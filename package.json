@@ -1,8 +1,8 @@
-
 {
   "name": "dreamli-website",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -14,7 +14,7 @@
     "@types/three": "^0.158.3",
     "framer-motion": "^10.16.5",
     "lucide-react": "^0.294.0",
-    "next": "14.0.3",
+    "next": "^14.2.32",
     "next-themes": "^0.2.1",
     "pusher": "^5.2.0",
     "pusher-js": "^8.4.0-rc2",
