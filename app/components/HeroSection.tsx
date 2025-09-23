@@ -1,0 +1,160 @@
+
+'use client';
+
+import { useState, useEffect } from 'react';
+import UploadForm from './UploadForm';
+import Link from 'next/link';
+import Image from 'next/image';
+import ScatteredCardGallery from '../../components/ScatteredCardGallery';
+
+interface HeroSectionProps {
+  onOpenUploadForm?: () => void;
+}
+
+export default function HeroSection({ onOpenUploadForm }: HeroSectionProps) {
+  const [showUploadForm, setShowUploadForm] = useState(false);
+
+  const handleOpenUploadForm = () => {
+    if (onOpenUploadForm) {
+      onOpenUploadForm();
+    } else {
+      setShowUploadForm(true);
+    }
+  };
+
+  const closeUploadForm = () => {
+    setShowUploadForm(false);
+  };
+
+  const galleryImages = [
+    {
+      src: "https://static.readdy.ai/image/ad9dc4c8042d4c1a873be12f55826cf9/618d433982e6a541bbed58f40346d0ad.webp",
+      alt: "Smiling girl holding her drawing and a 3D-printed figure made from it",
+      caption: "Turn drawings into amazing 3D toys"
+    },
+    {
+      src: "https://static.readdy.ai/image/ad9dc4c8042d4c1a873be12f55826cf9/d1b9f2c73d16581a1d3d8e47828f4689.webp",
+      alt: "Smiling girl holding a drawing of an elephant and a matching 3D-printed figure",
+      caption: "Elephant drawing becomes a real toy"
+    },
+    {
+      src: "https://static.readdy.ai/image/ad9dc4c8042d4c1a873be12f55826cf9/e9e64d632489530d3d9873d5ab3b0063.webp",
+      alt: "Young boy showing his robot drawing and a custom 3D printed toy created from it",
+      caption: "Robot drawings come to life"
+    },
+    {
+      src: "https://static.readdy.ai/image/ad9dc4c8042d4c1a873be12f55826cf9/a56ecd490581a2e2b26e74b7fbb1e085.webp",
+      alt: "Smiling boy holding his green robot drawing alongside a personalized 3D printed model",
+      caption: "Green robot ready for adventure"
+    }
+  ];
+
+  return (
+    <>
+      <section className="relative bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-12 sm:py-20 lg:py-24 overflow-hidden">
+        {/* Background decorations */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-32 w-80 h-80 bg-gradient-to-br from-purple-300/10 to-pink-300/10 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-40 -left-32 w-80 h-80 bg-gradient-to-br from-blue-300/10 to-purple-300/10 rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
+            {/* Left side - Text content */}
+            <div className="space-y-8">
+              <h1 className="font-bold leading-tight text-gray-900" style={{ fontSize: '3rem' }}>
+                Childhood is short. The memories shape <span className="text-[#8472DF]">a lifetime</span>.
+              </h1>
+              
+              <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl text-[#8472DF] mb-6 sm:mb-8 font-light leading-relaxed">
+                Turn your child's drawing into keepsakes that live in daily life—and become the core memories that last forever.
+              </h2>
+              
+              <p className="text-lg text-gray-600 leading-relaxed font-normal max-w-xl">
+                These early years form our children's beliefs, confidence, and view of what's possible. Most precious moments drift away, but some deserve to stay. Dreamli helps families transform their child's creativity into meaningful keepsakes that become part of everyday life—creating core memories that shape who they become.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-6 w-full">
+                <button 
+                  onClick={handleOpenUploadForm}
+                  className="bg-[#8472DF] text-white px-6 sm:px-8 py-4 rounded-full text-base sm:text-lg font-bold hover:bg-[#7A66D9] transition-all duration-300 cursor-pointer shadow-lg transform hover:scale-105 text-center w-full sm:w-auto max-w-full break-words whitespace-nowrap"
+                >
+                  Make My Child's Drawing Real
+                </button>
+              </div>
+
+              {/* Risk-free promise box */}
+              <div className="bg-white/80 backdrop-blur-sm border-2 border-transparent bg-gradient-to-r from-[#93C4FF] to-[#ACEEF3] rounded-2xl p-6 shadow-lg max-w-xl" style={{backgroundClip: 'padding-box', border: '2px solid transparent', backgroundImage: 'linear-gradient(white, white), linear-gradient(to right, #93C4FF, #ACEEF3)', backgroundOrigin: 'border-box'}}>
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i className="ri-shield-check-fill text-white text-xl"></i>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-[#333333] text-lg mb-2">100% Risk-Free Promise</h3>
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      Share a photo of your child with their 3D creation and we'll refund your entire order. No questions asked. Because we know they'll love it!
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Trust indicators */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-6 pt-6">
+                <div className="flex items-center space-x-3">
+                  <a 
+                    href="https://blog.dreamli.nl/safe-3d-printing-materials-for-childrens-products-a-complete-parents-guide/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center space-x-3 hover:opacity-80 transition-opacity cursor-pointer"
+                  >
+                    <div className="w-12 h-12 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full flex items-center justify-center flex-shrink-0">
+                      <i className="ri-shield-check-fill text-white text-xl"></i>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-[#333333] text-sm">Safe Materials</p>
+                      <p className="text-gray-500 text-xs">Child-friendly & non-toxic</p>
+                    </div>
+                  </a>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-12 h-12 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i className="ri-truck-fill text-white text-xl"></i>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-[#333333] text-sm">Fast Delivery</p>
+                    <p className="text-gray-500 text-xs">5-10 working days</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right side - Scattered Card Gallery (original version) */}
+            <div className="relative h-[500px] sm:h-[600px] lg:h-[600px] flex items-center justify-center">
+              <ScatteredCardGallery 
+                className="w-full h-full max-w-lg mx-auto"
+              />
+
+              {/* Decorative elements */}
+              <div className="hidden sm:block absolute top-1/4 left-1/4 w-6 h-6 bg-[#FFA726] rounded-full animate-bounce opacity-60" style={{ animationDelay: '0s' }}></div>
+              <div className="hidden sm:block absolute bottom-1/3 left-1/6 w-4 h-4 bg-pink-400 rounded-full animate-bounce opacity-60" style={{ animationDelay: '1s' }}></div>
+              <div className="hidden sm:block absolute top-1/3 right-1/4 w-5 h-5 bg-purple-400 rounded-full animate-bounce opacity-60" style={{ animationDelay: '2s' }}></div>
+
+              {/* Floating icons */}
+              <div className="hidden lg:block absolute top-8 left-1/2 animate-float opacity-40" style={{ animationDelay: '0s' }}>
+                <i aria-hidden="true" className="ri-palette-fill text-3xl text-[#FFA726]"></i>
+              </div>
+              <div className="hidden lg:block absolute bottom-16 left-12 animate-float opacity-40" style={{ animationDelay: '1s' }}>
+                <i aria-hidden="true" className="ri-brush-fill text-3xl text-purple-400"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Upload Form Modal */}
+      {showUploadForm && (
+        <UploadForm onClose={closeUploadForm} />
+      )}
+    </>
+  );
+}
