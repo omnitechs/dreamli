@@ -47,6 +47,3 @@ tasks.md
 * copy*.jsx
 # Sentry Config File
 .env.sentry-build-plugin
-
-tasks.md
-task-ai.md
