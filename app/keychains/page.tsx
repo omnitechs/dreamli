@@ -14,6 +14,7 @@ export default function KeychainsPage() {
       <KeychainHero />
       <KeychainConfigurator />
       <Footer />
+        <div>hi</div>
     </div>
   );
 }
