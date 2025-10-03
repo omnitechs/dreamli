@@ -1,5 +1,5 @@
 import React from "react";
-import {useChatController} from "@/components/Hero/useChatController";
+import {useChatController} from "@/app/components/Hero/useChatController";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
