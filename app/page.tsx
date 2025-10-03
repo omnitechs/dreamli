@@ -4,6 +4,7 @@
 import Link from 'next/link';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import Hero from "@/components/asfdasdfadsf";
 
 export default function HomePage() {
   return (
@@ -11,109 +12,7 @@ export default function HomePage() {
       <Header />
       
       {/* Gift Finder Hero Section */}
-      <section className="bg-gradient-to-br from-[#DBEAFE]/20 to[#F3E8FF]/20">
-        {/* Title Section - Sticks to top */}
-        <div className="pt-12 pb-8">
-          <div className="container mx-auto px-6">
-            <div className="max-w-6xl mx-auto text-center">
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#2E2E2E] leading-tight">
-                Find the perfect gift <span className="text-[#8472DF]">your way</span>
-              </h2>
-            </div>
-          </div>
-        </div>
-        
-        {/* Content Section */}
-        <div className="pb-16 sm:pb-24 lg:pb-32">
-          <div className="container mx-auto px-6">
-            <div className="max-w-6xl mx-auto">
-              <div className="grid lg:grid-cols-2 gap-16 items-start">
-                <div className="space-y-6">
-                  <p className="text-xl text-[#2E2E2E]/80 leading-relaxed">
-                    Not sure what to choose? With Dreamli you can find gifts in two ways:
-                  </p>
-                  
-                  <div className="space-y-4">
-                    <div className="flex items-start gap-4">
-                      <div className="w-8 h-8 flex items-center justify-center">
-                        <span className="text-2xl">🤖</span>
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-bold text-[#2E2E2E] mb-2">Ask our AI Gift Assistant</h3>
-                        <p className="text-[#2E2E2E]/70">
-                          Just tell it what you&apos;re looking for — a budget, an occasion, or even a vibe — and it will instantly suggest the best matches from thousands of products. No scrolling, no searching, just quick results.
-                        </p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start gap-4">
-                      <div className="w-8 h-8 flex items-center justify-center">
-                        <span className="text-2xl">🎯</span>
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-bold text-[#2E2E2E] mb-2">Use Advanced Filters</h3>
-                        <p className="text-[#2E2E2E]/70">
-                          Prefer to explore yourself? Set filters for budget, occasion, recipient, age group, or style, and browse our complete catalog of exclusive and personalized gifts.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <Link href="https://shop.dreamli.nl/shop" className="inline-flex items-center gap-3 bg-[#8472DF] text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-[#8472DF]/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1 whitespace-nowrap cursor-pointer">
-                    <i className="ri-search-line text-xl w-6 h-6 flex items-center justify-center"></i>
-                    Start Gift Finder
-                  </Link>
-                </div>
-                
-                <div className="relative lg:col-span-1">
-                  {/* AI Chat Interface */}
-                  <div className="bg-white rounded-3xl p-8 shadow-2xl border border-[#F3E8FF] mb-6">
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 bg-gradient-to-r from-[#8472DF] to-[#93C4FF] rounded-full flex items-center justify-center">
-                          <i className="ri-robot-line text-white text-lg w-5 h-5 flex items-center justify-center"></i>
-                        </div>
-                        <div>
-                          <h3 className="font-bold text-[#2E2E2E]">AI Gift Assistant</h3>
-                          <p className="text-sm text-[#2E2E2E]/60">Online now</p>
-                        </div>
-                      </div>
-                      
-                      <div className="space-y-3">
-                        <div className="bg-[#F8F9FF] p-4 rounded-2xl rounded-bl-sm">
-                          <p className="text-[#2E2E2E]">Hi! I&apos;m here to help you find the perfect gift. What are you looking for?</p>
-                        </div>
-                        
-                        <div className="bg-[#8472DF] text-white p-4 rounded-2xl rounded-br-sm ml-8">
-                          <p>I need a birthday gift for my 8-year-old nephew, budget around €40</p>
-                        </div>
-                        
-                        <div className="bg-[#F8F9FF] p-4 rounded-2xl rounded-bl-sm">
-                          <p className="text-[#2E2E2E]">Perfect! I found 12 amazing options for 8-year-old&apos;s within €40. Would you like to see personalized items or our trending gifts?</p>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center gap-2 pt-2">
-                        <input 
-                          type="text" 
-                          placeholder="Type your message..."
-                          className="flex-1 px-4 py-3 border border-gray-200 rounded-full text-sm focus:outline-none focus:border-[#8472DF]"
-                        />
-                        <button className="w-10 h-10 bg-[#8472DF] text-white rounded-full flex items-center justify-center hover:bg-[#8472DF]/90 transition-colors">
-                          <i className="ri-send-plane-line w-4 h-4 flex items-center justify-center"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="absolute -top-4 -right-4 w-8 h-8 bg-[#FFB067] rounded-full animate-pulse"></div>
-                  <div className="absolute -bottom-6 -left-6 w-12 h-12 bg-[#93C4FF]/20 rounded-full animate-bounce"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+        <Hero/>
 
       {/* How It Works Section - Turn any idea into a gift */}
       <section className="py-16 sm:py-24 lg:py-32 bg-white">
