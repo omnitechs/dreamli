@@ -1,3 +1,4 @@
+'use client';
 import React from "react";
 import { useChatController } from "@/app/components/Hero/useChatController";
 import ReactMarkdown from "react-markdown";

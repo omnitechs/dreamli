@@ -1,5 +1,5 @@
 
-'use client';
+// 'use client';
 
 import Link from 'next/link';
 import Header from './components/Header';
@@ -8,6 +8,7 @@ import Hero from "./components/Hero";
 import AI from "./components/AI";
 import {CustomizedGifts} from "@/app/components/CustomizedGifts";
 import {WhySection} from "@/app/components/WhySection";
+import KeychainOpenSCADPlain from "@/components/KeychainOpenSCADPlain.client";
 
 export default function HomePage() {
   return (
@@ -17,6 +18,7 @@ export default function HomePage() {
         <AI/>
         <CustomizedGifts/>
         <WhySection/>
+        <KeychainOpenSCADPlain />
       <Footer />
     </div>
   );

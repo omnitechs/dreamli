@@ -2,6 +2,7 @@
   "name": "dreamli-website",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -23,7 +24,8 @@
     "react-markdown": "^10.1.0",
     "recharts": "^2.8.0",
     "remark-gfm": "^4.0.1",
-    "three": "^0.158.0"
+    "three": "^0.160.1",
+    "three-csg-ts": "^3.2.0"
   },
   "devDependencies": {
     "@types/node": "20.19.19",
