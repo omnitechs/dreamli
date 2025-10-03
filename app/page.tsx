@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import Hero from "@/components/asfdasdfadsf";
+import Hero from "./components/Hero";
 
 export default function HomePage() {
   return (

@@ -125,7 +125,19 @@ export function useChatController() {
             // ensure we never exceed window
             setMessages((m) => m.slice(-MAX_MSGS));
         }
+
+
     }
 
-    return { messages, input, setInput, send, thinking };
+    function clearHistory() {
+        const seed: Msg[] = [
+            { from: "ai", text: "Hi! I'm here to help you find the perfect gift. What are you looking for?" },
+        ];
+        setMessages(seed);
+        if (typeof window !== "undefined") {
+            localStorage.setItem(SKEY, JSON.stringify(seed));
+        }
+    }
+
+    return { messages, input, setInput, send, thinking ,clearHistory};
 }
