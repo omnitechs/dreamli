@@ -1,6 +1,5 @@
 import React from "react";
 import {useChatController} from "@/components/Hero/useChatController";
-import {Linkify} from "@/components/Hero/linkify";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
