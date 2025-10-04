@@ -163,7 +163,7 @@ export default function KeychainOpenSCADPlain() {
                 };
 
                 w.postMessage({
-                    scadPath: "/first.scad",      // ensure /public/first.scad exists (with `mode` switch)
+                    scadPath: "/test.scad",      // ensure /public/first.scad exists (with `mode` switch)
                     outName: `${mode}.stl`,       // STL → color in viewer
                     defines: { ...deb, mode },    // tell SCAD which solid to emit
                 });
@@ -192,7 +192,7 @@ export default function KeychainOpenSCADPlain() {
             if (!baseGeom && !textGeom) { console.warn("Both STL parts are empty."); return; }
 
             const prep = (g: THREE.BufferGeometry | null) => {
-                if (!g) return; g.rotateX(-Math.PI / 2); g.computeVertexNormals(); g.center();
+                if (!g) return; g.rotateX(-Math.PI / 2); g.computeVertexNormals();
             };
             prep(baseGeom); prep(textGeom);
 
