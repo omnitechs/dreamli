@@ -7,20 +7,25 @@ import { STLLoader } from 'three/addons/loaders/STLLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 type Props = {
-    modelUrl?: string;          // e.g. "/models/example.stl" (public/) or remote URL
+    modelUrl?: string;
     className?: string;
-    forceType?: 'glb' | 'stl';  // optional override
+    forceType?: 'glb' | 'stl';
+    /** when false, stop RAF + minimal work */
+    active?: boolean;
 };
 
-export default function ModelViewer({ modelUrl, className = "", forceType }: Props) {
+export default function ModelViewer({ modelUrl, className = "", forceType, active = true }: Props) {
     const containerRef = useRef<HTMLDivElement>(null);
-    const sceneRef = useRef<THREE.Scene>();
-    const rendererRef = useRef<THREE.WebGLRenderer>();
-    const controlsRef = useRef<OrbitControls>();
-    const animationIdRef = useRef<number>();
+    const sceneRef = useRef<THREE.Scene | null>(null);
+    const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+    const controlsRef = useRef<OrbitControls | null>(null);
+    const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
+    const frameRef = useRef<number | null>(null);
+    const mountedRef = useRef(false);
 
     useEffect(() => {
         if (!containerRef.current || !modelUrl) return;
+        mountedRef.current = true;
 
         const container = containerRef.current;
         const width = container.clientWidth;
@@ -34,13 +39,17 @@ export default function ModelViewer({ modelUrl, className = "", forceType }: Pro
         // Camera
         const camera = new THREE.PerspectiveCamera(22, width / height, 0.1, 1000);
         camera.position.set(2, 2, 2);
+        cameraRef.current = camera;
 
-        // Renderer
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        // Renderer (prefer low power)
+        const renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            alpha: false,
+            powerPreference: 'low-power',
+        });
         renderer.setSize(width, height);
-        renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5)); // cap DPR for mobile
+        renderer.shadowMap.enabled = false; // shadows are expensive; enable only if needed
         rendererRef.current = renderer;
 
         // Controls
@@ -53,33 +62,47 @@ export default function ModelViewer({ modelUrl, className = "", forceType }: Pro
         controls.autoRotateSpeed = 2;
         controlsRef.current = controls;
 
-        // Lights
-        scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-
-        const dir = new THREE.DirectionalLight(0xffffff, 0.8);
-        dir.position.set(5, 5, 5);
-        dir.castShadow = true;
-        dir.shadow.mapSize.set(2048, 2048);
-        scene.add(dir);
-
-        scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 0.4));
+        // Lights (cheap)
+        scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+        const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 0.5);
+        scene.add(hemi);
 
         // -------- LOAD MODEL (GLB/GLTF or STL) --------
         const ext = (forceType ?? modelUrl.split('?')[0].split('#')[0].split('.').pop()?.toLowerCase()) || '';
+
+        const addToScene = (object: THREE.Object3D) => {
+            // Center & scale
+            const box = new THREE.Box3().setFromObject(object);
+            const size = box.getSize(new THREE.Vector3());
+            const center = box.getCenter(new THREE.Vector3());
+
+            object.position.sub(center);
+
+            const maxDim = Math.max(size.x, size.y, size.z) || 1;
+            const scale = 2 / maxDim;
+            object.scale.setScalar(scale);
+
+            scene.add(object);
+
+            // Fit camera
+            const dist = maxDim * scale * 2.5;
+            camera.position.set(dist, dist, dist);
+            controls.target.set(0, 0, 0);
+            controls.update();
+        };
 
         const loadGLB = (url: string) => {
             const loader = new GLTFLoader();
             loader.load(
                 url,
                 (gltf) => {
-                    const model = gltf.scene;
-                    model.traverse((child: any) => {
+                    gltf.scene.traverse((child: any) => {
                         if (child.isMesh) {
-                            child.castShadow = true;
-                            child.receiveShadow = true;
+                            child.castShadow = false;
+                            child.receiveShadow = false;
                         }
                     });
-                    addToScene(model);
+                    addToScene(gltf.scene);
                 },
                 undefined,
                 (e) => console.error('GLB load error:', e)
@@ -94,13 +117,11 @@ export default function ModelViewer({ modelUrl, className = "", forceType }: Pro
                     geometry.computeVertexNormals();
                     const material = new THREE.MeshStandardMaterial({
                         color: 0x3b82f6,
-                        metalness: 0.1,
-                        roughness: 0.6,
+                        metalness: 0.05,
+                        roughness: 0.85,
                         side: THREE.DoubleSide,
                     });
                     const mesh = new THREE.Mesh(geometry, material);
-                    mesh.castShadow = true;
-                    mesh.receiveShadow = true;
                     addToScene(mesh);
                 },
                 undefined,
@@ -108,74 +129,115 @@ export default function ModelViewer({ modelUrl, className = "", forceType }: Pro
             );
         };
 
-        // Meshy proxy logic preserved (optional)
         const finalUrl =
             modelUrl.includes('assets.meshy.ai')
                 ? `/api/proxy-glb?url=${encodeURIComponent(modelUrl)}`
                 : modelUrl;
 
-        if (ext === 'glb' || ext === 'gltf' || forceType === 'glb') {
-            loadGLB(finalUrl);
-        } else if (ext === 'stl' || forceType === 'stl') {
-            loadSTL(finalUrl);
-        } else {
+        if (ext === 'glb' || ext === 'gltf' || forceType === 'glb') loadGLB(finalUrl);
+        else if (ext === 'stl' || forceType === 'stl') loadSTL(finalUrl);
+        else {
             console.warn('Unknown model type, defaulting to GLB loader.');
             loadGLB(finalUrl);
         }
-
-        // Center + scale + fit camera
-        function addToScene(object: THREE.Object3D) {
-            // Center
-            const box = new THREE.Box3().setFromObject(object);
-            const center = box.getCenter(new THREE.Vector3());
-            object.position.sub(center);
-
-            // Scale to fit ~2 units
-            const size = box.getSize(new THREE.Vector3());
-            const maxDim = Math.max(size.x, size.y, size.z) || 1;
-            const scale = 2 / maxDim;
-            object.scale.setScalar(scale);
-
-            scene.add(object);
-
-            // Camera distance
-            const dist = maxDim * scale * 2;
-            camera.position.set(dist, dist, dist);
-            controls.target.set(0, 0, 0);
-            controls.update();
-        }
-
-        // Animate
-        const animate = () => {
-            animationIdRef.current = requestAnimationFrame(animate);
-            controls.update();
-            renderer.render(scene, camera);
-        };
-        animate();
 
         // Mount
         container.appendChild(renderer.domElement);
 
         // Resize
         const onResize = () => {
-            const w = container.clientWidth;
-            const h = container.clientHeight || 400;
-            camera.aspect = w / h;
-            camera.updateProjectionMatrix();
-            renderer.setSize(w, h);
+            if (!rendererRef.current || !cameraRef.current || !containerRef.current) return;
+            const w = containerRef.current.clientWidth;
+            const h = containerRef.current.clientHeight || 400;
+            rendererRef.current.setSize(w, h);
+            cameraRef.current.aspect = w / h;
+            cameraRef.current.updateProjectionMatrix();
         };
-        window.addEventListener('resize', onResize);
+        const ro = new ResizeObserver(onResize);
+        ro.observe(container);
+
+        // Tab visibility: auto-pause when hidden
+        const onVis = () => {
+            if (document.hidden) stopLoop();
+            else if (active) startLoop();
+        };
+        document.addEventListener('visibilitychange', onVis);
 
         // Cleanup
         return () => {
-            window.removeEventListener('resize', onResize);
-            if (animationIdRef.current) cancelAnimationFrame(animationIdRef.current);
+            document.removeEventListener('visibilitychange', onVis);
+            ro.disconnect();
+            stopLoop();
             controls.dispose();
+            if (renderer.domElement.parentElement)
+                renderer.domElement.parentElement.removeChild(renderer.domElement);
+            disposeScene(scene);
             renderer.dispose();
-            if (renderer.domElement.parentElement) renderer.domElement.parentElement.removeChild(renderer.domElement);
-            scene.clear();
+            // Free GPU context aggressively (optional)
+            try { renderer.forceContextLoss(); } catch {}
+            sceneRef.current = null;
+            rendererRef.current = null;
+            controlsRef.current = null;
+            cameraRef.current = null;
+            mountedRef.current = false;
         };
-    }, [modelUrl, forceType]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [modelUrl, forceType]); // init only when model changes
+
+    // start/stop loop on `active`
+    useEffect(() => {
+        if (!mountedRef.current) return;
+        if (active) startLoop();
+        else stopLoop();
+        // also stop autorotate when inactive
+        if (controlsRef.current) controlsRef.current.autoRotate = !!active;
+    }, [active]);
+
+    function startLoop() {
+        if (frameRef.current != null) return; // already running
+        const renderer = rendererRef.current;
+        const scene = sceneRef.current;
+        const camera = cameraRef.current;
+        if (!renderer || !scene || !camera) return;
+        const loop = () => {
+            // Skip any heavy updates if inactive elsewhere
+            controlsRef.current?.update();
+            renderer.render(scene, camera);
+            frameRef.current = requestAnimationFrame(loop);
+        };
+        frameRef.current = requestAnimationFrame(loop);
+    }
+
+    function stopLoop() {
+        if (frameRef.current != null) {
+            cancelAnimationFrame(frameRef.current);
+            frameRef.current = null;
+        }
+        // If using setAnimationLoop in future:
+        rendererRef.current?.setAnimationLoop(null as any);
+    }
+
+    function disposeScene(scene: THREE.Scene) {
+        scene.traverse((obj: any) => {
+            if (obj.isMesh) {
+                obj.geometry?.dispose?.();
+                disposeMaterial(obj.material);
+            } else if (obj.isLight && obj.dispose) {
+                obj.dispose();
+            }
+        });
+    }
+
+    function disposeMaterial(mat: any) {
+        if (Array.isArray(mat)) mat.forEach(disposeMaterial);
+        else if (mat) {
+            Object.keys(mat).forEach((k) => {
+                const v = (mat as any)[k];
+                if (v && v.isTexture) v.dispose?.();
+            });
+            mat.dispose?.();
+        }
+    }
 
     return (
         <div ref={containerRef} className={`w-full h-80 bg-gray-50 rounded-lg relative ${className}`}>

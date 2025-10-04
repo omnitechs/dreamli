@@ -3,8 +3,6 @@
 import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 
-
-// Dynamically load the heavy viewer on demand
 const ModelViewer = dynamic(() => import('./ModelViewer'), {
     ssr: false,
     loading: () => (
@@ -14,60 +12,77 @@ const ModelViewer = dynamic(() => import('./ModelViewer'), {
     ),
 });
 
+type OffMode = 'unmount' | 'pause';
+
 type LazyGlbProps = {
     modelUrl: string;
     className?: string;
-    /** how early (in px) to start loading before it hits viewport */
+    /** start loading before it hits viewport */
     rootMargin?: string; // e.g. '600px 0px'
     forceType?: 'glb' | 'stl';
     width?: number;
     height?: number;
-    poster?: string; // optional placeholder image
+    poster?: string;
+    /** what to do when not visible */
+    offMode?: OffMode; // 'unmount' = remove viewer, 'pause' = keep but stop loop
+    /** avoid rapid flip-flop while scrolling */
+    exitDebounceMs?: number; // default 200
 };
 
 export default function LazyGlb({
                                     modelUrl,
                                     className = '',
-                                    rootMargin = '600px 0px', // start loading early
+                                    rootMargin = '600px 0px',
                                     forceType,
                                     width,
                                     height,
                                     poster,
+                                    offMode = 'unmount',
+                                    exitDebounceMs = 200,
                                 }: LazyGlbProps) {
     const ref = useRef<HTMLDivElement>(null);
     const [visible, setVisible] = useState(false);
+    const tRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     useEffect(() => {
-        if (!ref.current || visible) return;
-
+        if (!ref.current) return;
         const el = ref.current;
-        const obs = new IntersectionObserver(
+
+        const io = new IntersectionObserver(
             (entries) => {
-                if (entries[0].isIntersecting) {
+                const e = entries[0];
+                if (e.isIntersecting) {
+                    if (tRef.current) clearTimeout(tRef.current);
                     setVisible(true);
-                    obs.disconnect();
+                } else {
+                    if (tRef.current) clearTimeout(tRef.current);
+                    tRef.current = setTimeout(() => setVisible(false), exitDebounceMs);
                 }
             },
             { root: null, rootMargin, threshold: 0.01 }
         );
 
-        obs.observe(el);
-        return () => obs.disconnect();
-    }, [visible, rootMargin]);
+        io.observe(el);
+        return () => {
+            io.disconnect();
+            if (tRef.current) clearTimeout(tRef.current);
+        };
+    }, [rootMargin, exitDebounceMs]);
 
-    // Optional: warm up the model file when user shows intent (hover/touch)
+    // Optional warm-up
     const prefetchModel = () => {
         if (typeof document === 'undefined') return;
         const link = document.createElement('link');
         link.rel = 'preload';
         link.as = 'fetch';
         link.href = modelUrl;
-        // Some CDNs like a type hint; safe to omit if unknown
         // @ts-ignore
         link.type = 'model/gltf-binary';
         link.crossOrigin = 'anonymous';
         document.head.appendChild(link);
     };
+
+    const style = { width, height } as React.CSSProperties;
 
     return (
         <div
@@ -75,20 +90,31 @@ export default function LazyGlb({
             className={`relative ${className}`}
             onMouseEnter={prefetchModel}
             onTouchStart={prefetchModel}
-            style={{ width, height }}
+            style={style}
         >
-            {!visible ? (
-                <div className="w-full h-80 bg-gray-50 rounded-lg grid place-items-center">
-                    {poster ? (
-                        // Poster image placeholder (if provided)
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={poster} alt="" className="w-full h-full object-cover rounded-lg" />
-                    ) : (
-                        <span className="text-sm text-gray-500">3D preview will load when in view…</span>
-                    )}
-                </div>
+            {offMode === 'unmount' ? (
+                visible ? (
+                    <ModelViewer
+                        modelUrl={modelUrl}
+                        className={className}
+                        forceType={forceType}
+                        active
+                    />
+                ) : poster ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={poster} alt="" className="w-full h-full object-cover rounded-lg" />
+                ) : (
+                    <div className="w-full h-80 bg-gray-50 rounded-lg grid place-items-center">
+                        <span className="text-sm text-gray-500">Scroll to view 3D…</span>
+                    </div>
+                )
             ) : (
-                <ModelViewer modelUrl={modelUrl} className={className} forceType={forceType} />
+                <ModelViewer
+                    modelUrl={modelUrl}
+                    className={className}
+                    forceType={forceType}
+                    active={visible}   // <- soft off
+                />
             )}
         </div>
     );

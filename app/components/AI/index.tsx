@@ -30,8 +30,8 @@ export default function AI(props: Props) {
                     <div className="grid lg:grid-cols-2 gap-16 items-center">
 
                         <div className="relative">
-                            <GlbViewer
-                                modelUrl="/example.glb"     // ✅ use modelUrl
+                            <GlbViewer offMode={"pause"}
+                                modelUrl="/untitled2.glb"     // ✅ use modelUrl
                                 forceType="glb"             // ✅ optional, but forces STL path
                                 className="h-[450px]"  // ✅ controls canvas size
                             />
