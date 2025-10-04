@@ -18,6 +18,7 @@ export async function addFonts(inst) {
         { family: "Archivo Black",    style: null,      file: "/openscad/fonts/ArchivoBlack-Regular.ttf" },
         { family: "Bebas Neue",       style: null,      file: "/openscad/fonts/BebasNeue-Regular.ttf" },
         { family: "Pacifico",         style: "Regular", file: "/openscad/fonts/Pacifico-Regular.ttf" },
+        { family: "HarmonyOs",         style: "Regular", file: "/openscad/fonts/HarmonyOS_Sans_Black.ttf" },
     ];
 
     inst.FS.mkdirTree("/usr/share/fonts/truetype");
@@ -31,7 +32,7 @@ export async function addFonts(inst) {
         // write in two common search paths
         const baseName = f.file.split("/").pop();
         const p1 = `/usr/share/fonts/truetype/${baseName}`;
-        const p2 = `/fonts/${baseName}`;
+        const p2 = `/openscad/fonts/${baseName}`;
         inst.FS.writeFile(p1, bytes);
         inst.FS.writeFile(p2, bytes);
 
