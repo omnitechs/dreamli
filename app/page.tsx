@@ -9,6 +9,7 @@ import AI from "./components/AI";
 import {CustomizedGifts} from "@/app/components/CustomizedGifts";
 import {WhySection} from "@/app/components/WhySection";
 import KeychainOpenSCADPlain from "@/components/KeychainOpenSCADPlain.client";
+import KeychainBuilder from "@/components/KeychainMaker";
 
 export default function HomePage() {
   return (
@@ -18,7 +19,8 @@ export default function HomePage() {
         <AI/>
         <CustomizedGifts/>
         <WhySection/>
-        <KeychainOpenSCADPlain />
+        {/*<KeychainOpenSCADPlain />*/}
+        <KeychainBuilder/>
       <Footer />
     </div>
   );
