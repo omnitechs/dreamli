@@ -199,8 +199,10 @@ export default function KeychainBuilder({
 
         } catch (error) {
             console.error('Error:', error);
+
             setShowNotification({
                 show: true,
+                // @ts-ignore
                 message: 'Failed to add to cart: ' + error.message,
                 type: 'error',
             });

@@ -1,6 +1,7 @@
 /// <reference lib="webworker" />
 
 // Types
+// @ts-ignore
 type MsgIn = {
     scadPath: string;
     defines: Record<string, string | number | boolean>;
