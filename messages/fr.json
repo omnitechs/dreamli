@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Dreamli | Kits créatifs 3D personnalisés à partir des dessins d’enfants",
-    "description": "Transformez les dessins de votre enfant en figurines et kits de peinture 3D personnalisés. Écologique, amusant et conçu pour stimuler la créativité et la confiance en soi."
+    "description": "Transformez les dessins de votre enfant en figurines et kits de peinture 3D personnalisés. Écologique, ludique et conçu pour stimuler la créativité et la confiance en soi."
   },
   "home": {
     "title": "",
@@ -9,7 +9,12 @@
     "hero": {
       "title": "Trouvez le cadeau parfait",
       "extendedTitle": "à votre façon",
-      "subtitle": "Vous ne savez pas quoi choisir ? Avec Dreamli, vous pouvez trouver des cadeaux de deux manières"
+      "subtitle": "Vous ne savez pas quoi choisir ? Avec Dreamli, vous pouvez trouver des cadeaux de deux manières",
+      "explore": {
+        "title": "Vous préférez explorer nos cadeaux vous-même ?",
+        "subtitle": "Définissez des filtres par budget, occasion, destinataire, tranche d’âge ou style, et parcourez tout notre catalogue de cadeaux exclusifs et personnalisés.",
+        "label": "Commencer à explorer"
+      }
     }
   },
   "Header": {
@@ -28,8 +33,10 @@
     "statusOnline": "En ligne maintenant",
     "clearHistory": "Effacer l’historique",
     "placeholder": "Écrivez votre message…",
-    "inputAria": "Saisie du message de chat",
+    "inputAria": "Champ de saisie du message de chat",
     "send": "Envoyer",
-    "decorativeDotAlt": "Point décoratif"
+    "decorativeDotAlt": "Point décoratif",
+    "greeting": "Bonjour ! Je suis là pour vous aider à trouver le cadeau parfait. Que recherchez-vous ?",
+    "errorStreaming": "Erreur lors du flux de la réponse"
   }
 }

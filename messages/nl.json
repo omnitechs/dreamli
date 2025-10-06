@@ -9,7 +9,12 @@
     "hero": {
       "title": "Vind het perfecte cadeau",
       "extendedTitle": "op jouw manier",
-      "subtitle": "Weet je niet wat je moet kiezen? Met Dreamli vind je cadeaus op twee manieren"
+      "subtitle": "Weet je niet wat je moet kiezen? Met Dreamli vind je cadeaus op twee manieren",
+      "explore": {
+        "title": "Liever zelf onze cadeaus verkennen?",
+        "subtitle": "Stel filters in voor budget, gelegenheid, ontvanger, leeftijdsgroep of stijl en bekijk onze complete catalogus met exclusieve en gepersonaliseerde cadeaus.",
+        "label": "Begin met verkennen"
+      }
     }
   },
   "Header": {
@@ -28,8 +33,10 @@
     "statusOnline": "Nu online",
     "clearHistory": "Geschiedenis wissen",
     "placeholder": "Typ je bericht…",
-    "inputAria": "Chatbericht invoer",
+    "inputAria": "Invoerveld chatbericht",
     "send": "Versturen",
-    "decorativeDotAlt": "Decoratieve stip"
+    "decorativeDotAlt": "Decoratieve stip",
+    "greeting": "Hoi! Ik help je graag het perfecte cadeau te vinden. Waar ben je naar op zoek?",
+    "errorStreaming": "Fout bij het streamen van het antwoord"
   }
 }

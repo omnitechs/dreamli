@@ -1,10 +1,11 @@
 'use client';
 
-import { useChatController } from '@/app/components/Hero/useChatController';
+import { useChatController } from '@/components/Hero/useChatController';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import React from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
+
 
 /* ---------- Chat UI Primitives ---------- */
 
@@ -196,8 +197,18 @@ function ChatInputBar({
 /* ---------- Composite Chat Card ---------- */
 
 function AIChatAssistant() {
+    // inside AIChatAssistant (client)
     const t = useTranslations('chat');
-    const { messages, input, setInput, send, thinking, clearHistory } = useChatController();
+    const locale = useLocale(); // optional, for per-locale storage separation
+
+    const { messages, input, setInput, send, thinking, clearHistory } =
+        useChatController({
+            i18n: {
+                greeting: t("greeting"),
+                errorStreaming: t('errorStreaming')
+            },
+            locale // optional
+        });
 
     return (
         <aside className="relative">

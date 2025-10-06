@@ -1,12 +1,11 @@
 import type { Metadata } from 'next';
 import { ReactNode } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages, getTranslations } from 'next-intl/server';
+import {getMessages, getTranslations, setRequestLocale} from 'next-intl/server';
 import { languages, languageCodes, type LanguageCode } from '@/config/i18n';
 import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-
 
 
 export async function generateStaticParams() {
@@ -59,9 +58,8 @@ export default async function LangLayout({
 }) {
     const { lang } = await params; // not a Promise here
     if (!languageCodes.includes(lang)) notFound();
-
+    setRequestLocale(lang);
     const messages = await getMessages({ locale: lang });
-
     const organizationSchema = {
         '@context': 'https://schema.org',
         '@type': 'Organization',

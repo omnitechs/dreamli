@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Dreamli | Spersonalizowane zestawy kreatywne 3D z rysunków dzieci",
-    "description": "Zmień rysunki swojego dziecka w spersonalizowane figurki 3D i zestawy do malowania. Ekologiczne, zabawne i zaprojektowane, by rozwijać kreatywność i pewność siebie."
+    "description": "Zmień rysunki swojego dziecka w spersonalizowane figurki 3D i zestawy do malowania. Ekologiczne, przyjemne i zaprojektowane, aby rozwijać kreatywność oraz pewność siebie."
   },
   "home": {
     "title": "",
@@ -9,7 +9,12 @@
     "hero": {
       "title": "Znajdź idealny prezent",
       "extendedTitle": "na swój sposób",
-      "subtitle": "Nie wiesz, co wybrać? Z Dreamli możesz znaleźć prezenty na dwa sposoby"
+      "subtitle": "Nie wiesz, co wybrać? Z Dreamli możesz znaleźć prezenty na dwa sposoby",
+      "explore": {
+        "title": "Wolisz samodzielnie przeglądać nasze prezenty?",
+        "subtitle": "Ustaw filtry według budżetu, okazji, odbiorcy, grupy wiekowej lub stylu i przeglądaj cały nasz katalog ekskluzywnych i personalizowanych prezentów.",
+        "label": "Zacznij odkrywać"
+      }
     }
   },
   "Header": {
@@ -28,8 +33,10 @@
     "statusOnline": "Online teraz",
     "clearHistory": "Wyczyść historię",
     "placeholder": "Napisz wiadomość…",
-    "inputAria": "Pole wiadomości czatu",
+    "inputAria": "Pole wprowadzania wiadomości na czacie",
     "send": "Wyślij",
-    "decorativeDotAlt": "Ozdobna kropka"
+    "decorativeDotAlt": "Ozdobna kropka",
+    "greeting": "Cześć! Pomogę Ci znaleźć idealny prezent. Czego szukasz?",
+    "errorStreaming": "Błąd podczas przesyłania odpowiedzi"
   }
 }

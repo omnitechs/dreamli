@@ -9,7 +9,12 @@
     "hero": {
       "title": "Finde das perfekte Geschenk",
       "extendedTitle": "auf deine Weise",
-      "subtitle": "Du weißt nicht, was du wählen sollst? Mit Dreamli findest du Geschenke auf zwei Arten"
+      "subtitle": "Du weißt nicht, was du wählen sollst? Mit Dreamli findest du Geschenke auf zwei Arten",
+      "explore": {
+        "title": "Möchtest du unsere Geschenke selbst entdecken?",
+        "subtitle": "Setze Filter für Budget, Anlass, Empfänger, Altersgruppe oder Stil und durchstöbere unseren gesamten Katalog exklusiver und personalisierter Geschenke.",
+        "label": "Jetzt entdecken"
+      }
     }
   },
   "Header": {
@@ -28,8 +33,10 @@
     "statusOnline": "Jetzt online",
     "clearHistory": "Verlauf löschen",
     "placeholder": "Nachricht eingeben…",
-    "inputAria": "Chat-Nachrichteneingabe",
+    "inputAria": "Eingabefeld für Chatnachricht",
     "send": "Senden",
-    "decorativeDotAlt": "Dekorativer Punkt"
+    "decorativeDotAlt": "Dekorativer Punkt",
+    "greeting": "Hallo! Ich helfe dir, das perfekte Geschenk zu finden. Wonach suchst du?",
+    "errorStreaming": "Fehler beim Streamen der Antwort"
   }
 }

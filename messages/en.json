@@ -3,16 +3,20 @@
     "title": "Dreamli | Personalized 3D Creative Kits from Kids' Drawings",
     "description": "Transform your child's drawings into personalized 3D figures and painting kits. Eco-friendly, fun, and designed to boost creativity & confidence."
   },
-  "home":{
+  "home": {
     "title": "",
     "description": "",
     "hero": {
       "title": "Find the perfect Gift",
       "extendedTitle": "your way",
-      "subtitle": "Not sure what to choose? With Dreamli you can find gifts in two ways"
+      "subtitle": "Not sure what to choose? With Dreamli you can find gifts in two ways",
+      "explore": {
+        "title": "Prefer to explore our gifts yourself??",
+        "subtitle": "Set filters for budget, occasion, recipient, age group, or style, and browse our complete catalog of exclusive and personalized gifts.",
+        "label": "Start exploring"
+      }
     }
   },
-
   "Header": {
     "home": "Home",
     "about": "About",
@@ -31,6 +35,9 @@
     "placeholder": "Type your message…",
     "inputAria": "Chat message input",
     "send": "Send",
-    "decorativeDotAlt": "Decorative dot"
+    "decorativeDotAlt": "Decorative dot",
+    "greeting": "Hi! I'm here to help you find the perfect gift. What are you looking for?",
+    "errorStreaming": "Error streaming response"
   }
+
 }
