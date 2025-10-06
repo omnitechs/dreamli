@@ -71,4 +71,11 @@ module hole3d() {
 if (mode == "base")      base3d_no_ring();
 else if (mode == "text") text3d();
 else if (mode == "hole") hole3d();
-else { base3d_no_ring(); text3d(); hole3d(); }
+else {
+    // ✅ ensure a single solid mesh for the merged STL
+    union() {
+        base3d_no_ring();
+        text3d();
+        hole3d();
+    }
+}
