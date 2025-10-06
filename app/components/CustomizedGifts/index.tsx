@@ -1,16 +1,15 @@
 // app/components/CustomizedGifts.tsx
-// @flow
+'use client';
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-type Props = {};
-
-export function CustomizedGifts(props: Props) {
+export function CustomizedGifts() {
     return (
         <section className="py-16 sm:py-24 lg:py-32 bg-white">
             <div className="container mx-auto px-6">
                 <div className="max-w-6xl mx-auto">
+                    {/* Header */}
                     <div className="text-center mb-16">
                         <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#2E2E2E] mb-6 leading-tight">
                             Customized <span className="text-[#8472DF]">Gifts</span>
@@ -26,14 +25,13 @@ export function CustomizedGifts(props: Props) {
                             className="bg-gradient-to-br from-[#F8F9FF] to-[#F3E8FF]/50 rounded-3xl p-8 hover:shadow-lg transition-transform duration-300 flex flex-col"
                             style={{ contentVisibility: "auto" as any }}
                         >
-                            {/* Intrinsic ratio image: width/height ensure aspect ratio; w-full h-auto makes it responsive */}
-                            <div className="relative mb-6 rounded-2xl overflow-hidden">
+                            {/* Image block with fixed ratio */}
+                            <div className="relative mb-6 rounded-2xl overflow-hidden aspect-[4/3]">
                                 <Image
                                     src="/New-Frame-CMYK.png"
                                     alt="Lithophane lamp showcase"
-                                    width={1200}      // 4:3 -> 1200x900; adjust if your source differs
-                                    height={900}
-                                    className="w-full h-auto block"
+                                    fill
+                                    className="object-cover w-full h-full"
                                     sizes="(min-width: 1024px) 560px, (min-width: 768px) 50vw, 100vw"
                                     priority={false}
                                     quality={70}
@@ -43,7 +41,7 @@ export function CustomizedGifts(props: Props) {
                                 </div>
                             </div>
 
-                            <div className="space-y-6">
+                            <div className="space-y-6 flex-1 flex flex-col justify-between">
                                 <div>
                                     <h3 className="text-2xl font-bold text-[#2E2E2E] mb-3">Lithophanes</h3>
                                     <p className="text-[#2E2E2E]/70 leading-relaxed">
@@ -67,13 +65,22 @@ export function CustomizedGifts(props: Props) {
                                     </li>
                                 </ul>
 
-                                <Link
-                                    href="/lithophanes"
-                                    className="inline-flex items-center gap-3 bg-[#8472DF] text-white px-6 py-3 rounded-full font-bold hover:bg-[#8472DF]/90 transition-colors duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 whitespace-nowrap"
-                                >
-                                    <i className="ri-lightbulb-line text-lg w-5 h-5 flex items-center justify-center" />
-                                    Create Lithophane
-                                </Link>
+                                <div className="flex flex-wrap gap-4 pt-4">
+                                    <Link
+                                        href="https://shop.dreamli.nl/product/lithophane/"
+                                        className="inline-flex items-center gap-3 bg-[#8472DF] text-white px-6 py-3 rounded-full font-bold hover:bg-[#8472DF]/90 transition-colors duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                                    >
+                                        <i className="ri-lightbulb-line text-lg w-5 h-5 flex items-center justify-center" />
+                                        Create Lithophane
+                                    </Link>
+                                    <Link
+                                        href="/lithophanes#learn-more"
+                                        className="inline-flex items-center gap-3 bg-white text-[#8472DF] border-2 border-[#8472DF] px-6 py-3 rounded-full font-bold hover:bg-[#8472DF]/10 transition-colors duration-300"
+                                    >
+                                        <i className="ri-information-line text-lg w-5 h-5 flex items-center justify-center" />
+                                        Learn More
+                                    </Link>
+                                </div>
                             </div>
                         </div>
 
@@ -82,13 +89,12 @@ export function CustomizedGifts(props: Props) {
                             className="bg-gradient-to-br from-[#F8F9FF] to-[#DBEAFE]/30 rounded-3xl p-8 hover:shadow-lg transition-transform duration-300 flex flex-col"
                             style={{ contentVisibility: "auto" as any }}
                         >
-                            <div className="relative mb-6 rounded-2xl overflow-hidden">
+                            <div className="relative mb-6 rounded-2xl overflow-hidden aspect-[4/3]">
                                 <Image
                                     src="/keychain.webp"
                                     alt="Custom keychain collection"
-                                    width={1200}     // also 4:3; change to your source ratio if needed
-                                    height={900}
-                                    className="w-full h-auto block"
+                                    fill
+                                    className="object-cover w-full h-full"
                                     sizes="(min-width: 1024px) 560px, (min-width: 768px) 50vw, 100vw"
                                     priority={false}
                                     quality={70}
@@ -98,7 +104,7 @@ export function CustomizedGifts(props: Props) {
                                 </div>
                             </div>
 
-                            <div className="space-y-6">
+                            <div className="space-y-6 flex-1 flex flex-col justify-between">
                                 <div>
                                     <h3 className="text-2xl font-bold text-[#2E2E2E] mb-3">Custom Keychains</h3>
                                     <p className="text-[#2E2E2E]/70 leading-relaxed">
@@ -124,7 +130,7 @@ export function CustomizedGifts(props: Props) {
 
                                 <Link
                                     href="/keychains"
-                                    className="inline-flex items-center gap-3 bg-[#93C4FF] text-white px-6 py-3 rounded-full font-bold hover:bg-[#93C4FF]/90 transition-colors duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 whitespace-nowrap"
+                                    className="inline-flex items-center gap-3 bg-[#93C4FF] text-white px-6 py-3 rounded-full font-bold hover:bg-[#93C4FF]/90 transition-colors duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
                                 >
                                     <i className="ri-key-line text-lg w-5 h-5 flex items-center justify-center" />
                                     Design Keychain
@@ -132,8 +138,6 @@ export function CustomizedGifts(props: Props) {
                             </div>
                         </div>
                     </div>
-
-                    <div className="mt-8 md:mt-12" />
                 </div>
             </div>
         </section>

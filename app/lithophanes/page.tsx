@@ -16,7 +16,7 @@ export default function LithophanesPage() {
       <LithophanesHero />
       <HowItWorksSection />
       <GallerySection />
-      <StyleComparison />
+      {/*<StyleComparison />*/}
       <ExplainerVideo />
       <WhyDreamli />
       <FinalCTA />

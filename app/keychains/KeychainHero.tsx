@@ -7,9 +7,9 @@ export default function KeychainHero() {
   return (
     <section id="hero" className="relative bg-gradient-to-br from-blue-50 to-indigo-100 overflow-hidden">
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat "
         style={{
-          backgroundImage: `url('https://static.readdy.ai/image/ad9dc4c8042d4c1a873be12f55826cf9/8001b8cf3ba37551025d17bdabd39401.png')`
+          backgroundImage: `url('https://static.readdy.ai/image/ad9dc4c8042d4c1a873be12f55826cf9/8001b8cf3ba37551025d17bdabd39401.png')`,
         }}
       />
       <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-transparent" />
@@ -26,20 +26,7 @@ export default function KeychainHero() {
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4">
-              <a
-                href="#tab-name"
-                className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors whitespace-nowrap cursor-pointer"
-              >
-                Start with Name (€19,99)
-              </a>
-              <a
-                href="#tab-photo"
-                className="inline-flex items-center justify-center px-8 py-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-colors whitespace-nowrap cursor-pointer"
-              >
-                Start with Photo (€29,99)
-              </a>
-            </div>
+
 
             {/* Trust Badges */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-8 border-t border-gray-200">
@@ -63,7 +50,7 @@ export default function KeychainHero() {
               </div>
               <div className="flex flex-col items-center text-center space-y-2">
                 <div className="w-12 h-12 flex items-center justify-center bg-orange-100 rounded-full">
-                  <i className="ri-nfc-line text-orange-600 text-xl"></i>
+                  <i className="ri-smartphone-line text-orange-600 text-xl"></i>
                 </div>
                 <span className="text-sm text-gray-600">NFC Optional</span>
               </div>

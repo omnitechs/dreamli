@@ -22,7 +22,7 @@ export default function LithophanesHero() {
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link 
-              href="/how-it-works"
+              href="https://shop.dreamli.nl/product/lithophane/"
               className="bg-yellow-500 hover:bg-yellow-600 text-black px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 shadow-xl hover:shadow-2xl whitespace-nowrap cursor-pointer"
             >
               Start Creating

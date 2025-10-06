@@ -21,6 +21,7 @@ let fontsLoaded = false;
 const scadCache = new Map<string, string>();
 
 // Utilities
+// @ts-ignore
 async function importFromPublic(path: string) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
