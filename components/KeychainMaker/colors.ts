@@ -1,4 +1,3 @@
-// app/components/keychain/colors.ts
 const COLOR_MAP: Record<string, string> = {
     'Rojo / Red': '#ff0000',
     'Rojo Oscuro / Dark Red': '#990000',
@@ -16,9 +15,5 @@ const COLOR_MAP: Record<string, string> = {
     'Gris Oscuro / Dark Gray': '#4D4D4D',
     'Turquesa / Turquoise': '#00cccc',
 };
-
-export function colorHex(name: string) {
-    return COLOR_MAP[name] ?? '#999999';
-}
-
+export function colorHex(name: string) { return COLOR_MAP[name] ?? '#999999'; }
 export const COLOR_OPTIONS = Object.keys(COLOR_MAP);

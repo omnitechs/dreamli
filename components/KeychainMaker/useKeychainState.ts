@@ -6,10 +6,7 @@ import type { Defines, KeychainColors } from './types';
 
 function useDebouncedValue<T>(value: T, delay = 300) {
     const [v, setV] = useState(value);
-    useEffect(() => {
-        const id = setTimeout(() => setV(value), delay);
-        return () => clearTimeout(id);
-    }, [value, delay]);
+    useEffect(() => { const id = setTimeout(() => setV(value), delay); return () => clearTimeout(id); }, [value, delay]);
     return v;
 }
 
@@ -21,33 +18,20 @@ export function useKeychainState() {
     // fonts
     const [fontList, setFontList] = useState<string[]>([]);
     const [fuente, setFuente] = useState('DejaVu Sans:style=Regular');
-
     useEffect(() => {
         (async () => {
             try {
                 // @ts-ignore
                 const mod: any = await import(/* webpackIgnore: true */ '/openscad/openscad.fonts.js');
                 const arr: string[] = Array.isArray(mod?.AVAILABLE_FONTS) ? mod.AVAILABLE_FONTS : [];
-                const sane = arr.length
-                    ? arr
-                    : [
-                        'DejaVu Sans:style=Regular',
-                        'DejaVu Sans:style=Book',
-                        'Noto Sans:style=Regular',
-                        'Archivo Black',
-                        'Bebas Neue',
-                        'Pacifico:style=Regular',
-                    ];
+                const sane = arr.length ? arr : [
+                    'DejaVu Sans:style=Regular','DejaVu Sans:style=Book','Noto Sans:style=Regular','Archivo Black','Bebas Neue','Pacifico:style=Regular',
+                ];
                 setFontList(sane);
                 if (!sane.includes(fuente)) setFuente(sane[0]);
             } catch {
                 const fallback = [
-                    'DejaVu Sans:style=Regular',
-                    'DejaVu Sans:style=Book',
-                    'Noto Sans:style=Regular',
-                    'Archivo Black',
-                    'Bebas Neue',
-                    'Pacifico:style=Regular',
+                    'DejaVu Sans:style=Regular','DejaVu Sans:style=Book','Noto Sans:style=Regular','Archivo Black','Bebas Neue','Pacifico:style=Regular',
                 ];
                 setFontList(fallback);
                 if (!fallback.includes(fuente)) setFuente(fallback[0]);
@@ -116,25 +100,7 @@ export function useKeychainState() {
             color_base: colors.baseName,
             color_texto: colors.textName,
         }),
-        [
-            dLinea1,
-            dLinea2,
-            fuente,
-            dTamanio,
-            dAltura,
-            dEspaciado,
-            dGrosorBorde,
-            dAlturaBorde,
-            dDExt,
-            dDInt,
-            dAjusteX,
-            dAjusteY,
-            mostrarAnilla,
-            dosColores,
-            colors.unicoName,
-            colors.baseName,
-            colors.textName,
-        ]
+        [dLinea1,dLinea2,fuente,dTamanio,dAltura,dEspaciado,dGrosorBorde,dAlturaBorde,dDExt,dDInt,dAjusteX,dAjusteY,mostrarAnilla,dosColores,colors.unicoName,colors.baseName,colors.textName]
     );
 
     return {
@@ -146,6 +112,8 @@ export function useKeychainState() {
         ringState: { ajusteX, setAjusteX, ajusteY, setAjusteY, dExt, setDExt, dInt, setDInt },
         colorState: { dosColores, setDosColores, colors, setColors },
         viewerState: { freeView, setFreeView },
+        mostrarAnilla,
+        setMostrarAnilla,
         defines,
     };
 }

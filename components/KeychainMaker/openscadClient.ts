@@ -19,3 +19,14 @@ export function compilePart(scadPath: string, defines: Defines, mode: Mode) {
         w.postMessage({ scadPath, outName: `${mode}.stl`, defines: { ...defines, mode } });
     });
 }
+
+// Run multiple compiles in PARALLEL (separate workers per mode)
+export async function compileMany(scadPath: string, defines: Defines, modes: Mode[]) {
+    const pairs = await Promise.all(
+        modes.map(async (m) => {
+            const buf = await compilePart(scadPath, defines, m);
+            return [m, buf] as const;
+        })
+    );
+    return Object.fromEntries(pairs) as Record<Mode, ArrayBuffer>;
+}

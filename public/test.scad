@@ -1,7 +1,7 @@
-// Keychain: text-base + separate ring (no bridge)
-$fa = 20; $fs = 1.6; $fn = 0;
+// public/test.scad
+// Keychain parts split: base (no ring), text, hole (ring only)
+// mode: "base" | "text" | "hole" | "all"
 
-// -------- Params --------
 linea1 = is_undef(linea1) ? "Sina" : linea1;
 linea2 = is_undef(linea2) ? "Esfahani" : linea2;
 fuente = is_undef(fuente) ? "DejaVu Sans:style=Regular" : fuente;
@@ -18,10 +18,8 @@ diametro_interior = is_undef(diametro_interior) ? 4  : diametro_interior;
 ajuste_x          = is_undef(ajuste_x) ? 0 : ajuste_x;
 ajuste_y          = is_undef(ajuste_y) ? 0 : ajuste_y;
 
-// for viewer
-mode = is_undef(mode) ? "all" : mode;   // "base" | "text" | "all"
+mode = is_undef(mode) ? "all" : mode;
 
-// -------- Text 2D --------
 module text2d_all() {
     if (len(linea1) > 0)
         translate([0, len(linea2)>0 ? tamanio_texto*espaciado_lineas/2 : 0])
@@ -31,40 +29,37 @@ module text2d_all() {
             text(linea2, size=tamanio_texto, font=fuente, halign="center", valign="center");
 }
 
-// -------- Helpers --------
 function _textHalfW() = (tamanio_texto * max(len(linea1), len(linea2)) * 0.6) / 2;
 function _ringX()     = max(0, _textHalfW()) + diametro_exterior/2 - 1 + ajuste_x;
 function _ringY()     = (len(linea2)>0 ? tamanio_texto*espaciado_lineas/2 : 0) + ajuste_y;
 
-// -------- Parts --------
-// base (from text outline only)
-module base3d() {
+// Base plate grown from text outline (no ring)
+module base3d_no_ring() {
     difference() {
         linear_extrude(height=altura_borde)
             offset(delta=grosor_borde)
                 offset(delta=0)
                     text2d_all();
 
-        // engrave if text height negative
+        // engrave when altura_texto < 0
         if (altura_texto < 0)
             translate([0,0,altura_borde + altura_texto])
                 linear_extrude(height=abs(altura_texto)) text2d_all();
     }
 }
 
-// text raised above base
+// Raised text (emboss) or thin preview if engraving
 module text3d() {
     if (altura_texto > 0)
         translate([0,0,altura_borde])
-            linear_extrude(height=altura_texto)
-                text2d_all();
+            linear_extrude(height=altura_texto) text2d_all();
     else
         translate([0,0,altura_borde])
-            linear_extrude(height=1.0) text2d_all(); // thin preview if engrave
+            linear_extrude(height=1.0) text2d_all();
 }
 
-// ring (donut) separate
-module ring3d() {
+// Ring (hole) as a separate part
+module hole3d() {
     if (mostrar_anilla)
         translate([_ringX(), _ringY(), 0])
             difference() {
@@ -73,14 +68,7 @@ module ring3d() {
             }
 }
 
-// -------- Selector --------
-module solid_base() {
-    union() {
-        base3d();
-        ring3d();
-    }
-}
-
-if (mode == "base")      solid_base();
+if (mode == "base")      base3d_no_ring();
 else if (mode == "text") text3d();
-else {                   solid_base(); text3d(); }
+else if (mode == "hole") hole3d();
+else { base3d_no_ring(); text3d(); hole3d(); }

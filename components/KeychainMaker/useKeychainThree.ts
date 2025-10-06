@@ -1,7 +1,7 @@
 // app/components/keychain/useKeychainThree.ts
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import * as THREE from 'three';
 // @ts-ignore
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
@@ -11,49 +11,62 @@ import { calcDims, fitOrthographic, fitPerspective, normalizeAndCenterXZ } from 
 import { colorHex } from './colors';
 import type { Defines } from './types';
 
-import { compilePart } from './openscadClient';
+type PartName = 'base' | 'text' | 'hole';
 
 export function useKeychainThree(params: {
     containerRef: React.RefObject<HTMLDivElement | null>;
     defines: Defines;
-    scadPath: string; // e.g. '/test.scad'
+    scadPath: string; // compile happens outside; kept for parity
     freeView: boolean;
     MOBILE: boolean;
     colorNames: { base: string; text: string; unico: string };
 }) {
-    const { containerRef, defines, scadPath, freeView, MOBILE, colorNames } = params;
+    const { containerRef, freeView, MOBILE, colorNames } = params;
 
     // three refs
-    const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
-    const sceneRef = useRef<THREE.Scene | null>(null);
-    const perspCamRef = useRef<THREE.PerspectiveCamera | null>(null);
-    const orthoCamRef = useRef<THREE.OrthographicCamera | null>(null);
+    const rendererRef  = useRef<THREE.WebGLRenderer | null>(null);
+    const sceneRef     = useRef<THREE.Scene | null>(null);
+    const perspCamRef  = useRef<THREE.PerspectiveCamera | null>(null);
+    const orthoCamRef  = useRef<THREE.OrthographicCamera | null>(null);
     const activeCamRef = useRef<THREE.Camera | null>(null);
-    const controlsRef = useRef<OrbitControls | null>(null);
-    const groupRef = useRef<THREE.Object3D | null>(null);
+    const controlsRef  = useRef<OrbitControls | null>(null);
+    const groupRef     = useRef<THREE.Group | null>(null);
 
-    const switchCamera = (kind: 'ortho' | 'persp') => {
+    // meshes + materials
+    const baseMeshRef  = useRef<THREE.Mesh | null>(null);
+    const textMeshRef  = useRef<THREE.Mesh | null>(null);
+    const holeMeshRef  = useRef<THREE.Mesh | null>(null);
+
+    const baseMatRef = useRef<THREE.MeshStandardMaterial | null>(null);
+    const textMatRef = useRef<THREE.MeshStandardMaterial | null>(null);
+    const holeMatRef = useRef<THREE.MeshStandardMaterial | null>(null);
+
+    const loaderRef   = useRef<STLLoader | null>(null);
+
+    // track initial fit (important for mobile single render)
+    const initialFitDoneRef = useRef(false);
+
+    const renderOnce = useCallback(() => {
+        const r = rendererRef.current, s = sceneRef.current, c = activeCamRef.current;
+        if (r && s && c) r.render(s, c);
+    }, []);
+
+    const switchCamera = useCallback((kind: 'ortho' | 'persp') => {
         activeCamRef.current = kind === 'ortho' ? orthoCamRef.current! : perspCamRef.current!;
         if (controlsRef.current) {
+            // NOTE: we don't rely on freeView here anymore; a separate effect handles enabling.
             const enable = kind === 'persp' && !MOBILE && freeView;
             controlsRef.current.object = activeCamRef.current as any;
             controlsRef.current.enabled = enable;
             controlsRef.current.enableRotate = enable;
-            controlsRef.current.enableZoom = enable;
-            controlsRef.current.enablePan = false;
+            controlsRef.current.enableZoom   = enable;
+            controlsRef.current.enablePan    = false;
             controlsRef.current.enableDamping = enable;
             controlsRef.current.update();
         }
-    };
+    }, [MOBILE, freeView]);
 
-    const renderOnce = () => {
-        const r = rendererRef.current,
-            s = sceneRef.current,
-            c = activeCamRef.current;
-        if (r && s && c) r.render(s, c);
-    };
-
-    // bootstrap three
+    // bootstrap three — restore your original view behavior
     useEffect(() => {
         const container = containerRef.current;
         if (!container) return;
@@ -69,7 +82,7 @@ export function useKeychainThree(params: {
         const scene = new THREE.Scene();
         sceneRef.current = scene;
 
-        // cameras
+        // cameras (same setup)
         const persp = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
         perspCamRef.current = persp;
 
@@ -77,14 +90,14 @@ export function useKeychainThree(params: {
         const ortho = new THREE.OrthographicCamera(-aspect, aspect, 1, -1, 0.01, 1000);
         orthoCamRef.current = ortho;
 
-        // controls (bound to persp by default; switched on demand)
+        // controls bound to persp; toggled by freeView
         const controls = new OrbitControls(persp, renderer.domElement);
         controls.enableRotate = false;
-        controls.enableZoom = false;
-        controls.enablePan = false;
+        controls.enableZoom   = false;
+        controls.enablePan    = false;
         controlsRef.current = controls;
 
-        // lights + ground helper (optional)
+        // lights + grid (as in your file)
         scene.add(new THREE.AmbientLight(0xffffff, 0.9));
         const dir = new THREE.DirectionalLight(0xffffff, 0.9);
         dir.position.set(5, 6, 3);
@@ -94,17 +107,56 @@ export function useKeychainThree(params: {
         (grid as any).position.y = 0;
         scene.add(grid);
 
-        // initial camera
+        // materials (created once; HOLE follows BASE color)
+        const baseMat = new THREE.MeshStandardMaterial({
+            color: colorHex(colorNames.base),
+            metalness: MOBILE ? 0.0 : 0.1,
+            roughness: 0.8,
+        });
+        const textMat = new THREE.MeshStandardMaterial({
+            color: colorHex(colorNames.text),
+            metalness: MOBILE ? 0.0 : 0.1,
+            roughness: 0.8,
+            depthWrite: false,
+            depthTest: true,
+            polygonOffset: true,
+            polygonOffsetFactor: -2,
+            polygonOffsetUnits: -2,
+        });
+        const holeMat = new THREE.MeshStandardMaterial({
+            color: colorHex(colorNames.base), // hole = base color
+            metalness: MOBILE ? 0.0 : 0.1,
+            roughness: 0.85,
+        });
+        baseMatRef.current = baseMat;
+        textMatRef.current = textMat;
+        holeMatRef.current = holeMat;
+
+        // meshes with empty geometry initially
+        const baseMesh = new THREE.Mesh(new THREE.BufferGeometry(), baseMat); baseMesh.name = 'base';
+        const textMesh = new THREE.Mesh(new THREE.BufferGeometry(), textMat); textMesh.name = 'text';
+        const holeMesh = new THREE.Mesh(new THREE.BufferGeometry(), holeMat); holeMesh.name = 'hole';
+        baseMeshRef.current = baseMesh;
+        textMeshRef.current = textMesh;
+        holeMeshRef.current = holeMesh;
+
+        const group = new THREE.Group();
+        group.add(baseMesh, textMesh, holeMesh);
+        groupRef.current = group;
+        scene.add(group);
+
+        // initial camera mode — EXACTLY like your component
         switchCamera(MOBILE ? 'ortho' : freeView ? 'persp' : 'ortho');
 
-        // resize
+        // resize — same recalculation & re-fit logic
         const ro = new ResizeObserver(() => {
             const dims = calcDims(container);
             renderer.setSize(dims.width, dims.height, false);
+
             if (orthoCamRef.current) {
-                orthoCamRef.current.left = -dims.width / dims.height;
-                orthoCamRef.current.right = dims.width / dims.height;
-                orthoCamRef.current.top = 1;
+                orthoCamRef.current.left   = -dims.width / dims.height;
+                orthoCamRef.current.right  =  dims.width / dims.height;
+                orthoCamRef.current.top    = 1;
                 orthoCamRef.current.bottom = -1;
                 orthoCamRef.current.updateProjectionMatrix();
             }
@@ -124,15 +176,16 @@ export function useKeychainThree(params: {
         });
         ro.observe(container);
 
-        // loop
+        // loop — animate on desktop, single render on mobile
         let raf = 0;
         const tick = () => {
             controls.update();
             renderer.render(scene, activeCamRef.current || persp);
             raf = requestAnimationFrame(tick);
         };
-        if (!MOBILE) tick();
-        else renderOnce();
+        if (!MOBILE) tick(); else renderOnce();
+
+        loaderRef.current = new STLLoader();
 
         return () => {
             if (!MOBILE) cancelAnimationFrame(raf);
@@ -145,102 +198,107 @@ export function useKeychainThree(params: {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // recompile + rebuild when defines/colors/freeView change
+    // ✅ NEW: when freeView/MOBILE change, (re)enable controls accordingly.
+    // This fixes the timing issue where switchTo('persp') runs before freeView=true reaches this hook.
     useEffect(() => {
-        const scene = sceneRef.current;
+        const controls = controlsRef.current;
+        if (!controls) return;
+
+        const enable = !MOBILE && freeView && activeCamRef.current === perspCamRef.current;
+        controls.enabled = enable;
+        controls.enableRotate = enable;
+        controls.enableZoom   = enable;
+        controls.enablePan    = false;
+        controls.enableDamping = enable;
+        controls.update();
+
+        if (MOBILE) renderOnce();
+    }, [freeView, MOBILE, renderOnce]);
+
+    // public: switch camera & refit — same as your file
+    const switchTo = useCallback((kind: 'ortho' | 'persp') => {
         const container = containerRef.current;
-        if (!scene || !container || !perspCamRef.current || !orthoCamRef.current) return;
+        const group = groupRef.current;
+        if (!container || !group) return;
 
-        let cancelled = false;
+        switchCamera(kind);
+        if (kind === 'persp') {
+            fitPerspective(group, perspCamRef.current!, container, true);
+        } else {
+            fitOrthographic(group, orthoCamRef.current!, container);
+        }
+        if (MOBILE) renderOnce();
+    }, [MOBILE, renderOnce, switchCamera, containerRef]);
 
-        (async () => {
-            // compile base + text (serialize on mobile)
-            const baseBuf = await compilePart(scadPath, defines, 'base');
-            if (cancelled) return;
-            const textBuf = await compilePart(scadPath, defines, 'text');
-            if (cancelled) return;
+    // helper: (re)center + fit (used only when BASE/TEXT change)
+    const recenterAndFit = useCallback(() => {
+        const container = containerRef.current;
+        const group = groupRef.current;
+        if (!container || !group) return;
 
-            // remove previous
-            if (groupRef.current) {
-                scene.remove(groupRef.current);
-                groupRef.current.traverse?.((o: any) => {
-                    o.geometry?.dispose?.();
-                    o.material?.dispose?.();
-                });
-                groupRef.current = null;
-            }
+        normalizeAndCenterXZ(group);
 
-            // parse STL
-            const loader = new STLLoader();
-            const baseGeom = baseBuf.byteLength ? loader.parse(baseBuf) : null;
-            const textGeom = textBuf.byteLength ? loader.parse(textBuf) : null;
-            if (!baseGeom && !textGeom) return;
+        if (activeCamRef.current === orthoCamRef.current && orthoCamRef.current) {
+            fitOrthographic(group, orthoCamRef.current, container);
+        } else if (activeCamRef.current === perspCamRef.current && perspCamRef.current) {
+            fitPerspective(group, perspCamRef.current, container, true);
+        }
+    }, [containerRef]);
 
-            const prep = (g: THREE.BufferGeometry | null) => {
-                if (!g) return;
-                g.rotateX(-Math.PI / 2);
-                g.computeVertexNormals();
-            };
-            prep(baseGeom);
-            prep(textGeom);
+    // public: set geometry per part
+    const setPartGeometry = useCallback((part: PartName, buf: ArrayBuffer) => {
+        const loader = loaderRef.current;
+        if (!loader) return;
 
-            const baseMat = new THREE.MeshStandardMaterial({
-                color: defines.dos_colores ? colorHex(colorNames.base) : colorHex(colorNames.unico),
-                metalness: MOBILE ? 0.0 : 0.1,
-                roughness: 0.8,
-            });
-            const textMat = new THREE.MeshStandardMaterial({
-                color: defines.dos_colores ? colorHex(colorNames.text) : colorHex(colorNames.unico),
-                metalness: MOBILE ? 0.0 : 0.1,
-                roughness: 0.8,
-                depthWrite: false,
-                depthTest: true,
-                polygonOffset: true,
-                polygonOffsetFactor: -2,
-                polygonOffsetUnits: -2,
-            });
+        const mesh =
+            part === 'base' ? baseMeshRef.current :
+                part === 'text' ? textMeshRef.current :
+                    part === 'hole' ? holeMeshRef.current : null;
+        if (!mesh) return;
 
-            const group = new THREE.Group();
-            if (baseGeom) group.add(new THREE.Mesh(baseGeom, baseMat));
-            if (textGeom) {
-                const m = new THREE.Mesh(textGeom, textMat);
-                m.renderOrder = 1;
-                m.position.z += 0.02;
-                group.add(m);
-            }
+        // dispose old geometry
+        mesh.geometry.dispose();
 
-            normalizeAndCenterXZ(group);
-            scene.add(group);
-            groupRef.current = group;
+        // parse & orient (Z-up)
+        if (!buf || !buf.byteLength) {
+            mesh.geometry = new THREE.BufferGeometry();
+        } else {
+            const geom = loader.parse(buf);
+            geom.rotateX(-Math.PI / 2);
+            geom.computeVertexNormals();
+            mesh.geometry = geom;
+        }
 
-            const wantPersp = !MOBILE && freeView;
-            switchCamera(wantPersp ? 'persp' : 'ortho');
-
-            if (wantPersp) {
-                fitPerspective(group, perspCamRef.current!, container, true);
+        // Only fit on base/text changes (mobile parity)
+        const isBaseOrText = part === 'base' || part === 'text';
+        if (isBaseOrText) {
+            if (!initialFitDoneRef.current) {
+                initialFitDoneRef.current = true;
+                recenterAndFit();
             } else {
-                fitOrthographic(group, orthoCamRef.current!, container);
+                recenterAndFit();
             }
+        }
 
-            if (MOBILE) renderOnce();
-        })();
+        if (MOBILE) renderOnce();
+    }, [MOBILE, renderOnce, recenterAndFit]);
 
-        return () => {
-            cancelled = true;
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(defines), freeView, colorNames.base, colorNames.text, colorNames.unico]);
+    // public: recolor without recompile (hole follows base)
+    const setColors = useCallback((opts: { base: string; text: string; unico: string; twoColors: boolean }) => {
+        const baseMat = baseMatRef.current;
+        const textMat = textMatRef.current;
+        const holeMat = holeMatRef.current;
+        if (!baseMat || !textMat || !holeMat) return;
 
-    // expose a few helpers to the component
-    return {
-        switchTo: (kind: 'ortho' | 'persp') => {
-            const container = containerRef.current;
-            const group = groupRef.current;
-            if (!container || !group) return;
-            switchCamera(kind);
-            if (kind === 'persp') fitPerspective(group, perspCamRef.current!, container, true);
-            else fitOrthographic(group, orthoCamRef.current!, container);
-            if (MOBILE) renderOnce();
-        },
-    };
+        const baseColorName = opts.twoColors ? opts.base : opts.unico;
+        const textColorName = opts.twoColors ? opts.text : opts.unico;
+
+        baseMat.color.set(colorHex(baseColorName));
+        textMat.color.set(colorHex(textColorName));
+        holeMat.color.set(colorHex(baseColorName)); // hole = base
+
+        if (MOBILE) renderOnce();
+    }, [MOBILE, renderOnce]);
+
+    return { switchTo, setPartGeometry, setColors };
 }
