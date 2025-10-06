@@ -1,25 +1,35 @@
 {
   "meta": {
-    "title": "Dreamli | Personalized 3D Creative Kits from Kids' Drawings",
-    "description": "Transform your child's drawings into personalized 3D figures and painting kits. Eco-friendly, fun, and designed to boost creativity & confidence."
+    "title": "Dreamli | Kits créatifs 3D personnalisés à partir des dessins d’enfants",
+    "description": "Transformez les dessins de votre enfant en figurines et kits de peinture 3D personnalisés. Écologique, amusant et conçu pour stimuler la créativité et la confiance en soi."
   },
-  "home":{
+  "home": {
     "title": "",
-    "description": ""
+    "description": "",
+    "hero": {
+      "title": "Trouvez le cadeau parfait",
+      "extendedTitle": "à votre façon",
+      "subtitle": "Vous ne savez pas quoi choisir ? Avec Dreamli, vous pouvez trouver des cadeaux de deux manières"
+    }
   },
   "Header": {
-    "home": "Home",
-    "about": "About",
+    "home": "Accueil",
+    "about": "À propos",
     "contact": "Contact",
     "title": "Dreamli"
   },
   "hero": {
-    "title": "Find the perfect gift <span class='text-[#8472DF]'>your way</span>",
-    "subtitle": "Not sure what to choose? With Dreamli you can find gifts in two ways",
-    "cta": "Explore gifts"
+    "title": "Trouvez le cadeau parfait <span class='text-[#8472DF]'>à votre façon</span>",
+    "subtitle": "Vous ne savez pas quoi choisir ? Avec Dreamli, vous pouvez trouver des cadeaux de deux manières",
+    "cta": "Explorer les cadeaux"
   },
   "chat": {
-    "prompt": "Type your question…",
-    "send": "Send"
+    "assistantTitle": "Assistant cadeau IA",
+    "statusOnline": "En ligne maintenant",
+    "clearHistory": "Effacer l’historique",
+    "placeholder": "Écrivez votre message…",
+    "inputAria": "Saisie du message de chat",
+    "send": "Envoyer",
+    "decorativeDotAlt": "Point décoratif"
   }
 }

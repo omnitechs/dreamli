@@ -57,7 +57,7 @@ export default async function LangLayout({
     children: ReactNode;
     params: { lang: LanguageCode };
 }) {
-    const { lang } = params; // not a Promise here
+    const { lang } = await params; // not a Promise here
     if (!languageCodes.includes(lang)) notFound();
 
     const messages = await getMessages({ locale: lang });

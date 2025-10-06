@@ -34,9 +34,9 @@ export async function generateMetadata(
     };
 }
 
-export default function HomePage({ params }: { params: { lang: LanguageCode } }) {
-    const { lang } = params; // DO NOT await here
+export default async function HomePage({ params }: { params: { lang: LanguageCode } }) {
+    const { lang } = await params; // DO NOT await here
     if (!languageCodes.includes(lang)) notFound();
 
-    return <HomePageComponent lang={lang} />;
+    return <HomePageComponent />;
 }

@@ -1,8 +1,11 @@
-'use client'
-import { useChatController } from "@/app/components/Hero/useChatController";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import React from "react";
+'use client';
+
+import { useChatController } from '@/app/components/Hero/useChatController';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import React from 'react';
+import { useTranslations } from 'next-intl';
+
 /* ---------- Chat UI Primitives ---------- */
 
 export function ThinkingBubble() {
@@ -21,6 +24,7 @@ export function ThinkingBubble() {
 }
 
 function ChatHeader({ onClear }: { onClear: () => void }) {
+    const t = useTranslations('chat');
     return (
         <header className="flex items-center justify-between gap-3 mb-4">
             {/* Left side: avatar + title */}
@@ -29,8 +33,8 @@ function ChatHeader({ onClear }: { onClear: () => void }) {
                     <i className="ri-robot-line text-white text-lg" />
                 </div>
                 <div>
-                    <h3 className="font-bold text-[#2E2E2E]">AI Gift Assistant</h3>
-                    <p className="text-sm text-[#2E2E2E]/60">Online now</p>
+                    <h3 className="font-bold text-[#2E2E2E]">{t('assistantTitle')}</h3>
+                    <p className="text-sm text-[#2E2E2E]/60">{t('statusOnline')}</p>
                 </div>
             </div>
 
@@ -38,29 +42,30 @@ function ChatHeader({ onClear }: { onClear: () => void }) {
             <button
                 onClick={onClear}
                 className="text-sm px-3 py-1.5 rounded-full border border-[#E6E6F5] hover:bg-[#F8F9FF] transition-colors"
+                aria-label={t('clearHistory')}
             >
-                Clear history
+                {t('clearHistory')}
             </button>
         </header>
     );
 }
 
 export function ChatBubble({
-                               from = "ai",
+                               from = 'ai',
                                children,
                            }: {
-    from?: "ai" | "user";
+    from?: 'ai' | 'user';
     children: string;
 }) {
-    const isUser = from === "user";
+    const isUser = from === 'user';
     return (
         <li
             className={[
-                "p-4 rounded-2xl leading-relaxed",
+                'p-4 rounded-2xl leading-relaxed',
                 isUser
-                    ? "bg-[#8472DF] text-white rounded-br-sm ml-8"
-                    : "bg-[#F8F9FF] text-[#2E2E2E] rounded-bl-sm",
-            ].join(" ")}
+                    ? 'bg-[#8472DF] text-white rounded-br-sm ml-8'
+                    : 'bg-[#F8F9FF] text-[#2E2E2E] rounded-bl-sm',
+            ].join(' ')}
         >
             <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
@@ -72,8 +77,8 @@ export function ChatBubble({
                             rel="noopener noreferrer"
                             className={
                                 isUser
-                                    ? "underline"
-                                    : "underline decoration-[#8472DF]/50 hover:decoration-[#8472DF]"
+                                    ? 'underline'
+                                    : 'underline decoration-[#8472DF]/50 hover:decoration-[#8472DF]'
                             }
                         />
                     ),
@@ -92,14 +97,13 @@ function ChatTranscript({
                             items,
                             thinking,
                         }: {
-    items: { from: "ai" | "user"; text: string }[];
+    items: { from: 'ai' | 'user'; text: string }[];
     thinking: boolean;
 }) {
     const scrollerRef = React.useRef<HTMLDivElement | null>(null);
     const endRef = React.useRef<HTMLDivElement | null>(null);
     const userAnchoring = React.useRef(true); // true = follow bottom
 
-    // Helper: am I close enough to bottom?
     const isNearBottom = React.useCallback(() => {
         const el = scrollerRef.current;
         if (!el) return true;
@@ -107,29 +111,24 @@ function ChatTranscript({
         return el.scrollHeight - el.scrollTop - el.clientHeight <= threshold;
     }, []);
 
-    // Track user-initiated scrolls to enable/disable anchoring
     const onScroll = React.useCallback(() => {
         userAnchoring.current = isNearBottom();
     }, [isNearBottom]);
 
-    // When messages update, only auto-scroll if anchored or actively thinking
     React.useEffect(() => {
         const el = scrollerRef.current;
         if (!el) return;
-
         if (userAnchoring.current || thinking) {
-            // Use 'auto' to avoid jumpy smooth chaining during streaming
-            endRef.current?.scrollIntoView({ behavior: "auto", block: "end" });
+            endRef.current?.scrollIntoView({ behavior: 'auto', block: 'end' });
         }
     }, [items, thinking]);
 
-    // If container resizes (e.g., window resize), keep position if anchored
     React.useEffect(() => {
         const el = scrollerRef.current;
-        if (!el || typeof ResizeObserver === "undefined") return;
+        if (!el || typeof ResizeObserver === 'undefined') return;
         const ro = new ResizeObserver(() => {
             if (userAnchoring.current) {
-                endRef.current?.scrollIntoView({ behavior: "auto", block: "end" });
+                endRef.current?.scrollIntoView({ behavior: 'auto', block: 'end' });
             }
         });
         ro.observe(el);
@@ -141,7 +140,7 @@ function ChatTranscript({
             ref={scrollerRef}
             onScroll={onScroll}
             className="flex-1 overflow-y-auto min-h-0 pr-1 overscroll-contain"
-            style={{ scrollbarGutter: "stable both-edges" }}
+            style={{ scrollbarGutter: 'stable both-edges' }}
             aria-live="polite"
         >
             <ul className="space-y-3">
@@ -161,30 +160,31 @@ function ChatInputBar({
                           value,
                           onChange,
                           onSend,
-                          sending,      // rename prop
+                          sending,
                       }: {
     value: string;
     onChange: (v: string) => void;
     onSend: (e?: React.FormEvent) => void;
-    sending: boolean; // true when the model is thinking
+    sending: boolean;
 }) {
+    const t = useTranslations('chat');
     const sendDisabled = sending || !value.trim();
 
     return (
         <form className="flex items-center gap-2 pt-2" onSubmit={onSend}>
             <input
                 type="text"
-                placeholder="Type your message..."
+                placeholder={t('placeholder')}
                 className="flex-1 px-4 py-3 border border-gray-200 rounded-full text-sm focus:outline-none focus:border-[#8472DF]"
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
-                // keep input enabled; optionally lock typing only while thinking:
                 readOnly={sending}
+                aria-label={t('inputAria')}
             />
             <button
                 type="submit"
                 className="w-10 h-10 bg-[#8472DF] text-white rounded-full grid place-items-center hover:bg-[#8472DF]/90 transition-colors disabled:opacity-50"
-                aria-label="Send message"
+                aria-label={t('send')}
                 disabled={sendDisabled}
             >
                 <i className="ri-send-plane-line" />
@@ -196,6 +196,7 @@ function ChatInputBar({
 /* ---------- Composite Chat Card ---------- */
 
 function AIChatAssistant() {
+    const t = useTranslations('chat');
     const { messages, input, setInput, send, thinking, clearHistory } = useChatController();
 
     return (
@@ -205,30 +206,22 @@ function AIChatAssistant() {
                 <div className="flex-1 overflow-y-auto min-h-0">
                     <ChatTranscript items={messages} thinking={thinking} />
                 </div>
-                {/* pass only 'thinking' as sending */}
                 <ChatInputBar value={input} onChange={setInput} onSend={send} sending={thinking} />
             </article>
 
-            <div className="absolute -top-4 -right-4 w-8 h-8 bg-[#FFB067] rounded-full animate-pulse" />
-            <div className="absolute -bottom-6 -left-6 w-12 h-12 bg-[#93C4FF]/20 rounded-full animate-bounce" />
+            <div
+                className="absolute -top-4 -right-4 w-8 h-8 bg-[#FFB067] rounded-full animate-pulse"
+                aria-hidden="true"
+                title={t('decorativeDotAlt')}
+            />
+            <div
+                className="absolute -bottom-6 -left-6 w-12 h-12 bg-[#93C4FF]/20 rounded-full animate-bounce"
+                aria-hidden="true"
+                title={t('decorativeDotAlt')}
+            />
         </aside>
     );
 }
-
-// function HeroContent() {
-//     return (
-//         <div className="pb-12 sm:pb-12 lg:pb-12">
-//             <div className="container mx-auto px-6">
-//                 <div className="max-w-6xl mx-auto">
-//                     <div className="grid lg:grid-cols-1 gap-16 items-start">
-//                         <AIChatAssistant />
-//                         {/* Add your second column content here when ready */}
-//                     </div>
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// }
 
 export default function ChatBox() {
     return (
@@ -237,10 +230,10 @@ export default function ChatBox() {
                 <div className="max-w-6xl mx-auto">
                     <div className="grid lg:grid-cols-1 gap-16 items-start">
                         <AIChatAssistant />
-                        {/* Add your second column content here when ready */}
+                        {/* second column content when ready */}
                     </div>
                 </div>
             </div>
         </div>
-    )
+    );
 }

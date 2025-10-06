@@ -10,11 +10,11 @@ import {CustomizedGifts} from "@/app/components/CustomizedGifts";
 import {WhySection} from "@/app/components/WhySection";
 import {LanguageCode} from "@/config/i18n";
 
-export default function HomePageComponent({lang}:{lang:LanguageCode}) {
+export default function HomePageComponent() {
     return (
         <div className="min-h-screen bg-white">
 
-            <Hero lang={lang}/>
+            <Hero/>
             <AI/>
             <CustomizedGifts/>
             <WhySection/>
