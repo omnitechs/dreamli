@@ -6,24 +6,38 @@ import { useKeychainState } from './useKeychainState';
 import { COLOR_OPTIONS, colorHex } from './colors';
 import { useKeychainThree } from './useKeychainThree';
 import { useKeychainCompile } from './useKeychainCompile';
+import { compilePart } from './openscadClient';
 
 // Extract clean font names from the full font strings
 const getCleanFontName = (fontString: string) => {
-    // Remove style suffixes like ":style=Book", ":style=Regular"
     return fontString.split(':')[0];
 };
 
 type Props = {
     scadPath?: string;
     className?: string;
+    woocommerceConfig?: {
+        productId: number;
+        apiUrl: string;
+    };
 };
 
 export default function KeychainBuilder({
                                             scadPath = '/test.scad',
                                             className = '',
+                                            woocommerceConfig = {
+                                                productId: 123,
+                                                apiUrl: '/wp-json/custom/v1/add-to-cart'
+                                            }
                                         }: Props) {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const [activeTab, setActiveTab] = useState<'text' | 'style' | 'ring'>('text');
+    const [showNotification, setShowNotification] = useState<{
+        show: boolean;
+        message: string;
+        type: 'success' | 'error';
+    }>({ show: false, message: '', type: 'success' });
+    const [isProcessing, setIsProcessing] = useState(false);
 
     const {
         MOBILE,
@@ -78,8 +92,125 @@ export default function KeychainBuilder({
     });
 
     const { switchTo, setPartGeometry, setColors: viewerSetColors } = three;
-
     const { baseBuf, textBuf, holeBuf } = useKeychainCompile({ scadPath, defines });
+
+    // Helper function to generate filename
+    const generateFilename = () => {
+        const timestamp = Date.now();
+        const line1 = (defines.linea1 || 'keychain').replace(/[^a-zA-Z0-9]/g, '-');
+        return `keychain-${line1}-${timestamp}.stl`;
+    };
+
+    // Handle download
+    const handleDownload = async () => {
+        try {
+            setIsProcessing(true);
+            const buffer = await compilePart(scadPath, defines, 'all');
+
+            if (!buffer || buffer.byteLength === 0) {
+                console.warn('No STL data generated');
+                return;
+            }
+
+            const filename = generateFilename();
+            const blob = new Blob([buffer], { type: 'application/octet-stream' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('Failed to download STL:', error);
+        } finally {
+            setIsProcessing(false);
+        }
+    };
+
+    // Handle add to cart
+    const handleAddToCart = async () => {
+        try {
+            setIsProcessing(true);
+            console.log('Sending design parameters to cart...');
+
+            const formData = new FormData();
+            formData.append('product_id', woocommerceConfig.productId.toString());
+            formData.append('quantity', '1');
+
+            // Send all design parameters as JSON
+            const designData = {
+                text: {
+                    line1: defines.linea1,
+                    line2: defines.linea2,
+                    font: defines.fuente,
+                    size: defines.tamanio_texto,
+                    spacing: defines.espaciado_lineas,
+                },
+                style: {
+                    textHeight: defines.altura_texto,
+                    baseThickness: defines.altura_borde,
+                    borderThickness: defines.grosor_borde,
+                },
+                ring: {
+                    show: defines.mostrar_anilla,
+                    outerDiameter: defines.diametro_exterior,
+                    innerDiameter: defines.diametro_interior,
+                    adjustX: defines.ajuste_x,
+                    adjustY: defines.ajuste_y,
+                },
+                colors: {
+                    twoColor: defines.dos_colores,
+                    base: defines.color_base,
+                    text: defines.color_texto,
+                    single: defines.color_unico,
+                }
+            };
+
+            formData.append('design_data', JSON.stringify(designData));
+
+            const response = await fetch('https://shop.dreamli.nl/wp-json/custom/v1/add-to-cart', {
+                method: 'POST',
+                body: formData,
+            });
+
+            console.log('Response status:', response.status);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log('Result:', result);
+
+            if (result.success) {
+                setShowNotification({
+                    show: true,
+                    message: 'Added to cart! Redirecting...',
+                    type: 'success',
+                });
+                setTimeout(() => {
+                    window.location.href = result.cart_url || 'https://shop.dreamli.nl/cart';
+                }, 1500);
+            } else {
+                throw new Error('Failed to add to cart');
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+            setShowNotification({
+                show: true,
+                message: 'Failed to add to cart: ' + error.message,
+                type: 'error',
+            });
+            setTimeout(() => {
+                setShowNotification({ show: false, message: '', type: 'success' });
+            }, 3000);
+        } finally {
+            setIsProcessing(false);
+        }
+    };
 
     useEffect(() => {
         if (baseBuf && baseBuf.byteLength) setPartGeometry('base', baseBuf);
@@ -112,6 +243,19 @@ export default function KeychainBuilder({
         <div
             className={`min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 overflow-x-hidden ${className}`}
         >
+            {/* Notification */}
+            {showNotification.show && (
+                <div className="fixed top-4 right-4 z-50">
+                    <div className={`px-6 py-3 rounded-lg shadow-lg ${
+                        showNotification.type === 'success'
+                            ? 'bg-green-500 text-white'
+                            : 'bg-red-500 text-white'
+                    }`}>
+                        {showNotification.message}
+                    </div>
+                </div>
+            )}
+
             <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8 w-full">
                 {/* Header */}
                 <div className="mb-4 md:mb-6">
@@ -558,7 +702,7 @@ export default function KeychainBuilder({
                     <div className="lg:col-span-2 w-full min-w-0">
                         <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden w-full">
                             {/* Viewer Header */}
-                            <div className="border-b border-slate-200 p-3 md:p-4 md:flex flex-col sm:flex-row sm:items-center sm:justify-between bg-slate-50 gap-2 sm:gap-0 hidden">
+                            <div className="border-b border-slate-200 p-3 md:p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between bg-slate-50 gap-2 sm:gap-0">
                                 <div className="min-w-0">
                                     <h2 className="font-semibold text-slate-900 text-sm md:text-base">
                                         3D Preview
@@ -570,20 +714,48 @@ export default function KeychainBuilder({
                                     </p>
                                 </div>
 
-                                <button
-                                    onClick={() => {
-                                        const next = !freeView;
-                                        setFreeView(next);
-                                        switchTo(!MOBILE && next ? 'persp' : 'ortho');
-                                    }}
-                                    className={`px-3 md:px-4 py-1.5 md:py-2 rounded-lg font-medium text-xs md:text-sm transition-all whitespace-nowrap flex-shrink-0 ${
-                                        freeView
-                                            ? 'bg-blue-500 text-white hover:bg-blue-600 shadow-sm'
-                                            : 'bg-white text-slate-700 border border-slate-300 hover:bg-slate-50'
-                                    }`}
-                                >
-                                    {freeView ? '🔓 Free View' : '🔒 Lock View'}
-                                </button>
+                                <div className="flex gap-2 flex-wrap">
+                                    <button
+                                        onClick={handleAddToCart}
+                                        disabled={isProcessing}
+                                        className={`px-3 md:px-4 py-1.5 md:py-2 rounded-lg font-medium text-xs md:text-sm transition-all whitespace-nowrap flex items-center gap-2 ${
+                                            isProcessing
+                                                ? 'bg-blue-300 text-white cursor-wait'
+                                                : 'bg-blue-500 text-white hover:bg-blue-600 shadow-sm'
+                                        }`}
+                                    >
+                                        <span>{isProcessing ? '⏳' : '🛒'}</span>
+                                        {isProcessing ? 'Processing...' : 'Add to Cart'}
+                                    </button>
+
+                                    <button
+                                        onClick={handleDownload}
+                                        disabled={isProcessing}
+                                        className={`px-3 md:px-4 py-1.5 md:py-2 rounded-lg font-medium text-xs md:text-sm transition-all whitespace-nowrap flex items-center gap-2 ${
+                                            isProcessing
+                                                ? 'bg-green-300 text-white cursor-wait'
+                                                : 'bg-green-500 text-white hover:bg-green-600 shadow-sm'
+                                        }`}
+                                    >
+                                        <span>⬇️</span>
+                                        Download
+                                    </button>
+
+                                    <button
+                                        onClick={() => {
+                                            const next = !freeView;
+                                            setFreeView(next);
+                                            switchTo(!MOBILE && next ? 'persp' : 'ortho');
+                                        }}
+                                        className={`px-3 md:px-4 py-1.5 md:py-2 rounded-lg font-medium text-xs md:text-sm transition-all whitespace-nowrap flex-shrink-0 ${
+                                            freeView
+                                                ? 'bg-slate-500 text-white hover:bg-slate-600 shadow-sm'
+                                                : 'bg-white text-slate-700 border border-slate-300 hover:bg-slate-50'
+                                        }`}
+                                    >
+                                        {freeView ? '🔓' : '🔒'}
+                                    </button>
+                                </div>
                             </div>
 
                             {/* Canvas */}

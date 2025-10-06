@@ -20,7 +20,10 @@ export default function HomePage() {
         <CustomizedGifts/>
         <WhySection/>
         {/*<KeychainOpenSCADPlain />*/}
-        <KeychainBuilder/>
+        <KeychainBuilder woocommerceConfig={{
+            productId: 50361, // Your WooCommerce product ID
+            apiUrl: 'https://shop.dreamli.nl/wp-json/custom/v1/add-to-cart'
+        }}/>
       <Footer />
     </div>
   );
