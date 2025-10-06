@@ -1,5 +1,5 @@
 
-
+import createNextIntlPlugin from 'next-intl/plugin';
 const nextConfig = {
  // output: "export",
   images: {
@@ -13,5 +13,5 @@ const nextConfig = {
         esmExternals: true,  // <-- keep ESM behavior for worker deps
     },
 };
-
-export default nextConfig;
+const withNextIntl = createNextIntlPlugin();
+export default withNextIntl(nextConfig);
