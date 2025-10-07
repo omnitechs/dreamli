@@ -1,10 +1,11 @@
 // app/(lang)[lang]/custom-print/Custom3DPrintSection.tsx
 import Link from 'next/link';
-import { getTranslations } from 'next-intl/server';
+import {getLocale, getTranslations} from 'next-intl/server';
+import type {LanguageCode} from "@/config/i18n";
 
 export default async function Custom3DPrintSection() {
     const t = await getTranslations('home.Custom3D');
-
+    const locale = await getLocale();
     return (
         <section className="py-16 sm:py-24 lg:py-32 bg-gradient-to-br from-[#F8F9FF] to-[#F3E8FF]/30">
             <div className="container mx-auto px-6">
@@ -41,7 +42,7 @@ export default async function Custom3DPrintSection() {
 
                             <div className="flex flex-col sm:flex-row gap-4">
                                 <Link
-                                    href="/custom-print/upload"
+                                    href= {locale =="en" ? "https://shop.dreamli.nl/product/custom-3d-print/" : `https://shop.dreamli.nl/${locale}/product/custom-3d-print/`} target="_blank"
                                     className="inline-flex items-center justify-center gap-3 bg-[#8472DF] text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-[#8472DF]/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1 whitespace-nowrap cursor-pointer"
                                 >
                                     <i className="ri-upload-cloud-line text-xl w-6 h-6 flex items-center justify-center"></i>
@@ -49,7 +50,7 @@ export default async function Custom3DPrintSection() {
                                 </Link>
 
                                 <Link
-                                    href="/custom-print/request"
+                                    href="https://wa.me/31645559587"
                                     className="inline-flex items-center justify-center gap-3 bg-white text-[#8472DF] border-2 border-[#8472DF] px-8 py-4 rounded-full text-lg font-bold hover:bg-[#8472DF] hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1 whitespace-nowrap cursor-pointer"
                                 >
                                     <i className="ri-pencil-ruler-line text-xl w-6 h-6 flex items-center justify-center"></i>
