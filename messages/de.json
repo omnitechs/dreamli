@@ -232,6 +232,29 @@
     }
   },
   "lithosphanes": {
+    "WhyDreamli": {
+      "title": "Warum Dreamli wählen?",
+      "subtitle": "Wir verbinden modernste Technik mit Handwerkskunst, um Lithophane zu schaffen, die Erwartungen übertreffen.",
+      "features": {
+        "print": {
+          "title": "Hochwertiger 3D-Druck",
+          "desc": "Mit Präzision gefertigt – außergewöhnliche Details und Haltbarkeit."
+        },
+        "led": {
+          "title": "Gleichmäßige LED-Beleuchtung",
+          "desc": "Keine dunklen Stellen – gleichmäßige Ausleuchtung über das gesamte Lithophan."
+        },
+        "gift": {
+          "title": "Das perfekte Geschenk",
+          "desc": "Persönlich, bedeutungsvoll, unvergesslich. Mache aus jedem Foto ein leuchtendes Andenken."
+        }
+      },
+      "stats": {
+        "delivery": "Tage Lieferzeit",
+        "rating": "Kundenbewertung",
+        "guarantee": "Qualitätsgarantie"
+      }
+    },
     "ExplainerVideo": {
       "title": "Erlebe Lithophane zum Leben",
       "blurb": "Sieh dir an, wie wir deine Erinnerungen in beeindruckende, beleuchtete Kunstwerke verwandeln, die bei Hintergrundlicht verborgene Details zeigen.",

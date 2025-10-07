@@ -232,6 +232,29 @@
     }
   },
   "lithosphanes": {
+    "WhyDreamli": {
+      "title": "Pourquoi choisir Dreamli ?",
+      "subtitle": "Nous associons technologie de pointe et savoir-faire artisanal pour créer des lithophanies qui dépassent les attentes.",
+      "features": {
+        "print": {
+          "title": "Impression 3D de haute qualité",
+          "desc": "Fabriqué avec précision grâce à l’impression 3D avancée pour un niveau de détail et une durabilité remarquables."
+        },
+        "led": {
+          "title": "Éclairage LED uniforme",
+          "desc": "Aucune zone sombre—un rétroéclairage homogène pour une illumination parfaite."
+        },
+        "gift": {
+          "title": "Le cadeau parfait",
+          "desc": "Personnel, significatif, inoubliable. Transformez chaque photo en souvenir lumineux."
+        }
+      },
+      "stats": {
+        "delivery": "Jours de livraison",
+        "rating": "Note des clients",
+        "guarantee": "Garantie de qualité"
+      }
+    },
     "ExplainerVideo": {
       "title": "Voyez les lithophanies prendre vie",
       "blurb": "Découvrez comment nous transformons vos précieux souvenirs en superbes œuvres lumineuses qui révèlent des détails cachés à contre-jour.",
@@ -242,43 +265,45 @@
       "subtitle": "Créez de superbes lithophanies 3D qui donnent vie à vos souvenirs grâce à la lumière",
       "ctaPrimary": "Commencer la création",
       "ctaSecondary": "Voir la galerie"
-    }
-  },
-  "howItWorks": {
-    "title": "Comment ça marche",
-    "subtitle": "De votre photo à une superbe lithophanie en quelques étapes simples",
-    "diagramAlt": "Schéma d’assemblage de la lithophanie",
-    "steps": [
-      {
-        "title": "Téléchargez votre photo",
-        "description": "Portrait, dessin d’enfant, animal de compagnie ou toute image préférée."
-      },
-      {
-        "title": "Choisissez votre style",
-        "description": "Noir et blanc ou couleur. Format du cadre et couleur."
-      },
-      {
-        "title": "Nous la fabriquons",
-        "description": "Impression 3D précise avec rétroéclairage LED uniforme."
-      },
-      {
-        "title": "Livrée chez vous",
-        "description": "Prête à brancher et à briller."
+    },
+    "howItWorks": {
+      "title": "Comment ça marche",
+      "subtitle": "De votre photo à une superbe lithophanie en quelques étapes simples",
+      "diagramAlt": "Schéma d’assemblage de la lithophanie",
+      "steps": [
+        {
+          "title": "Téléchargez votre photo",
+          "description": "Portrait, dessin d’enfant, animal de compagnie ou toute image préférée."
+        },
+        {
+          "title": "Choisissez votre style",
+          "description": "Noir et blanc ou couleur. Format du cadre et couleur."
+        },
+        {
+          "title": "Nous la fabriquons",
+          "description": "Impression 3D précise avec rétroéclairage LED uniforme."
+        },
+        {
+          "title": "Livrée chez vous",
+          "description": "Prête à brancher et à briller."
+        }
+      ]
+    },
+
+    "Gallery": {
+      "title": "Galerie / Inspiration",
+      "subtitle1": "Chaque photo devient une œuvre lumineuse.",
+      "subtitle2": "Découvrez les possibilités étonnantes avec nos lithophanies personnalisées.",
+      "cta": "Créez la vôtre",
+      "items": {
+        "neonCat": { "title": "Chat Néon", "category": "Lithophanie couleur", "alt": "Exemple de lithophanie d’un chat néon" },
+        "vintagePortrait": { "title": "Portrait Vintage", "category": "Noir et blanc", "alt": "Exemple de lithophanie portrait en noir et blanc" },
+        "vanGogh": { "title": "Œuvre de Van Gogh", "category": "Lithophanie couleur", "alt": "Exemple de lithophanie style Van Gogh" },
+        "familyMemories": { "title": "Souvenirs de famille", "category": "Noir et blanc", "alt": "Exemple de lithophanie de photo de famille" },
+        "natureAbstract": { "title": "Nature Abstraite", "category": "Lithophanie couleur", "alt": "Exemple de lithophanie de nature abstraite" },
+        "petPortrait": { "title": "Portrait d’animal", "category": "Noir et blanc", "alt": "Exemple de lithophanie de portrait d’animal" }
       }
-    ]
-  },
-  "Gallery": {
-    "title": "Galerie / Inspiration",
-    "subtitle1": "Chaque photo devient une œuvre lumineuse.",
-    "subtitle2": "Découvrez les possibilités étonnantes avec nos lithophanies personnalisées.",
-    "cta": "Créez la vôtre",
-    "items": {
-      "neonCat": { "title": "Chat Néon", "category": "Lithophanie couleur", "alt": "Exemple de lithophanie d’un chat néon" },
-      "vintagePortrait": { "title": "Portrait Vintage", "category": "Noir et blanc", "alt": "Exemple de lithophanie portrait en noir et blanc" },
-      "vanGogh": { "title": "Œuvre de Van Gogh", "category": "Lithophanie couleur", "alt": "Exemple de lithophanie style Van Gogh" },
-      "familyMemories": { "title": "Souvenirs de famille", "category": "Noir et blanc", "alt": "Exemple de lithophanie de photo de famille" },
-      "natureAbstract": { "title": "Nature Abstraite", "category": "Lithophanie couleur", "alt": "Exemple de lithophanie de nature abstraite" },
-      "petPortrait": { "title": "Portrait d’animal", "category": "Noir et blanc", "alt": "Exemple de lithophanie de portrait d’animal" }
     }
   }
+
 }

@@ -231,6 +231,29 @@
     }
   },
   "lithosphanes": {
+    "WhyDreamli": {
+      "title": "Waarom kiezen voor Dreamli?",
+      "subtitle": "We combineren geavanceerde technologie met ambachtelijk vakmanschap om lithofanen te maken die verwachtingen overtreffen.",
+      "features": {
+        "print": {
+          "title": "Hoogwaardige 3D-print",
+          "desc": "Met precisie gemaakt met geavanceerde 3D-printing voor uitzonderlijk detail en duurzaamheid."
+        },
+        "led": {
+          "title": "Egelijke LED-verlichting",
+          "desc": "Geen donkere plekken—onze uniforme backlight zorgt voor perfecte verlichting over het hele lithofaan."
+        },
+        "gift": {
+          "title": "Het perfecte cadeau",
+          "desc": "Persoonlijk, betekenisvol, onvergetelijk. Maak van elke foto een lichtgevend aandenken."
+        }
+      },
+      "stats": {
+        "delivery": "Dagen levertijd",
+        "rating": "Klantbeoordeling",
+        "guarantee": "Kwaliteitsgarantie"
+      }
+    },
     "ExplainerVideo": {
       "title": "Zie lithofanen tot leven komen",
       "blurb": "Bekijk hoe we jouw dierbare herinneringen omtoveren tot schitterende, verlichte kunstwerken die verborgen details laten zien met tegenlicht.",

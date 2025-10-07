@@ -232,6 +232,29 @@
     }
   },
   "lithosphanes": {
+    "WhyDreamli": {
+      "title": "Dlaczego Dreamli?",
+      "subtitle": "Łączymy nowoczesną technologię z rzemiosłem, tworząc litofany przewyższające oczekiwania.",
+      "features": {
+        "print": {
+          "title": "Wysokiej jakości druk 3D",
+          "desc": "Precyzyjne wykonanie z użyciem zaawansowanego druku 3D gwarantuje świetne detale i trwałość."
+        },
+        "led": {
+          "title": "Równe oświetlenie LED",
+          "desc": "Bez ciemnych plam—jednolite podświetlenie zapewnia idealną iluminację całego litofanu."
+        },
+        "gift": {
+          "title": "Idealny prezent",
+          "desc": "Osobisty, pełen znaczenia, niezapomniany. Zamień każde zdjęcie w świecącą pamiątkę."
+        }
+      },
+      "stats": {
+        "delivery": "Dni dostawy",
+        "rating": "Ocena klientów",
+        "guarantee": "Gwarancja jakości"
+      }
+    },
     "ExplainerVideo": {
       "title": "Zobacz, jak litofany ożywają",
       "blurb": "Zobacz, jak zamieniamy Twoje wspomnienia w zachwycające, podświetlane dzieła sztuki ujawniające ukryte detale.",
