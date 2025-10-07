@@ -2,10 +2,21 @@
 import * as React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import {getTranslations} from 'next-intl/server';
+import {getTranslations, getLocale} from 'next-intl/server';
+
+function withLocale(path: string, locale: string) {
+    // Ensure leading slash and prefix with /{locale}
+    const p = path.startsWith('/') ? path : `/${path}`;
+    return `/${locale}${p}`;
+}
 
 export async function CustomizedGifts() {
     const t = await getTranslations('home.personalizedGift');
+    const locale = await getLocale();
+
+    // Your target route segment (as you asked): /{lang}/listhospanes
+    const lithoBase = withLocale('/lithophanes', locale);
+    const keychainsHref = withLocale('/keychains', locale);
 
     return (
         <section className="py-16 sm:py-24 lg:py-32 bg-white">
@@ -67,16 +78,19 @@ export async function CustomizedGifts() {
                                 </ul>
 
                                 <div className="flex flex-wrap gap-4 pt-4">
+                                    {/* Go to /{lang}/listhospanes */}
                                     <Link
-                                        href="https://shop.dreamli.nl/product/lithophane/"
+                                        href={lithoBase}
                                         className="inline-flex items-center gap-3 bg-[#8472DF] text-white px-6 py-3 rounded-full font-bold hover:bg-[#8472DF]/90 transition-colors duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
                                         aria-label={t('litho.ctaPrimary')}
                                     >
                                         <i className="ri-lightbulb-line text-lg w-5 h-5 flex items-center justify-center" />
                                         {t('litho.ctaPrimary')}
                                     </Link>
+
+                                    {/* And the learn-more anchor: /{lang}/listhospanes#learn-more */}
                                     <Link
-                                        href="/lithophanes#learn-more"
+                                        href={`${lithoBase}#learn-more`}
                                         className="inline-flex items-center gap-3 bg-white text-[#8472DF] border-2 border-[#8472DF] px-6 py-3 rounded-full font-bold hover:bg-[#8472DF]/10 transition-colors duration-300"
                                         aria-label={t('litho.ctaSecondary')}
                                     >
@@ -128,8 +142,9 @@ export async function CustomizedGifts() {
                                     </li>
                                 </ul>
 
+                                {/* Go to /{lang}/keychains */}
                                 <Link
-                                    href="/keychains"
+                                    href={keychainsHref}
                                     className="inline-flex items-center gap-3 bg-[#93C4FF] text-white px-6 py-3 rounded-full font-bold hover:bg-[#93C4FF]/90 transition-colors duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
                                     aria-label={t('keys.cta')}
                                 >

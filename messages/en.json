@@ -229,6 +229,37 @@
       "added": "Added to cart! Redirecting…",
       "failed": "Failed to add to cart: {msg}"
     }
+  },
+  "lithosphanes": {
+    "hero": {
+      "title": "Transform Your Photos Into <highlight>Illuminated Art</highlight>",
+      "subtitle": "Create stunning 3D lithophanes that bring your memories to life with light",
+      "ctaPrimary": "Start Creating",
+      "ctaSecondary": "View Gallery"
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "subtitle": "From your photo to a stunning lithophane in just a few simple steps",
+      "diagramAlt": "Lithophane Assembly Diagram",
+      "steps": [
+        {
+          "title": "Upload your photo",
+          "description": "Portrait, kids' drawing, pet, or any favorite picture."
+        },
+        {
+          "title": "Choose your style",
+          "description": "Black & White or Full-Color. Frame ratio and color."
+        },
+        {
+          "title": "We craft it",
+          "description": "3D-printed with precision and fitted with a uniform LED backlight."
+        },
+        {
+          "title": "Delivered to your door",
+          "description": "Ready to plug in and shine."
+        }
+      ]
+    }
   }
 
 }

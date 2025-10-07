@@ -230,6 +230,37 @@
       "added": "Zum Warenkorb hinzugefügt! Weiterleiten…",
       "failed": "Hinzufügen fehlgeschlagen: {msg}"
     }
+  },
+  "lithosphanes": {
+    "hero": {
+      "title": "Verwandle deine Fotos in <highlight>Leuchtende Kunstwerke</highlight>",
+      "subtitle": "Erstelle beeindruckende 3D-Lithophane, die deine Erinnerungen mit Licht zum Leben erwecken",
+      "ctaPrimary": "Jetzt erstellen",
+      "ctaSecondary": "Galerie ansehen"
+    },
+    "howItWorks": {
+      "title": "So funktioniert’s",
+      "subtitle": "Von deinem Foto zur beeindruckenden Lithophanie in nur wenigen Schritten",
+      "diagramAlt": "Lithophanie Montage-Diagramm",
+      "steps": [
+        {
+          "title": "Foto hochladen",
+          "description": "Porträt, Kinderzeichnung, Haustier oder dein Lieblingsbild."
+        },
+        {
+          "title": "Stil auswählen",
+          "description": "Schwarz-Weiß oder Vollfarbe. Rahmenformat und Farbe."
+        },
+        {
+          "title": "Wir fertigen es an",
+          "description": "Präzisions-3D-Druck mit gleichmäßiger LED-Hinterleuchtung."
+        },
+        {
+          "title": "Lieferung zu dir nach Hause",
+          "description": "Einstecken und erstrahlen lassen."
+        }
+      ]
+    }
   }
 
 }

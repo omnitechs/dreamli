@@ -230,5 +230,36 @@
       "added": "Dodano do koszyka! Przekierowywanie…",
       "failed": "Nie udało się dodać: {msg}"
     }
+  },
+  "lithosphanes": {
+    "hero": {
+      "title": "Zamień swoje zdjęcia w <highlight>Rozświetlone dzieła sztuki</highlight>",
+      "subtitle": "Stwórz zachwycające litofany 3D, które ożywią twoje wspomnienia światłem",
+      "ctaPrimary": "Zacznij tworzyć",
+      "ctaSecondary": "Zobacz galerię"
+    },
+    "howItWorks": {
+      "title": "Jak to działa",
+      "subtitle": "Od Twojego zdjęcia do zachwycającej litofanii w kilku prostych krokach",
+      "diagramAlt": "Schemat montażu litofanii",
+      "steps": [
+        {
+          "title": "Prześlij swoje zdjęcie",
+          "description": "Portret, rysunek dziecka, zwierzak lub dowolne ulubione zdjęcie."
+        },
+        {
+          "title": "Wybierz styl",
+          "description": "Czarno-biały lub w pełnym kolorze. Proporcje i kolor ramki."
+        },
+        {
+          "title": "My to wykonamy",
+          "description": "Precyzyjny druk 3D z równomiernym podświetleniem LED."
+        },
+        {
+          "title": "Dostawa pod drzwi",
+          "description": "Gotowe do podłączenia i rozświetlenia."
+        }
+      ]
+    }
   }
 }

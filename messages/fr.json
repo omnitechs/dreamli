@@ -230,5 +230,36 @@
       "added": "Ajouté au panier ! Redirection…",
       "failed": "Échec de l’ajout : {msg}"
     }
+  },
+  "lithosphanes": {
+    "hero": {
+      "title": "Transformez vos photos en <highlight>Œuvres d’art illuminées</highlight>",
+      "subtitle": "Créez de superbes lithophanies 3D qui donnent vie à vos souvenirs grâce à la lumière",
+      "ctaPrimary": "Commencer la création",
+      "ctaSecondary": "Voir la galerie"
+    }
+  },
+  "howItWorks": {
+    "title": "Comment ça marche",
+    "subtitle": "De votre photo à une superbe lithophanie en quelques étapes simples",
+    "diagramAlt": "Schéma d’assemblage de la lithophanie",
+    "steps": [
+      {
+        "title": "Téléchargez votre photo",
+        "description": "Portrait, dessin d’enfant, animal de compagnie ou toute image préférée."
+      },
+      {
+        "title": "Choisissez votre style",
+        "description": "Noir et blanc ou couleur. Format du cadre et couleur."
+      },
+      {
+        "title": "Nous la fabriquons",
+        "description": "Impression 3D précise avec rétroéclairage LED uniforme."
+      },
+      {
+        "title": "Livrée chez vous",
+        "description": "Prête à brancher et à briller."
+      }
+    ]
   }
 }

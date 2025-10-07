@@ -229,5 +229,36 @@
       "added": "Toegevoegd aan je winkelwagen! Doorsturen…",
       "failed": "Toevoegen mislukt: {msg}"
     }
+  },
+  "lithosphanes": {
+    "hero": {
+      "title": "Verander je foto’s in <highlight>Verlichte Kunst</highlight>",
+      "subtitle": "Maak prachtige 3D-lithofanen die je herinneringen tot leven brengen met licht",
+      "ctaPrimary": "Begin met maken",
+      "ctaSecondary": "Bekijk galerij"
+    },
+    "howItWorks": {
+      "title": "Hoe het werkt",
+      "subtitle": "Van jouw foto naar een verbluffende lithofaan in een paar eenvoudige stappen",
+      "diagramAlt": "Lithofaan montage-diagram",
+      "steps": [
+        {
+          "title": "Upload je foto",
+          "description": "Portret, kindertekening, huisdier of je favoriete afbeelding."
+        },
+        {
+          "title": "Kies je stijl",
+          "description": "Zwart-wit of full-color. Beeldverhouding en kleur van de lijst."
+        },
+        {
+          "title": "Wij maken het",
+          "description": "3D-geprint met precisie en voorzien van een egale LED-achtergrondverlichting."
+        },
+        {
+          "title": "Geleverd aan huis",
+          "description": "Klaar om in te pluggen en te stralen."
+        }
+      ]
+    }
   }
 }
