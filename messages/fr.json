@@ -232,6 +232,21 @@
     }
   },
   "lithosphanes": {
+    "FinalCTA": {
+      "heading": {
+        "before": "Transformez votre photo en",
+        "highlight": "souvenir lumineux",
+        "after": "dès aujourd’hui"
+      },
+      "subheading": "Créez un cadeau unique qui illuminera leur monde et préservera vos précieux souvenirs pour toujours.",
+      "cta": "Commencer – Importer votre photo",
+      "guarantee": "Garantie satisfait ou remboursé 30 jours",
+      "trust": {
+        "freeShipping": { "title": "Livraison offerte", "desc": "Pour toute commande supérieure à {threshold}" },
+        "support": { "title": "Support d’experts", "desc": "Aide à chaque étape" },
+        "quality": { "title": "Promesse de qualité", "desc": "Matériaux et finitions premium" }
+      }
+    },
     "WhyDreamli": {
       "title": "Pourquoi choisir Dreamli ?",
       "subtitle": "Nous associons technologie de pointe et savoir-faire artisanal pour créer des lithophanies qui dépassent les attentes.",

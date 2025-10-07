@@ -232,6 +232,21 @@
     }
   },
   "lithosphanes": {
+    "FinalCTA": {
+      "heading": {
+        "before": "Zmień swoje zdjęcie w",
+        "highlight": "świetlistą pamiątkę",
+        "after": "już dziś"
+      },
+      "subheading": "Stwórz niepowtarzalny prezent, który rozświetli ich świat i zachowa wspomnienia na zawsze.",
+      "cta": "Zacznij teraz – Prześlij zdjęcie",
+      "guarantee": "30 dni gwarancji zwrotu pieniędzy",
+      "trust": {
+        "freeShipping": { "title": "Darmowa dostawa", "desc": "Dla zamówień powyżej {threshold}" },
+        "support": { "title": "Wsparcie ekspertów", "desc": "Pomoc na każdym kroku" },
+        "quality": { "title": "Obietnica jakości", "desc": "Materiały premium i rzemiosło" }
+      }
+    },
     "WhyDreamli": {
       "title": "Dlaczego Dreamli?",
       "subtitle": "Łączymy nowoczesną technologię z rzemiosłem, tworząc litofany przewyższające oczekiwania.",

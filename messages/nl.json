@@ -231,6 +231,21 @@
     }
   },
   "lithosphanes": {
+    "FinalCTA": {
+      "heading": {
+        "before": "Maak van je foto een",
+        "highlight": "lichtgevend aandenken",
+        "after": "vandaag nog"
+      },
+      "subheading": "Maak een uniek cadeau dat hun wereld zal verlichten en je dierbare herinneringen voor altijd bewaart.",
+      "cta": "Start nu – Upload je foto",
+      "guarantee": "30 dagen geld-terug-garantie",
+      "trust": {
+        "freeShipping": { "title": "Gratis verzending", "desc": "Bij alle bestellingen boven {threshold}" },
+        "support": { "title": "Expertsupport", "desc": "Hulp bij elke stap" },
+        "quality": { "title": "Kwaliteitsbelofte", "desc": "Premium materialen & vakmanschap" }
+      }
+    },
     "WhyDreamli": {
       "title": "Waarom kiezen voor Dreamli?",
       "subtitle": "We combineren geavanceerde technologie met ambachtelijk vakmanschap om lithofanen te maken die verwachtingen overtreffen.",

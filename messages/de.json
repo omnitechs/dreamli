@@ -232,6 +232,21 @@
     }
   },
   "lithosphanes": {
+    "FinalCTA": {
+      "heading": {
+        "before": "Verwandle dein Foto in ein",
+        "highlight": "leuchtendes Andenken",
+        "after": "– noch heute"
+      },
+      "subheading": "Kreiere ein einzigartiges Geschenk, das die Welt der Beschenkten erhellt und Erinnerungen für immer bewahrt.",
+      "cta": "Jetzt starten – Foto hochladen",
+      "guarantee": "30 Tage Geld-zurück-Garantie",
+      "trust": {
+        "freeShipping": { "title": "Kostenloser Versand", "desc": "Für alle Bestellungen über {threshold}" },
+        "support": { "title": "Experten-Support", "desc": "Hilfe bei jedem Schritt" },
+        "quality": { "title": "Qualitätsversprechen", "desc": "Premium-Materialien & Handwerk" }
+      }
+    },
     "WhyDreamli": {
       "title": "Warum Dreamli wählen?",
       "subtitle": "Wir verbinden modernste Technik mit Handwerkskunst, um Lithophane zu schaffen, die Erwartungen übertreffen.",

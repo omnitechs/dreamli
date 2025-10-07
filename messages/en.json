@@ -231,6 +231,21 @@
     }
   },
   "lithosphanes": {
+    "FinalCTA": {
+      "heading": {
+        "before": "Turn your photo into a",
+        "highlight": "luminous keepsake",
+        "after": "today"
+      },
+      "subheading": "Create a one-of-a-kind gift that will light up their world and preserve your precious memories forever.",
+      "cta": "Start Now – Upload Your Photo",
+      "guarantee": "30-day money-back guarantee",
+      "trust": {
+        "freeShipping": { "title": "Free Shipping", "desc": "On all orders over {threshold}" },
+        "support": { "title": "Expert Support", "desc": "Help every step of the way" },
+        "quality": { "title": "Quality Promise", "desc": "Premium materials & craftsmanship" }
+      }
+    },
     "WhyDreamli": {
       "title": "Why Choose Dreamli?",
       "subtitle": "We combine cutting-edge technology with artisanal craftsmanship to create lithophanes that exceed expectations.",
