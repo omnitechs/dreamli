@@ -15,7 +15,38 @@
         "subtitle": "Définissez des filtres par budget, occasion, destinataire, tranche d’âge ou style, et parcourez tout notre catalogue de cadeaux exclusifs et personnalisés.",
         "label": "Commencer à explorer"
       }
+    },
+    "ai": {
+      "title": "Transformez toute idée en un ",
+      "extendedTitle": "cadeau",
+      "subtitle": "Avec l’aide de l’IA et de notre équipe créative, vous pouvez transformer presque n’importe quoi en objet physique. Partagez une photo, un dessin d’enfant ou même une description courte — et nous le réaliserons sous forme de figurine, puzzle, veilleuse ou autre création personnalisée. Votre imagination devient un cadeau que l’on peut tenir.",
+      "cta": "Commencez à créer votre cadeau",
+
+      "steps": {
+        "upload": {
+          "title": "Téléverser & Partager",
+          "text": "Téléversez votre photo, dessin ou idée. Notre IA se met immédiatement au travail et commence à le façonner en cadeau."
+        },
+        "design": {
+          "title": "Concevoir & Affiner",
+          "text": "Certains modèles sont créés entièrement par l’IA — vous pouvez interagir directement, ajuster et confirmer en temps réel. D’autres associent l’IA à notre équipe de design. Dans ce cas, vous verrez la prévisualisation une fois terminé, et vous pourrez approuver ou demander des modifications."
+        },
+        "print": {
+          "title": "Imprimer & Livrer",
+          "text": "Une fois que vous confirmez le design, nous l’imprimons aux Pays-Bas avec des matériaux de haute qualité et l’expédions directement à votre porte."
+        }
+      },
+      "viewer": {
+        "loading": "Chargement de la visionneuse 3D…",
+        "placeholder": "Faites défiler pour voir en 3D…",
+        "posterAlt": "Affiche d’aperçu 3D",
+        "rotate": "Faites glisser pour faire pivoter",
+        "zoom": "Faites défiler pour zoomer",
+        "pan": "Faites glisser avec le bouton droit pour déplacer"
+
+      }
     }
+
   },
   "Header": {
     "home": "Accueil",

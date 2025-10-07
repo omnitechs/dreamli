@@ -15,6 +15,34 @@
         "subtitle": "Set filters for budget, occasion, recipient, age group, or style, and browse our complete catalog of exclusive and personalized gifts.",
         "label": "Start exploring"
       }
+    },
+    "ai": {
+      "title": "Turn any idea into a ",
+      "extendedTitle": "gift",
+      "subtitle": "With the help of AI and our creative team, you can transform almost anything into a physical gift. Share a picture, a child’s drawing, or even a short description — and we’ll bring it to life as a figurine, puzzle, sleep light, or other custom creation. Your imagination becomes a gift they can hold.",
+      "cta": "Start building your special gift",
+      "steps": {
+        "upload": {
+          "title": "Upload & Share",
+          "text": "Upload your photo, drawing, or idea. Our AI gets to work instantly and starts shaping it into a gift."
+        },
+        "design": {
+          "title": "Design & Refine",
+          "text": "Some models are created fully by AI — you can interact directly, adjust, and confirm in real time. Others combine AI with our design team. In those cases, you’ll see the preview once it’s finalized, and you can approve or request changes."
+        },
+        "print": {
+          "title": "Print & Deliver",
+          "text": "Once you confirm the design, we 3D print it in the Netherlands with high-quality materials and ship it straight to your door."
+        }
+      },
+      "viewer": {
+        "loading": "Loading 3D viewer…",
+        "placeholder": "Scroll to view 3D…",
+        "posterAlt": "3D preview poster",
+        "rotate": "Drag to rotate",
+        "zoom": "Scroll to zoom",
+        "pan": "Right drag to pan"
+      }
     }
   },
   "Header": {

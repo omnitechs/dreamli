@@ -15,6 +15,35 @@
         "subtitle": "Stel filters in voor budget, gelegenheid, ontvanger, leeftijdsgroep of stijl en bekijk onze complete catalogus met exclusieve en gepersonaliseerde cadeaus.",
         "label": "Begin met verkennen"
       }
+    },
+    "ai": {
+      "title": "Verander elk idee in een ",
+      "extendedTitle": "cadeau",
+      "subtitle": "Met de hulp van AI en ons creatieve team kun je bijna alles omzetten in een fysiek cadeau. Deel een foto, een tekening van een kind of zelfs een korte beschrijving — en wij laten het tot leven komen als een figuur, puzzel, nachtlampje of een ander gepersonaliseerd ontwerp. Jouw verbeelding wordt een cadeau dat je kunt vasthouden.",
+      "cta": "Begin met jouw unieke cadeau",
+
+      "steps": {
+        "upload": {
+          "title": "Upload & Deel",
+          "text": "Upload je foto, tekening of idee. Onze AI gaat meteen aan de slag en begint het in een cadeau te vormen."
+        },
+        "design": {
+          "title": "Ontwerp & Verfijn",
+          "text": "Sommige modellen worden volledig door AI gemaakt — je kunt direct interactie aangaan, aanpassen en bevestigen in realtime. Anderen combineren AI met ons ontwerpteam. In die gevallen zie je de preview zodra het is afgerond, en kun je goedkeuren of wijzigingen aanvragen."
+        },
+        "print": {
+          "title": "Print & Lever",
+          "text": "Zodra je het ontwerp bevestigt, printen we het in Nederland met hoogwaardige materialen en verzenden we het rechtstreeks naar je deur."
+        }
+      },
+      "viewer": {
+        "loading": "3D-viewer wordt geladen…",
+        "placeholder": "Scroll om 3D te bekijken…",
+        "posterAlt": "3D-voorbeeldposter",
+        "rotate": "Sleep om te draaien",
+        "zoom": "Scroll om in of uit te zoomen",
+        "pan": "Sleep met de rechtermuisknop om te verplaatsen"
+      }
     }
   },
   "Header": {

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
+import {useTranslations} from "next-intl";
 
 const ModelViewer = dynamic(() => import('./ModelViewer'), {
     ssr: false,
@@ -43,7 +44,7 @@ export default function LazyGlb({
     const ref = useRef<HTMLDivElement>(null);
     const [visible, setVisible] = useState(false);
     const tRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
+    const t = useTranslations('home.ai.viewer');
     useEffect(() => {
         if (!ref.current) return;
         const el = ref.current;
@@ -105,7 +106,7 @@ export default function LazyGlb({
                     <img src={poster} alt="" className="w-full h-full object-cover rounded-lg" />
                 ) : (
                     <div className="w-full h-80 bg-gray-50 rounded-lg grid place-items-center">
-                        <span className="text-sm text-gray-500">Scroll to view 3D…</span>
+                        <span className="text-sm text-gray-500">{t('placeholder')}</span>
                     </div>
                 )
             ) : (

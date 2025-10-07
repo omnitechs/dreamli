@@ -15,7 +15,39 @@
         "subtitle": "Setze Filter für Budget, Anlass, Empfänger, Altersgruppe oder Stil und durchstöbere unseren gesamten Katalog exklusiver und personalisierter Geschenke.",
         "label": "Jetzt entdecken"
       }
+    },
+    "ai": {
+      "title": "Verwandle jede Idee in ein ",
+      "extendedTitle": "Geschenk",
+      "subtitle": "Mit Hilfe von KI und unserem Kreativteam kannst du fast alles in ein physisches Geschenk verwandeln. Teile ein Bild, eine Kinderzeichnung oder sogar eine kurze Beschreibung — und wir erwecken es zum Leben als Figur, Puzzle, Nachtlicht oder ein anderes maßgeschneidertes Geschenk. Deine Vorstellungskraft wird zu einem Geschenk, das man halten kann.",
+      "cta": "Gestalte dein besonderes Geschenk",
+
+      "steps": {
+        "upload": {
+          "title": "Hochladen & Teilen",
+          "text": "Lade dein Foto, deine Zeichnung oder Idee hoch. Unsere KI beginnt sofort und formt es zu einem Geschenk."
+        },
+        "design": {
+          "title": "Entwerfen & Verfeinern",
+          "text": "Einige Modelle werden vollständig von der KI erstellt — du kannst direkt interagieren, Anpassungen vornehmen und Echtzeit bestätigen. Andere verbinden KI mit unserem Designteam. In diesen Fällen siehst du die Vorschau, sobald sie abgeschlossen ist, und kannst sie genehmigen oder Änderungen anfordern."
+        },
+        "print": {
+          "title": "Drucken & Liefern",
+          "text": "Sobald du das Design bestätigst, drucken wir es in den Niederlanden mit hochwertigen Materialien und liefern es direkt zu deiner Tür."
+        }
+      },
+      "viewer": {
+        "loading": "3D-Viewer wird geladen…",
+        "placeholder": "Scrollen, um 3D anzuzeigen…",
+        "posterAlt": "3D-Vorschauposter",
+        "rotate": "Ziehen, um zu drehen",
+        "zoom": "Scrollen, um zu zoomen",
+        "pan": "Mit der rechten Maustaste ziehen, um zu verschieben"
+
+
+      }
     }
+
   },
   "Header": {
     "home": "Startseite",

@@ -1,7 +1,7 @@
 import Hero from "@/components/Hero";
 import AI from "@/components/AI";
-import {CustomizedGifts} from "@/app/components/CustomizedGifts";
-import {WhySection} from "@/app/components/WhySection";
+import {CustomizedGifts} from "@/components/CustomizedGifts";
+import {WhySection} from "@/components/WhySection";
 
 
 export default function HomePageComponent() {

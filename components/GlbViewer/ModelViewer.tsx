@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { STLLoader } from 'three/addons/loaders/STLLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { useTranslations } from 'next-intl';
 
 type Props = {
     modelUrl?: string;
@@ -14,7 +15,7 @@ type Props = {
     active?: boolean;
 };
 
-export default function ModelViewer({ modelUrl, className = "", forceType, active = true }: Props) {
+export default function ModelViewer({ modelUrl, className = '', forceType, active = true }: Props) {
     const containerRef = useRef<HTMLDivElement>(null);
     const sceneRef = useRef<THREE.Scene | null>(null);
     const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
@@ -22,10 +23,17 @@ export default function ModelViewer({ modelUrl, className = "", forceType, activ
     const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
     const frameRef = useRef<number | null>(null);
     const mountedRef = useRef(false);
+    const isTouchRef = useRef(false);
+    const t = useTranslations('home.ai.viewer');
 
     useEffect(() => {
         if (!containerRef.current || !modelUrl) return;
         mountedRef.current = true;
+
+        // detect touch/coarse pointer
+        if (typeof window !== 'undefined') {
+            isTouchRef.current = window.matchMedia?.('(pointer: coarse)')?.matches ?? false;
+        }
 
         const container = containerRef.current;
         const width = container.clientWidth;
@@ -41,15 +49,15 @@ export default function ModelViewer({ modelUrl, className = "", forceType, activ
         camera.position.set(2, 2, 2);
         cameraRef.current = camera;
 
-        // Renderer (prefer low power)
+        // Renderer
         const renderer = new THREE.WebGLRenderer({
             antialias: true,
             alpha: false,
             powerPreference: 'low-power',
         });
         renderer.setSize(width, height);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5)); // cap DPR for mobile
-        renderer.shadowMap.enabled = false; // shadows are expensive; enable only if needed
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+        renderer.shadowMap.enabled = false;
         rendererRef.current = renderer;
 
         // Controls
@@ -58,20 +66,33 @@ export default function ModelViewer({ modelUrl, className = "", forceType, activ
         controls.dampingFactor = 0.05;
         controls.enableZoom = true;
         controls.enablePan = true;
+        controls.enableRotate = true;
         controls.autoRotate = true;
         controls.autoRotateSpeed = 2;
         controlsRef.current = controls;
 
-        // Lights (cheap)
+        // === Mobile behavior: auto-rotate ON, user gestures OFF ===
+        if (isTouchRef.current) {
+            // Keep controls.enabled = true so autoRotate works
+            controls.enableZoom = false;
+            controls.enablePan = false;
+            controls.enableRotate = false;
+            controls.autoRotate = true;
+
+            // Let page scrolling work; block all pointer interaction with the canvas
+            renderer.domElement.style.pointerEvents = 'none';
+            renderer.domElement.tabIndex = -1;
+        }
+
+        // Lights
         scene.add(new THREE.AmbientLight(0xffffff, 0.8));
         const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 0.5);
         scene.add(hemi);
 
-        // -------- LOAD MODEL (GLB/GLTF or STL) --------
+        // -------- LOAD MODEL --------
         const ext = (forceType ?? modelUrl.split('?')[0].split('#')[0].split('.').pop()?.toLowerCase()) || '';
 
         const addToScene = (object: THREE.Object3D) => {
-            // Center & scale
             const box = new THREE.Box3().setFromObject(object);
             const size = box.getSize(new THREE.Vector3());
             const center = box.getCenter(new THREE.Vector3());
@@ -84,7 +105,6 @@ export default function ModelViewer({ modelUrl, className = "", forceType, activ
 
             scene.add(object);
 
-            // Fit camera
             const dist = maxDim * scale * 2.5;
             camera.position.set(dist, dist, dist);
             controls.target.set(0, 0, 0);
@@ -130,9 +150,7 @@ export default function ModelViewer({ modelUrl, className = "", forceType, activ
         };
 
         const finalUrl =
-            modelUrl.includes('assets.meshy.ai')
-                ? `/api/proxy-glb?url=${encodeURIComponent(modelUrl)}`
-                : modelUrl;
+            modelUrl.includes('assets.meshy.ai') ? `/api/proxy-glb?url=${encodeURIComponent(modelUrl)}` : modelUrl;
 
         if (ext === 'glb' || ext === 'gltf' || forceType === 'glb') loadGLB(finalUrl);
         else if (ext === 'stl' || forceType === 'stl') loadSTL(finalUrl);
@@ -173,7 +191,6 @@ export default function ModelViewer({ modelUrl, className = "", forceType, activ
                 renderer.domElement.parentElement.removeChild(renderer.domElement);
             disposeScene(scene);
             renderer.dispose();
-            // Free GPU context aggressively (optional)
             try { renderer.forceContextLoss(); } catch {}
             sceneRef.current = null;
             rendererRef.current = null;
@@ -182,25 +199,25 @@ export default function ModelViewer({ modelUrl, className = "", forceType, activ
             mountedRef.current = false;
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [modelUrl, forceType]); // init only when model changes
+    }, [modelUrl, forceType]); // re-init only when model changes
 
     // start/stop loop on `active`
     useEffect(() => {
         if (!mountedRef.current) return;
         if (active) startLoop();
         else stopLoop();
-        // also stop autorotate when inactive
+
+        // keep auto-rotate ON for all devices when active
         if (controlsRef.current) controlsRef.current.autoRotate = !!active;
     }, [active]);
 
     function startLoop() {
-        if (frameRef.current != null) return; // already running
+        if (frameRef.current != null) return;
         const renderer = rendererRef.current;
         const scene = sceneRef.current;
         const camera = cameraRef.current;
         if (!renderer || !scene || !camera) return;
         const loop = () => {
-            // Skip any heavy updates if inactive elsewhere
             controlsRef.current?.update();
             renderer.render(scene, camera);
             frameRef.current = requestAnimationFrame(loop);
@@ -213,7 +230,6 @@ export default function ModelViewer({ modelUrl, className = "", forceType, activ
             cancelAnimationFrame(frameRef.current);
             frameRef.current = null;
         }
-        // If using setAnimationLoop in future:
         rendererRef.current?.setAnimationLoop(null as any);
     }
 
@@ -249,8 +265,9 @@ export default function ModelViewer({ modelUrl, className = "", forceType, activ
                     </div>
                 </div>
             )}
-            <div className="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
-                <p>🖱️ Drag to rotate • 🔍 Scroll to zoom • 🤏 Right drag to pan</p>
+            {/* Helper hidden on mobile to avoid showing pan/zoom tips */}
+            <div className="hidden md:block absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
+                <p>🖱️ {t('rotate')} • 🔍 {t('zoom')} • 🤏 {t('pan')}</p>
             </div>
         </div>
     );

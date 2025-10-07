@@ -15,7 +15,38 @@
         "subtitle": "Ustaw filtry według budżetu, okazji, odbiorcy, grupy wiekowej lub stylu i przeglądaj cały nasz katalog ekskluzywnych i personalizowanych prezentów.",
         "label": "Zacznij odkrywać"
       }
+    },
+    "ai": {
+      "title": "Przekształć dowolny pomysł w ",
+      "extendedTitle": "prezent",
+      "subtitle": "Dzięki pomocy AI i naszego zespołu kreatywnego możesz zmienić prawie wszystko w fizyczny prezent. Udostępnij zdjęcie, rysunek dziecka lub nawet krótki opis — a my ożywimy to jako figurkę, puzzle, lampkę nocną lub inną spersonalizowaną kreację. Twoja wyobraźnia staje się prezentem, który można trzymać w ręku.",
+      "cta": "Rozpocznij tworzenie wyjątkowego prezentu",
+
+      "steps": {
+        "upload": {
+          "title": "Prześlij & Udostępnij",
+          "text": "Prześlij swoje zdjęcie, rysunek lub pomysł. Nasza AI zaczyna pracę natychmiast i zaczyna formować go w prezent."
+        },
+        "design": {
+          "title": "Projektuj & Udoskonalaj",
+          "text": "Niektóre modele są tworzone w całości przez AI — możesz bezpośrednio wchodzić w interakcję, dostosowywać i zatwierdzać w czasie rzeczywistym. Inne łączą AI z naszym zespołem projektowym. W takich przypadkach zobaczysz podgląd, gdy zostanie ukończony, i możesz zatwierdzić lub poprosić o zmiany."
+        },
+        "print": {
+          "title": "Drukuj & Dostarczaj",
+          "text": "Gdy zaakceptujesz projekt, drukujemy go w Holandii przy użyciu wysokiej jakości materiałów i wysyłamy bezpośrednio pod Twoje drzwi."
+        }
+      },
+      "viewer": {
+        "loading": "Wczytywanie przeglądarki 3D…",
+        "placeholder": "Przewiń, aby zobaczyć 3D…",
+        "posterAlt": "Plakat podglądu 3D",
+        "rotate": "Przeciągnij, aby obrócić",
+        "zoom": "Przewiń, aby powiększyć lub pomniejszyć",
+        "pan": "Przeciągnij prawym przyciskiem, aby przesunąć"
+
+      }
     }
+
   },
   "Header": {
     "home": "Strona główna",
