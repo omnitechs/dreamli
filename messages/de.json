@@ -260,6 +260,20 @@
           "description": "Einstecken und erstrahlen lassen."
         }
       ]
+    },
+    "Gallery": {
+      "title": "Galerie / Inspiration",
+      "subtitle1": "Jedes Foto wird zu leuchtender Kunst.",
+      "subtitle2": "Entdecke die beeindruckenden Möglichkeiten unserer individuellen Lithophane.",
+      "cta": "Erstelle dein eigenes",
+      "items": {
+        "neonCat": { "title": "Neon-Katze", "category": "Farb-Lithophan", "alt": "Beispiel eines Lithophans einer Neon-Katze" },
+        "vintagePortrait": { "title": "Vintage-Porträt", "category": "Schwarz-Weiß", "alt": "Beispiel eines Schwarz-Weiß-Porträt-Lithophans" },
+        "vanGogh": { "title": "Van-Gogh-Kunstwerk", "category": "Farb-Lithophan", "alt": "Beispiel eines Lithophans im Van-Gogh-Stil" },
+        "familyMemories": { "title": "Familienerinnerungen", "category": "Schwarz-Weiß", "alt": "Beispiel eines Familienfoto-Lithophans" },
+        "natureAbstract": { "title": "Natur Abstrakt", "category": "Farb-Lithophan", "alt": "Beispiel eines abstrakten Natur-Lithophans" },
+        "petPortrait": { "title": "Haustierporträt", "category": "Schwarz-Weiß", "alt": "Beispiel eines Haustierporträt-Lithophans" }
+      }
     }
   }
 

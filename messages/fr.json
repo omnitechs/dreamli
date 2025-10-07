@@ -261,5 +261,19 @@
         "description": "Prête à brancher et à briller."
       }
     ]
+  },
+  "Gallery": {
+    "title": "Galerie / Inspiration",
+    "subtitle1": "Chaque photo devient une œuvre lumineuse.",
+    "subtitle2": "Découvrez les possibilités étonnantes avec nos lithophanies personnalisées.",
+    "cta": "Créez la vôtre",
+    "items": {
+      "neonCat": { "title": "Chat Néon", "category": "Lithophanie couleur", "alt": "Exemple de lithophanie d’un chat néon" },
+      "vintagePortrait": { "title": "Portrait Vintage", "category": "Noir et blanc", "alt": "Exemple de lithophanie portrait en noir et blanc" },
+      "vanGogh": { "title": "Œuvre de Van Gogh", "category": "Lithophanie couleur", "alt": "Exemple de lithophanie style Van Gogh" },
+      "familyMemories": { "title": "Souvenirs de famille", "category": "Noir et blanc", "alt": "Exemple de lithophanie de photo de famille" },
+      "natureAbstract": { "title": "Nature Abstraite", "category": "Lithophanie couleur", "alt": "Exemple de lithophanie de nature abstraite" },
+      "petPortrait": { "title": "Portrait d’animal", "category": "Noir et blanc", "alt": "Exemple de lithophanie de portrait d’animal" }
+    }
   }
 }

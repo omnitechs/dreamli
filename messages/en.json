@@ -259,6 +259,20 @@
           "description": "Ready to plug in and shine."
         }
       ]
+    },
+    "Gallery": {
+      "title": "Gallery / Inspiration",
+      "subtitle1": "Every photo becomes a luminous piece of art.",
+      "subtitle2": "Discover the stunning possibilities with our custom lithophanes.",
+      "cta": "Create Your Own",
+      "items": {
+        "neonCat": { "title": "Neon Cat", "category": "Color Lithophane", "alt": "Neon cat lithophane example" },
+        "vintagePortrait": { "title": "Vintage Portrait", "category": "Black & White", "alt": "Vintage portrait lithophane example" },
+        "vanGogh": { "title": "Van Gogh Artwork", "category": "Color Lithophane", "alt": "Van Gogh style lithophane example" },
+        "familyMemories": { "title": "Family Memories", "category": "Black & White", "alt": "Family photo lithophane example" },
+        "natureAbstract": { "title": "Nature Abstract", "category": "Color Lithophane", "alt": "Abstract nature lithophane example" },
+        "petPortrait": { "title": "Pet Portrait", "category": "Black & White", "alt": "Pet portrait lithophane example" }
+      }
     }
   }
 

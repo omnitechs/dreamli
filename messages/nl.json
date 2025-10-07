@@ -259,6 +259,20 @@
           "description": "Klaar om in te pluggen en te stralen."
         }
       ]
+    },
+    "Gallery": {
+      "title": "Galerij / Inspiratie",
+      "subtitle1": "Elke foto wordt een lichtgevend kunstwerk.",
+      "subtitle2": "Ontdek de verbluffende mogelijkheden met onze custom lithofanen.",
+      "cta": "Maak jouw creatie",
+      "items": {
+        "neonCat": { "title": "Neonkat", "category": "Kleur-lithofaan", "alt": "Voorbeeld van een lithofaan van een neonkat" },
+        "vintagePortrait": { "title": "Vintage Portret", "category": "Zwart-wit", "alt": "Voorbeeld van een zwart-wit portret-lithofaan" },
+        "vanGogh": { "title": "Van Gogh Kunstwerk", "category": "Kleur-lithofaan", "alt": "Voorbeeld van een lithofaan in Van Gogh-stijl" },
+        "familyMemories": { "title": "Familieherinneringen", "category": "Zwart-wit", "alt": "Voorbeeld van een familie-foto lithofaan" },
+        "natureAbstract": { "title": "Natuur Abstract", "category": "Kleur-lithofaan", "alt": "Voorbeeld van een abstracte natuur-lithofaan" },
+        "petPortrait": { "title": "Huisdierportret", "category": "Zwart-wit", "alt": "Voorbeeld van een lithofaan met huisdierportret" }
+      }
     }
   }
 }

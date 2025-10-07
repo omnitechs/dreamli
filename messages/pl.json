@@ -260,6 +260,20 @@
           "description": "Gotowe do podłączenia i rozświetlenia."
         }
       ]
+    },
+    "Gallery": {
+      "title": "Galeria / Inspiracje",
+      "subtitle1": "Każde zdjęcie staje się świetlnym dziełem sztuki.",
+      "subtitle2": "Odkryj niesamowite możliwości naszych spersonalizowanych litofanów.",
+      "cta": "Stwórz własny",
+      "items": {
+        "neonCat": { "title": "Neonowy Kot", "category": "Litofan kolorowy", "alt": "Przykład litofanu z neonowym kotem" },
+        "vintagePortrait": { "title": "Portret Vintage", "category": "Czarno-biały", "alt": "Przykład czarno-białego litofanu portretowego" },
+        "vanGogh": { "title": "Dzieło Van Gogha", "category": "Litofan kolorowy", "alt": "Przykład litofanu w stylu Van Gogha" },
+        "familyMemories": { "title": "Rodzinne Wspomnienia", "category": "Czarno-biały", "alt": "Przykład litofanu ze zdjęciem rodzinnym" },
+        "natureAbstract": { "title": "Abstrakcja Natury", "category": "Litofan kolorowy", "alt": "Przykład abstrakcyjnego litofanu natury" },
+        "petPortrait": { "title": "Portret Pupila", "category": "Czarno-biały", "alt": "Przykład litofanu z portretem zwierzaka" }
+      }
     }
   }
 }
