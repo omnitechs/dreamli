@@ -232,6 +232,50 @@
     }
   },
   "lithosphanes": {
+    "FAQ": {
+      "title": "Najczęściej zadawane pytania",
+      "subtitle": "Wszystko, co musisz wiedzieć o Twojej spersonalizowanej litofanie",
+      "items": {
+        "bestPhotos": {
+          "q": "Jakie zdjęcia sprawdzają się najlepiej?",
+          "a": "Wyraźne, dobrze oświetlone portrety lub wysokiej jakości grafiki. Najlepsze efekty dają zdjęcia z dobrym kontrastem i detalami. Zalecamy co najmniej 1080p."
+        },
+        "leadTime": {
+          "q": "Ile trwa wykonanie i wysyłka?",
+          "a": "Po wgraniu zdjęcia i akceptacji projektu produkcja trwa zwykle 3–5 dni roboczych. Wysyłka: 2–3 dni w NL i 5–7 dni międzynarodowo."
+        },
+        "sizes": {
+          "q": "Jakie rozmiary są dostępne?",
+          "a": "Mały (15×20 cm), Średni (20×25 cm), Duży (25×30 cm) i Bardzo duży (30×40 cm). Każdy zawiera oświetlenie LED i podstawkę."
+        },
+        "preview": {
+          "q": "Czy mogę zobaczyć podgląd przed wykonaniem?",
+          "a": "Tak! Po wgraniu pokazujemy cyfrowy podgląd z podświetleniem. Możesz poprosić o poprawki przed produkcją."
+        },
+        "monoVsCmyk": {
+          "q": "Czym różni się Mono od CMYK?",
+          "a": "Mono to czerń-biel—idealna do portretów i zdjęć z głębią. CMYK to pełny kolor, świetny do barwnych obrazów z żywym światłem."
+        },
+        "ledIncluded": {
+          "q": "Czy oświetlenie LED jest w zestawie?",
+          "a": "Tak! Każda litofana ma dopasowane tylne podświetlenie LED zapewniające równomierną iluminację. Energooszczędne, z zasilaczem."
+        },
+        "satisfaction": {
+          "q": "Co jeśli nie będę zadowolony?",
+          "a": "Oferujemy 30-dniową gwarancję zwrotu pieniędzy. Naprawimy problem lub zwrócimy środki."
+        },
+        "multiOrder": {
+          "q": "Czy mogę zamówić kilka litofan z różnymi zdjęciami?",
+          "a": "Oczywiście! A przy 3+ sztukach obowiązują rabaty."
+        }
+      },
+      "contact": {
+        "title": "Masz jeszcze pytania?",
+        "blurb": "Pomożemy Ci stworzyć idealną litofanę.",
+        "email": "Wsparcie e-mail",
+        "whatsapp": "Czat WhatsApp"
+      }
+    },
     "FinalCTA": {
       "heading": {
         "before": "Zmień swoje zdjęcie w",

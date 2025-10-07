@@ -232,6 +232,50 @@
     }
   },
   "lithosphanes": {
+    "FAQ": {
+      "title": "Häufig gestellte Fragen",
+      "subtitle": "Alles, was du über dein individuelles Lithophan wissen musst",
+      "items": {
+        "bestPhotos": {
+          "q": "Welche Fotos eignen sich am besten?",
+          "a": "Klare, gut ausgeleuchtete Porträts oder hochwertige Kunstwerke. Bilder mit starkem Kontrast und Details liefern die besten Ergebnisse. Empfohlen: mind. 1080p Auflösung."
+        },
+        "leadTime": {
+          "q": "Wie lange dauern Herstellung und Versand?",
+          "a": "Nach Upload und Designbestätigung produzieren wir in der Regel in 3–5 Werktagen. Versand: zusätzlich 2–3 Tage innerhalb der Niederlande, 5–7 Tage international."
+        },
+        "sizes": {
+          "q": "Welche Größen gibt es?",
+          "a": "Klein (15×20 cm), Mittel (20×25 cm), Groß (25×30 cm), Extra Groß (30×40 cm). Alle Größen inkl. LED-Hinterlicht und Ständer."
+        },
+        "preview": {
+          "q": "Kann ich vorab eine Vorschau sehen?",
+          "a": "Ja! Nach dem Upload erhältst du eine digitale Vorschau mit Beleuchtung. Anpassungen sind möglich, bevor wir starten."
+        },
+        "monoVsCmyk": {
+          "q": "Unterschied zwischen Mono und CMYK Lithophanen?",
+          "a": "Mono ist schwarz-weiß—ideal für Porträts mit Tiefe. CMYK ist vollfarbig, perfekt für farbenfrohe Motive mit leuchtender Wirkung."
+        },
+        "ledIncluded": {
+          "q": "Ist die LED-Beleuchtung dabei?",
+          "a": "Ja! Jedes Lithophan hat ein passgenaues LED-Backlight für gleichmäßige Ausleuchtung. Energiesparend inkl. Netzteil."
+        },
+        "satisfaction": {
+          "q": "Was, wenn ich unzufrieden bin?",
+          "a": "30-Tage Geld-zurück-Garantie. Wir finden eine Lösung oder erstatten den Betrag."
+        },
+        "multiOrder": {
+          "q": "Kann ich mehrere Lithophane mit unterschiedlichen Fotos bestellen?",
+          "a": "Natürlich! Beliebig viele—und Rabatte ab 3 Stück."
+        }
+      },
+      "contact": {
+        "title": "Noch Fragen?",
+        "blurb": "Unser Team hilft dir beim perfekten Lithophan.",
+        "email": "E-Mail-Support",
+        "whatsapp": "WhatsApp-Chat"
+      }
+    },
     "FinalCTA": {
       "heading": {
         "before": "Verwandle dein Foto in ein",

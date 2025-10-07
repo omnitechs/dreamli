@@ -231,6 +231,50 @@
     }
   },
   "lithosphanes": {
+    "FAQ": {
+      "title": "Veelgestelde vragen",
+      "subtitle": "Alles wat je moet weten over het maken van jouw custom lithofaan",
+      "items": {
+        "bestPhotos": {
+          "q": "Welke foto’s werken het beste?",
+          "a": "Heldere, goed belichte portretten of hoge-kwaliteit artwork werken het best. Foto’s met goed contrast en detail geven het mooiste resultaat. We raden minimaal 1080p resolutie aan."
+        },
+        "leadTime": {
+          "q": "Hoelang duurt het maken en verzenden?",
+          "a": "Na het uploaden en bevestigen van het ontwerp produceren we meestal binnen 3–5 werkdagen. Verzending duurt 2–3 dagen binnen Nederland en 5–7 dagen internationaal."
+        },
+        "sizes": {
+          "q": "Welke maten zijn beschikbaar?",
+          "a": "We bieden: Klein (15×20 cm), Medium (20×25 cm), Groot (25×30 cm) en Extra Groot (30×40 cm). Alle maten zijn inclusief LED-achterverlichting en standaard."
+        },
+        "preview": {
+          "q": "Kan ik een preview zien voordat het gemaakt wordt?",
+          "a": "Ja! Na het uploaden ontvang je een digitale preview van hoe je lithofaan eruitziet met tegenlicht. Je kunt aanpassingen vragen voordat we starten."
+        },
+        "monoVsCmyk": {
+          "q": "Wat is het verschil tussen Mono en CMYK lithofanen?",
+          "a": "Mono lithofanen zijn zwart-wit—perfect voor portretten en foto’s met veel diepte. CMYK lithofanen zijn full-colour en ideaal voor kleurrijke beelden met levendige verlichting."
+        },
+        "ledIncluded": {
+          "q": "Is de LED-verlichting inbegrepen?",
+          "a": "Ja! Elke lithofaan wordt geleverd met een passend LED-achterlicht voor gelijkmatige verlichting. Het systeem is energiezuinig en bevat een adapter."
+        },
+        "satisfaction": {
+          "q": "Wat als ik niet tevreden ben?",
+          "a": "We bieden 30 dagen geld-terug-garantie. Ben je niet volledig tevreden, dan lossen we het op of krijg je je geld terug."
+        },
+        "multiOrder": {
+          "q": "Kan ik meerdere lithofanen met verschillende foto’s bestellen?",
+          "a": "Zeker! Bestel zoveel lithofanen als je wilt, elk met een andere foto. We bieden ook korting bij 3 of meer stuks."
+        }
+      },
+      "contact": {
+        "title": "Nog vragen?",
+        "blurb": "Ons team helpt je graag met het perfecte lithofaan.",
+        "email": "E-mail support",
+        "whatsapp": "WhatsApp-chat"
+      }
+    },
     "FinalCTA": {
       "heading": {
         "before": "Maak van je foto een",

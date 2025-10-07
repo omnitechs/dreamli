@@ -232,6 +232,50 @@
     }
   },
   "lithosphanes": {
+    "FAQ": {
+      "title": "Questions fréquentes",
+      "subtitle": "Tout ce qu’il faut savoir pour créer votre lithophanie personnalisée",
+      "items": {
+        "bestPhotos": {
+          "q": "Quelles photos fonctionnent le mieux ?",
+          "a": "Des portraits nets et bien éclairés ou des œuvres de qualité. Un bon contraste et des détails donnent les meilleurs résultats. Résolution conseillée : au moins 1080p."
+        },
+        "leadTime": {
+          "q": "Quels sont les délais de création et d’expédition ?",
+          "a": "Après l’upload et la validation du design : 3–5 jours ouvrés de production. Expédition : 2–3 jours aux Pays-Bas, 5–7 jours à l’international."
+        },
+        "sizes": {
+          "q": "Quelles tailles sont proposées ?",
+          "a": "Petit (15×20 cm), Moyen (20×25 cm), Grand (25×30 cm), Très grand (30×40 cm). Toutes les tailles incluent l’éclairage LED et le support."
+        },
+        "preview": {
+          "q": "Puis-je voir un aperçu avant fabrication ?",
+          "a": "Oui ! Après l’upload, nous fournissons un aperçu illuminé. Vous pouvez demander des ajustements avant la production."
+        },
+        "monoVsCmyk": {
+          "q": "Différence entre lithophanies Mono et CMYK ?",
+          "a": "Mono est en noir et blanc—idéal pour les portraits avec de la profondeur. CMYK est en couleur, parfait pour des images lumineuses."
+        },
+        "ledIncluded": {
+          "q": "L’éclairage LED est-il inclus ?",
+          "a": "Oui ! Chaque lithophanie est livrée avec un système LED ajusté pour une luminosité uniforme. Faible consommation, avec adaptateur."
+        },
+        "satisfaction": {
+          "q": "Et si je ne suis pas satisfait ?",
+          "a": "Garantie satisfait ou remboursé 30 jours. Nous corrigerons le résultat ou vous rembourserons."
+        },
+        "multiOrder": {
+          "q": "Puis-je commander plusieurs lithophanies avec des photos différentes ?",
+          "a": "Absolument ! Et des remises s’appliquent dès 3 pièces."
+        }
+      },
+      "contact": {
+        "title": "Encore des questions ?",
+        "blurb": "Notre équipe vous aide à créer la lithophanie parfaite.",
+        "email": "Support e-mail",
+        "whatsapp": "Chat WhatsApp"
+      }
+    },
     "FinalCTA": {
       "heading": {
         "before": "Transformez votre photo en",

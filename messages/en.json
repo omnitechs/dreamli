@@ -231,6 +231,50 @@
     }
   },
   "lithosphanes": {
+    "FAQ": {
+      "title": "Frequently Asked Questions",
+      "subtitle": "Everything you need to know about creating your custom lithophane",
+      "items": {
+        "bestPhotos": {
+          "q": "What kind of photos work best?",
+          "a": "Clear, well-lit portraits or high-quality artwork work best. Photos with good contrast and detail will produce the most stunning results. We recommend images with at least 1080p resolution for optimal quality."
+        },
+        "leadTime": {
+          "q": "How long does it take to create and ship?",
+          "a": "Once you upload your photo and confirm the design, we typically complete production within 3–5 business days. Shipping takes an additional 2–3 days within the Netherlands and 5–7 days for international orders."
+        },
+        "sizes": {
+          "q": "What sizes are available?",
+          "a": "We offer several sizes: Small (15×20 cm), Medium (20×25 cm), Large (25×30 cm), and Extra Large (30×40 cm). All sizes include the LED backlighting system and stand."
+        },
+        "preview": {
+          "q": "Can I preview my lithophane before it's made?",
+          "a": "Yes! After you upload your photo, we provide a digital preview showing how your lithophane will look when illuminated. You can request adjustments before we begin production."
+        },
+        "monoVsCmyk": {
+          "q": "What's the difference between Mono and CMYK lithophanes?",
+          "a": "Mono lithophanes are black and white, perfect for portraits and detailed photos with depth and shadows. CMYK lithophanes are full-color—ideal for artwork and images that benefit from vibrant illumination."
+        },
+        "ledIncluded": {
+          "q": "Is the LED lighting included?",
+          "a": "Yes! Every lithophane comes with a custom-fitted LED backlighting system that provides uniform illumination. The LED system is energy-efficient and includes a power adapter."
+        },
+        "satisfaction": {
+          "q": "What if I'm not satisfied with the result?",
+          "a": "We offer a 30-day money-back guarantee. If you're not completely satisfied with your lithophane, we'll work with you to make it right or provide a full refund."
+        },
+        "multiOrder": {
+          "q": "Can I order multiple lithophanes with different photos?",
+          "a": "Absolutely! You can order as many lithophanes as you want, each with different photos. We also offer discounts for bulk orders of 3 or more."
+        }
+      },
+      "contact": {
+        "title": "Still have questions?",
+        "blurb": "Our team is here to help you create the perfect lithophane.",
+        "email": "Email Support",
+        "whatsapp": "WhatsApp Chat"
+      }
+    },
     "FinalCTA": {
       "heading": {
         "before": "Turn your photo into a",
