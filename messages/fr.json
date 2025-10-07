@@ -168,6 +168,11 @@
     }
   },
   "Keychains": {
+    "meta": {
+      "title": "Porte-clés NFC personnalisés — Conception & aperçu 3D | Dreamli",
+      "description": "Créez votre porte-clés avec aperçu 3D en direct. Choisissez couleurs, texte et matériaux, puis ajoutez au panier. Expédition rapide dans l’UE.",
+      "ogImage": "/og/keychains.jpg"
+    },
     "aria": { "hero": "Section héros porte-clés" },
     "headline": "Porte-clés personnalisés — Nom ou photo, en PLA+",
     "subheadline": "Aperçu en direct • Jusqu’à 25 cm • NFC en option • Livraison offerte dès 50 €",

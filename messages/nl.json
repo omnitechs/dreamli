@@ -167,6 +167,11 @@
     }
   },
   "Keychains": {
+    "meta": {
+      "title": "Personalisierte NFC-Schlüsselanhänger — Design & 3D-Vorschau | Dreamli",
+      "description": "Gestalte deinen Schlüsselanhänger mit Live-3D-Vorschau. Farben, Text und Materialien wählen und direkt in den Warenkorb legen. Schneller EU-Versand.",
+      "ogImage": "/og/keychains.jpg"
+    },
     "aria": { "hero": "Keychains hero sectie" },
     "headline": "Gepersonaliseerde sleutelhangers — Naam of foto, gemaakt van PLA+",
     "subheadline": "Live voorbeeld • Tot 25 cm • NFC optioneel • Gratis verzending boven €50",

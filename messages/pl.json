@@ -168,6 +168,11 @@
     }
   },
   "Keychains": {
+    "meta": {
+      "title": "Personalizowane breloki NFC — Projekt i podgląd 3D | Dreamli",
+      "description": "Stwórz własny brelok z podglądem 3D na żywo. Wybierz kolory, tekst i materiały, a następnie dodaj do koszyka. Szybka wysyłka w UE.",
+      "ogImage": "/og/keychains.jpg"
+    },
     "aria": { "hero": "Sekcja bohater – breloczki" },
     "headline": "Personalizowane breloczki — imię lub zdjęcie, z PLA+",
     "subheadline": "Podgląd na żywo • Do 25 cm • NFC opcjonalnie • Darmowa dostawa od 50 €",

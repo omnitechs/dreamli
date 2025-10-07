@@ -167,6 +167,11 @@
 
   },
   "Keychains": {
+    "meta": {
+      "title": "Custom NFC Keychains — Design & Preview in 3D | Dreamli",
+      "description": "Create a personalized keychain with live 3D preview. Choose colors, text, and materials, then add to cart seamlessly. Fast EU shipping.",
+      "ogImage": "/og/keychains.jpg"
+    },
     "aria": { "hero": "Keychains hero section" },
     "headline": "Custom Keychains — Name or Photo, Made in PLA+",
     "subheadline": "Live preview • Up to 25 cm • NFC optional • Free shipping over €50",

@@ -1,6 +1,6 @@
 
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import Header from '../../../components/Header';
+import Footer from '../../../components/Footer';
 import ContactHero from './ContactHero';
 import ContactInfo from './ContactInfo';
 import ContactMap from './ContactMap';
@@ -22,12 +22,10 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <div className="min-h-screen">
-      <Header />
       <ContactHero />
       <ContactInfo />
       <ContactMap />
       <ContactForm />
-      <Footer />
     </div>
   );
 }

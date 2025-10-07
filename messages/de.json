@@ -168,6 +168,11 @@
     }
   },
   "Keychains": {
+    "meta": {
+      "title": "Porte-clés NFC personnalisés — Conception & aperçu 3D | Dreamli",
+      "description": "Créez votre porte-clés avec aperçu 3D en direct. Choisissez couleurs, texte et matériaux, puis ajoutez au panier. Expédition rapide dans l’UE.",
+      "ogImage": "/og/keychains.jpg"
+    },
     "aria": { "hero": "Keychains Hero-Bereich" },
     "headline": "Personalisierte Schlüsselanhänger – Name oder Foto, aus PLA+",
     "subheadline": "Live-Vorschau • Bis zu 25 cm • NFC optional • Kostenloser Versand ab 50 €",
