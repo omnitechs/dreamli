@@ -384,6 +384,37 @@
     "hero": {
       "title": "Contactez-nous",
       "subtitle": "Nous serions ravis d’avoir de vos nouvelles ! Que vous cherchiez le cadeau parfait ou souhaitiez créer quelque chose de vraiment personnel, notre équipe est là pour vous aider — où que vous soyez dans le monde."
+    },
+    "info": {
+      "about": {
+        "title": "À propos de Dreamli",
+        "body": "Dreamli est une boutique de cadeaux créative où l’imagination rencontre le savoir-faire. Nous aidons les gens à trouver ou à créer des cadeaux significatifs grâce à l’impression 3D, au design personnalisé et à des matériaux écologiques, transformant les moments spéciaux en souvenirs durables. Notre studio est situé à Groningue, aux Pays-Bas, et nous expédions dans le monde entier pour que chacun puisse donner vie à son cadeau de rêve."
+      },
+      "cards": {
+        "phone": {
+          "title": "Téléphone & WhatsApp",
+          "subtitle": "Appelez-nous ou envoyez un message",
+          "button": "Discuter via WhatsApp",
+          "whatsappAria": "Ouvrir le chat WhatsApp"
+        },
+        "email": {
+          "title": "E-mail",
+          "subtitle": "Envoyez-nous un e-mail à tout moment"
+        },
+        "address": {
+          "title": "Adresse",
+          "subtitle": "Venez nous rendre visite à Groningue",
+          "kvk": "KvK"
+        }
+      },
+      "hours": {
+        "title": "Horaires d’ouverture",
+        "weekdays": "Lundi - Vendredi",
+        "saturday": "Samedi",
+        "sunday": "Dimanche",
+        "byAppointment": "Sur rendez-vous",
+        "closed": "Fermé"
+      }
     }
   }
 

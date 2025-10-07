@@ -382,6 +382,37 @@
     "hero": {
       "title": "Neem contact op",
       "subtitle": "We horen graag van je! Of je nu op zoek bent naar het perfecte cadeau of iets unieks wilt ontwerpen, ons team helpt je graag — waar je ook bent in de wereld."
+    },
+    "info": {
+      "about": {
+        "title": "Over Dreamli",
+        "body": "Dreamli is een creatieve cadeauwinkel waar verbeelding en vakmanschap samenkomen. We helpen mensen om betekenisvolle cadeaus te vinden of te ontwerpen via 3D-printing, maatwerk en milieuvriendelijke materialen — zo worden bijzondere momenten blijvende herinneringen. Onze studio is gevestigd in Groningen en we verzenden wereldwijd, zodat iedereen zijn droomcadeau tot leven kan brengen."
+      },
+      "cards": {
+        "phone": {
+          "title": "Telefoon & WhatsApp",
+          "subtitle": "Bel ons of stuur een bericht",
+          "button": "Chat via WhatsApp",
+          "whatsappAria": "Open WhatsApp-chat"
+        },
+        "email": {
+          "title": "E-mail",
+          "subtitle": "Stuur ons op elk moment een e-mail"
+        },
+        "address": {
+          "title": "Adres",
+          "subtitle": "Bezoek ons in Groningen",
+          "kvk": "KvK"
+        }
+      },
+      "hours": {
+        "title": "Openingstijden",
+        "weekdays": "Maandag - Vrijdag",
+        "saturday": "Zaterdag",
+        "sunday": "Zondag",
+        "byAppointment": "Op afspraak",
+        "closed": "Gesloten"
+      }
     }
   }
 }

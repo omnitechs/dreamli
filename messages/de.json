@@ -383,6 +383,37 @@
     "hero": {
       "title": "Kontakt aufnehmen",
       "subtitle": "Wir freuen uns, von Ihnen zu hören! Egal, ob Sie nach dem perfekten Geschenk suchen oder etwas ganz Persönliches gestalten möchten — unser Team hilft Ihnen gerne, wo immer Sie sind."
+    },
+    "info": {
+      "about": {
+        "title": "Über Dreamli",
+        "body": "Dreamli ist ein kreativer Geschenkeladen, in dem Vorstellungskraft auf Handwerkskunst trifft. Wir helfen Menschen, bedeutungsvolle Geschenke zu finden oder zu gestalten – durch 3D-Druck, individuelles Design und umweltfreundliche Materialien – und verwandeln besondere Momente in bleibende Erinnerungen. Unser Studio befindet sich in Groningen, Niederlande, und wir versenden weltweit, damit jeder sein Traumgeschenk zum Leben erwecken kann."
+      },
+      "cards": {
+        "phone": {
+          "title": "Telefon & WhatsApp",
+          "subtitle": "Rufen Sie uns an oder senden Sie eine Nachricht",
+          "button": "Chat über WhatsApp",
+          "whatsappAria": "WhatsApp-Chat öffnen"
+        },
+        "email": {
+          "title": "E-Mail",
+          "subtitle": "Senden Sie uns jederzeit eine E-Mail"
+        },
+        "address": {
+          "title": "Adresse",
+          "subtitle": "Besuchen Sie uns in Groningen",
+          "kvk": "Handelskammer (KvK)"
+        }
+      },
+      "hours": {
+        "title": "Öffnungszeiten",
+        "weekdays": "Montag - Freitag",
+        "saturday": "Samstag",
+        "sunday": "Sonntag",
+        "byAppointment": "Nach Vereinbarung",
+        "closed": "Geschlossen"
+      }
     }
   }
 
