@@ -6,7 +6,7 @@ import {getLocale, getTranslations} from 'next-intl/server';
 export default async function ExploreCTA() {
     const lang = await getLocale();                       // e.g., "en" | "nl" | ...
     const t = await getTranslations('home.hero.explore'); // uses your JSON keys
-    const href = `https://shop.dreamli.nl/${lang}`;
+    const href = `https://shop.dreamli.nl/${lang ==="en" ? "" : lang}`;
 
     const btn =
         'group inline-flex items-center gap-3 rounded-full px-6 sm:px-8 py-3 sm:py-4 ' +
