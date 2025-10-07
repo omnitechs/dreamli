@@ -1,7 +1,8 @@
+// app/components/keychain/KeychainBuilder.tsx
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useKeychainState } from './useKeychainState';
 import { COLOR_OPTIONS, colorHex } from './colors';
 import { useKeychainThree } from './useKeychainThree';
@@ -10,12 +11,45 @@ import { compilePart } from './openscadClient';
 
 const getCleanFontName = (fontString: string) => fontString.split(':')[0];
 
+// Locale → cart URL
+const CART_URLS: Record<string, string> = {
+    en: 'https://shop.dreamli.nl/cart',
+    nl: 'https://shop.dreamli.nl/nl/winkelwagen/',
+    de: 'https://shop.dreamli.nl/de/warenkorb/',
+    fr: 'https://shop.dreamli.nl/fr/panier/',
+    pl: 'https://shop.dreamli.nl/pl/koszyk/'
+};
+
+// Helpers for redirect
+const isLocalized = (u: string, loc: string) => {
+    try {
+        const url = new URL(u);
+        return new RegExp(`/(?:${loc})(/|$)`).test(url.pathname);
+    } catch {
+        return false;
+    }
+};
+
+const appendSearch = (base: string, from?: string) => {
+    try {
+        const baseURL = new URL(base);
+        if (!from) return baseURL.toString();
+        const fromURL = new URL(from);
+        fromURL.searchParams.forEach((v, k) => baseURL.searchParams.set(k, v));
+        return baseURL.toString();
+    } catch {
+        return base;
+    }
+};
+
 type Props = {
     scadPath?: string;
     className?: string;
     woocommerceConfig?: {
         productId: number;
         apiUrl: string;
+        /** optional per-instance override if you ever want to force a specific cart page */
+        cartUrl?: string;
     };
 };
 
@@ -28,6 +62,7 @@ export default function KeychainBuilder({
                                             }
                                         }: Props) {
     const t = useTranslations('KeychainBuilder');
+    const locale = useLocale();
 
     const containerRef = useRef<HTMLDivElement | null>(null);
     const [activeTab, setActiveTab] = useState<'text' | 'style' | 'ring'>('text');
@@ -49,31 +84,14 @@ export default function KeychainBuilder({
         viewerState,
         defines,
         mostrarAnilla,
-        setMostrarAnilla,
+        setMostrarAnilla
     } = useKeychainState();
 
     const [fuente, setFuente] = fuenteState;
     const { linea1, setLinea1, linea2, setLinea2, tamanio, setTamanio } = textState;
-    const {
-        altura,
-        setAltura,
-        alturaBorde,
-        setAlturaBorde,
-        grosorBorde,
-        setGrosorBorde,
-        espaciado,
-        setEspaciado,
-    } = geoState;
-    const {
-        ajusteX,
-        setAjusteX,
-        ajusteY,
-        setAjusteY,
-        dExt,
-        setDExt,
-        dInt,
-        setDInt,
-    } = ringState;
+    const { altura, setAltura, alturaBorde, setAlturaBorde, grosorBorde, setGrosorBorde, espaciado, setEspaciado } =
+        geoState;
+    const { ajusteX, setAjusteX, ajusteY, setAjusteY, dExt, setDExt, dInt, setDInt } = ringState;
     const { dosColores, setDosColores, colors, setColors } = colorState;
     const { freeView, setFreeView } = viewerState;
 
@@ -86,8 +104,8 @@ export default function KeychainBuilder({
         colorNames: {
             base: colors.baseName,
             text: colors.textName,
-            unico: colors.unicoName,
-        },
+            unico: colors.unicoName
+        }
     });
 
     const { switchTo, setPartGeometry, setColors: viewerSetColors } = three;
@@ -138,25 +156,25 @@ export default function KeychainBuilder({
                     line2: defines.linea2,
                     font: defines.fuente,
                     size: defines.tamanio_texto,
-                    spacing: defines.espaciado_lineas,
+                    spacing: defines.espaciado_lineas
                 },
                 style: {
                     textHeight: defines.altura_texto,
                     baseThickness: defines.altura_borde,
-                    borderThickness: defines.grosor_borde,
+                    borderThickness: defines.grosor_borde
                 },
                 ring: {
                     show: defines.mostrar_anilla,
                     outerDiameter: defines.diametro_exterior,
                     innerDiameter: defines.diametro_interior,
                     adjustX: defines.ajuste_x,
-                    adjustY: defines.ajuste_y,
+                    adjustY: defines.ajuste_y
                 },
                 colors: {
                     twoColor: defines.dos_colores,
                     base: defines.color_base,
                     text: defines.color_texto,
-                    single: defines.color_unico,
+                    single: defines.color_unico
                 }
             };
 
@@ -165,6 +183,7 @@ export default function KeychainBuilder({
             const response = await fetch(woocommerceConfig.apiUrl, {
                 method: 'POST',
                 body: formData,
+                credentials: 'include' // keep Woo session cookies if cross-origin
             });
 
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -174,10 +193,27 @@ export default function KeychainBuilder({
                 setShowNotification({
                     show: true,
                     message: t('notif.added'),
-                    type: 'success',
+                    type: 'success'
                 });
+
+                // Choose redirect: prefer localized cart, but preserve API query string
+                const apiUrlRaw: string | undefined =
+                    result.cart_url || result.cartUrl || result.redirect || result.url;
+
+                const propUrl = woocommerceConfig.cartUrl;
+                const localeUrlRaw = CART_URLS[locale] || CART_URLS.en || '/cart';
+
+                let target: string;
+                if (apiUrlRaw && isLocalized(apiUrlRaw, locale)) {
+                    // API already returned a localized URL for this locale
+                    target = apiUrlRaw;
+                } else {
+                    const base = propUrl || localeUrlRaw;
+                    target = appendSearch(base, apiUrlRaw); // graft ?keychain_design=... if provided
+                }
+
                 setTimeout(() => {
-                    window.location.href = result.cart_url || '/cart';
+                    window.location.href = target || '/cart';
                 }, 1200);
             } else {
                 throw new Error('woocommerce_failed');
@@ -187,7 +223,7 @@ export default function KeychainBuilder({
             setShowNotification({
                 show: true,
                 message: t('notif.failed', { msg: String(error?.message || 'error') }),
-                type: 'error',
+                type: 'error'
             });
             setTimeout(() => setShowNotification({ show: false, message: '', type: 'success' }), 2500);
         } finally {
@@ -212,10 +248,9 @@ export default function KeychainBuilder({
             base: colors.baseName,
             text: colors.textName,
             unico: colors.unicoName,
-            twoColors: dosColores,
+            twoColors: dosColores
         });
     }, [colors.baseName, colors.textName, colors.unicoName, dosColores, viewerSetColors]);
-
     return (
         <div
             className={`min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 overflow-x-hidden ${className}`}
