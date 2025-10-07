@@ -415,6 +415,15 @@
         "byAppointment": "Sur rendez-vous",
         "closed": "Fermé"
       }
+    },
+    "map": {
+      "title": "Nous trouver",
+      "subtitle": "Situé au cœur de Groningue, aux Pays-Bas",
+      "iframeTitle": "Emplacement Dreamli - Resedastraat 39, 9713 TN Groningue",
+      "access": "Facilement accessible en transports en commun ou en voiture. Parking gratuit à proximité.",
+      "bus": "Arrêt de bus : à 2 minutes à pied",
+      "parking": "Parking gratuit disponible",
+      "bike": "Emplacement adapté aux vélos"
     }
   }
 

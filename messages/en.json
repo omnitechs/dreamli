@@ -413,6 +413,15 @@
         "byAppointment": "By Appointment",
         "closed": "Closed"
       }
+    },
+    "map": {
+      "title": "Find Us",
+      "subtitle": "Located in the heart of Groningen, Netherlands",
+      "iframeTitle": "Dreamli Location - Resedastraat 39, 9713 TN Groningen",
+      "access": "Easily accessible by public transport or car. Free parking available nearby.",
+      "bus": "Bus stop: 2 minutes walk",
+      "parking": "Free parking available",
+      "bike": "Bike-friendly location"
     }
   }
 
