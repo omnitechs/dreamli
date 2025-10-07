@@ -232,6 +232,11 @@
     }
   },
   "lithosphanes": {
+    "ExplainerVideo": {
+      "title": "Zobacz, jak litofany ożywają",
+      "blurb": "Zobacz, jak zamieniamy Twoje wspomnienia w zachwycające, podświetlane dzieła sztuki ujawniające ukryte detale.",
+      "videoTitle": "Litofany — wyjaśnienie"
+    },
     "hero": {
       "title": "Zamień swoje zdjęcia w <highlight>Rozświetlone dzieła sztuki</highlight>",
       "subtitle": "Stwórz zachwycające litofany 3D, które ożywią twoje wspomnienia światłem",

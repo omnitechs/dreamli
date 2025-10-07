@@ -232,6 +232,11 @@
     }
   },
   "lithosphanes": {
+    "ExplainerVideo": {
+      "title": "Voyez les lithophanies prendre vie",
+      "blurb": "Découvrez comment nous transformons vos précieux souvenirs en superbes œuvres lumineuses qui révèlent des détails cachés à contre-jour.",
+      "videoTitle": "Lithophanies expliquées"
+    },
     "hero": {
       "title": "Transformez vos photos en <highlight>Œuvres d’art illuminées</highlight>",
       "subtitle": "Créez de superbes lithophanies 3D qui donnent vie à vos souvenirs grâce à la lumière",

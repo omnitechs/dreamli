@@ -231,6 +231,11 @@
     }
   },
   "lithosphanes": {
+    "ExplainerVideo": {
+      "title": "See Lithophanes Come to Life",
+      "blurb": "Watch how we transform your precious memories into stunning illuminated art pieces that reveal hidden details when backlit.",
+      "videoTitle": "Lithophanes Explained"
+    },
     "hero": {
       "title": "Transform Your Photos Into <highlight>Illuminated Art</highlight>",
       "subtitle": "Create stunning 3D lithophanes that bring your memories to life with light",

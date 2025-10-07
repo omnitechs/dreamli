@@ -232,6 +232,11 @@
     }
   },
   "lithosphanes": {
+    "ExplainerVideo": {
+      "title": "Erlebe Lithophane zum Leben",
+      "blurb": "Sieh dir an, wie wir deine Erinnerungen in beeindruckende, beleuchtete Kunstwerke verwandeln, die bei Hintergrundlicht verborgene Details zeigen.",
+      "videoTitle": "Lithophane erklärt"
+    },
     "hero": {
       "title": "Verwandle deine Fotos in <highlight>Leuchtende Kunstwerke</highlight>",
       "subtitle": "Erstelle beeindruckende 3D-Lithophane, die deine Erinnerungen mit Licht zum Leben erwecken",
