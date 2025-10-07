@@ -114,5 +114,58 @@
     "decorativeDotAlt": "Dekorativer Punkt",
     "greeting": "Hallo! Ich helfe dir, das perfekte Geschenk zu finden. Wonach suchst du?",
     "errorStreaming": "Fehler beim Streamen der Antwort"
+  },
+  "footer": {
+    "aria": { "home": "Dreamli Startseite" },
+    "logoAlt": "Dreamli Logo",
+    "tagline": {
+      "line1": "Finde oder kreiere das perfekte Geschenk – unterstützt von KI und Fantasie.",
+      "line2": "Entdecke durchdachte Geschenke oder gestalte persönliche Andenken, mit Liebe und 3D-Präzision gefertigt."
+    },
+    "social": {
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "whatsapp": "WhatsApp"
+    },
+    "company": {
+      "heading": "Unternehmensinfo",
+      "name": "Omni Techs",
+      "address": {
+        "line1": "Resedastraat 39",
+        "line2": "9713TN, Groningen",
+        "country": "Niederlande"
+      },
+      "kvk": "KvK: {kvk}",
+      "phone": "{phone}"
+    },
+    "collab": {
+      "heading": "Kooperation",
+      "partner": "Partner werden",
+      "aboutFounder": "Über den Gründer"
+    },
+    "newsletter": {
+      "heading": "Newsletter",
+      "blurb": "Verpassen Sie keine neuen Geschichten, Produkte und Angebote.",
+      "emailLabel": "E-Mail-Adresse",
+      "placeholder": "Deine E-Mail-Adresse",
+      "subscribe": "Abonnieren",
+      "sending": "Wird gesendet…",
+      "success": "Danke! Bitte überprüfe deine E-Mails, um dein Abonnement zu bestätigen.",
+      "privacy": "Wir respektieren deine Privatsphäre. Du kannst dich jederzeit abmelden.",
+      "errors": {
+        "missingEmail": "Bitte gib deine E-Mail-Adresse ein.",
+        "generic": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
+      }
+    },
+    "legal": {
+      "copyright": "{year} Dreamli. Alle Rechte vorbehalten.",
+      "privacy": "Datenschutz",
+      "terms": "Nutzungsbedingungen",
+      "cookies": "Cookies"
+    },
+    "trustpilot": {
+      "ariaOpen": "Open Trustpilot page"
+    }
   }
+
 }

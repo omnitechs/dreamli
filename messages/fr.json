@@ -114,5 +114,57 @@
     "decorativeDotAlt": "Point décoratif",
     "greeting": "Bonjour ! Je suis là pour vous aider à trouver le cadeau parfait. Que recherchez-vous ?",
     "errorStreaming": "Erreur lors du flux de la réponse"
+  },
+  "footer": {
+    "aria": { "home": "Accueil Dreamli" },
+    "logoAlt": "Logo Dreamli",
+    "tagline": {
+      "line1": "Trouvez ou créez le cadeau parfait grâce à l’IA et à l’imagination.",
+      "line2": "Découvrez des présents attentionnés ou concevez vos souvenirs personnalisés, réalisés avec amour et une précision 3D."
+    },
+    "social": {
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "whatsapp": "WhatsApp"
+    },
+    "company": {
+      "heading": "Informations sur l’entreprise",
+      "name": "Omni Techs",
+      "address": {
+        "line1": "Resedastraat 39",
+        "line2": "9713TN, Groningue",
+        "country": "Pays-Bas"
+      },
+      "kvk": "KvK : {kvk}",
+      "phone": "{phone}"
+    },
+    "collab": {
+      "heading": "Espace de collaboration",
+      "partner": "Devenir partenaire",
+      "aboutFounder": "À propos du fondateur"
+    },
+    "newsletter": {
+      "heading": "Bulletin",
+      "blurb": "Ne manquez pas nos dernières histoires, produits et offres.",
+      "emailLabel": "Adresse e-mail",
+      "placeholder": "Votre adresse e-mail",
+      "subscribe": "S'abonner",
+      "sending": "Envoi…",
+      "success": "Merci ! Vérifiez votre e-mail pour confirmer votre inscription.",
+      "privacy": "Nous respectons votre vie privée. Vous pouvez vous désinscrire à tout moment.",
+      "errors": {
+        "missingEmail": "Veuillez saisir votre adresse e-mail.",
+        "generic": "Une erreur s'est produite. Veuillez réessayer."
+      }
+    },
+    "legal": {
+      "copyright": "{year} Dreamli. Tous droits réservés.",
+      "privacy": "Politique de confidentialité",
+      "terms": "Conditions d’utilisation",
+      "cookies": "Cookies"
+    },
+    "trustpilot": {
+      "ariaOpen": "Open Trustpilot page"
+    }
   }
 }

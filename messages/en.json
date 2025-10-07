@@ -112,6 +112,59 @@
     "decorativeDotAlt": "Decorative dot",
     "greeting": "Hi! I'm here to help you find the perfect gift. What are you looking for?",
     "errorStreaming": "Error streaming response"
+  },
+  "footer": {
+    "aria": { "home": "Dreamli home" },
+    "logoAlt": "Dreamli logo",
+    "tagline": {
+      "line1": "Find or create the perfect gift powered by AI and imagination.",
+      "line2": "Discover thoughtful presents or design your own personalized keepsakes, crafted with love and 3D precision."
+    },
+    "social": {
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "whatsapp": "WhatsApp"
+    },
+    "company": {
+      "heading": "Company Info",
+      "name": "Omni Techs",
+      "address": {
+        "line1": "Resedastraat 39",
+        "line2": "9713TN, Groningen",
+        "country": "Netherlands"
+      },
+      "kvk": "KvK: {kvk}",
+      "phone": "{phone}"
+    },
+    "collab": {
+      "heading": "Collaboration Hub",
+      "partner": "Partner With Us",
+      "aboutFounder": "About Founder"
+    },
+    "newsletter": {
+      "heading" : "Newsletter",
+      "blurb": "Stay updated with our latest news",
+      "emailLabel": "Email address",
+      "placeholder": "Your email address",
+      "subscribe": "Subscribe",
+      "sending": "Sending…",
+      "success": "Thank you! Please check your email to confirm your subscription.",
+      "privacy": "We respect your privacy. You can unsubscribe at any time.",
+      "errors": {
+        "missingEmail": "Please enter your email address.",
+        "generic": "Something went wrong. Please try again."
+      }
+    },
+    "legal": {
+      "copyright": "{year} Dreamli. All rights reserved.",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "cookies": "Cookies"
+    },
+    "trustpilot": {
+      "ariaOpen": "Open Trustpilot page"
+    }
+
   }
 
 }

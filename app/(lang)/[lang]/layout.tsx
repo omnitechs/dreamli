@@ -115,7 +115,7 @@ export default async function LangLayout({
             />
         </head>
         <body>
-        <NextIntlClientProvider locale={lang} messages={messages}>
+        <NextIntlClientProvider key={lang} locale={lang} messages={messages}>
             <Header lang={lang} />
             {children}
             <Footer />
