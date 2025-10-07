@@ -64,8 +64,12 @@ export default function MailchimpSubscriptionCoupon() {
 
         try {
             const formData = new FormData();
+            formData.append('u', 'b5c4e06a78dece913db9a1f79');
+            formData.append('id', '78ff17c433');
+            formData.append('f_id', '00c4c4e8f0');
             formData.append('EMAIL', email);
             formData.append('COUPON', 'EARLYBIRD50');
+            formData.append('tags', '12756101');
             formData.append('b_b5c4e06a78dece913db9a1f79_78ff17c433', '');
 
             await fetch(
@@ -150,6 +154,8 @@ export default function MailchimpSubscriptionCoupon() {
                             <p className="text-[11px] text-gray-500 text-center mt-1">
                                 {t('footer')}
                             </p>
+                            <input type="hidden" name="tags" value="coupon" />
+                            <input type="hidden" name="COUPON" value="EARLYBIRD50" />
                         </form>
                     ) : (
                         <div className="text-center py-8">
