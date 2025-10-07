@@ -34,7 +34,7 @@ export default async function FinalCTA({ lang }: { lang: LanguageCode }) {
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                         <Link
-                            href={`/${lang}#upload`}
+                            href={`https://shop.dreamli.nl${lang === 'en' ? '' : `/${lang}`}/product/lithophane/`}
                             className="inline-flex items-center gap-3 bg-gradient-to-r from-[#FFB067] to-[#FF8A65] text-white px-10 py-5 rounded-full text-xl font-bold hover:from-[#FFB067]/90 hover:to-[#FF8A65]/90 transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 whitespace-nowrap"
                         >
                             <i className="ri-upload-cloud-line text-2xl w-6 h-6 flex items-center justify-center" />

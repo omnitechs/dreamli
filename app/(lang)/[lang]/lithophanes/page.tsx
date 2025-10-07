@@ -8,7 +8,7 @@ import FAQ from './FAQ';
 import {LanguageCode} from "@/config/i18n";
 
 export default async function LithophanesPage(props: { params: Promise<{ lang: LanguageCode }>}) {
-    await props.params;
+    const {lang} = await props.params;
   return (
     <div className="min-h-screen bg-white">
       <LithophanesHero />
@@ -17,7 +17,7 @@ export default async function LithophanesPage(props: { params: Promise<{ lang: L
       {/*<StyleComparison />*/}
       <ExplainerVideo />
       <WhyDreamli />
-      <FinalCTA />
+      <FinalCTA  lang={lang}/>
       <FAQ />
     </div>
   );
