@@ -4,6 +4,21 @@
     "description": "Zmień rysunki swojego dziecka w spersonalizowane figurki 3D i zestawy do malowania. Ekologiczne, przyjemne i zaprojektowane, aby rozwijać kreatywność oraz pewność siebie."
   },
   "home": {
+    "Custom3D": {
+      "title": { "prefix": "Indywidualny druk 3D — Zamów coś,", "highlight": "czego jeszcze nie ma" },
+      "subtitle": "Masz już plik 3D lub wyjątkowy pomysł? Zrealizujemy go.",
+      "intro": "Prześlij plik, szkic lub po prostu opisz, co sobie wyobrażasz — resztą zajmiemy się my. Figurki, rysunki dziecka, część zamienna czy jedyny w swoim rodzaju prezent — Dreamli projektuje lub drukuje to lokalnie w Holandii z wysokiej jakości, zrównoważonych materiałów.",
+      "assist": { "title": "Nie chcesz projektować samodzielnie? Żaden problem.", "text": "Nasz zespół projektowy 3D współpracuje z AI, zamieniając pomysły w modele gotowe do druku — kreatywnie i precyzyjnie." },
+      "promise": "Twoja wyobraźnia nie kończy się na naszym katalogu — my też nie.",
+      "cta": { "upload": "Prześlij plik", "request": "Złóż prośbę o projekt" },
+      "imageAlt": "Stanowisko do personalizowanego druku 3D",
+      "status": { "processing": "Przetwarzanie pliku", "printing": "Druk 3D", "qc": "Kontrola jakości" },
+      "features": {
+        "files": { "title": "Dowolny format pliku", "text": "STL, OBJ, PLY, a nawet szkice i zdjęcia — poradzimy sobie ze wszystkim" },
+        "materials": { "title": "Zrównoważone materiały", "text": "Wysokiej jakości, ekologiczne materiały drukowane lokalnie w Holandii" },
+        "team": { "title": "Ekspercki zespół projektowy", "text": "Projektowanie wspierane przez AI połączone z ludzką kreatywnością i precyzją" }
+      }
+    },
     "title": "",
     "description": "",
     "hero": {

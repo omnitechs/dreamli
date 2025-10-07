@@ -4,6 +4,21 @@
     "description": "Transformez les dessins de votre enfant en figurines et kits de peinture 3D personnalisés. Écologique, ludique et conçu pour stimuler la créativité et la confiance en soi."
   },
   "home": {
+    "Custom3D": {
+      "title": { "prefix": "Impression 3D sur mesure — Commandez quelque chose qui", "highlight": "n’existe pas (encore)" },
+      "subtitle": "Vous avez déjà un fichier 3D ou une idée unique ? On la réalise.",
+      "intro": "Téléversez votre fichier, une esquisse ou décrivez simplement votre idée — nous nous occupons du reste. Figurine personnelle, dessin d’enfant, pièce de rechange ou cadeau unique : Dreamli le conçoit ou l’imprime localement aux Pays-Bas avec des matériaux durables de haute qualité.",
+      "assist": { "title": "Pas envie de concevoir vous-même ? Aucun problème.", "text": "Notre équipe de design 3D travaille main dans la main avec l’IA pour transformer vos idées en modèles imprimables — créativité et précision." },
+      "promise": "Votre imagination ne s’arrête pas à notre catalogue — et nous non plus.",
+      "cta": { "upload": "Téléverser votre fichier", "request": "Demander un design" },
+      "imageAlt": "Atelier d’impression 3D personnalisé",
+      "status": { "processing": "Traitement du fichier", "printing": "Impression 3D", "qc": "Contrôle qualité" },
+      "features": {
+        "files": { "title": "Tous formats de fichiers", "text": "STL, OBJ, PLY, ou même croquis et photos — on gère tout" },
+        "materials": { "title": "Matériaux durables", "text": "Matériaux écologiques de haute qualité, imprimés localement aux Pays-Bas" },
+        "team": { "title": "Équipe design experte", "text": "Design assisté par IA, allié à la créativité et la précision humaines" }
+      }
+    },
     "title": "",
     "description": "",
     "hero": {

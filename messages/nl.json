@@ -4,6 +4,21 @@
     "description": "Verander de tekeningen van je kind in gepersonaliseerde 3D-figuren en schildersets. Milieuvriendelijk, leuk en ontworpen om creativiteit en zelfvertrouwen te stimuleren."
   },
   "home": {
+    "Custom3D": {
+      "title": { "prefix": "Custom 3D Print — Bestel iets dat", "highlight": "nog niet bestaat" },
+      "subtitle": "Heb je al een 3D-bestand of een uniek idee? Wij maken het werkelijkheid.",
+      "intro": "Upload je bestand, schets of beschrijving van je idee — wij doen de rest. Of het nu gaat om een persoonlijk beeldje, de tekening van je kind, een vervangend onderdeel of een betekenisvol cadeau dat niemand anders heeft: Dreamli ontwerpt of print het lokaal in Nederland met hoogwaardige, duurzame materialen.",
+      "assist": { "title": "Liever niet zelf ontwerpen? Geen probleem.", "text": "Ons 3D-designteam werkt samen met AI en zet jouw idee om in een printbaar model met een perfecte balans tussen creativiteit en precisie." },
+      "promise": "Jouw verbeelding stopt niet bij onze catalogus — en wij ook niet.",
+      "cta": { "upload": "Upload je bestand", "request": "Vraag een ontwerp aan" },
+      "imageAlt": "Werkplek voor custom 3D-printing",
+      "status": { "processing": "Bestandsverwerking", "printing": "3D-printen", "qc": "Kwaliteitscontrole" },
+      "features": {
+        "files": { "title": "Elk bestandsformaat", "text": "STL, OBJ, PLY of zelfs schetsen en foto’s — wij regelen het" },
+        "materials": { "title": "Duurzame materialen", "text": "Hoogwaardige, milieuvriendelijke materialen, lokaal geprint in Nederland" },
+        "team": { "title": "Expert designteam", "text": "AI-ondersteund ontwerp gecombineerd met menselijke creativiteit en precisie" }
+      }
+    },
     "title": "",
     "description": "",
     "hero": {

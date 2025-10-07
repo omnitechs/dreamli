@@ -4,6 +4,27 @@
     "description": "Transform your child's drawings into personalized 3D figures and painting kits. Eco-friendly, fun, and designed to boost creativity & confidence."
   },
   "home": {
+    "Custom3D": {
+      "title": {
+        "prefix": "Custom 3D Print — Order Something That",
+        "highlight": "Doesn't Exist (Yet)"
+      },
+      "subtitle": "Already have a 3D file or a one-of-a-kind idea? We'll make it real.",
+      "intro": "Upload your file, sketch, or simply describe what you imagine — and we'll handle the rest. Whether it's a personal figurine, your kid's drawing, a replacement part, or a meaningful gift that no one else has, Dreamli prints or designs it for you locally in the Netherlands using high-quality, sustainable materials.",
+      "assist": {
+        "title": "Prefer not to design it yourself? No problem.",
+        "text": "Our 3D design team works hand-in-hand with AI, turning your ideas into printable models with the perfect balance of creativity and precision."
+      },
+      "promise": "Your imagination doesn't stop at our catalog — and neither do we.",
+      "cta": { "upload": "Upload Your File", "request": "Request a Design" },
+      "imageAlt": "Custom 3D printing workspace",
+      "status": { "processing": "File Processing", "printing": "3D Printing", "qc": "Quality Check" },
+      "features": {
+        "files": { "title": "Any File Format", "text": "STL, OBJ, PLY, or even sketches and photos — we handle it all" },
+        "materials": { "title": "Sustainable Materials", "text": "High-quality, eco-friendly materials printed locally in the Netherlands" },
+        "team": { "title": "Expert Design Team", "text": "AI-powered design combined with human creativity and precision" }
+      }
+    },
     "title": "",
     "description": "",
     "hero": {

@@ -4,6 +4,21 @@
     "description": "Verwandle die Zeichnungen deines Kindes in personalisierte 3D-Figuren und Malsets. Umweltfreundlich, unterhaltsam und fördert Kreativität und Selbstvertrauen."
   },
   "home": {
+    "Custom3D": {
+      "title": { "prefix": "Individueller 3D-Druck — Bestellen Sie etwas,", "highlight": "das es noch nicht gibt" },
+      "subtitle": "Sie haben bereits eine 3D-Datei oder eine einzigartige Idee? Wir machen sie real.",
+      "intro": "Laden Sie Ihre Datei, Skizze oder Beschreibung hoch — wir übernehmen den Rest. Ob persönliche Figur, Zeichnung Ihres Kindes, Ersatzteil oder ein besonderes Geschenk: Dreamli entwirft oder druckt es lokal in den Niederlanden mit hochwertigen, nachhaltigen Materialien.",
+      "assist": { "title": "Sie möchten nicht selbst designen? Kein Problem.", "text": "Unser 3D-Designteam arbeitet Hand in Hand mit KI und verwandelt Ihre Ideen in druckbare Modelle — kreativ und präzise." },
+      "promise": "Ihre Vorstellungskraft endet nicht bei unserem Katalog — und unsere auch nicht.",
+      "cta": { "upload": "Datei hochladen", "request": "Design anfragen" },
+      "imageAlt": "Arbeitsplatz für individuellen 3D-Druck",
+      "status": { "processing": "Dateiverarbeitung", "printing": "3D-Druck", "qc": "Qualitätsprüfung" },
+      "features": {
+        "files": { "title": "Jedes Dateiformat", "text": "STL, OBJ, PLY oder sogar Skizzen und Fotos — wir können alles verarbeiten" },
+        "materials": { "title": "Nachhaltige Materialien", "text": "Hochwertige, umweltfreundliche Materialien — lokal in den Niederlanden gedruckt" },
+        "team": { "title": "Experten-Designteam", "text": "KI-gestütztes Design kombiniert mit menschlicher Kreativität und Präzision" }
+      }
+    },
     "title": "",
     "description": "",
     "hero": {
