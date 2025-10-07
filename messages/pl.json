@@ -73,6 +73,23 @@
         ],
         "cta": "Zaprojektuj brelok"
       }
+    },
+    "why": {
+      "title": "Dlaczego Dreamli to dom ",
+      "highlight": "niezapomnianych prezentów",
+      "subtitle": "Wybór idealnego prezentu nie zależy od ceny — liczy się historia, zaskoczenie i więź. W Dreamli ożywiamy te momenty. Niezależnie czy szukasz czegoś rzadkiego i ekskluzywnego, spersonalizowanej kreacji z Twojego zdjęcia lub rysunku, czy szybkiego wyboru z naszego szerokiego katalogu — znajdziesz to tutaj.",
+      "exclusive": {
+        "title": "🎁 Ekskluzywne prezenty",
+        "text": "Starannie wyselekcjonowane, limitowane i unikalne — niedostępne nigdzie indziej."
+      },
+      "personalized": {
+        "title": "✨ Spersonalizowane prezenty",
+        "text": "Tworzone z Twoich zdjęć, rysunków lub pomysłów. Zamień wspomnienia w wyjątkowe pamiątki."
+      },
+      "catalog": {
+        "title": "📚 Pełny katalog prezentów",
+        "text": "Od drobnych niespodzianek po wyraziste akcenty — wszystko w jednym miejscu."
+      }
     }
 
   },

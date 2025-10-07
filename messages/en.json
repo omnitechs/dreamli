@@ -72,6 +72,23 @@
         ],
         "cta": "Design Keychain"
       }
+    },
+    "why": {
+      "title": "Why Dreamli is the home of ",
+      "highlight": "unforgettable gifts",
+      "subtitle": "Choosing the right gift isn’t about the price tag — it’s about the story, the surprise, and the connection. At Dreamli we bring these moments to life. Whether you’re looking for something rare and exclusive, a personalized creation made from your own photo or drawing, or a quick pick from our wide catalog, you’ll find it here.",
+      "exclusive": {
+        "title": "🎁 Exclusive Gifts",
+        "text": "Carefully curated, limited, and unique pieces you won’t find anywhere else."
+      },
+      "personalized": {
+        "title": "✨ Personalized Gifts",
+        "text": "Made from your photos, drawings, or ideas. Turn memories into meaningful keepsakes."
+      },
+      "catalog": {
+        "title": "📚 Complete Gift Catalog",
+        "text": "Everything from small surprises to statement pieces, all in one convenient place."
+      }
     }
   },
   "Header": {

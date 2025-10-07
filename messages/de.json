@@ -73,6 +73,23 @@
         ],
         "cta": "Schlüsselanhänger gestalten"
       }
+    },
+    "why": {
+      "title": "Warum Dreamli die Heimat ",
+      "highlight": "unvergesslicher Geschenke",
+      "subtitle": "Choisir le bon cadeau n’est pas une question de prix — c’est une histoire d’émotion, de surprise et de lien. Chez Dreamli, nous donnons vie à ces moments. Que vous cherchiez quelque chose de rare et d’exclusif, une création personnalisée à partir de votre photo ou dessin, ou une sélection rapide dans notre large catalogue, vous le trouverez ici.",
+      "exclusive": {
+        "title": "🎁 Cadeaux exclusifs",
+        "text": "Soigneusement sélectionnés, en édition limitée et uniques — introuvables ailleurs."
+      },
+      "personalized": {
+        "title": "✨ Cadeaux personnalisés",
+        "text": "Créés à partir de vos photos, dessins ou idées. Transformez vos souvenirs en souvenirs précieux."
+      },
+      "catalog": {
+        "title": "📚 Catalogue cadeau complet",
+        "text": "Des petites attentions aux pièces marquantes, tout au même endroit."
+      }
     }
 
   },

@@ -73,6 +73,23 @@
         ],
         "cta": "Ontwerp sleutelhanger"
       }
+    },
+    "why": {
+      "title": "Waarom Dreamli het thuis is van ",
+      "highlight": "onvergetelijke cadeaus",
+      "subtitle": "Het juiste cadeau draait niet om de prijs — maar om het verhaal, de verrassing en de verbinding. Bij Dreamli laten we die momenten tot leven komen. Of je nu iets zeldzaams en exclusiefs zoekt, een persoonlijk ontwerp gemaakt van je eigen foto of tekening, of snel iets wilt kiezen uit onze brede catalogus — je vindt het hier.",
+      "exclusive": {
+        "title": "🎁 Exclusieve cadeaus",
+        "text": "Zorgvuldig samengesteld, gelimiteerd en uniek — nergens anders te vinden."
+      },
+      "personalized": {
+        "title": "✨ Gepersonaliseerde cadeaus",
+        "text": "Gemaakt van jouw foto’s, tekeningen of ideeën. Maak van herinneringen betekenisvolle aandenkens."
+      },
+      "catalog": {
+        "title": "📚 Complete cadeaucatalogus",
+        "text": "Van kleine verrassingen tot eyecatchers, allemaal op één plek."
+      }
     }
   },
   "Header": {
