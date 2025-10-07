@@ -457,5 +457,18 @@
         "support": { "title": "Persoonlijke support", "subtitle": "Vriendelijke hulp" }
       }
     }
+  },
+  "CouponPopup": {
+    "badge": "TIJDELIJK AANBOD",
+    "headline": "Krijg 50% korting op je eerste cadeau",
+    "subtext": "Schrijf je in voor slimme cadeau-ideeën en vroege toegang tot limited drops. Je welkomstcode komt direct aan.",
+    "emailPlaceholder": "Vul je e-mailadres in",
+    "cta": "Ontvang mijn 50% welkomstcode",
+    "maybeLater": "Misschien later",
+    "footer": "Geen spam. Uitschrijven kan altijd.",
+    "success": {
+      "title": "Gefeliciteerd!",
+      "body": "Je welkomstcode is zojuist naar je inbox gestuurd. Check ook je spam als je niets ziet."
+    }
   }
 }

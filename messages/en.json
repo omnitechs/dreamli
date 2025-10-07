@@ -457,6 +457,19 @@
         "support": { "title": "Personal Support", "subtitle": "Friendly help" }
       }
     }
+  },
+  "CouponPopup": {
+    "badge": "LIMITED TIME",
+    "headline": "Get 50% Off Your First Gift",
+    "subtext": "Join our list for smart gift ideas and early access to limited drops. Your welcome code arrives instantly.",
+    "emailPlaceholder": "Enter your email address",
+    "cta": "Get My 50% Welcome Code",
+    "maybeLater": "Maybe later",
+    "footer": "No spam. Unsubscribe anytime.",
+    "success": {
+      "title": "Congratulations!",
+      "body": "Your welcome code is on its way to your inbox. Check your spam folder if you don’t see it."
+    }
   }
 
 }

@@ -4,9 +4,11 @@ import { NextIntlClientProvider } from 'next-intl';
 import {getMessages, getTranslations, setRequestLocale} from 'next-intl/server';
 import { languages, languageCodes, type LanguageCode } from '@/config/i18n';
 import { notFound } from 'next/navigation';
-
+import "@/app/globals.css";
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import MailchimpSubscriptionCoupon from "@/app/components/MailchimpSubscriptionCoupon";
+import Script from "next/script";
 
 
 export async function generateStaticParams() {
@@ -117,10 +119,35 @@ export default async function LangLayout({
         </head>
         <body>
         <NextIntlClientProvider key={lang} locale={lang} messages={messages}>
+            <MailchimpSubscriptionCoupon />
             <Header lang={lang} />
+
             {children}
             <Footer />
         </NextIntlClientProvider>
+        <Script id="clarity-script" strategy="lazyOnload">
+            {`
+          (function(c,l,a,r,i,t,y){
+              c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+              t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+              y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+          })(window, document, "clarity", "script", "sy5gylxyzn");
+        `}
+        </Script>
+
+        {/* Google Analytics 4 */}
+        <Script
+            src="https://www.googletagmanager.com/gtag/js?id=G-2Q0BPDFWS4"
+            strategy="lazyOnload"
+        />
+        <Script id="gtag-init" strategy="lazyOnload">
+            {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-2Q0BPDFWS4');
+        `}
+        </Script>
         </body>
         </html>
     );

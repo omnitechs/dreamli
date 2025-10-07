@@ -458,5 +458,18 @@
         "support": { "title": "Wsparcie osobiste", "subtitle": "Życzliwa pomoc" }
       }
     }
+  },
+  "CouponPopup": {
+    "badge": "OFERTA OGRANICZONA CZASOWO",
+    "headline": "Zgarnij 50% zniżki na pierwszy prezent",
+    "subtext": "Zapisz się po sprytne pomysły na prezenty i wczesny dostęp do limitowanych dropów. Twój kod powitalny przyjdzie od razu.",
+    "emailPlaceholder": "Wpisz swój adres e-mail",
+    "cta": "Odbierz mój kod powitalny -50%",
+    "maybeLater": "Może później",
+    "footer": "Zero spamu. Wypisz się w każdej chwili.",
+    "success": {
+      "title": "Gratulacje!",
+      "body": "Twój kod powitalny właśnie trafił do skrzynki. Sprawdź spam, jeśli go nie widzisz."
+    }
   }
 }

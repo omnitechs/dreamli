@@ -459,6 +459,19 @@
         "support": { "title": "Support personnalisé", "subtitle": "Aide chaleureuse" }
       }
     }
+  },
+  "CouponPopup": {
+    "badge": "OFFRE LIMITÉE",
+    "headline": "–50 % sur votre premier cadeau",
+    "subtext": "Inscrivez-vous pour des idées cadeaux futées et un accès anticipé aux séries limitées. Votre code de bienvenue arrive instantanément.",
+    "emailPlaceholder": "Entrez votre adresse e-mail",
+    "cta": "Recevoir mon code de bienvenue -50 %",
+    "maybeLater": "Plus tard",
+    "footer": "Pas de spam. Désinscription à tout moment.",
+    "success": {
+      "title": "Félicitations !",
+      "body": "Votre code de bienvenue vient d’être envoyé à votre boîte mail. Vérifiez le dossier spam si besoin."
+    }
   }
 
 }
