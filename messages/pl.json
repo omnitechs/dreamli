@@ -486,5 +486,16 @@
       "title": "Gratulacje!",
       "body": "Twój kod powitalny właśnie trafił do skrzynki. Sprawdź spam, jeśli go nie widzisz."
     }
+  },
+  "nav": {
+    "menu": "Menu",
+    "shop": "Sklep",
+    "keychains": "Breloki",
+    "lithophanes": "Litofany",
+    "contact": "Kontakt"
+  },
+  "aria": {
+    "home": "Strona główna Dreamli",
+    "logoAlt": "Logo Dreamli"
   }
 }

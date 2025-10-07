@@ -491,6 +491,17 @@
       "title": "Congratulations!",
       "body": "Your welcome code is on its way to your inbox. Check your spam folder if you don’t see it."
     }
+  },
+  "nav": {
+    "menu": "Menu",
+    "shop": "Shop",
+    "keychains": "Keychains",
+    "lithophanes": "Lithophanes",
+    "contact": "Contact"
+  },
+  "aria": {
+    "home": "Dreamli home",
+    "logoAlt": "Dreamli Logo"
   }
 
 }

@@ -57,10 +57,10 @@ export default async function ContactPage(
 
     return (
         <div className="min-h-screen">
-            <ContactHero />
-            <ContactInfo />
-            <ContactMap />
-            <ContactForm />
+            <ContactHero lang={lang}/>
+            <ContactInfo lang={lang}/>
+            <ContactMap lang={lang}/>
+            <ContactForm/>
         </div>
     );
 }

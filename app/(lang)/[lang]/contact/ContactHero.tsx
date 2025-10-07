@@ -1,8 +1,9 @@
 // app/(lang)[lang]/contact/ContactHero.tsx
 import { getTranslations } from 'next-intl/server';
+import type {LanguageCode} from "@/config/i18n";
 
-export default async function ContactHero() {
-    const t = await getTranslations('Contact.hero');
+export default async function ContactHero({lang}: { lang: LanguageCode }) {
+    const t = await getTranslations({locale:lang ,namespace:'Contact.hero'});
 
     return (
         <section

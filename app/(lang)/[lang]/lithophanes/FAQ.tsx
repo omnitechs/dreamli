@@ -1,9 +1,10 @@
 // Server component (no "use client")
 import { getTranslations } from "next-intl/server";
+import type {LanguageCode} from "@/config/i18n";
 
 
-export default async function FAQ() {
-    const t = await getTranslations("lithosphanes.FAQ" );
+export default async function FAQ({lang}: { lang: LanguageCode }) {
+    const t = await getTranslations({locale:lang ,namespace:"lithosphanes.FAQ"} );
 
     // Keep IDs stable and fetch strings from i18n
     const items = [

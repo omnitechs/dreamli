@@ -1,8 +1,9 @@
 // components/HowItWorksSection.tsx (SERVER)
 import {getTranslations} from 'next-intl/server';
+import type {LanguageCode} from "@/config/i18n";
 
-export default async function HowItWorksSection() {
-    const t = await getTranslations('lithosphanes.howItWorks');
+export default async function HowItWorksSection({lang}: { lang: LanguageCode }) {
+    const t = await getTranslations({locale:lang ,namespace:'lithosphanes.howItWorks'});
 
     const steps = [
         {

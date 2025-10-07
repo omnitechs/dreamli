@@ -1,8 +1,9 @@
 // app/(lang)[lang]/_components/ExplainerVideo.tsx
 import { getTranslations } from "next-intl/server";
+import type {LanguageCode} from "@/config/i18n";
 
-export default async function ExplainerVideo() {
-    const t = await getTranslations("lithosphanes.ExplainerVideo" );
+export default async function ExplainerVideo({lang}: { lang: LanguageCode }) {
+    const t = await getTranslations({locale:lang ,namespace:"lithosphanes.ExplainerVideo" });
 
     return (
         <section className="py-24 bg-gradient-to-br from-blue-50 to-indigo-100">

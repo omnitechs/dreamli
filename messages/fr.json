@@ -487,6 +487,17 @@
       "title": "Félicitations !",
       "body": "Votre code de bienvenue vient d’être envoyé à votre boîte mail. Vérifiez le dossier spam si besoin."
     }
+  },
+  "nav": {
+    "menu": "Menu",
+    "shop": "Boutique",
+    "keychains": "Porte-clés",
+    "lithophanes": "Lithophanies",
+    "contact": "Contact"
+  },
+  "aria": {
+    "home": "Accueil Dreamli",
+    "logoAlt": "Logo Dreamli"
   }
 
 }

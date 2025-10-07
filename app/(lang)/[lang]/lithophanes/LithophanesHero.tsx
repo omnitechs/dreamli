@@ -1,9 +1,10 @@
 // components/LithophanesHero.tsx (SERVER)
 import Link from 'next/link';
 import {getTranslations} from 'next-intl/server';
+import type {LanguageCode} from "@/config/i18n";
 
-export default async function LithophanesHero() {
-    const t = await getTranslations('lithosphanes.hero');
+export default async function LithophanesHero({lang}: { lang: LanguageCode }) {
+    const t = await getTranslations({locale:lang ,namespace:'lithosphanes.hero'});
 
     return (
         <section

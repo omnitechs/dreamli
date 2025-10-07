@@ -1,24 +1,81 @@
+// app/(lang)[lang]/_components/Header.tsx  (SERVER)
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { languages, type LanguageCode, type Language } from '@/config/i18n';
 import LangSwitcher from './LangSwitcher';
+import MenuLink from './MenuLink'; // <— tiny client shim for closing mobile menu
 
 export default async function Header({ lang }: { lang: LanguageCode }) {
-    const t = await getTranslations('Header'); // optional
+    const t = await getTranslations({ locale: lang, namespace: '' });
+
+    const langMeta = (languages as readonly Language[]).find(l => l.code === lang);
+    const base = (langMeta?.prefix ?? `/${lang}`) || ''; // respect '' for default lang
+
+    const navItems = [
+        { label: t('nav.shop'),        href: `${base}/shop` },
+        { label: t('nav.keychains'),   href: `${base}/keychains` },
+        { label: t('nav.lithophanes'), href: `${base}/lithophanes` },
+        { label: t('nav.contact'),     href: `${base}/contact` }
+    ] as const;
 
     return (
-        <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-100">
-            <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-                <Link href={`/${lang}`} aria-label="Dreamli home">
-                    <img
-                        src="https://static.readdy.ai/image/ad9dc4c8042d4c1a873be12f55826cf9/48224f9cc1b0c55ac8c088f51f17f701.png"
-                        alt="Dreamli Logo"
-                        className="h-10 w-auto"
-                    />
-                </Link>
+        <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+            <div className="container mx-auto px-4">
+                <div className="h-14 md:h-16 flex items-center gap-4">
+                    {/* Logo */}
+                    <Link href={base || '/'} aria-label={t('aria.home')} className="inline-flex items-center gap-2 shrink-0">
+                        <img
+                            src="https://static.readdy.ai/image/ad9dc4c8042d4c1a873be12f55826cf9/48224f9cc1b0c55ac8c088f51f17f701.png"
+                            alt={t('aria.logoAlt')}
+                            className="h-9 w-auto md:h-10"
+                        />
+                    </Link>
 
-                {/* Only the switcher is client-side to read the live pathname */}
-                <LangSwitcher lang={lang} languages={languages as readonly Language[]} />
+                    {/* Desktop nav */}
+                    <nav className="hidden md:block">
+                        <ul className="flex items-center gap-1.5">
+                            {navItems.map(item => (
+                                <li key={item.href}>
+                                    <Link
+                                        href={item.href}
+                                        className="px-3 py-2 rounded-xl text-sm text-gray-700/90 hover:text-purple-700 hover:bg-purple-50 transition-all leading-none"
+                                    >
+                                        {item.label}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </nav>
+
+                    {/* Right side */}
+                    <div className="ml-auto flex items-center gap-2">
+                        <LangSwitcher lang={lang} languages={languages as readonly Language[]} />
+                    </div>
+
+                    {/* Mobile menu */}
+                    <nav className="md:hidden">
+                        <details className="group relative">
+                            <summary className="list-none px-3 py-2 rounded-xl bg-gray-50 text-gray-700 text-sm cursor-pointer select-none hover:bg-gray-100 transition">
+                                {t('nav.menu')}
+                            </summary>
+
+                            <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-2xl shadow-lg p-2 space-y-1 z-50">
+                                {navItems.map(item => (
+                                    <MenuLink
+                                        key={item.href}
+                                        href={item.href}
+                                        className="block px-3 py-2 rounded-lg text-sm text-gray-700/90 hover:text-purple-700 hover:bg-purple-50 transition"
+                                    >
+                                        {item.label}
+                                    </MenuLink>
+                                ))}
+                                <div className="my-1 border-t border-gray-100" />
+                                {/* If you want the switcher inside the menu as well, render it here */}
+                                {/* <div className="px-1"><LangSwitcher lang={lang} languages={languages as readonly Language[]} compact /></div> */}
+                            </div>
+                        </details>
+                    </nav>
+                </div>
             </div>
         </header>
     );

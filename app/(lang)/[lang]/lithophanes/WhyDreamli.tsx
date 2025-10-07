@@ -2,8 +2,8 @@
 import { getTranslations } from "next-intl/server";
 import type { LanguageCode } from "@/config/i18n";
 
-export default async function WhyDreamli() {
-    const t = await getTranslations("lithosphanes.WhyDreamli");
+export default async function WhyDreamli({lang}: { lang: LanguageCode }) {
+    const t = await getTranslations({locale:lang ,namespace:"lithosphanes.WhyDreamli"});
 
     const features = [
         {

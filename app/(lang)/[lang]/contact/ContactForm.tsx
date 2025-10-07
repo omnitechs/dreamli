@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
+import type {LanguageCode} from "@/config/i18n";
 
 export default function ContactForm() {
     const t = useTranslations('Contact.form');

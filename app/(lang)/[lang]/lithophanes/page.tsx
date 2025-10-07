@@ -60,13 +60,13 @@ export default async function LithophanesPage(props: { params: Promise<{ lang: L
     const { lang } = await props.params;
     return (
         <div className="min-h-screen bg-white">
-            <LithophanesHero />
-            <HowItWorksSection />
+            <LithophanesHero lang={lang}/>
+            <HowItWorksSection lang={lang} />
             <GallerySection />
-            <ExplainerVideo />
-            <WhyDreamli />
+            <ExplainerVideo lang={lang}/>
+            <WhyDreamli lang={lang}/>
             <FinalCTA lang={lang} />
-            <FAQ />
+            <FAQ lang={lang}/>
         </div>
     );
 }

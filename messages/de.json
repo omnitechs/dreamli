@@ -487,6 +487,17 @@
       "title": "Glückwunsch!",
       "body": "Ihr Willkommenskode ist auf dem Weg in Ihr Postfach. Prüfen Sie den Spam-Ordner, falls Sie ihn nicht sehen."
     }
+  },
+  "nav": {
+    "menu": "Menü",
+    "shop": "Shop",
+    "keychains": "Schlüsselanhänger",
+    "lithophanes": "Lithophanien",
+    "contact": "Kontakt"
+  },
+  "aria": {
+    "home": "Dreamli Startseite",
+    "logoAlt": "Dreamli Logo"
   }
 
 }

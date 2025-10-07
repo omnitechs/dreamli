@@ -1,8 +1,9 @@
 // app/(lang)[lang]/contact/ContactMap.tsx
 import { getTranslations } from 'next-intl/server';
+import type {LanguageCode} from "@/config/i18n";
 
-export default async function ContactMap() {
-    const t = await getTranslations('Contact.map');
+export default async function ContactMap({lang}: { lang: LanguageCode }) {
+    const t = await getTranslations({locale:lang ,namespace:'Contact.map'});
 
     return (
         <section className="py-20 bg-white">

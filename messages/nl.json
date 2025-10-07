@@ -485,5 +485,16 @@
       "title": "Gefeliciteerd!",
       "body": "Je welkomstcode is zojuist naar je inbox gestuurd. Check ook je spam als je niets ziet."
     }
+  },
+  "nav": {
+    "menu": "Menu",
+    "shop": "Winkel",
+    "keychains": "Sleutelhangers",
+    "lithophanes": "Lithofanen",
+    "contact": "Contact"
+  },
+  "aria": {
+    "home": "Dreamli startpagina",
+    "logoAlt": "Dreamli-logo"
   }
 }

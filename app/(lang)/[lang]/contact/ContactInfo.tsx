@@ -1,8 +1,9 @@
 // app/(lang)[lang]/contact/ContactInfo.tsx
 import { getTranslations } from 'next-intl/server';
+import type {LanguageCode} from "@/config/i18n";
 
-export default async function ContactInfo() {
-    const t = await getTranslations('Contact.info');
+export default async function ContactInfo({lang}: { lang: LanguageCode }) {
+    const t = await getTranslations({locale:lang ,namespace:'Contact.info'});
 
     return (
         <section className="py-20 bg-gradient-to-br from-[#F6EBD9] to-[#FBD4D4]">
