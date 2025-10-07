@@ -166,5 +166,20 @@
     "trustpilot": {
       "ariaOpen": "Open Trustpilot page"
     }
+  },
+  "Keychains": {
+    "aria": { "hero": "Sekcja bohater – breloczki" },
+    "headline": "Personalizowane breloczki — imię lub zdjęcie, z PLA+",
+    "subheadline": "Podgląd na żywo • Do 25 cm • NFC opcjonalnie • Darmowa dostawa od 50 €",
+    "badge": {
+      "material": "Materiał PLA+",
+      "madeIn": "Wyprodukowano w Groningen",
+      "payment": "Bezpieczna płatność",
+      "nfc": "NFC opcjonalnie"
+    },
+    "image": {
+      "alt": "Kolekcja personalizowanych breloczków",
+      "livePreview": "Podgląd na żywo"
+    }
   }
 }

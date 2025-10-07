@@ -165,5 +165,20 @@
     "trustpilot": {
       "ariaOpen": "Open Trustpilot page"
     }
+  },
+  "Keychains": {
+    "aria": { "hero": "Keychains hero sectie" },
+    "headline": "Gepersonaliseerde sleutelhangers — Naam of foto, gemaakt van PLA+",
+    "subheadline": "Live voorbeeld • Tot 25 cm • NFC optioneel • Gratis verzending boven €50",
+    "badge": {
+      "material": "PLA+ materiaal",
+      "madeIn": "Gemaakt in Groningen",
+      "payment": "Veilig betalen",
+      "nfc": "NFC optioneel"
+    },
+    "image": {
+      "alt": "Collectie gepersonaliseerde sleutelhangers",
+      "livePreview": "Live voorbeeld"
+    }
   }
 }

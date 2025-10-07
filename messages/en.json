@@ -165,6 +165,21 @@
       "ariaOpen": "Open Trustpilot page"
     }
 
+  },
+  "Keychains": {
+    "aria": { "hero": "Keychains hero section" },
+    "headline": "Custom Keychains — Name or Photo, Made in PLA+",
+    "subheadline": "Live preview • Up to 25 cm • NFC optional • Free shipping over €50",
+    "badge": {
+      "material": "PLA+ Material",
+      "madeIn": "Made in Groningen",
+      "payment": "Secure Payment",
+      "nfc": "NFC Optional"
+    },
+    "image": {
+      "alt": "Custom Keychains Collection",
+      "livePreview": "Live Preview"
+    }
   }
 
 }

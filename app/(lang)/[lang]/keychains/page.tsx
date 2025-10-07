@@ -1,24 +1,16 @@
-
-'use client';
-
-import { useState, useEffect, useRef } from 'react';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 import KeychainHero from './KeychainHero';
-import KeychainConfigurator from './KeychainConfigurator';
 import KeychainBuilder from "@/components/KeychainMaker";
+import {LanguageCode} from "@/config/i18n";
 
-export default function KeychainsPage() {
+export default async function KeychainsPage(props: { params: Promise<{ lang: LanguageCode }>}) {
+    const { lang } = await props.params;
   return (
     <div className="min-h-screen">
-
-      <KeychainHero />
+      <KeychainHero lang={lang} />
         <KeychainBuilder woocommerceConfig={{
             productId: 50361, // Your WooCommerce product ID
             apiUrl: 'https://shop.dreamli.nl/wp-json/custom/v1/add-to-cart'
         }}/>
-      {/*<KeychainConfigurator />*/}
-
     </div>
   );
 }

@@ -166,6 +166,21 @@
     "trustpilot": {
       "ariaOpen": "Open Trustpilot page"
     }
+  },
+  "Keychains": {
+    "aria": { "hero": "Keychains Hero-Bereich" },
+    "headline": "Personalisierte Schlüsselanhänger – Name oder Foto, aus PLA+",
+    "subheadline": "Live-Vorschau • Bis zu 25 cm • NFC optional • Kostenloser Versand ab 50 €",
+    "badge": {
+      "material": "PLA+ Material",
+      "madeIn": "Hergestellt in Groningen",
+      "payment": "Sichere Zahlung",
+      "nfc": "NFC optional"
+    },
+    "image": {
+      "alt": "Sammlung personalisierter Schlüsselanhänger",
+      "livePreview": "Live-Vorschau"
+    }
   }
 
 }

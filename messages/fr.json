@@ -166,5 +166,20 @@
     "trustpilot": {
       "ariaOpen": "Open Trustpilot page"
     }
+  },
+  "Keychains": {
+    "aria": { "hero": "Section héros porte-clés" },
+    "headline": "Porte-clés personnalisés — Nom ou photo, en PLA+",
+    "subheadline": "Aperçu en direct • Jusqu’à 25 cm • NFC en option • Livraison offerte dès 50 €",
+    "badge": {
+      "material": "Matériau PLA+",
+      "madeIn": "Fabriqué à Groningue",
+      "payment": "Paiement sécurisé",
+      "nfc": "NFC en option"
+    },
+    "image": {
+      "alt": "Collection de porte-clés personnalisés",
+      "livePreview": "Aperçu en direct"
+    }
   }
 }
