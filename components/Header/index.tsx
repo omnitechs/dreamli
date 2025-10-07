@@ -1,11 +1,12 @@
-// app/(lang)[lang]/_components/Header.tsx  (SERVER)
+// app/(lang)[lang]/_components/Header.tsx
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { languages, type LanguageCode, type Language } from '@/config/i18n';
 import LangSwitcher from './LangSwitcher';
-import MenuLink from './MenuLink'; // <— tiny client shim for closing mobile menu
+import MobileDropdown from './MobileDropdown';
 
 export default async function Header({ lang }: { lang: LanguageCode }) {
+    // use your actual namespace if you have one, else omit "namespace"
     const t = await getTranslations({ locale: lang, namespace: '' });
 
     const langMeta = (languages as readonly Language[]).find(l => l.code === lang);
@@ -23,7 +24,11 @@ export default async function Header({ lang }: { lang: LanguageCode }) {
             <div className="container mx-auto px-4">
                 <div className="h-14 md:h-16 flex items-center gap-4">
                     {/* Logo */}
-                    <Link href={base || '/'} aria-label={t('aria.home')} className="inline-flex items-center gap-2 shrink-0">
+                    <Link
+                        href={base || '/'}
+                        aria-label={t('aria.home')}
+                        className="inline-flex items-center gap-2 shrink-0"
+                    >
                         <img
                             src="https://static.readdy.ai/image/ad9dc4c8042d4c1a873be12f55826cf9/48224f9cc1b0c55ac8c088f51f17f701.png"
                             alt={t('aria.logoAlt')}
@@ -54,26 +59,13 @@ export default async function Header({ lang }: { lang: LanguageCode }) {
 
                     {/* Mobile menu */}
                     <nav className="md:hidden">
-                        <details className="group relative">
-                            <summary className="list-none px-3 py-2 rounded-xl bg-gray-50 text-gray-700 text-sm cursor-pointer select-none hover:bg-gray-100 transition">
-                                {t('nav.menu')}
-                            </summary>
-
-                            <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-2xl shadow-lg p-2 space-y-1 z-50">
-                                {navItems.map(item => (
-                                    <MenuLink
-                                        key={item.href}
-                                        href={item.href}
-                                        className="block px-3 py-2 rounded-lg text-sm text-gray-700/90 hover:text-purple-700 hover:bg-purple-50 transition"
-                                    >
-                                        {item.label}
-                                    </MenuLink>
-                                ))}
-                                <div className="my-1 border-t border-gray-100" />
-                                {/* If you want the switcher inside the menu as well, render it here */}
-                                {/* <div className="px-1"><LangSwitcher lang={lang} languages={languages as readonly Language[]} compact /></div> */}
-                            </div>
-                        </details>
+                        <MobileDropdown
+                            label={t('nav.menu')}
+                            items={navItems.map(item => ({
+                                label: item.label,
+                                href: item.href
+                            }))}
+                        />
                     </nav>
                 </div>
             </div>
