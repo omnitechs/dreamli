@@ -43,6 +43,35 @@
         "zoom": "Scroll to zoom",
         "pan": "Right drag to pan"
       }
+    },
+    "personalizedGift": {
+      "title": "Customized <highlight>Gifts</highlight>",
+      "subtitle": "Transform your memories into beautiful, personalized gifts that tell your unique story",
+      "litho": {
+        "imageAlt": "Lithophane lamp showcase",
+        "badge": "Most Popular",
+        "title": "Lithophanes",
+        "desc": "Turn your favorite photos into stunning illuminated art pieces. When lit from behind, your image comes to life with beautiful depth and detail.",
+        "features": [
+          "Multiple sizes and styles available",
+          "Perfect for bedrooms and living spaces",
+          "Warm LED lighting included"
+        ],
+        "ctaPrimary": "Create Lithophane",
+        "ctaSecondary": "Learn More"
+      },
+      "keys": {
+        "imageAlt": "Custom keychain collection",
+        "badge": "Quick & Easy",
+        "title": "Custom Keychains",
+        "desc": "Carry your memories everywhere with personalized keychains. Choose from various shapes, colors, and add your own photos or text.",
+        "features": [
+          "Multiple shapes and colors",
+          "Durable 3D printed materials",
+          "Perfect for gifts or personal use"
+        ],
+        "cta": "Design Keychain"
+      }
     }
   },
   "Header": {

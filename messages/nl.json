@@ -44,6 +44,35 @@
         "zoom": "Scroll om in of uit te zoomen",
         "pan": "Sleep met de rechtermuisknop om te verplaatsen"
       }
+    },
+    "personalizedGift": {
+      "title": "Gepersonaliseerde <highlight>Cadeaus</highlight>",
+      "subtitle": "Maak van je herinneringen prachtige, persoonlijke cadeaus die jouw unieke verhaal vertellen",
+      "litho": {
+        "imageAlt": "Lithofaan-lamp voorbeeld",
+        "badge": "Meest populair",
+        "title": "Lithofanen",
+        "desc": "Verander je favoriete foto’s in prachtige verlichte kunstwerken. Met licht erachter komt je afbeelding tot leven met diepte en detail.",
+        "features": [
+          "Beschikbaar in meerdere maten en stijlen",
+          "Perfect voor slaap- en woonkamers",
+          "Warme LED-verlichting inbegrepen"
+        ],
+        "ctaPrimary": "Maak een lithofaan",
+        "ctaSecondary": "Meer informatie"
+      },
+      "keys": {
+        "imageAlt": "Collectie gepersonaliseerde sleutelhangers",
+        "badge": "Snel & eenvoudig",
+        "title": "Gepersonaliseerde sleutelhangers",
+        "desc": "Draag je herinneringen overal mee met gepersonaliseerde sleutelhangers. Kies uit verschillende vormen en kleuren en voeg je eigen foto’s of tekst toe.",
+        "features": [
+          "Meerdere vormen en kleuren",
+          "Duurzame 3D-geprinte materialen",
+          "Perfect als cadeau of voor jezelf"
+        ],
+        "cta": "Ontwerp sleutelhanger"
+      }
     }
   },
   "Header": {

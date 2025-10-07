@@ -43,8 +43,35 @@
         "rotate": "Ziehen, um zu drehen",
         "zoom": "Scrollen, um zu zoomen",
         "pan": "Mit der rechten Maustaste ziehen, um zu verschieben"
-
-
+      }
+    },
+    "personalizedGift": {
+      "title": "Personalisierte <highlight>Geschenke</highlight>",
+      "subtitle": "Verwandle deine Erinnerungen in schöne, persönliche Geschenke, die deine einzigartige Geschichte erzählen",
+      "litho": {
+        "imageAlt": "Lithophan-Lampenbeispiel",
+        "badge": "Am beliebtesten",
+        "title": "Lithophane",
+        "desc": "Verwandle deine Lieblingsfotos in beeindruckende leuchtende Kunstwerke. Mit Hintergrundbeleuchtung erwacht dein Bild mit Tiefe und Details zum Leben.",
+        "features": [
+          "In mehreren Größen und Stilen erhältlich",
+          "Ideal für Schlaf- und Wohnräume",
+          "Warmweiße LED-Beleuchtung inklusive"
+        ],
+        "ctaPrimary": "Lithophan erstellen",
+        "ctaSecondary": "Mehr erfahren"
+      },
+      "keys": {
+        "imageAlt": "Kollektion personalisierter Schlüsselanhänger",
+        "badge": "Schnell & einfach",
+        "title": "Personalisierte Schlüsselanhänger",
+        "desc": "Trage deine Erinnerungen überall bei dir mit personalisierten Schlüsselanhängern. Wähle aus verschiedenen Formen und Farben und füge eigene Fotos oder Text hinzu.",
+        "features": [
+          "Viele Formen und Farben",
+          "Robuste 3D-gedruckte Materialien",
+          "Perfekt als Geschenk oder für dich selbst"
+        ],
+        "cta": "Schlüsselanhänger gestalten"
       }
     }
 

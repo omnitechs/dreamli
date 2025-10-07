@@ -43,7 +43,35 @@
         "rotate": "Faites glisser pour faire pivoter",
         "zoom": "Faites défiler pour zoomer",
         "pan": "Faites glisser avec le bouton droit pour déplacer"
-
+      }
+    },
+    "personalizedGift": {
+      "title": "Cadeaux <highlight>personnalisés</highlight>",
+      "subtitle": "Transformez vos souvenirs en magnifiques cadeaux personnalisés qui racontent votre histoire",
+      "litho": {
+        "imageAlt": "Exemple de lampe lithophane",
+        "badge": "Le plus populaire",
+        "title": "Lithophanies",
+        "desc": "Transformez vos photos préférées en superbes œuvres lumineuses. Avec un rétroéclairage, votre image prend vie avec profondeur et détails.",
+        "features": [
+          "Plusieurs tailles et styles disponibles",
+          "Parfait pour chambres et salons",
+          "Éclairage LED chaud inclus"
+        ],
+        "ctaPrimary": "Créer une lithophanie",
+        "ctaSecondary": "En savoir plus"
+      },
+      "keys": {
+        "imageAlt": "Collection de porte-clés personnalisés",
+        "badge": "Rapide & facile",
+        "title": "Porte-clés personnalisés",
+        "desc": "Emportez vos souvenirs partout avec des porte-clés personnalisés. Choisissez parmi diverses formes et couleurs, et ajoutez vos photos ou votre texte.",
+        "features": [
+          "De nombreuses formes et couleurs",
+          "Matériaux imprimés 3D durables",
+          "Parfait pour offrir ou pour soi"
+        ],
+        "cta": "Concevoir un porte-clés"
       }
     }
 

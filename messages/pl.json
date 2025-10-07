@@ -43,7 +43,35 @@
         "rotate": "Przeciągnij, aby obrócić",
         "zoom": "Przewiń, aby powiększyć lub pomniejszyć",
         "pan": "Przeciągnij prawym przyciskiem, aby przesunąć"
-
+      }
+    },
+    "personalizedGift": {
+      "title": "Spersonalizowane <highlight>prezenty</highlight>",
+      "subtitle": "Zamień wspomnienia w piękne, personalizowane prezenty opowiadające Twoją wyjątkową historię",
+      "litho": {
+        "imageAlt": "Przykładowa lampa litofanowa",
+        "badge": "Najpopularniejsze",
+        "title": "Litofany",
+        "desc": "Zmień ulubione zdjęcia w zachwycające, podświetlane dzieła sztuki. Przy podświetleniu od tyłu obraz ożywa głębią i detalami.",
+        "features": [
+          "Wiele rozmiarów i stylów",
+          "Idealne do sypialni i salonów",
+          "Ciepłe oświetlenie LED w zestawie"
+        ],
+        "ctaPrimary": "Stwórz litofan",
+        "ctaSecondary": "Dowiedz się więcej"
+      },
+      "keys": {
+        "imageAlt": "Kolekcja personalizowanych breloków",
+        "badge": "Szybko i łatwo",
+        "title": "Personalizowane breloki",
+        "desc": "Noś wspomnienia zawsze przy sobie dzięki personalizowanym brelokom. Wybierz kształt, kolor i dodaj własne zdjęcia lub tekst.",
+        "features": [
+          "Różne kształty i kolory",
+          "Trwałe materiały drukowane 3D",
+          "Idealne na prezent lub dla siebie"
+        ],
+        "cta": "Zaprojektuj brelok"
       }
     }
 
