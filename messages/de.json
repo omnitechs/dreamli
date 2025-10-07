@@ -414,16 +414,51 @@
         "byAppointment": "Nach Vereinbarung",
         "closed": "Geschlossen"
       }
-    }
-  },
-  "map": {
-    "title": "Finden Sie uns",
-    "subtitle": "Im Herzen von Groningen, Niederlande",
-    "iframeTitle": "Dreamli Standort - Resedastraat 39, 9713 TN Groningen",
-    "access": "Leicht mit öffentlichen Verkehrsmitteln oder dem Auto erreichbar. Kostenlose Parkplätze in der Nähe.",
-    "bus": "Bushaltestelle: 2 Minuten zu Fuß",
-    "parking": "Kostenloses Parken verfügbar",
-    "bike": "Fahrradfreundlicher Standort"
+    },
+    "map": {
+      "title": "Finden Sie uns",
+      "subtitle": "Im Herzen von Groningen, Niederlande",
+      "iframeTitle": "Dreamli Standort - Resedastraat 39, 9713 TN Groningen",
+      "access": "Leicht mit öffentlichen Verkehrsmitteln oder dem Auto erreichbar. Kostenlose Parkplätze in der Nähe.",
+      "bus": "Bushaltestelle: 2 Minuten zu Fuß",
+      "parking": "Kostenloses Parken verfügbar",
+      "bike": "Fahrradfreundlicher Standort"
+    },
+    "form": {
+      "title": "Schreiben Sie uns",
+      "subtitle": "Haben Sie Fragen? Wir helfen Ihnen gerne, die Kunst Ihres Kindes zum Leben zu erwecken!",
+      "fields": {
+        "name": { "label": "Vollständiger Name", "placeholder": "Ihr vollständiger Name" },
+        "email": { "label": "E-Mail-Adresse", "placeholder": "ihre.email@beispiel.de" },
+        "subject": {
+          "label": "Betreff",
+          "placeholder": "Thema auswählen",
+          "options": {
+            "general": "Allgemeine Anfrage",
+            "order": "Frage zur Bestellung",
+            "technical": "Technischer Support",
+            "partnership": "Partnerschaft",
+            "feedback": "Feedback"
+          }
+        },
+        "message": {
+          "label": "Nachricht",
+          "placeholder": "Beschreiben Sie Ihr Anliegen oder wie wir helfen können...",
+          "characters": "Zeichen"
+        }
+      },
+      "buttons": { "send": "Nachricht senden", "sending": "Nachricht wird gesendet..." },
+      "status": {
+        "success": "Vielen Dank für Ihre Nachricht! Wir melden uns bald.",
+        "error": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+      },
+      "badges": {
+        "fast": { "title": "Schnelle Antwort", "subtitle": "Innerhalb von 24 Stunden" },
+        "secure": { "title": "Sicher", "subtitle": "Ihre Daten sind geschützt" },
+        "support": { "title": "Persönlicher Support", "subtitle": "Freundliche Hilfe" }
+      }
+  }
+
   }
 
 }

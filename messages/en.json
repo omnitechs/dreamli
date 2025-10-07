@@ -422,6 +422,40 @@
       "bus": "Bus stop: 2 minutes walk",
       "parking": "Free parking available",
       "bike": "Bike-friendly location"
+    },
+    "form": {
+      "title": "Send Us a Message",
+      "subtitle": "Have questions? We'd love to help you bring your child's artwork to life!",
+      "fields": {
+        "name": { "label": "Full Name", "placeholder": "Your full name" },
+        "email": { "label": "Email Address", "placeholder": "your.email@example.com" },
+        "subject": {
+          "label": "Subject",
+          "placeholder": "Select a subject",
+          "options": {
+            "general": "General Inquiry",
+            "order": "Order Question",
+            "technical": "Technical Support",
+            "partnership": "Partnership",
+            "feedback": "Feedback"
+          }
+        },
+        "message": {
+          "label": "Message",
+          "placeholder": "Tell us about your question or how we can help you...",
+          "characters": "characters"
+        }
+      },
+      "buttons": { "send": "Send Message", "sending": "Sending Message..." },
+      "status": {
+        "success": "Thank you for your message! We'll get back to you soon.",
+        "error": "Something went wrong. Please try again."
+      },
+      "badges": {
+        "fast": { "title": "Quick Response", "subtitle": "Within 24 hours" },
+        "secure": { "title": "Secure", "subtitle": "Your data is safe" },
+        "support": { "title": "Personal Support", "subtitle": "Friendly help" }
+      }
     }
   }
 

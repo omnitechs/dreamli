@@ -423,6 +423,40 @@
       "bus": "Przystanek autobusowy: 2 minuty pieszo",
       "parking": "Darmowy parking dostępny",
       "bike": "Przyjazne dla rowerów miejsce"
+    },
+    "form": {
+      "title": "Wyślij nam wiadomość",
+      "subtitle": "Masz pytania? Chętnie pomożemy ożywić sztukę Twojego dziecka!",
+      "fields": {
+        "name": { "label": "Imię i nazwisko", "placeholder": "Twoje imię i nazwisko" },
+        "email": { "label": "Adres e-mail", "placeholder": "twoj.email@przyklad.pl" },
+        "subject": {
+          "label": "Temat",
+          "placeholder": "Wybierz temat",
+          "options": {
+            "general": "Pytanie ogólne",
+            "order": "Pytanie o zamówienie",
+            "technical": "Wsparcie techniczne",
+            "partnership": "Współpraca",
+            "feedback": "Opinie"
+          }
+        },
+        "message": {
+          "label": "Wiadomość",
+          "placeholder": "Opisz nam swoje pytanie lub jak możemy pomóc...",
+          "characters": "znaków"
+        }
+      },
+      "buttons": { "send": "Wyślij wiadomość", "sending": "Wysyłanie wiadomości..." },
+      "status": {
+        "success": "Dziękujemy za wiadomość! Skontaktujemy się wkrótce.",
+        "error": "Coś poszło nie tak. Spróbuj ponownie."
+      },
+      "badges": {
+        "fast": { "title": "Szybka odpowiedź", "subtitle": "W ciągu 24 godzin" },
+        "secure": { "title": "Bezpiecznie", "subtitle": "Twoje dane są bezpieczne" },
+        "support": { "title": "Wsparcie osobiste", "subtitle": "Życzliwa pomoc" }
+      }
     }
   }
 }

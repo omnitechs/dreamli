@@ -422,6 +422,40 @@
       "bus": "Bushaltestelle: 2 Minuten zu Fuß",
       "parking": "Kostenloses Parken verfügbar",
       "bike": "Fahrradfreundlicher Standort"
+    },
+    "form": {
+      "title": "Stuur ons een bericht",
+      "subtitle": "Vragen? We helpen je graag om de kunst van je kind tot leven te brengen!",
+      "fields": {
+        "name": { "label": "Volledige naam", "placeholder": "Je volledige naam" },
+        "email": { "label": "E-mailadres", "placeholder": "jouw.email@voorbeeld.nl" },
+        "subject": {
+          "label": "Onderwerp",
+          "placeholder": "Kies een onderwerp",
+          "options": {
+            "general": "Algemene vraag",
+            "order": "Vragen over bestelling",
+            "technical": "Technische ondersteuning",
+            "partnership": "Samenwerking",
+            "feedback": "Feedback"
+          }
+        },
+        "message": {
+          "label": "Bericht",
+          "placeholder": "Vertel ons je vraag of hoe we kunnen helpen...",
+          "characters": "tekens"
+        }
+      },
+      "buttons": { "send": "Bericht verzenden", "sending": "Bericht verzenden..." },
+      "status": {
+        "success": "Bedankt voor je bericht! We nemen snel contact met je op.",
+        "error": "Er is iets misgegaan. Probeer het opnieuw."
+      },
+      "badges": {
+        "fast": { "title": "Snelle reactie", "subtitle": "Binnen 24 uur" },
+        "secure": { "title": "Veilig", "subtitle": "Je gegevens zijn veilig" },
+        "support": { "title": "Persoonlijke support", "subtitle": "Vriendelijke hulp" }
+      }
     }
   }
 }
