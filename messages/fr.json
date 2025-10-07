@@ -237,6 +237,11 @@
     }
   },
   "lithosphanes": {
+    "meta": {
+      "title": "Lithophanies personnalisées — Transformez vos photos en œuvres lumineuses 3D | Dreamli",
+      "description": "Téléchargez votre photo préférée et Dreamli la transforme en lithophanie 3D lumineuse. Finition artisanale, éclairage LED inclus, livraison rapide dans l’UE.",
+      "ogImage": "/og/lithophanes.jpg"
+    },
     "FAQ": {
       "title": "Questions fréquentes",
       "subtitle": "Tout ce qu’il faut savoir pour créer votre lithophanie personnalisée",

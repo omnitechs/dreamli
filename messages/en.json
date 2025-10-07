@@ -236,6 +236,11 @@
     }
   },
   "lithosphanes": {
+    "meta": {
+      "title": "Custom Lithophanes — Turn Your Photos Into Glowing 3D Memories | Dreamli",
+      "description": "Upload your favorite photo and let Dreamli transform it into a glowing 3D lithophane night light. Handcrafted precision, LED lighting included, fast EU delivery.",
+      "ogImage": "/og/lithophanes.jpg"
+    },
     "FAQ": {
       "title": "Frequently Asked Questions",
       "subtitle": "Everything you need to know about creating your custom lithophane",

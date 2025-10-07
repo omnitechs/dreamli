@@ -237,6 +237,11 @@
     }
   },
   "lithosphanes": {
+    "meta": {
+      "title": "Personalisierte Lithophane — Verwandle dein Foto in ein leuchtendes 3D-Kunstwerk | Dreamli",
+      "description": "Lade dein Lieblingsfoto hoch und Dreamli verwandelt es in ein leuchtendes 3D-Lithophan. Präzise gefertigt, inklusive LED-Beleuchtung, schneller EU-Versand.",
+      "ogImage": "/og/lithophanes.jpg"
+    },
     "FAQ": {
       "title": "Häufig gestellte Fragen",
       "subtitle": "Alles, was du über dein individuelles Lithophan wissen musst",
