@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import {getMessages, getTranslations, setRequestLocale} from 'next-intl/server';
 import { languages, languageCodes, type LanguageCode } from '@/config/i18n';
 import { notFound } from 'next/navigation';
+
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
