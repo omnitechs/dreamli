@@ -1,31 +1,66 @@
+// app/(lang)[lang]/contact/page.tsx
+import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
+import { languages, languageCodes, type LanguageCode } from '@/config/i18n';
+import { notFound } from 'next/navigation';
 
-import Header from '../../../components/Header';
-import Footer from '../../../components/Footer';
 import ContactHero from './ContactHero';
 import ContactInfo from './ContactInfo';
 import ContactMap from './ContactMap';
 import ContactForm from './ContactForm';
-import { Metadata } from 'next';
 
-export const metadata: Metadata = {
-  title: 'Contact Dreamli | Get in Touch About 3D Creative Kits',
-  description: 'Contact Dreamli for questions about personalized 3D creative kits. Call, email, or visit us in Groningen, Netherlands. Customer support for your orders.',
-  keywords: 'contact dreamli, customer service, groningen, 3d printing, kids drawings, creative kits',
-  openGraph: {
-    title: 'Contact Dreamli | Get in Touch About 3D Creative Kits',
-    description: 'Contact Dreamli for questions about personalized 3D creative kits. Call, email, or visit us in Groningen, Netherlands.',
-    type: 'website',
-    locale: 'en_US',
-  },
-};
+export async function generateMetadata(
+    props: { params: Promise<{ lang: LanguageCode }> }
+): Promise<Metadata> {
+    const { lang } = await props.params;
+    if (!languageCodes.includes(lang)) notFound();
 
-export default function ContactPage() {
-  return (
-    <div className="min-h-screen">
-      <ContactHero />
-      <ContactInfo />
-      <ContactMap />
-      <ContactForm />
-    </div>
-  );
+    const t = await getTranslations({ locale: lang });
+
+    return {
+        metadataBase: new URL('https://dreamli.nl'),
+        title: t('Contact.meta.title'),
+        description: t('Contact.meta.description'),
+        keywords: t('Contact.meta.keywords', { default: '' })
+            ?.split(',')
+            .map(s => s.trim())
+            .filter(Boolean),
+        alternates: {
+            canonical: `/${lang}/contact`,
+            languages: Object.fromEntries(
+                languages.map(l => [l.code, `/${l.code}/contact`])
+            ),
+        },
+        openGraph: {
+            title: t('Contact.meta.title'),
+            description: t('Contact.meta.description'),
+            url: `/${lang}/contact`,
+            images: [{ url: t('Contact.meta.ogImage') }],
+            siteName: 'Dreamli',
+            locale: lang,
+            type: 'website',
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: t('Contact.meta.title'),
+            description: t('Contact.meta.description'),
+            images: [t('Contact.meta.ogImage')],
+        },
+        robots: { index: true, follow: true },
+    };
+}
+
+export default async function ContactPage(
+    props: { params: Promise<{ lang: LanguageCode }> }
+) {
+    const { lang } = await props.params;
+
+    return (
+        <div className="min-h-screen">
+            <ContactHero />
+            <ContactInfo />
+            <ContactMap />
+            <ContactForm />
+        </div>
+    );
 }

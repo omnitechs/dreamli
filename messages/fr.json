@@ -373,6 +373,14 @@
         "petPortrait": { "title": "Portrait d’animal", "category": "Noir et blanc", "alt": "Exemple de lithophanie de portrait d’animal" }
       }
     }
+  },
+  "Contact": {
+    "meta": {
+      "title": "Contact Dreamli | Boutique de cadeaux personnalisés des Pays-Bas",
+      "description": "Contactez Dreamli — une boutique créative de cadeaux située à Groningue, aux Pays-Bas. Trouvez ou créez votre cadeau personnalisé parfait, fabriqué avec amour et expédié dans le monde entier.",
+      "ogImage": "https://dreamli.nl/og/contact-fr.png",
+      "keywords": "contact dreamli, cadeaux personnalisés, boutique de cadeaux, groningue, pays-bas, impression 3d, cadeaux uniques, livraison mondiale"
+    }
   }
 
 }

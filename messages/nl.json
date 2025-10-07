@@ -371,5 +371,13 @@
         "petPortrait": { "title": "Huisdierportret", "category": "Zwart-wit", "alt": "Voorbeeld van een lithofaan met huisdierportret" }
       }
     }
+  },
+  "Contact": {
+    "meta": {
+      "title": "Contact Dreamli | Persoonlijke Cadeauwinkel uit Nederland",
+      "description": "Neem contact op met Dreamli — een creatieve cadeauwinkel gevestigd in Groningen, Nederland. Ontdek of ontwerp jouw perfecte persoonlijke cadeau, met liefde gemaakt en wereldwijd verzonden.",
+      "ogImage": "https://dreamli.nl/og/contact-nl.png",
+      "keywords": "contact dreamli, gepersonaliseerde cadeaus, cadeauwinkel, groningen, nederland, 3d printen, unieke cadeaus, wereldwijde verzending"
+    }
   }
 }

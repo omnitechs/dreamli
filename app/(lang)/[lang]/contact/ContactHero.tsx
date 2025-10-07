@@ -1,6 +1,3 @@
-
-'use client';
-
 export default function ContactHero() {
   return (
     <section 
@@ -14,7 +11,7 @@ export default function ContactHero() {
           Get In Touch
         </h1>
         <p className="text-xl text-white/90 max-w-2xl mx-auto">
-          We'd love to hear from you! Contact us with any questions about bringing your child's drawings to life.
+            We'd love to hear from you! Whether you're looking for the perfect gift or designing something truly personal, our team is here to help — wherever you are in the world.
         </p>
       </div>
     </section>

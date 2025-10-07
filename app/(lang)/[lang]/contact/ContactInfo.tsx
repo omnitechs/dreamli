@@ -14,7 +14,9 @@ export default function ContactInfo() {
             About Dreamli
           </h2>
           <p className="text-xl text-gray-700 max-w-3xl mx-auto">
-            We are passionate about bringing children's creativity to life through innovative 3D printing technology and creating lasting digital memories for families.
+              Dreamli is a creative gift shop where imagination meets craftsmanship.
+              We help people find or create meaningful presents through 3D printing, custom design, and eco-friendly materials, turning special moments into lasting memories.
+              Our studio is proudly based in Groningen, the Netherlands, and we ship worldwide so anyone can bring their dream gift to life.
           </p>
         </div>
 

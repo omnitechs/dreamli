@@ -371,6 +371,14 @@
         "petPortrait": { "title": "Pet Portrait", "category": "Black & White", "alt": "Pet portrait lithophane example" }
       }
     }
+  },
+  "Contact": {
+    "meta": {
+      "title": "Contact Dreamli | Personalized Gift Shop from the Netherlands",
+      "description": "Get in touch with Dreamli — a creative gift shop based in Groningen, the Netherlands. Find or design your perfect personalized gift, made with love and shipped worldwide.",
+      "ogImage": "https://dreamli.nl/og/contact-en.png",
+      "keywords": "contact dreamli, personalized gifts, creative gift shop, groningen, netherlands, 3d printing, custom gifts, worldwide shipping"
+    }
   }
 
 }

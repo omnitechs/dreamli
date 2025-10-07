@@ -372,6 +372,14 @@
         "petPortrait": { "title": "Haustierporträt", "category": "Schwarz-Weiß", "alt": "Beispiel eines Haustierporträt-Lithophans" }
       }
     }
+  },
+  "Contact": {
+    "meta": {
+      "title": "Kontakt Dreamli | Personalisierter Geschenkshop aus den Niederlanden",
+      "description": "Kontaktieren Sie Dreamli — einen kreativen Geschenkshop aus Groningen, Niederlande. Finden oder gestalten Sie Ihr perfektes personalisiertes Geschenk, mit Liebe gefertigt und weltweit versendet.",
+      "ogImage": "https://dreamli.nl/og/contact-de.png",
+      "keywords": "kontakt dreamli, personalisierte geschenke, geschenkshop, groningen, niederlande, 3d druck, individuelle geschenke, weltweiter versand"
+    }
   }
 
 }

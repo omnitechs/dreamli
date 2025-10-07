@@ -372,5 +372,13 @@
         "petPortrait": { "title": "Portret Pupila", "category": "Czarno-biały", "alt": "Przykład litofanu z portretem zwierzaka" }
       }
     }
+  },
+  "Contact": {
+    "meta": {
+      "title": "Kontakt Dreamli | Spersonalizowany sklep z prezentami z Holandii",
+      "description": "Skontaktuj się z Dreamli — kreatywnym sklepem z prezentami z Groningen w Holandii. Znajdź lub zaprojektuj swój idealny, spersonalizowany prezent, wykonany z miłością i wysyłany na cały świat.",
+      "ogImage": "https://dreamli.nl/og/contact-pl.png",
+      "keywords": "kontakt dreamli, spersonalizowane prezenty, sklep z prezentami, groningen, holandia, druk 3d, wyjątkowe prezenty, wysyłka na cały świat"
+    }
   }
 }
