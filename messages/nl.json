@@ -180,5 +180,54 @@
       "alt": "Collectie gepersonaliseerde sleutelhangers",
       "livePreview": "Live voorbeeld"
     }
+  },
+  "KeychainBuilder": {
+    "title": "Sleutelhanger-ontwerper",
+    "subtitle": "Ontwerp je eigen 3D-geprinte sleutelhanger",
+    "optional": "optioneel",
+    "tabs": { "text": "Tekst", "style": "Stijl", "ring": "Ring" },
+    "text": {
+      "font": "Lettertype",
+      "line1": "Eerste regel",
+      "line1_ph": "Voer eerste regel in",
+      "line2": "Tweede regel",
+      "line2_ph": "Voer tweede regel in",
+      "size": "Tekstgrootte",
+      "spacing": "Regelafstand"
+    },
+    "style": {
+      "effect": "Teksteffect",
+      "effect_hint": "Positief = Reliëf, Negatief = Gravure",
+      "base": "Basisdikte",
+      "outline": "Randdikte",
+      "twoColor": "Twee-kleurmodus",
+      "baseColor": "Basiskleur",
+      "keychainColor": "Sleutelhangerkleur",
+      "textColor": "Tekstkleur"
+    },
+    "ring": {
+      "show": "Ring tonen",
+      "x": "X-positie",
+      "y": "Y-positie",
+      "outer": "Buitendiameter",
+      "inner": "Binnendiameter"
+    },
+    "viewer": {
+      "title": "3D-voorbeeld",
+      "hint_free": "Sleep om te roteren, scroll om te zoomen",
+      "hint_locked": "Bovenaanzicht vergrendeld",
+      "canvas": "3D-canvas sleutelhanger"
+    },
+    "actions": {
+      "addToCart": "Toevoegen aan winkelwagen",
+      "download": "Downloaden",
+      "processing": "Bezig…",
+      "lock": "Weergave vergrendelen",
+      "unlock": "Weergave ontgrendelen"
+    },
+    "notif": {
+      "added": "Toegevoegd aan je winkelwagen! Doorsturen…",
+      "failed": "Toevoegen mislukt: {msg}"
+    }
   }
 }

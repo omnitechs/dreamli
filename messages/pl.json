@@ -181,5 +181,54 @@
       "alt": "Kolekcja personalizowanych breloczków",
       "livePreview": "Podgląd na żywo"
     }
+  },
+  "KeychainBuilder": {
+    "title": "Kreator breloczków",
+    "subtitle": "Zaprojektuj własny breloczek drukowany 3D",
+    "optional": "opcjonalne",
+    "tabs": { "text": "Tekst", "style": "Styl", "ring": "Kółko" },
+    "text": {
+      "font": "Krój pisma",
+      "line1": "Pierwsza linia",
+      "line1_ph": "Wpisz pierwszą linię",
+      "line2": "Druga linia",
+      "line2_ph": "Wpisz drugą linię",
+      "size": "Rozmiar tekstu",
+      "spacing": "Odstęp między wierszami"
+    },
+    "style": {
+      "effect": "Efekt tekstu",
+      "effect_hint": "Dodatni = Wypukły, Ujemny = Grawer",
+      "base": "Grubość podstawy",
+      "outline": "Grubość obrysu",
+      "twoColor": "Tryb dwukolorowy",
+      "baseColor": "Kolor podstawy",
+      "keychainColor": "Kolor breloczka",
+      "textColor": "Kolor tekstu"
+    },
+    "ring": {
+      "show": "Pokaż kółko",
+      "x": "Pozycja X",
+      "y": "Pozycja Y",
+      "outer": "Średnica zewnętrzna",
+      "inner": "Średnica wewnętrzna"
+    },
+    "viewer": {
+      "title": "Podgląd 3D",
+      "hint_free": "Przeciągnij, aby obracać; przewiń, aby przybliżać",
+      "hint_locked": "Widok z góry zablokowany",
+      "canvas": "Płótno 3D breloczka"
+    },
+    "actions": {
+      "addToCart": "Dodaj do koszyka",
+      "download": "Pobierz",
+      "processing": "Przetwarzanie…",
+      "lock": "Zablokuj widok",
+      "unlock": "Odblokuj widok"
+    },
+    "notif": {
+      "added": "Dodano do koszyka! Przekierowywanie…",
+      "failed": "Nie udało się dodać: {msg}"
+    }
   }
 }

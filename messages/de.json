@@ -181,6 +181,55 @@
       "alt": "Sammlung personalisierter Schlüsselanhänger",
       "livePreview": "Live-Vorschau"
     }
+  },
+  "KeychainBuilder": {
+    "title": "Schlüsselanhänger-Designer",
+    "subtitle": "Gestalte deinen eigenen 3D-gedruckten Schlüsselanhänger",
+    "optional": "optional",
+    "tabs": { "text": "Text", "style": "Stil", "ring": "Ring" },
+    "text": {
+      "font": "Schriftart",
+      "line1": "Erste Zeile",
+      "line1_ph": "Erste Zeile eingeben",
+      "line2": "Zweite Zeile",
+      "line2_ph": "Zweite Zeile eingeben",
+      "size": "Textgröße",
+      "spacing": "Zeilenabstand"
+    },
+    "style": {
+      "effect": "Texteffekt",
+      "effect_hint": "Positiv = Relief, Negativ = Gravur",
+      "base": "Grundstärke",
+      "outline": "Randstärke",
+      "twoColor": "Zweifarbmodus",
+      "baseColor": "Grundfarbe",
+      "keychainColor": "Anhängerfarbe",
+      "textColor": "Textfarbe"
+    },
+    "ring": {
+      "show": "Ring anzeigen",
+      "x": "X-Position",
+      "y": "Y-Position",
+      "outer": "Außendurchmesser",
+      "inner": "Innendurchmesser"
+    },
+    "viewer": {
+      "title": "3D-Vorschau",
+      "hint_free": "Ziehen zum Drehen, Scrollen zum Zoomen",
+      "hint_locked": "Draufsicht gesperrt",
+      "canvas": "3D-Leinwand Schlüsselanhänger"
+    },
+    "actions": {
+      "addToCart": "In den Warenkorb",
+      "download": "Herunterladen",
+      "processing": "Wird verarbeitet…",
+      "lock": "Ansicht sperren",
+      "unlock": "Ansicht entsperren"
+    },
+    "notif": {
+      "added": "Zum Warenkorb hinzugefügt! Weiterleiten…",
+      "failed": "Hinzufügen fehlgeschlagen: {msg}"
+    }
   }
 
 }

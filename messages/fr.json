@@ -181,5 +181,54 @@
       "alt": "Collection de porte-clés personnalisés",
       "livePreview": "Aperçu en direct"
     }
+  },
+  "KeychainBuilder": {
+    "title": "Créateur de porte-clés",
+    "subtitle": "Concevez votre porte-clés imprimé en 3D",
+    "optional": "facultatif",
+    "tabs": { "text": "Texte", "style": "Style", "ring": "Anneau" },
+    "text": {
+      "font": "Police",
+      "line1": "Première ligne",
+      "line1_ph": "Saisissez la première ligne",
+      "line2": "Deuxième ligne",
+      "line2_ph": "Saisissez la deuxième ligne",
+      "size": "Taille du texte",
+      "spacing": "Interligne"
+    },
+    "style": {
+      "effect": "Effet du texte",
+      "effect_hint": "Positif = Relief, Négatif = Gravure",
+      "base": "Épaisseur de base",
+      "outline": "Épaisseur du contour",
+      "twoColor": "Mode deux couleurs",
+      "baseColor": "Couleur de base",
+      "keychainColor": "Couleur du porte-clés",
+      "textColor": "Couleur du texte"
+    },
+    "ring": {
+      "show": "Afficher l’anneau",
+      "x": "Position X",
+      "y": "Position Y",
+      "outer": "Diamètre extérieur",
+      "inner": "Diamètre intérieur"
+    },
+    "viewer": {
+      "title": "Aperçu 3D",
+      "hint_free": "Faites glisser pour pivoter, défilez pour zoomer",
+      "hint_locked": "Vue de dessus verrouillée",
+      "canvas": "Plan de travail 3D du porte-clés"
+    },
+    "actions": {
+      "addToCart": "Ajouter au panier",
+      "download": "Télécharger",
+      "processing": "Traitement…",
+      "lock": "Verrouiller la vue",
+      "unlock": "Déverrouiller la vue"
+    },
+    "notif": {
+      "added": "Ajouté au panier ! Redirection…",
+      "failed": "Échec de l’ajout : {msg}"
+    }
   }
 }

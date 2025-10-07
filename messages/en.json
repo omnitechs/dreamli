@@ -180,6 +180,55 @@
       "alt": "Custom Keychains Collection",
       "livePreview": "Live Preview"
     }
+  },
+  "KeychainBuilder": {
+    "title": "Keychain Builder",
+    "subtitle": "Design your custom 3D printed keychain",
+    "optional": "optional",
+    "tabs": { "text": "Text", "style": "Style", "ring": "Ring" },
+    "text": {
+      "font": "Font Family",
+      "line1": "First Line",
+      "line1_ph": "Enter first line",
+      "line2": "Second Line",
+      "line2_ph": "Enter second line",
+      "size": "Text Size",
+      "spacing": "Line Spacing"
+    },
+    "style": {
+      "effect": "Text Effect",
+      "effect_hint": "Positive = Embossed, Negative = Engraved",
+      "base": "Base Thickness",
+      "outline": "Outline Thickness",
+      "twoColor": "Two Color Mode",
+      "baseColor": "Base Color",
+      "keychainColor": "Keychain Color",
+      "textColor": "Text Color"
+    },
+    "ring": {
+      "show": "Show Ring",
+      "x": "X Position",
+      "y": "Y Position",
+      "outer": "Outer Diameter",
+      "inner": "Inner Diameter"
+    },
+    "viewer": {
+      "title": "3D Preview",
+      "hint_free": "Drag to rotate, scroll to zoom",
+      "hint_locked": "Top view locked",
+      "canvas": "Keychain 3D canvas"
+    },
+    "actions": {
+      "addToCart": "Add to Cart",
+      "download": "Download",
+      "processing": "Processing...",
+      "lock": "Lock view",
+      "unlock": "Unlock view"
+    },
+    "notif": {
+      "added": "Added to cart! Redirecting…",
+      "failed": "Failed to add to cart: {msg}"
+    }
   }
 
 }
