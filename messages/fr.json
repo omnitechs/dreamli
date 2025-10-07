@@ -380,6 +380,10 @@
       "description": "Contactez Dreamli — une boutique créative de cadeaux située à Groningue, aux Pays-Bas. Trouvez ou créez votre cadeau personnalisé parfait, fabriqué avec amour et expédié dans le monde entier.",
       "ogImage": "https://dreamli.nl/og/contact-fr.png",
       "keywords": "contact dreamli, cadeaux personnalisés, boutique de cadeaux, groningue, pays-bas, impression 3d, cadeaux uniques, livraison mondiale"
+    },
+    "hero": {
+      "title": "Contactez-nous",
+      "subtitle": "Nous serions ravis d’avoir de vos nouvelles ! Que vous cherchiez le cadeau parfait ou souhaitiez créer quelque chose de vraiment personnel, notre équipe est là pour vous aider — où que vous soyez dans le monde."
     }
   }
 
