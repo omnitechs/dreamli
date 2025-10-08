@@ -2,8 +2,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 
 export default function TermsPage() {
   const [language, setLanguage] = useState<'en' | 'nl'>('en');
@@ -36,7 +34,6 @@ export default function TermsPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Header />
       
       <main className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
@@ -374,7 +371,6 @@ export default function TermsPage() {
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 }

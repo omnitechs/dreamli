@@ -7,7 +7,7 @@ import { notFound } from 'next/navigation';
 import '@/app/globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import MailchimpSubscriptionCoupon from '@/app/components/MailchimpSubscriptionCoupon';
+import MailchimpSubscriptionCoupon from '@/components/MailchimpSubscriptionCoupon';
 import Script from 'next/script';
 
 export async function generateStaticParams() {
