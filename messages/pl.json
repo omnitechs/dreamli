@@ -497,5 +497,317 @@
   "aria": {
     "home": "Strona główna Dreamli",
     "logoAlt": "Logo Dreamli"
+  },
+  "Terms": {
+    "meta": {
+      "title": "Regulamin | Dreamli",
+      "description": "Przeczytaj Regulamin Dreamli dotyczący zamówień, korzyści związanych z dostawą, zwrotów przedmiotów personalizowanych, licencjonowania modeli generowanych przez AI, odpowiedzialności, prywatności i innych."
+    },
+    "header": {
+      "title": "Regulamin",
+      "site": "Dreamli.nl",
+      "updated": "Ostatnia aktualizacja: październik 2025"
+    },
+    "company": {
+      "title": "Informacje o firmie",
+      "body": "Dreamli jest częścią OmniTechs V.O.F. (KvK 93814429, Resedastraat 39, 9713TN Groningen, Holandia, info@dreamli.nl). Niniejszy regulamin ma zastosowanie do wszystkich zamówień składanych za pośrednictwem Dreamli.nl."
+    },
+    "products": {
+      "title": "Produkty",
+      "body": "Pomagamy wybrać świetne prezenty—albo je stworzyć od podstaw. Dzięki Asystentowi Prezentowemu AI i zespołowi projektowemu dostaniesz trafne rekomendacje lub zamówisz personalizowane produkty (druk 3D, grawer, zdjęcia i inne)."
+    },
+    "orders": {
+      "title": "Zamówienia i Płatności",
+      "body": "Umowa zawierana jest w momencie złożenia zamówienia i jego potwierdzenia przez nas. Płatność wymagana jest przy kasie poprzez iDEAL, Stripe lub kartę. Ceny podane są w EUR i zawierają VAT, chyba że zaznaczono inaczej. Możemy odmówić lub anulować zamówienie (np. pliki niewłaściwe, ograniczenia produkcyjne, oczywiste błędy cenowe); jeśli płatność została pobrana, zwrócimy ją."
+    },
+    "delivery": {
+      "title": "Dostawa i Korzyści z Opóźnienia",
+      "body": "Czas dostawy wynosi 3–10 dni roboczych od potwierdzenia zamówienia. Zazwyczaj wysyłamy przy użyciu PostNL lub DHL. Nie ponosimy odpowiedzialności za opóźnienia spowodowane przez przewoźnika.",
+      "points": {
+        "onTime": "Dostarczone w ciągu 3–10 dni roboczych: otrzymujesz 10 % zniżki na kolejne zamówienie. Zostanie dodane do Twojego konta jako kupon/kredyt i będzie ważne przy następnym zakupie (jeden na użytkownika i zamówienie).",
+        "delayed": "Jeśli dostawa przekroczy 10 dni roboczych: Twoje następne zamówienie jest bezpłatne do kwoty 100 €. Kredyt zostaje dodany do Twojego konta (raz na użytkownika i opóźnione zamówienie). Prawo do przyznania tego zależy wyłącznie od Dreamli; oświadczenia przewoźnika nie są brane pod uwagę."
+      }
+    },
+    "returns": {
+      "title": "Zwroty",
+      "body": "Zgodnie z prawem UE przysługuje zazwyczaj 14-dniowe prawo odstąpienia; jednak nie dotyczy ono dóbr personalizowanych (Artykuł 6:230p BW). Ponieważ nasze produkty są wykonywane na zamówienie, mogą być zwrócone tylko wtedy, gdy są uszkodzone, wadliwe lub znacznie różnią się od uzgodnionego projektu. Prosimy o niezwłoczne zgłoszenie wraz ze zdjęciami; jeśli wada zostanie potwierdzona, naprawimy, wymienimy lub zwrócimy koszt. Koszty wysyłki przy uznanych wadach pokrywamy my."
+    },
+    "cashback": {
+      "title": "Zasady Cashback & Kredytu na Stronie",
+      "body": "Każde zamówienie daje szansę otrzymania kredytu na stronie w zależności od wartości zamówienia:",
+      "points": {
+        "full": "1 % szansy — 100 % cashback jako kredyt na stronie",
+        "thirty": "29 % szansy — 30 % cashback jako kredyt na stronie",
+        "ten": "60 % szansy — 10 % cashback jako kredyt na stronie",
+        "none": "10 % szansy — brak cashbacku"
+      },
+      "notice": "Kredyty są dodawane do Twojego konta Dreamli i mogą być używane przy przyszłych zakupach. Kredyty są nieprzenoszalne i nie podlegają wymianie na gotówkę, chyba że określimy inaczej. Możemy zmieniać lub zakończyć promocje; przyznane kredyty pozostają ważne zgodnie z warunkami."
+    },
+    "ai": {
+      "title": "Modele Generowane przez AI & Licencjonowanie",
+      "intro": "Nasza strona może generować aktywa cyfrowe (np. modele 3D, obrazy) za pomocą naszych systemów AI. O ile nie ustalono inaczej w formie pisemnej:",
+      "points": {
+        "license": "Otrzymujesz osobistą, niewyłączną, nieprzenoszalną, niekomercyjną licencję na używanie tych treści generowanych przez AI.",
+        "commercial": "Użycie komercyjne (odsprzedaż, produkcja masowa, dystrybucja) jest dozwolone tylko przez autoryzowany kanał Dreamli na podstawie osobnej licencji komercyjnej. Możemy ułatwić produkcję masową — skontaktuj się z nami w celu uzyskania warunków.",
+        "rights": "Potwierdzasz, że posiadasz prawa do wszystkich wgranych plików (np. rysunki, zdjęcia) i że nie naruszają one praw osób trzecich."
+      }
+    },
+    "liability": {
+      "title": "Odpowiedzialność",
+      "body": "Nie ponosimy odpowiedzialności za niewłaściwe użycie lub modyfikacje produktów. W maksymalnym zakresie dozwolonym przez prawo wyłączamy odpowiedzialność za szkody pośrednie lub następcze. Nasza całkowita odpowiedzialność za zamówienie jest ograniczona do wartości zamówienia. Nadzór dorosłych może być wymagany dla dzieci; niektóre elementy mogą być małe lub kruche."
+    },
+    "ip": {
+      "title": "Własność Intelektualna",
+      "body": "Wszystkie strony internetowe, marki i projekty produktów należą do Dreamli. Poprzez przesłanie rysunku lub pliku oświadczasz, że masz prawo go używać. Udzielasz Dreamli ograniczonej licencji do jego reprodukcji i przetwarzania w celu produkcji i realizacji zamówienia (a jeśli zgadzasz się na to osobno, również do prezentacji)."
+    },
+    "privacy": {
+      "title": "Prywatność & Pliki cookie",
+      "body": "Przetwarzamy Twoje dane zgodnie z naszą Polityką Prywatności. Zapoznaj się z nią, aby poznać, jakie dane zbieramy, jak je wykorzystujemy i jakie masz prawa."
+    },
+    "law": {
+      "title": "Prawo & Spory",
+      "body": "Niniejsze warunki podlegają prawu holenderskiemu. Spory będą rozpatrywane przez właściwe sądy w Holandii."
+    },
+    "changes": {
+      "title": "Zmiany",
+      "body": "Możemy aktualizować niniejsze warunki. Obowiązuje wersja w chwili złożenia zamówienia. Kontynuowanie korzystania z naszych usług po wprowadzeniu zmian oznacza akceptację zaktualizowanych warunków."
+    },
+    "contact": {
+      "title": "Dane kontaktowe",
+      "company": "OmniTechs V.O.F. (Dreamli.nl)",
+      "kvk": "KvK: 93814429",
+      "address": "Adres: Resedastraat 39, 9713TN Groningen, Holandia",
+      "email": "E-mail: info@dreamli.nl"
+    }
+  },
+  "privacy": {
+    "meta": {
+      "title": "Polityka prywatności | Dreamli Ochrona danych i pliki cookie",
+      "description": "Jak Dreamli zbiera, wykorzystuje i chroni dane osobowe rodzin, twórców i partnerów — wyjaśnienie Twoich praw i wyborów."
+    },
+    "ui": {
+      "toggle": {
+        "en": "English",
+        "nl": "Nederlands"
+      },
+      "backHome": "Powrót na stronę główną"
+    },
+    "header": {
+      "title": "Polityka prywatności",
+      "updated": "Ostatnia aktualizacja: styczeń 2024"
+    },
+    "intro": {
+      "title": "Wprowadzenie",
+      "body": "Dreamli (OmniTechs V.O.F.) szanuje Twoją prywatność i przetwarza dane osobowe zgodnie z ogólnym rozporządzeniem o ochronie danych (RODO) oraz obowiązującymi przepisami. Niniejsza polityka wyjaśnia, jak zbieramy, wykorzystujemy i chronimy Twoje dane."
+    },
+    "collect": {
+      "title": "Jakie informacje zbieramy",
+      "blocks": {
+        "provided": {
+          "title": "Informacje przekazywane przez Ciebie",
+          "items": [
+            "Dane osobowe (imię i nazwisko, adres e-mail, numer telefonu)",
+            "Adresy wysyłki i rozliczeniowe",
+            "Informacje płatnicze",
+            "Rysunki i prace dzieci",
+            "Komunikacja z działem obsługi"
+          ]
+        },
+        "technical": {
+          "title": "Informacje techniczne",
+          "items": [
+            "Adres IP i dane lokalizacyjne",
+            "Typ i wersja przeglądarki",
+            "Informacje o urządzeniu",
+            "Sposób korzystania z witryny"
+          ]
+        },
+        "cookies": {
+          "title": "Pliki cookie i analityka",
+          "items": [
+            "Niezbędne pliki cookie dla działania strony",
+            "Dane Google Analytics (wyłącznie za Twoją zgodą)",
+            "Dane dotyczące wydajności i optymalizacji"
+          ]
+        }
+      }
+    },
+    "use": {
+      "title": "Jak wykorzystujemy Twoje informacje",
+      "blocks": {
+        "orders": {
+          "title": "Realizacja zamówień",
+          "items": [
+            "Tworzenie i wysyłka spersonalizowanych produktów",
+            "Bezpieczne przetwarzanie płatności",
+            "Aktualizacje zamówień i śledzenie przesyłek",
+            "Obsługa zwrotów i wymian"
+          ]
+        },
+        "support": {
+          "title": "Wsparcie klienta",
+          "items": [
+            "Odpowiadanie na pytania i prośby",
+            "Zapewnienie wsparcia technicznego",
+            "Zarządzanie Twoim kontem",
+            "Rozwiązywanie problemów"
+          ]
+        },
+        "legal": {
+          "title": "Zgodność z prawem",
+          "items": [
+            "Spełnianie obowiązków podatkowych i księgowych",
+            "Przestrzeganie wymogów prawnych",
+            "Zapobieganie oszustwom i zapewnienie bezpieczeństwa",
+            "Prowadzenie dokumentacji firmowej"
+          ]
+        },
+        "marketing": {
+          "title": "Marketing (za zgodą)",
+          "items": [
+            "Wysyłanie newsletterów i aktualizacji",
+            "Udostępnianie informacji o produktach",
+            "Proponowanie spersonalizowanych ofert",
+            "Udoskonalanie naszych usług"
+          ]
+        }
+      }
+    },
+    "legalBasis": {
+      "title": "Podstawa prawna przetwarzania",
+      "items": {
+        "contract": {
+          "title": "Umowa",
+          "body": "Przetwarzanie niezbędne do realizacji zamówień i świadczenia usług"
+        },
+        "obligation": {
+          "title": "Obowiązek prawny",
+          "body": "Zgodność z przepisami podatkowymi i innymi wymogami prawnymi"
+        },
+        "consent": {
+          "title": "Zgoda",
+          "body": "Analityka, komunikacja marketingowa i niezbędne pliki cookie"
+        },
+        "interest": {
+          "title": "Uzasadniony interes",
+          "body": "Środki bezpieczeństwa, zapobieganie nadużyciom i bieżące operacje"
+        }
+      }
+    },
+    "retention": {
+      "title": "Przechowywanie danych i okresy retencji",
+      "block": {
+        "title": "Okresy przechowywania",
+        "items": [
+          "Dane zamówień: 7 lat (wymogi podatkowe)",
+          "Dane analityczne: maksymalnie 14 miesięcy",
+          "Dane konta: do czasu żądania usunięcia",
+          "Dane marketingowe: do czasu wycofania zgody"
+        ]
+      }
+    },
+    "sharing": {
+      "title": "Udostępnianie danych",
+      "neverSell": {
+        "title": "Nigdy nie sprzedajemy Twoich danych",
+        "body": "Twoje dane osobowe nigdy nie są sprzedawane podmiotom trzecim w celach marketingowych."
+      },
+      "onlyWith": {
+        "title": "Udostępniamy dane wyłącznie:",
+        "items": [
+          "Operatorom płatności: w celu bezpiecznej obsługi transakcji",
+          "Firmom kurierskim: w celu dostarczenia zamówień",
+          "Dostawcom IT i hostingu: w celu utrzymania usług",
+          "Google Analytics: wyłącznie za Twoją wyraźną zgodą"
+        ]
+      }
+    },
+    "rights": {
+      "title": "Twoje prawa",
+      "blocks": {
+        "access": {
+          "icon": "ri-eye-line",
+          "title": "Dostęp",
+          "body": "Poproś o kopię swoich danych osobowych"
+        },
+        "rectify": {
+          "icon": "ri-edit-line",
+          "title": "Sprostowanie",
+          "body": "Zaktualizuj nieprawidłowe lub niekompletne informacje"
+        },
+        "erase": {
+          "icon": "ri-delete-bin-line",
+          "title": "Usunięcie",
+          "body": "Zażądaj usunięcia swoich danych (w granicach prawa)"
+        },
+        "consent": {
+          "icon": "ri-close-circle-line",
+          "title": "Wycofanie zgody",
+          "body": "Zatrzymaj komunikację marketingową lub analitykę"
+        },
+        "portability": {
+          "icon": "ri-download-line",
+          "title": "Przenoszalność",
+          "body": "Otrzymaj swoje dane w przenośnym formacie"
+        },
+        "complaint": {
+          "icon": "ri-alert-line",
+          "title": "Skarga",
+          "body": "Złóż skargę do organu nadzorczego ds. ochrony danych"
+        }
+      }
+    },
+    "cookies": {
+      "title": "Polityka plików cookie",
+      "essential": {
+        "title": "Niezbędne pliki cookie",
+        "body": "Te pliki są wymagane do działania strony i nie mogą zostać wyłączone:",
+        "items": [
+          "Zarządzanie sesją i bezpieczeństwo",
+          "Funkcjonalność koszyka",
+          "Preferencje językowe"
+        ]
+      },
+      "analytics": {
+        "title": "Pliki cookie analityczne (opcjonalnie)",
+        "body": "Te pliki pomagają nam zrozumieć, jak użytkownicy korzystają z witryny:",
+        "items": [
+          "Google Analytics (tylko za Twoją zgodą)",
+          "Wyświetlenia stron i zachowanie użytkowników",
+          "Dane wydajności i optymalizacji"
+        ]
+      },
+      "note": "Możesz w każdej chwili zmienić preferencje dotyczące plików cookie poprzez nasz baner lub kontaktując się z nami."
+    },
+    "security": {
+      "title": "Środki bezpieczeństwa",
+      "how": {
+        "title": "Jak chronimy Twoje dane",
+        "items": [
+          "Szyfrowanie SSL dla wszystkich transmisji danych",
+          "Bezpieczne serwery z ograniczonym dostępem",
+          "Regularne aktualizacje i monitorowanie bezpieczeństwa",
+          "Szkolenia personelu z ochrony danych"
+        ]
+      },
+      "disclaimer": "Mimo że stosujemy branżowe środki bezpieczeństwa, żaden system nie jest w 100% bezpieczny. Nieustannie ulepszamy nasze praktyki w tym zakresie."
+    },
+    "contact": {
+      "title": "Dane kontaktowe",
+      "controller": {
+        "title": "Administrator danych",
+        "company": "OmniTechs V.O.F. (Dreamli)",
+        "kvk": "KvK: 93814429",
+        "addr1": "Resedastraat 39",
+        "addr2": "9713TN Groningen, Niderlandy"
+      },
+      "details": {
+        "title": "Kontakt",
+        "email": "info@dreamli.nl",
+        "phone": "+31 6 4555 9587"
+      }
+    }
   }
+
+
 }

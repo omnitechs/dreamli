@@ -125,7 +125,7 @@ export default async function LangLayout({
             <MailchimpSubscriptionCoupon />
             <Header lang={lang} />
             {children}
-            <Footer />
+            <Footer lang={lang} />
         </NextIntlClientProvider>
 
         {/* Microsoft Clarity */}

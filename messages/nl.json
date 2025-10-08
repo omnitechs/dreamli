@@ -496,5 +496,315 @@
   "aria": {
     "home": "Dreamli startpagina",
     "logoAlt": "Dreamli-logo"
+  },
+  "Terms": {
+    "meta": {
+      "title": "Algemene Voorwaarden | Dreamli",
+      "description": "Lees Dreamli’s Algemene Voorwaarden over bestellingen, leveringsvoordelen, retouren voor gepersonaliseerde items, AI-gegenereerde modellenlicenties, aansprakelijkheid, privacy en meer."
+    },
+    "header": {
+      "title": "Algemene Voorwaarden",
+      "site": "Dreamli.nl",
+      "updated": "Laatst bijgewerkt: oktober 2025"
+    },
+    "company": {
+      "title": "Bedrijfsinformatie",
+      "body": "Dreamli maakt deel uit van OmniTechs V.O.F. (KvK 93814429, Resedastraat 39, 9713TN Groningen, Nederland, info@dreamli.nl). Deze voorwaarden zijn van toepassing op alle bestellingen die via Dreamli.nl worden geplaatst."
+    },
+    "products": {
+      "title": "Producten",
+      "body": "We helpen je geweldige cadeaus te kiezen—of ze vanaf nul te laten maken. Met onze AI Cadeau-Assistent en een betrokken designteam krijg je slimme aanbevelingen of bestel je persoonlijke items (3D-print, gravure, foto-producten, enz.)"
+    },
+    "orders": {
+      "title": "Bestellingen & Betaling",
+      "body": "Een overeenkomst komt tot stand wanneer u een bestelling plaatst en wij deze bevestigen. Betaling is vereist bij het afrekenen via iDEAL, Stripe of kaart. Prijzen zijn in EUR en inclusief btw, tenzij anders vermeld. We kunnen een bestelling weigeren of annuleren (bijv. ongeschikte bestanden, productiebeperkingen, duidelijke prijsfouten); als betaling is afgeschreven, storten wij terug."
+    },
+    "delivery": {
+      "title": "Levering & Vertraging Voordelen",
+      "body": "Leveringstijd is 3–10 werkdagen vanaf orderbevestiging. We verzenden doorgaans met PostNL of DHL. We zijn niet verantwoordelijk voor vertragingen veroorzaakt door de vervoerder.",
+      "points": {
+        "onTime": "Opgeleverd binnen 3–10 werkdagen: u verdient 10 % korting op uw volgende bestelling. Deze wordt toegevoegd aan uw account als coupon/tegoed en is geldig bij uw volgende aankoop (één per gebruiker per bestelling).",
+        "delayed": "Exceeding 10 werkdagen: uw volgende bestelling is gratis tot € 100. Tegoed wordt aan uw account toegevoegd (één per gebruiker per vertraagde bestelling). De geschiktheid wordt uitsluitend door Dreamli bepaald; verklaringen van de vervoerder zijn niet relevant."
+      }
+    },
+    "returns": {
+      "title": "Retouren",
+      "body": "Volgens EU-wetgeving geldt doorgaans een 14-daagse herroepingsrecht; dit geldt echter **niet** voor gepersonaliseerde goederen (Artikel 6:230p BW). Aangezien onze producten op bestelling worden gemaakt, kunnen ze alleen worden geretourneerd wanneer ze beschadigd, defect of wezenlijk anders zijn dan het overeengekomen ontwerp. Meld dit alstublieft zo snel mogelijk met foto’s; als gevalideerd, zullen wij repareren, vervangen of terugbetalen. Verzendkosten voor gevalideerde defecten worden door ons gedekt."
+    },
+    "cashback": {
+      "title": "Cashback & Site-tegoedbeleid",
+      "body": "Elke bestelling komt in aanmerking voor een kans om site-tegoed te ontvangen op basis van uw huidige orderwaarde:",
+      "points": {
+        "full": "1 % kans — 100 % cashback als site-tegoed",
+        "thirty": "29 % kans — 30 % cashback als site-tegoed",
+        "ten": "60 % kans — 10 % cashback als site-tegoed",
+        "none": "10 % kans — geen cashback"
+      },
+      "notice": "Tegoeden worden aan uw Dreamli-account toegevoegd en kunnen worden gebruikt voor toekomstige aankopen. Tegoeden zijn niet overdraagbaar en niet inwisselbaar voor contant geld, tenzij wij anders aangeven. We kunnen promoties wijzigen of beëindigen; reeds toegekende tegoeden blijven geldig onder hun voorwaarden."
+    },
+    "ai": {
+      "title": "AI-Gegenereerde Modellen & Licenties",
+      "intro": "Onze website kan digitale activa genereren (bijv. 3D-modellen, afbeeldingen) via onze AI-systemen. Tenzij anders schriftelijk overeengekomen:",
+      "points": {
+        "license": "U ontvangt een persoonlijke, niet-exclusieve, niet-overdraagbare, niet-commerciële licentie om dergelijk AI-gegenereerd materiaal te gebruiken.",
+        "commercial": "Commercieel gebruik (doorverkoop, massaproductie, distributie) is alleen toegestaan via het door Dreamli geautoriseerde kanaal onder een afzonderlijke commerciële licentie. We kunnen massaproductie faciliteren — neem contact met ons op voor voorwaarden.",
+        "rights": "U bevestigt dat u de rechten bezit op alle uploads (bijv. tekeningen, foto’s) en dat deze geen inbreuk maken op de rechten van derden."
+      }
+    },
+    "liability": {
+      "title": "Aansprakelijkheid",
+      "body": "We zijn niet aansprakelijk voor misbruik of modificaties van producten. Voor zover wettelijk toegestaan, sluiten we aansprakelijkheid uit voor indirecte of gevolgschade. Onze totale aansprakelijkheid per bestelling is beperkt tot de orderwaarde. Toezicht door volwassenen kan nodig zijn voor kinderen; sommige onderdelen kunnen klein of broos zijn."
+    },
+    "ip": {
+      "title": "Intellectuele Eigendom",
+      "body": "Alle website-, merk- en productontwerpen behoren toe aan Dreamli. Door een tekening of bestand te uploaden, garandeert u dat u het recht hebt dit te gebruiken. U verleent Dreamli een beperkte licentie om het te reproduceren en te verwerken voor productie en ordervervulling (en, indien u afzonderlijk toestemt, voor presentatie)."
+    },
+    "privacy": {
+      "title": "Privacy & Cookies",
+      "body": "We behandelen uw gegevens volgens ons Privacy-beleid. Lees dit voor details over wat we verzamelen, hoe we het gebruiken, en uw rechten."
+    },
+    "law": {
+      "title": "Recht & Geschillen",
+      "body": "Deze voorwaarden worden beheerst door Nederlands recht. Geschillen worden behandeld door de bevoegde rechtbanken in Nederland."
+    },
+    "changes": {
+      "title": "Wijzigingen",
+      "body": "We kunnen deze voorwaarden bijwerken. De versie op het moment van uw bestelling is van toepassing. Voortdurend gebruik van onze diensten na wijzigingen betekent acceptatie van de bijgewerkte voorwaarden."
+    },
+    "contact": {
+      "title": "Contactgegevens",
+      "company": "OmniTechs V.O.F. (Dreamli.nl)",
+      "kvk": "KvK: 93814429",
+      "address": "Adres: Resedastraat 39, 9713TN Groningen, Nederland",
+      "email": "E-mail: info@dreamli.nl"
+    }
+  },
+  "privacy": {
+    "meta": {
+      "title": "Privacybeleid | Dreamli Gegevensbescherming & Cookiebeleid",
+      "description": "Hoe Dreamli persoonlijke gegevens verzamelt, gebruikt en beschermt voor gezinnen, makers en partners — uw rechten en keuzes uitgelegd."
+    },
+    "ui": {
+      "toggle": {
+        "en": "English",
+        "nl": "Nederlands"
+      },
+      "backHome": "Terug naar Homepage"
+    },
+    "header": {
+      "title": "Privacybeleid",
+      "updated": "Laatst bijgewerkt: januari 2024"
+    },
+    "intro": {
+      "title": "Inleiding",
+      "body": "Dreamli (OmniTechs V.O.F.) respecteert je privacy en verwerkt persoonsgegevens in overeenstemming met de Algemene Verordening Gegevensbescherming (AVG) en toepasselijke wetgeving. Dit privacybeleid legt uit hoe wij je persoonlijke informatie verzamelen, gebruiken en beschermen."
+    },
+    "collect": {
+      "title": "Welke informatie we verzamelen",
+      "blocks": {
+        "provided": {
+          "title": "Informatie die je verstrekt",
+          "items": [
+            "Persoonlijke gegevens (naam, e-mailadres, telefoonnummer)",
+            "Verzend- en factuuradres",
+            "Betalingsgegevens",
+            "Tekeningen en kunstwerken van kinderen",
+            "Communicatie met klantenservice"
+          ]
+        },
+        "technical": {
+          "title": "Technische informatie",
+          "items": [
+            "IP-adres en locatiegegevens",
+            "Browsertype en versie",
+            "Apparaatinformatie",
+            "Website-gebruikspatronen"
+          ]
+        },
+        "cookies": {
+          "title": "Cookies en Analytics",
+          "items": [
+            "Essentiële cookies voor websitefunctionaliteit",
+            "Google Analytics-gegevens (alleen met jouw toestemming)",
+            "Prestatie- en optimalisatiegegevens"
+          ]
+        }
+      }
+    },
+    "use": {
+      "title": "Hoe we je informatie gebruiken",
+      "blocks": {
+        "orders": {
+          "title": "Bestellingen verwerken",
+          "items": [
+            "Je gepersonaliseerde producten maken en verzenden",
+            "Betalingen veilig verwerken",
+            "Bestelupdates en tracking verstrekken",
+            "Retouren en omruilen afhandelen"
+          ]
+        },
+        "support": {
+          "title": "Klantenservice",
+          "items": [
+            "Vragen en verzoeken beantwoorden",
+            "Technische ondersteuning bieden",
+            "Je account beheren",
+            "Problemen oplossen"
+          ]
+        },
+        "legal": {
+          "title": "Wettelijke naleving",
+          "items": [
+            "Voldoen aan belasting- en boekhoudverplichtingen",
+            "Voldoen aan wettelijke vereisten",
+            "Fraude voorkomen en veiligheid waarborgen",
+            "Bedrijfsadministratie bijhouden"
+          ]
+        },
+        "marketing": {
+          "title": "Marketing (met toestemming)",
+          "items": [
+            "Nieuwsbrieven en updates versturen",
+            "Productaankondigingen delen",
+            "Gepersonaliseerde aanbiedingen bieden",
+            "Onze diensten verbeteren"
+          ]
+        }
+      }
+    },
+    "legalBasis": {
+      "title": "Rechtsgrondslag voor verwerking",
+      "items": {
+        "contract": {
+          "title": "Overeenkomst",
+          "body": "Verwerking noodzakelijk om je bestellingen te vervullen en onze diensten te leveren"
+        },
+        "obligation": {
+          "title": "Wettelijke verplichting",
+          "body": "Naleving van belastingwetten en andere wettelijke vereisten"
+        },
+        "consent": {
+          "title": "Toestemming",
+          "body": "Analytics, marketingcommunicatie en niet-essentiële cookies"
+        },
+        "interest": {
+          "title": "Gerechtvaardigd belang",
+          "body": "Beveiligingsmaatregelen, fraudepreventie en bedrijfsvoering"
+        }
+      }
+    },
+    "retention": {
+      "title": "Gegevensopslag en bewaartermijnen",
+      "block": {
+        "title": "Bewaartermijnen",
+        "items": [
+          "Bestelgegevens: 7 jaar (belastingwetgeving)",
+          "Analytics-gegevens: maximaal 14 maanden",
+          "Accountgegevens: totdat je verwijdering aanvraagt",
+          "Marketinggegevens: totdat je toestemming intrekt"
+        ]
+      }
+    },
+    "sharing": {
+      "title": "Gegevens delen",
+      "neverSell": {
+        "title": "We verkopen je gegevens nooit",
+        "body": "Je persoonlijke informatie wordt nooit verkocht aan derden voor marketingdoeleinden."
+      },
+      "onlyWith": {
+        "title": "We delen gegevens alleen met:",
+        "items": [
+          "Betaalverwerkers: om veilige transacties af te handelen",
+          "Verzendbedrijven: om je bestellingen te bezorgen",
+          "IT- en hostingproviders: om onze diensten te onderhouden",
+          "Google Analytics: alleen met je expliciete toestemming"
+        ]
+      }
+    },
+    "rights": {
+      "title": "Jouw rechten",
+      "blocks": {
+        "access": {
+          "icon": "ri-eye-line",
+          "title": "Inzage",
+          "body": "Vraag een kopie van je persoonsgegevens aan"
+        },
+        "rectify": {
+          "icon": "ri-edit-line",
+          "title": "Correctie",
+          "body": "Onjuiste of onvolledige informatie bijwerken"
+        },
+        "erase": {
+          "icon": "ri-delete-bin-line",
+          "title": "Verwijdering",
+          "body": "Verzoek om verwijdering van je gegevens (waar wettelijk mogelijk)"
+        },
+        "consent": {
+          "icon": "ri-close-circle-line",
+          "title": "Toestemming intrekken",
+          "body": "Stop marketingcommunicatie of analytics"
+        },
+        "portability": {
+          "icon": "ri-download-line",
+          "title": "Overdraagbaarheid",
+          "body": "Ontvang je gegevens in een overdraagbaar formaat"
+        },
+        "complaint": {
+          "icon": "ri-alert-line",
+          "title": "Klacht",
+          "body": "Dien een klacht in bij de Autoriteit Persoonsgegevens"
+        }
+      }
+    },
+    "cookies": {
+      "title": "Cookiebeleid",
+      "essential": {
+        "title": "Essentiële cookies",
+        "body": "Deze cookies zijn noodzakelijk voor de werking van de website en kunnen niet worden uitgeschakeld:",
+        "items": [
+          "Sessiebeheer en veiligheid",
+          "Winkelwagenfunctionaliteit",
+          "Taalvoorkeuren"
+        ]
+      },
+      "analytics": {
+        "title": "Analytics-cookies (optioneel)",
+        "body": "Deze cookies helpen ons te begrijpen hoe bezoekers onze website gebruiken:",
+        "items": [
+          "Google Analytics (alleen met jouw toestemming)",
+          "Paginaweergaven en gebruikersgedrag",
+          "Prestatie-optimalisatiegegevens"
+        ]
+      },
+      "note": "Je kunt je cookievoorkeuren op elk moment wijzigen via onze cookiebanner of door contact met ons op te nemen."
+    },
+    "security": {
+      "title": "Beveiligingsmaatregelen",
+      "how": {
+        "title": "Hoe we je gegevens beschermen",
+        "items": [
+          "SSL-versleuteling voor alle gegevensoverdracht",
+          "Veilige servers met beperkte toegang",
+          "Regelmatige beveiligingsupdates en monitoring",
+          "Training van personeel over gegevensbescherming"
+        ]
+      },
+      "disclaimer": "Hoewel wij beveiligingsmaatregelen volgens de industrienorm implementeren, kan geen enkel systeem 100% veilig zijn. We werken continu aan het verbeteren van onze beveiligingspraktijken."
+    },
+    "contact": {
+      "title": "Contactgegevens",
+      "controller": {
+        "title": "Verwerkingsverantwoordelijke",
+        "company": "OmniTechs V.O.F. (Dreamli)",
+        "kvk": "KvK: 93814429",
+        "addr1": "Resedastraat 39",
+        "addr2": "9713TN Groningen, Nederland"
+      },
+      "details": {
+        "title": "Contactgegevens",
+        "email": "info@dreamli.nl",
+        "phone": "+31 6 4555 9587"
+      }
+    }
   }
 }

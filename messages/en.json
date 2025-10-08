@@ -502,6 +502,316 @@
   "aria": {
     "home": "Dreamli home",
     "logoAlt": "Dreamli Logo"
+  },
+  "Terms": {
+    "meta": {
+      "title": "Terms & Conditions | Dreamli",
+      "description": "Read Dreamli’s Terms & Conditions covering orders, delivery benefits, returns for personalized items, AI-generated models licensing, liability, privacy, and more."
+    },
+    "header": {
+      "title": "Terms & Conditions",
+      "site": "Dreamli.nl",
+      "updated": "Last updated: October 2025"
+    },
+    "company": {
+      "title": "Company Information",
+      "body": "Dreamli is part of OmniTechs V.O.F. (KvK 93814429, Resedastraat 39, 9713TN Groningen, Netherlands, info@dreamli.nl). These terms apply to all orders placed via Dreamli.nl."
+    },
+    "products": {
+      "title": "Products",
+      "body": "We help you choose amazing gifts—or make them from scratch. With our AI Gift Assistant and a hands-on design team, you can discover smart recommendations or commission personalized pieces (3D-printed, engraved, photo-based, and more)."
+    },
+    "orders": {
+      "title": "Orders & Payment",
+      "body": "A contract is formed when you place an order and we confirm it. Payment is required at checkout via iDEAL, Stripe, or card. Prices are in EUR and include VAT unless stated otherwise. We may refuse or cancel an order (e.g., unsuitable files, production constraints, obvious pricing errors); if payment was taken, we will refund you."
+    },
+    "delivery": {
+      "title": "Delivery & Delay Benefits",
+      "body": "Delivery time is 3–10 business days from order confirmation. We typically ship with PostNL or DHL. We are not responsible for carrier-caused delays.",
+      "points": {
+        "onTime": "Delivered on day 3–10 (business days): you earn a 10% discount on your next order. It’s added to your account as a coupon/credit and is valid on your next purchase (one per user per order).",
+        "delayed": "Exceeds 10 business days: your next purchase is free up to €100. Credit is added to your account (one per user per delayed order). Eligibility is determined solely by Dreamli’s records; carrier statements do not affect eligibility."
+      }
+    },
+    "returns": {
+      "title": "Returns",
+      "body": "Under EU law, a 14-day right of withdrawal generally applies; however, it does not apply to personalized goods (Article 6:230p BW). Because our products are made to order, they cannot be returned unless they arrive damaged, defective, or materially different from the agreed design. Please notify us promptly with photos; if validated, we will repair, replace, or refund. Return shipping for validated defects is covered by us."
+    },
+    "cashback": {
+      "title": "Cashback & Site Credit Policy",
+      "body": "Each order qualifies for a chance to receive site credit based on your current order value:",
+      "points": {
+        "full": "1% chance — 100% cashback as site credit",
+        "thirty": "29% chance — 30% cashback as site credit",
+        "ten": "60% chance — 10% cashback as site credit",
+        "none": "10% chance — no cashback"
+      },
+      "notice": "Credits are added to your Dreamli account and can be used on future purchases. Credits are non-transferable and not redeemable for cash unless we state otherwise. We may change or end promotions prospectively; credits already awarded remain valid per their terms."
+    },
+    "ai": {
+      "title": "AI-Generated Models & Licensing",
+      "intro": "Our website may generate digital assets (e.g., 3D models, images) via our AI systems. Unless expressly agreed otherwise in writing:",
+      "points": {
+        "license": "You receive a personal, non-exclusive, non-transferable, non-commercial licence to use such AI-generated content.",
+        "commercial": "Commercial use (resale, mass production, distribution) is only permitted via Dreamli’s authorized channel under a separate commercial licence. We can facilitate mass production—contact us for terms.",
+        "rights": "You confirm you have rights to any input (e.g., drawings, photos) you upload and that it doesn’t infringe third-party rights."
+      }
+    },
+    "liability": {
+      "title": "Liability",
+      "body": "We are not liable for misuse or modifications of products. To the maximum extent permitted by law, we exclude liability for indirect or consequential loss. Our total liability per order is limited to the order value. Adult supervision may be required for children; some parts may be small or fragile."
+    },
+    "ip": {
+      "title": "Intellectual Property",
+      "body": "All website, branding, and product designs belong to Dreamli. By uploading a drawing or file, you warrant you have the right to use it. You grant Dreamli a limited licence to reproduce and process it for production and order fulfilment (and, if you separately consent, for showcasing)."
+    },
+    "privacy": {
+      "title": "Privacy & Cookies",
+      "body": "We handle your data according to our Privacy Policy. Please review it for details on what we collect, how we use it, and your rights."
+    },
+    "law": {
+      "title": "Law & Disputes",
+      "body": "These terms are governed by Dutch law. Disputes will be handled by the competent courts in the Netherlands."
+    },
+    "changes": {
+      "title": "Changes",
+      "body": "We may update these terms. The version at the time of your order applies. Continued use of our services after changes constitutes acceptance of the updated terms."
+    },
+    "contact": {
+      "title": "Contact Information",
+      "company": "OmniTechs V.O.F. (Dreamli.nl)",
+      "kvk": "KvK: 93814429",
+      "address": "Address: Resedastraat 39, 9713TN Groningen, Netherlands",
+      "email": "Email: info@dreamli.nl"
+    }
+  },
+  "privacy": {
+    "meta": {
+      "title": "Privacy Policy | Dreamli Data Protection & Cookie Policy",
+      "description": "How Dreamli collects, uses, and protects personal data for families, creators, and partners—your rights and choices explained."
+    },
+    "ui": {
+      "toggle": {
+        "en": "English",
+        "nl": "Nederlands"
+      },
+      "backHome": "Back to Homepage"
+    },
+    "header": {
+      "title": "Privacy Policy",
+      "updated": "Last updated: January 2024"
+    },
+    "intro": {
+      "title": "Introduction",
+      "body": "Dreamli (OmniTechs V.O.F.) respects your privacy and processes personal data in accordance with the General Data Protection Regulation (GDPR) and applicable data protection laws. This privacy policy explains how we collect, use, and protect your personal information."
+    },
+    "collect": {
+      "title": "What Information We Collect",
+      "blocks": {
+        "provided": {
+          "title": "Information You Provide",
+          "items": [
+            "Personal details (name, email address, phone number)",
+            "Shipping and billing addresses",
+            "Payment information",
+            "Children’s drawings and artwork",
+            "Communication with customer support"
+          ]
+        },
+        "technical": {
+          "title": "Technical Information",
+          "items": [
+            "IP address and location data",
+            "Browser type and version",
+            "Device information",
+            "Website usage patterns"
+          ]
+        },
+        "cookies": {
+          "title": "Cookies and Analytics",
+          "items": [
+            "Essential cookies for website functionality",
+            "Google Analytics data (only with your consent)",
+            "Performance and optimization data"
+          ]
+        }
+      }
+    },
+    "use": {
+      "title": "How We Use Your Information",
+      "blocks": {
+        "orders": {
+          "title": "Order Processing",
+          "items": [
+            "Create and ship your personalized products",
+            "Process payments securely",
+            "Provide order updates and tracking",
+            "Handle returns and exchanges"
+          ]
+        },
+        "support": {
+          "title": "Customer Support",
+          "items": [
+            "Respond to inquiries and requests",
+            "Provide technical assistance",
+            "Manage your account",
+            "Resolve any issues"
+          ]
+        },
+        "legal": {
+          "title": "Legal Compliance",
+          "items": [
+            "Meet tax and accounting obligations",
+            "Comply with legal requirements",
+            "Prevent fraud and ensure security",
+            "Maintain business records"
+          ]
+        },
+        "marketing": {
+          "title": "Marketing (With Consent)",
+          "items": [
+            "Send newsletters and updates",
+            "Share product announcements",
+            "Provide personalized offers",
+            "Improve our services"
+          ]
+        }
+      }
+    },
+    "legalBasis": {
+      "title": "Legal Basis for Processing",
+      "items": {
+        "contract": {
+          "title": "Contract",
+          "body": "Processing necessary to fulfill your orders and provide our services"
+        },
+        "obligation": {
+          "title": "Legal Obligation",
+          "body": "Compliance with tax laws and other legal requirements"
+        },
+        "consent": {
+          "title": "Consent",
+          "body": "Analytics, marketing communications, and non-essential cookies"
+        },
+        "interest": {
+          "title": "Legitimate Interest",
+          "body": "Security measures, fraud prevention, and business operations"
+        }
+      }
+    },
+    "retention": {
+      "title": "Data Storage and Retention",
+      "block": {
+        "title": "Retention Periods",
+        "items": [
+          "Order data: 7 years (tax law requirements)",
+          "Analytics data: 14 months maximum",
+          "Account data: Until you request deletion",
+          "Marketing data: Until you withdraw consent"
+        ]
+      }
+    },
+    "sharing": {
+      "title": "Data Sharing",
+      "neverSell": {
+        "title": "We Never Sell Your Data",
+        "body": "Your personal information is never sold to third parties for marketing purposes."
+      },
+      "onlyWith": {
+        "title": "We only share data with:",
+        "items": [
+          "Payment processors: To handle secure transactions",
+          "Shipping companies: To deliver your orders",
+          "IT and hosting providers: To maintain our services",
+          "Google Analytics: Only with your explicit consent"
+        ]
+      }
+    },
+    "rights": {
+      "title": "Your Rights",
+      "blocks": {
+        "access": {
+          "icon": "ri-eye-line",
+          "title": "Access",
+          "body": "Request a copy of your personal data"
+        },
+        "rectify": {
+          "icon": "ri-edit-line",
+          "title": "Correction",
+          "body": "Update incorrect or incomplete information"
+        },
+        "erase": {
+          "icon": "ri-delete-bin-line",
+          "title": "Deletion",
+          "body": "Request removal of your data (where legally possible)"
+        },
+        "consent": {
+          "icon": "ri-close-circle-line",
+          "title": "Withdraw Consent",
+          "body": "Stop marketing communications or analytics"
+        },
+        "portability": {
+          "icon": "ri-download-line",
+          "title": "Portability",
+          "body": "Receive your data in a portable format"
+        },
+        "complaint": {
+          "icon": "ri-alert-line",
+          "title": "Complaint",
+          "body": "File a complaint with the data protection authority"
+        }
+      }
+    },
+    "cookies": {
+      "title": "Cookies Policy",
+      "essential": {
+        "title": "Essential Cookies",
+        "body": "These cookies are necessary for the website to function and cannot be switched off:",
+        "items": [
+          "Session management and security",
+          "Shopping cart functionality",
+          "Language preferences"
+        ]
+      },
+      "analytics": {
+        "title": "Analytics Cookies (Optional)",
+        "body": "These cookies help us understand how visitors use our website:",
+        "items": [
+          "Google Analytics (only with your consent)",
+          "Page views and user behavior",
+          "Performance optimization data"
+        ]
+      },
+      "note": "You can change your cookie preferences at any time through our cookie banner or by contacting us."
+    },
+    "security": {
+      "title": "Security Measures",
+      "how": {
+        "title": "How We Protect Your Data",
+        "items": [
+          "SSL encryption for all data transmission",
+          "Secure servers with restricted access",
+          "Regular security updates and monitoring",
+          "Staff training on data protection"
+        ]
+      },
+      "disclaimer": "While we implement industry-standard security measures, no system can be 100% secure. We continuously work to improve our security practices."
+    },
+    "contact": {
+      "title": "Contact Information",
+      "controller": {
+        "title": "Data Controller",
+        "company": "OmniTechs V.O.F. (Dreamli)",
+        "kvk": "KvK: 93814429",
+        "addr1": "Resedastraat 39",
+        "addr2": "9713TN Groningen, Netherlands"
+      },
+      "details": {
+        "title": "Contact Details",
+        "email": "info@dreamli.nl",
+        "phone": "+31 6 4555 9587"
+      }
+    }
   }
 
 }

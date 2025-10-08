@@ -4,11 +4,12 @@ import Image from 'next/image';
 import NewsletterForm from '@/components/Footer/NewsletterForm';
 import TrustPilot from '@/components/Footer/TrustPilot';
 import {getTranslations} from 'next-intl/server';
+import type {LanguageCode} from "@/config/i18n";
 
-export default async function Footer() {
-    const t = await getTranslations('footer');
+export default async function Footer({ lang }: { lang: LanguageCode }) {
+    const t = await getTranslations({ locale: lang, namespace: 'footer'});
     const year = new Date().getFullYear();
-
+    console.log(lang)
     return (
         <footer className="bg-gradient-to-br from-gray-50 to-gray-100 py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -141,13 +142,13 @@ export default async function Footer() {
                             {t('legal.copyright', {year})}
                         </p>
                         <div className="flex space-x-6 text-sm text-gray-600">
-                            <Link href="/privacy" className="hover:text-purple-600 transition-colors cursor-pointer">
+                            <Link href="privacy" className="hover:text-purple-600 transition-colors cursor-pointer">
                                 {t('legal.privacy')}
                             </Link>
-                            <Link href="/terms" className="hover:text-purple-600 transition-colors cursor-pointer">
+                            <Link href="terms" className="hover:text-purple-600 transition-colors cursor-pointer">
                                 {t('legal.terms')}
                             </Link>
-                            <Link href="/cookies" className="hover:text-purple-600 transition-colors cursor-pointer">
+                            <Link href="cookies" className="hover:text-purple-600 transition-colors cursor-pointer">
                                 {t('legal.cookies')}
                             </Link>
                         </div>
