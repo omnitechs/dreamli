@@ -44,7 +44,7 @@ export async function CustomizedGifts({lang}: { lang: LanguageCode }) {
                             {/* Image block */}
                             <div className="relative mb-6 rounded-2xl overflow-hidden aspect-[4/3]">
                                 <Image
-                                    src="/New-Frame-CMYK.png"
+                                    src="/New-Frame-CMYK.avif"
                                     alt={t('litho.imageAlt')}
                                     fill
                                     className="object-cover w-full h-full"
@@ -109,7 +109,7 @@ export async function CustomizedGifts({lang}: { lang: LanguageCode }) {
                         >
                             <div className="relative mb-6 rounded-2xl overflow-hidden aspect-[4/3]">
                                 <Image
-                                    src="/keychain.webp"
+                                    src="/keychain.avif"
                                     alt={t('keys.imageAlt')}
                                     fill
                                     className="object-cover w-full h-full"

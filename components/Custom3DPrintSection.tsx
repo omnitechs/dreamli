@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import {getLocale, getTranslations} from 'next-intl/server';
 import type {LanguageCode} from "@/config/i18n";
-
+import Image from 'next/image';
 export default async function Custom3DPrintSection({lang}: { lang: LanguageCode }) {
     const t = await getTranslations({locale:lang ,namespace:'home.Custom3D'});
     const locale = await getLocale();
@@ -60,10 +60,14 @@ export default async function Custom3DPrintSection({lang}: { lang: LanguageCode 
                         </div>
 
                         <div className="relative">
-                            <img
-                                src="https://readdy.ai/api/search-image?query=Professional%203D%20printing%20workspace%20with%20high-tech%203D%20printers%20creating%20custom%20objects%2C%20modern%20manufacturing%20facility%20in%20Netherlands%2C%20sustainable%20materials%20and%20eco-friendly%20production%2C%20precision%20engineering%20and%20quality%20craftsmanship%2C%20innovative%20technology%20meets%20creativity&width=600&height=500&seq=custom-3d-print-workspace&orientation=landscape"
+
+                            <Image
+                                src="/3dmodeling.avif"
                                 alt={t('imageAlt')}
-                                className="w-full h-[500px] rounded-2xl object-cover shadow-2xl"
+                                className="rounded-2xl object-cover shadow-2xl"
+                                width={600}
+                                height={500}
+                                // optional: priority or other props
                             />
 
                             <div className="absolute -top-6 -left-6 w-16 h-16 bg-gradient-to-br from-[#8472DF] to-[#93C4FF] rounded-2xl flex items-center justify-center shadow-lg">
