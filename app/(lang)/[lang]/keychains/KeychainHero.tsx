@@ -10,12 +10,14 @@ export default async function KeychainHero({lang}: { lang: LanguageCode }) {
             className="relative bg-gradient-to-br from-blue-50 to-indigo-100 overflow-hidden"
             aria-label={t('aria.hero')}
         >
-            <div
-                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                style={{
-                    backgroundImage:
-                        "url('/keychain-background.avif')",
-                }}
+            hi
+            <Image
+                src="/keychain-background.avif"
+                alt=""
+                priority
+                fetchPriority="high"
+                fill={true}
+                className="object-cover object-center z-1" // sits behind content
             />
             <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-transparent" />
 

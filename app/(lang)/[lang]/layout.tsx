@@ -116,12 +116,14 @@ export default async function LangLayout({
     return (
         <html lang={lang}>
         <head>
+            <link rel="icon" href="/favicon.ico" />
             <meta name="google" content="notranslate" />
             <script
                 type="application/ld+json"
                 // eslint-disable-next-line react/no-danger
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
             />
+
         </head>
         <body>
         <NextIntlClientProvider key={lang} locale={lang} messages={messages}>
