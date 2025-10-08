@@ -4,7 +4,7 @@ import { getTranslations } from 'next-intl/server';
 import { languages, type LanguageCode, type Language } from '@/config/i18n';
 import LangSwitcher from './LangSwitcher';
 import MobileDropdown from './MobileDropdown';
-
+import { Suspense } from 'react'
 export default async function Header({ lang }: { lang: LanguageCode }) {
     // use your actual namespace if you have one, else omit "namespace"
     const t = await getTranslations({ locale: lang, namespace: '' });
@@ -54,7 +54,9 @@ export default async function Header({ lang }: { lang: LanguageCode }) {
 
                     {/* Right side */}
                     <div className="ml-auto flex items-center gap-2">
+                        <Suspense fallback={<>...</>}>
                         <LangSwitcher lang={lang} languages={languages as readonly Language[]} />
+                        </Suspense>
                     </div>
 
                     {/* Mobile menu */}
