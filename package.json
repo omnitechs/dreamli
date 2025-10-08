@@ -30,6 +30,7 @@
     "three-csg-ts": "^3.2.0"
   },
   "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^7.0.2",
     "@types/node": "20.19.19",
     "@types/react": "18.3.25",
     "@types/react-dom": "^18",
