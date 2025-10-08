@@ -5,6 +5,7 @@ import { languages, type LanguageCode, type Language } from '@/config/i18n';
 import LangSwitcher from './LangSwitcher';
 import MobileDropdown from './MobileDropdown';
 import { Suspense } from 'react'
+import Image from 'next/image';
 export default async function Header({ lang }: { lang: LanguageCode }) {
     // use your actual namespace if you have one, else omit "namespace"
     const t = await getTranslations({ locale: lang, namespace: '' });
@@ -29,10 +30,14 @@ export default async function Header({ lang }: { lang: LanguageCode }) {
                         aria-label={t('aria.home')}
                         className="inline-flex items-center gap-2 shrink-0"
                     >
-                        <img
-                            src="https://static.readdy.ai/image/ad9dc4c8042d4c1a873be12f55826cf9/48224f9cc1b0c55ac8c088f51f17f701.png"
+
+                        <Image
+                            src="/logo.avif"
                             alt={t('aria.logoAlt')}
-                            className="h-9 w-auto md:h-10"
+                            className="h-9 w-auto md:h-10"  // you can omit class Names you don't need
+                            width={/* approximate actual width, e.g. */ 120}
+                            height={36}   // approximate height, e.g. originally you used "h-9"
+                            priority={true} // or true if this is a critical logo above the fold
                         />
                     </Link>
 

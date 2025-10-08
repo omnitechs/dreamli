@@ -31,12 +31,12 @@ export default async function Footer({ lang }: { lang: LanguageCode }) {
                     <div>
                         <Link href="/home" className="cursor-pointer mb-4 inline-block" aria-label={t('aria.home')}>
                             <Image
-                                src="https://static.readdy.ai/image/ad9dc4c8042d4c1a873be12f55826cf9/48224f9cc1b0c55ac8c088f51f17f701.png"
+                                src="/logo.avif"
                                 alt={t('logoAlt')}
                                 width={160}
                                 height={56}
                                 className="h-14 w-auto"
-                                priority
+                                priority={false}
                             />
                         </Link>
                         <p className="text-gray-600 max-w-sm leading-relaxed">
