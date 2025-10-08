@@ -37,7 +37,7 @@ export default async function AI({lang}: { lang: LanguageCode }) {
                         <div className="relative">
                             <GlbViewer
                                 offMode="pause"
-                                modelUrl="/untitled2.glb"
+                                modelUrl="/Untitled2.glb"
                                 forceType="glb"
                                 className="h-[450px]"
                             />
