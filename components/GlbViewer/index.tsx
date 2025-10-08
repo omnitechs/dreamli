@@ -33,7 +33,7 @@ type LazyGlbProps = {
 export default function LazyGlb({
                                     modelUrl,
                                     className = '',
-                                    rootMargin = '600px 0px',
+                                    rootMargin = '0px 0px -40% 0px',
                                     forceType,
                                     width,
                                     height,
