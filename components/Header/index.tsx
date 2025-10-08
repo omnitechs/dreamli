@@ -13,7 +13,7 @@ export default async function Header({ lang }: { lang: LanguageCode }) {
     const base = (langMeta?.prefix ?? `/${lang}`) || ''; // respect '' for default lang
 
     const navItems = [
-        { label: t('nav.shop'),        href: `${base}/shop` },
+        { label: t('nav.shop'),        href: `https://shop.dreamli.nl/${lang}` },
         { label: t('nav.keychains'),   href: `${base}/keychains` },
         { label: t('nav.lithophanes'), href: `${base}/lithophanes` },
         { label: t('nav.contact'),     href: `${base}/contact` }
