@@ -9,6 +9,9 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import MailchimpSubscriptionCoupon from '@/components/MailchimpSubscriptionCoupon';
 import Script from 'next/script';
+import 'remixicon/fonts/remixicon.css';
+
+export const revalidate = 3600;
 
 export async function generateStaticParams() {
     return languageCodes.map((code) => ({ lang: code }));
