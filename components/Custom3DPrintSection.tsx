@@ -95,7 +95,7 @@ export default async function Custom3DPrintSection({lang}: { lang: LanguageCode 
                     <div className="grid md:grid-cols-3 gap-8 mt-16">
                         <div className="text-center">
                             <div className="w-16 h-16 bg-gradient-to-br from-[#8472DF] to-[#93C4FF] rounded-2xl flex items-center justify-center mb-4 mx-auto">
-                                <i className="ri-file-3d-line text-2xl text-white w-8 h-8 flex items-center justify-center"></i>
+                                <i className="ri-file-code-line text-2xl text-white w-8 h-8 flex items-center justify-center"></i>
                             </div>
                             <h3 className="text-lg font-bold text-[#2E2E2E] mb-2">{t('features.files.title')}</h3>
                             <p className="text-[#2E2E2E]/70 text-sm">{t('features.files.text')}</p>
