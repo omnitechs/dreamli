@@ -1,6 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import type { LanguageCode } from '@/config/i18n';
-
+import Image from 'next/image'
 export default async function KeychainHero({lang}: { lang: LanguageCode }) {
     const t = await getTranslations({ locale: lang, namespace: 'Keychains' });
 
@@ -14,7 +14,7 @@ export default async function KeychainHero({lang}: { lang: LanguageCode }) {
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat"
                 style={{
                     backgroundImage:
-                        "url('https://static.readdy.ai/image/ad9dc4c8042d4c1a873be12f55826cf9/8001b8cf3ba37551025d17bdabd39401.png')",
+                        "url('/keychain-background.avif')",
                 }}
             />
             <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-transparent" />
@@ -62,10 +62,15 @@ export default async function KeychainHero({lang}: { lang: LanguageCode }) {
 
                     <div className="lg:pl-8">
                         <div className="relative">
-                            <img
-                                src="https://static.readdy.ai/image/ad9dc4c8042d4c1a873be12f55826cf9/bbfb8fa6e81f7d83d9a8938d1bcf8447.webp"
+                            <Image
+                                src="/keychain-all.avif"
                                 alt={t('image.alt')}
                                 className="w-full rounded-2xl shadow-2xl object-cover"
+                                // you must provide width & height (or use "fill" mode)
+                                width={100}
+                                height={100}
+                                // make it high priority so it loads eagerly / isn't lazy-delayed
+                                priority={true}
                             />
                             <div className="absolute -bottom-4 -right-4 bg-white rounded-lg shadow-lg p-4">
                                 <div className="flex items-center space-x-2">
