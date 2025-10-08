@@ -1,34 +1,47 @@
 // app/sitemap.ts
 import type { MetadataRoute } from 'next';
 
+export const dynamic = 'force-static';
+
 const SITE = 'https://dreamli.nl';
 const LANGS = ['en', 'nl', 'de', 'fr', 'pl'] as const;
 const DEFAULT_LANG = 'nl';
 const PATHS = ['', '/keychains', '/lithophanes', '/contact', '/privacy', '/terms'] as const;
 
-const urlFor = (lang: string, path: string) => `${SITE}/${lang}${path}`;
-
-function alternatesFor(path: string) {
-    const languages = Object.fromEntries(LANGS.map(l => [l, urlFor(l, path)])) as Record<string,string>;
-    languages['x-default'] = urlFor(DEFAULT_LANG, path);
-    return { languages };
+function urlFor(lang: string, path: string): string {
+    // Ensure path starts with '/', but avoid double slash issues
+    // path is assumed with leading slash or empty string, so okay
+    return `${SITE}/${lang}${path}`;
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
     const now = new Date();
-    const output = PATHS.map((p) => ({
-        url: urlFor(DEFAULT_LANG, p),
-        lastModified: now,
-        changeFrequency: p === '' ? 'weekly' : 'monthly',
-        priority: p === '' ? 1 : 0.8,
-        alternates: alternatesFor(p), // renders <xhtml:link hreflang="..." />
-    }));
-    console.log(output);
-    return PATHS.map((p) => ({
-        url: urlFor(DEFAULT_LANG, p),
-        lastModified: now,
-        changeFrequency: p === '' ? 'weekly' : 'monthly',
-        priority: p === '' ? 1 : 0.8,
-        alternates: alternatesFor(p), // renders <xhtml:link hreflang="..." />
-    }));
+    const items: MetadataRoute.Sitemap = [];
+
+    for (const path of PATHS) {
+        // Build alternates map
+        const altObj: Record<string, string> = {};
+
+        for (const l of LANGS) {
+            const url = urlFor(l, path);
+            altObj[l] = url;
+        }
+        // Add x-default
+        altObj['x-default'] = urlFor(DEFAULT_LANG, path);
+
+        // Now create one item per language
+        for (const l of LANGS) {
+            const item = {
+                url: urlFor(l, path),
+                lastModified: now,
+                changeFrequency: path === '' ? 'weekly' : 'monthly',
+                priority: path === '' ? 1 : 0.8,
+                alternates: { languages: altObj },
+            };
+
+            items.push(item);
+        }
+    }
+    console.log(items)
+    return items;
 }
