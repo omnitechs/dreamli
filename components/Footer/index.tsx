@@ -10,7 +10,19 @@ export default async function Footer({ lang }: { lang: LanguageCode }) {
     const t = await getTranslations({ locale: lang, namespace: 'footer'});
     const year = new Date().getFullYear();
     const hdr = await headers();
-    const host = hdr.get('host'); // e.g. "localhost:3000" or "dreamli.nl"
+    const host = hdr.get("host"); // maybe "localhost:3000" or "dreamli.nl" or "dreamli.nl:8000"
+    let origin: string;
+    if (!host) {
+        throw new Error("Missing host header — cannot determine origin");
+    }
+
+    if (host.includes("localhost") || host.startsWith("127.0.0.1")) {
+        // You may want to use http in dev
+        origin = `http://${host}`;
+    } else {
+        // else assume production / secure
+        origin = `https://${host}`;
+    }
     return (
         <footer className="bg-gradient-to-br from-gray-50 to-gray-100 py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -143,10 +155,10 @@ export default async function Footer({ lang }: { lang: LanguageCode }) {
                             {t('legal.copyright', {year})}
                         </p>
                         <div className="flex space-x-6 text-sm text-gray-600">
-                            <Link href={`${host}/${lang}/privacy`} className="hover:text-purple-600 transition-colors cursor-pointer">
+                            <Link href={`${origin}/${lang}/privacy`} className="hover:text-purple-600 transition-colors cursor-pointer">
                                 {t('legal.privacy')}
                             </Link>
-                            <Link href={`${host}/${lang}/terms`} className="hover:text-purple-600 transition-colors cursor-pointer">
+                            <Link href={`${origin}/${lang}/terms`} className="hover:text-purple-600 transition-colors cursor-pointer">
                                 {t('legal.terms')}
                             </Link>
                         </div>
