@@ -7,7 +7,7 @@ const SITE = 'https://dreamli.nl';
 const LANGS = ['en', 'nl', 'de', 'fr', 'pl'] as const;
 const DEFAULT_LANG = 'nl';
 const PATHS = ['', '/keychains', '/lithophanes', '/contact', '/privacy', '/terms'] as const;
-
+const sina = ""
 function urlFor(lang: string, path: string): string {
     // Ensure path starts with '/', but avoid double slash issues
     // path is assumed with leading slash or empty string, so okay
