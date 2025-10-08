@@ -9,6 +9,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
     experimental: {
+      optimizeCss: true,
         webWorkerTs: true,   // <-- allow TypeScript in web workers
         esmExternals: true,  // <-- keep ESM behavior for worker deps
     },
