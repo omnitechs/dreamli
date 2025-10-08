@@ -23,6 +23,7 @@ export async function generateMetadata(
 
     const title = t('privacy.meta.title');
     const description = t('privacy.meta.description');
+    // @ts-ignore
     const ogImage = t?.optional?.('privacy.meta.ogImage')?.() || undefined;
 
     return {
