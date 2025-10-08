@@ -1,9 +1,10 @@
 // components/WhySection.tsx (SERVER)
 import * as React from 'react';
 import {getTranslations} from 'next-intl/server';
+import type {LanguageCode} from "@/config/i18n";
 
-export async function WhySection() {
-    const t = await getTranslations('home.why');
+export async function WhySection({lang}: { lang: LanguageCode }) {
+    const t = await getTranslations({locale:lang ,namespace:'home.why'});
 
     return (
         <section className="py-16 sm:py-24 lg:py-32 bg-gradient-to-br from-[#F3E8FF]/30 to-[#DBEAFE]/20">

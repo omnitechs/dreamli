@@ -3,9 +3,10 @@ import React from 'react';
 import Link from 'next/link';
 import {getTranslations} from 'next-intl/server';
 import GlbViewer from '@/components/GlbViewer';
+import type {LanguageCode} from "@/config/i18n";
 
-export default async function AI() {
-    const t = await getTranslations('home.ai');
+export default async function AI({lang}: { lang: LanguageCode }) {
+    const t = await getTranslations({locale:lang ,namespace:'home.ai'});
 
     return (
         <section className="py-16 sm:py-24 lg:py-32 bg-white">

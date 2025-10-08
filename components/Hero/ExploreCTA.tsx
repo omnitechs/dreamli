@@ -1,11 +1,11 @@
 // components/ExploreCTA.tsx  (SERVER)
 import React from 'react';
 import Link from 'next/link';
-import {getLocale, getTranslations} from 'next-intl/server';
+import {getTranslations} from 'next-intl/server';
+import type {LanguageCode} from "@/config/i18n";
 
-export default async function ExploreCTA() {
-    const lang = await getLocale();                       // e.g., "en" | "nl" | ...
-    const t = await getTranslations('home.hero.explore'); // uses your JSON keys
+export default async function ExploreCTA({lang}: { lang: LanguageCode }) {     // e.g., "en" | "nl" | ...
+    const t = await getTranslations({locale:lang ,namespace:'home.hero.explore'}); // uses your JSON keys
     const href = `https://shop.dreamli.nl/${lang ==="en" ? "" : lang}`;
 
     const btn =

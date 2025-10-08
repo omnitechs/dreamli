@@ -1,11 +1,12 @@
 // @flow
 import * as React from 'react';
 import {getTranslations} from "next-intl/server";
+import type {LanguageCode} from "@/config/i18n";
 
 
 
-async function HeroTitle() {
-    const t =  await getTranslations('home.hero');
+async function HeroTitle({lang}: { lang: LanguageCode }) {
+    const t =  await getTranslations({locale:lang ,namespace:'home.hero'});
     return (
         <div className="pt-12 pb-8">
             <div className="container mx-auto px-6">

@@ -38,5 +38,5 @@ export default async function HomePage({ params }: { params: { lang: LanguageCod
     const { lang } = await params; // DO NOT await here
     if (!languageCodes.includes(lang)) notFound();
 
-    return <HomePageComponent />;
+    return <HomePageComponent lang={lang}/>;
 }

@@ -3,8 +3,8 @@ import Link from 'next/link';
 import {getLocale, getTranslations} from 'next-intl/server';
 import type {LanguageCode} from "@/config/i18n";
 
-export default async function Custom3DPrintSection() {
-    const t = await getTranslations('home.Custom3D');
+export default async function Custom3DPrintSection({lang}: { lang: LanguageCode }) {
+    const t = await getTranslations({locale:lang ,namespace:'home.Custom3D'});
     const locale = await getLocale();
     return (
         <section className="py-16 sm:py-24 lg:py-32 bg-gradient-to-br from-[#F8F9FF] to-[#F3E8FF]/30">

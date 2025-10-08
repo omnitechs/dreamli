@@ -3,6 +3,7 @@ import * as React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {getTranslations, getLocale} from 'next-intl/server';
+import type {LanguageCode} from "@/config/i18n";
 
 function withLocale(path: string, locale: string) {
     // Ensure leading slash and prefix with /{locale}
@@ -10,8 +11,8 @@ function withLocale(path: string, locale: string) {
     return `/${locale}${p}`;
 }
 
-export async function CustomizedGifts() {
-    const t = await getTranslations('home.personalizedGift');
+export async function CustomizedGifts({lang}: { lang: LanguageCode }) {
+    const t = await getTranslations({locale:lang ,namespace:'home.personalizedGift'});
     const locale = await getLocale();
 
     // Your target route segment (as you asked): /{lang}/listhospanes
