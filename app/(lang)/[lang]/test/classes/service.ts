@@ -10,24 +10,18 @@ export default class WorkplaceService {
     private headId: UUID;
     private store: CommitStore;
 
-    /**
-     * If `headCommit` exists: rehydrate generator from it.
-     * If not: create an initial commit from a fresh empty generator.
-     */
     constructor(store: CommitStore, headCommit?: Commit | null) {
         this.store = store;
 
         if (headCommit) {
             this.headId = headCommit.id;
             this.gen = generatorFromSnapshot(headCommit.generator, ({ type, payload, message }) => {
-                this.createCommit(type, payload, message);
+                void this.createCommit(type, payload, message);
             });
         } else {
-            // empty generator wired first
             this.gen = new Generator("text", ({ type, payload, message }) => {
-                this.createCommit(type, payload, message);
+                void this.createCommit(type, payload, message);
             });
-            // initial commit
             const initial = Commit.create({
                 generator: this.gen,
                 parentId: undefined,
@@ -35,27 +29,18 @@ export default class WorkplaceService {
                 messages: [],
             });
             this.headId = initial.id;
-            this.store.save(initial);
+            void this.store.save(initial);
         }
     }
 
-    /** Access the live generator (already wired to auto-commit). */
-    getGenerator(): Generator {
-        return this.gen;
-    }
+    getGenerator(): Generator { return this.gen; }
+    getHeadId(): UUID { return this.headId; }
 
-    /** Latest commit id (head of the linked list). */
-    getHeadId(): UUID {
-        return this.headId;
-    }
-
-    /** Append a chat message (this will auto-create a commit). */
     postMessage(text: string, role: MessageRole = "user") {
-        this.gen.addMessage(text, role);
+        this.gen.addMessage(text, role); // auto-commit via onChange
     }
 
-    /** Create a version commit when a 3D model is produced. */
-    recordVersion(model: Model) {
+    async recordVersion(model: Model) {
         const c = Commit.createVersion({
             generator: this.gen,
             model,
@@ -63,17 +48,15 @@ export default class WorkplaceService {
         });
         this.headId = c.id;
         this.gen.dirtySinceLastModel = false;
-        this.store.save(c);
+        await this.store.save(c);
     }
 
-    /** Read ALL messages from the root up to the current head (chronological). */
     getAllMessages(): Message[] {
         return this.gen.messages;
     }
 
     // ——— internal ———
-
-    private createCommit(
+    private async createCommit(
         type?: NonNullable<Message["action"]>["type"],
         payload?: Record<string, unknown>,
         message?: Message
@@ -84,12 +67,11 @@ export default class WorkplaceService {
             summary: this.summary(type, message),
             messages: [],
         });
-
         if (type) c = c.withActionLog(type, payload);
         if (message) c = c.withMessage(message);
 
         this.headId = c.id;
-        this.store.save(c);
+        await this.store.save(c);
     }
 
     private summary(type?: NonNullable<Message["action"]>["type"], msg?: Message) {
@@ -104,5 +86,4 @@ export default class WorkplaceService {
             default: return undefined;
         }
     }
-
 }

@@ -1,6 +1,8 @@
-import type { Commit, UUID } from "./interface";
+//commitStore.ts
+import type { UUID } from "./interface";
+import { Commit } from "./commit";
 
 export interface CommitStore {
-    get(id: UUID): Commit | undefined;   // load a commit by id
-    save(commit: Commit): void;          // persist a commit
+    get(id: UUID): Promise<Commit | undefined>;
+    save(commit: Commit): Promise<void>;
 }

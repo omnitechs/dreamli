@@ -1,0 +1,29 @@
+// prisma/schema.prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Commit {
+  id         String   @id @db.Uuid
+  parentId   String?  @db.Uuid
+  timestamp  DateTime
+  isVersion  Boolean
+  summary    String?
+  generator  Json      // Generator snapshot (from gen.toJSON())
+  model      Json?     // Model snapshot or null
+  messages   Json      // Array<Message> for this commit delta
+  // optional indexing helpers:
+  // branchId String? @db.Uuid
+  @@index([parentId])
+}
+
+model Workspace {
+  id           String  @id @db.Uuid
+  name         String
+  headCommitId String? @db.Uuid
+}
