@@ -65,6 +65,7 @@ export interface Generator {
     designated: Partial<Record<DesignatedSlot, Image | null>>;
     approvalSet?: UUID[]; // ordered list of approved images for 3D
     dirtySinceLastModel: boolean;
+    messages:Message[]
 
 }
 
@@ -101,7 +102,6 @@ export interface Commit {
     id: UUID;
     timestamp: string;
     parentId?: UUID;
-    branchId: UUID;
     forkedFromId?: UUID;
     isVersion: boolean; // true if contains generated model
     summary?: string;
@@ -125,3 +125,22 @@ export interface Project {
     commits: Commit[];
     activeCommitId: UUID;
 }
+// Action types reused from Message["action"]["type"]
+export type GeneratorActionType =
+    | "SET_MODE"
+    | "UPDATE_TEXT"
+    | "ADD_IMAGE"
+    | "ASSIGN_SLOT"
+    | "CLEAR_SLOT";
+
+export type OnChangeFn = (args: {
+    type: GeneratorActionType | undefined; // undefined when change is just "new chat message"
+    payload?: Record<string, any>;
+    message?: Message; // if the change *is* a new message
+}) => void;
+
+
+// /core/types.ts (optional helper file)
+export type CommitLike =
+    import("./commit").Commit |
+    import("./interface").Commit; // the plain JSON shape

@@ -5,34 +5,22 @@ import type {
     ISODate,
     Model,
     Generator as GeneratorShape,
+    DesignatedSlot,
+    Image,
 } from "./interface";
-import Generator from "./generator";
 
-// A commit can take either a live Generator instance or a plain Generator snapshot
-export type GeneratorLike = Generator | GeneratorShape;
+import uid from "../helper/uuid";
 
-/** Utility: RFC4122-ish id generator */
-const uid = (): UUID =>
-    typeof crypto !== "undefined" && "randomUUID" in crypto
-        ? (crypto.randomUUID() as UUID)
-        : ("xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
-            const r = (Math.random() * 16) | 0;
-            const v = c === "x" ? r : (r & 0x3) | 0x8;
-            return v.toString(16);
-        }) as UUID);
+export type GeneratorLike = GeneratorShape | { toJSON(): GeneratorShape };
 
-/** Deep snapshot (no references to live objects) */
 function snapshotGenerator(gen: GeneratorLike): GeneratorShape {
-    const base = "toJSON" in gen ? gen.toJSON() : gen;
+    const base = "toJSON" in gen ? gen.toJSON() : (gen as GeneratorShape);
     try {
-        return structuredClone
-            ? structuredClone(base)
-            : JSON.parse(JSON.stringify(base));
+        return structuredClone ? structuredClone(base) : JSON.parse(JSON.stringify(base));
     } catch {
         return JSON.parse(JSON.stringify(base));
     }
 }
-
 /** Structure of a serialized commit */
 export interface CommitJSON {
     id: UUID;
@@ -110,7 +98,7 @@ export class Commit implements CommitJSON {
             isVersion: true,
             summary: params.summary ?? "3D model generated",
             generator: snapshotGenerator(params.generator),
-            model: { ...params.model },
+            model: {...params.model},
             messages: params.messages ?? [],
         });
     }
@@ -144,7 +132,7 @@ export class Commit implements CommitJSON {
         return this.withMessage({
             role: "system",
             content,
-            action: { type, payload },
+            action: {type, payload},
         });
     }
 
@@ -181,8 +169,8 @@ export class Commit implements CommitJSON {
         return new Commit({
             ...json,
             generator: snapshotGenerator(json.generator),
-            messages: json.messages.map((m) => ({ ...m })),
-            model: json.model ? { ...json.model } : null,
+            messages: json.messages.map((m) => ({...m})),
+            model: json.model ? {...json.model} : null,
         });
     }
 
