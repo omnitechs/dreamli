@@ -1,10 +1,11 @@
+//generator.ts
 import type {
     Image,
     Generator as GeneratorType,
     DesignatedSlot,
 } from "./interface";
 
-export class Generator implements GeneratorType {
+export default class Generator implements GeneratorType {
     type: "text" | "image";
     textPrompt: string;
     images: Image[];
@@ -51,9 +52,10 @@ export class Generator implements GeneratorType {
             textPrompt: this.textPrompt,
             images: this.images,
             designated: this.designated,
+            dirtySinceLastModel: this.dirtySinceLastModel,
         };
     }
 }
 
 
-const generator = new Generator();
+

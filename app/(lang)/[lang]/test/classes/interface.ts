@@ -1,10 +1,11 @@
-// /types/dreamli.ts
+// interface.ts
 
 // ----------------------------------
 // 🔹 Basic shared types
 // ----------------------------------
 export type UUID = string;
 export type Mode = "text" | "image";
+export type ISODate = string;
 export type DesignatedSlot =
     | "front"
     | "back"
@@ -64,6 +65,7 @@ export interface Generator {
     designated: Partial<Record<DesignatedSlot, Image | null>>;
     approvalSet?: UUID[]; // ordered list of approved images for 3D
     dirtySinceLastModel: boolean;
+
 }
 
 // ----------------------------------
