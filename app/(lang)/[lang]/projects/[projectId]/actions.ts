@@ -226,3 +226,44 @@ export async function actionGenerate3D(projectId: UUID, headId: UUID | undefined
     const st = await state(projectId, svc);
     return { ...st, taskId, modelUrl, status: (final as any)?.status ?? "succeeded" };
 }
+
+
+// --- GENERIC: create images via GPT and optionally assign to a slot ---
+export async function actionCreateImages(
+    projectId: string,
+    headId: string | undefined,
+    payload: {
+        prompt?: string;
+        n?: number;
+        size?: "256x256" | "512x512" | "1024x1024";
+        assignSlot?: "front" | "back" | "side" | "threeQuarter" | "top" | "bottom" | null;
+    }
+) {
+    const { svc } = await build(projectId, headId);
+    const gen = svc.getGenerator();
+
+    // 1) generate images (this uses selected refs automatically for edits)
+    const urls = await (gen as any).generateImagesWithGPT({
+        prompt: payload.prompt,
+        n: payload.n ?? 1,
+        size: payload.size ?? "1024x1024",
+    });
+
+    // 2) add all to library
+    const created: Array<{ id: string; url: string }> = [];
+    for (const url of urls) {
+        const id = crypto.randomUUID();
+        gen.addImage({ id, url } as any);
+        created.push({ id, url });
+    }
+
+    // 3) optionally assign first to a slot
+    if (payload.assignSlot && created.length > 0) {
+        const first = created[0];
+        gen.assignImage(payload.assignSlot, { id: first.id, url: first.url } as any);
+    }
+
+    // 4) return full refreshed state
+    return state(projectId, svc);
+}
+

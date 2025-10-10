@@ -55,7 +55,7 @@ export function ProjectWorkspace({ projectId }: ProjectWorkspaceProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Desktop 3-pane layout */}
-      <div className="hidden xl:grid xl:grid-cols-[280px_1fr_360px] min-h-screen">
+        <div className="hidden xl:grid xl:grid-cols-[280px_minmax(0,0.7fr)_minmax(0,1fr)] min-h-screen">
         <CommitsPanel 
           commits={projectState.commits}
           headId={projectState.headId}
