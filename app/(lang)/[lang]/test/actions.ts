@@ -243,3 +243,27 @@ export async function actionBulkAssignFromSelection(headId: UUID | undefined) {
     return { headId: svc.getHeadId(), generator: gen.toJSON(), messages: await svc.getAllMessages() };
 }
 
+export async function actionUnassignSlot(
+    headId: UUID | undefined,
+    slot: "front" | "back" | "side" | "threeQuarter" | "top" | "bottom"
+) {
+    const { svc } = await build(headId);
+    svc.getGenerator().unassignSlot(slot);
+    return {
+        headId: svc.getHeadId(),
+        generator: svc.getGenerator().toJSON(),
+        messages: await svc.getAllMessages(),
+    };
+}
+
+export async function actionDeleteImage(headId: UUID | undefined, url: string) {
+    const { svc } = await build(headId);
+    const gen = svc.getGenerator();
+    gen.deleteImageByUrl(url);
+    return {
+        headId: svc.getHeadId(),
+        generator: gen.toJSON(),
+        messages: await svc.getAllMessages(),
+    };
+}
+

@@ -71,10 +71,6 @@ export default class Generator implements GeneratorType {
         this.notify("ASSIGN_SLOT", { slot, imageId: (image as any)?.id ?? undefined });
     }
 
-    clearSlot(slot: keyof typeof this.designated) {
-        this.designated[slot] = null;
-        this.notify("CLEAR_SLOT", { slot });
-    }
 
     updatePrompt(text: string) {
         if (this.type !== "text") throw new Error("Cannot update text in image mode");
@@ -423,6 +419,63 @@ export default class Generator implements GeneratorType {
         if (urls.length === 0) throw new Error("OpenAI generations returned no images.");
         this.notify("GENERATE_IMAGE", { provider: "openai", count: urls.length, edited: false });
         return urls;
+    }
+    /** Unassign an image from a designated slot (keep image in library) */
+    unassignSlot(slot: keyof typeof this.designated) {
+        if (this.designated[slot] !== null) {
+            this.designated[slot] = null;
+            // fire the clearer, but use the clearer name
+            this.notify("UNASSIGN_SLOT", { slot });
+        }
+    }
+
+    /** Backward-compat: Clear == Unassign */
+    clearSlot(slot: keyof typeof this.designated) {
+        this.unassignSlot(slot);
+    }
+
+    /** Delete the image entirely by URL:
+     * - removes from images[]
+     * - removes from selection
+     * - unassigns from ANY slot that used it
+     * Returns true if anything was removed.
+     */
+    deleteImageByUrl(url: string): boolean {
+        if (!url) return false;
+
+        // remove from images[]
+        const before = this.images.length;
+        this.images = this.images.filter(img => {
+            const u = (img as any)?.url ?? (img as any)?.src;
+            return u !== url;
+        });
+        const removedAny = this.images.length !== before;
+
+        // drop from selection set
+        // We use imageKey() which prefers url; removing by URL is enough:
+        // just remove key == url and also any key that resolves to this url
+        this.selectedImageKeys.delete(String(url));
+
+        // unassign from every slot that referenced it
+        (["front","back","side","threeQuarter","top","bottom"] as const).forEach(slot => {
+            const d = this.designated[slot];
+            const dUrl = d ? ((d as any).url ?? (d as any).src) : undefined;
+            if (dUrl && dUrl === url) {
+                this.designated[slot] = null;
+            }
+        });
+
+        if (removedAny) {
+            this.notify("DELETE_IMAGE", { url });
+        }
+        return removedAny;
+    }
+
+    /** Delete by reference (convenience) */
+    deleteImage(image: Image): boolean {
+        const url = (image as any)?.url ?? (image as any)?.src;
+        if (!url) return false;
+        return this.deleteImageByUrl(String(url));
     }
 
 }

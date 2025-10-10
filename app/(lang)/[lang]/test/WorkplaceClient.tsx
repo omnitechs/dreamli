@@ -10,8 +10,10 @@ import {
     actionUnselectImage,
     actionClearSelection,
     actionAssignSlot,
-    actionClearSlot,
+    actionClearSlot, // kept for backward-compat if you still use it
     actionGenerate3D,
+    actionUnassignSlot, // new: clearer naming
+    actionDeleteImage,  // new: delete from library + unassign everywhere
     actionSetMode,
     actionAssignSlotFromSelection,
     actionBulkAssignFromSelection,
@@ -46,6 +48,15 @@ export default function WorkplaceClient({ initialHeadId, initialMessages, initia
         setHeadId(r.headId);
         setMessages(r.messages);
         setGenerator(r.generator);
+    };
+
+    // Slot ops (clear naming)
+    const unassignSlot = (slot: (typeof SLOTS)[number]) => {
+        startTransition(async () => refresh(await actionUnassignSlot(headId, slot)));
+    };
+
+    const deleteImage = (url: string) => {
+        startTransition(async () => refresh(await actionDeleteImage(headId, url)));
     };
 
     // Prompt & mode
@@ -90,18 +101,20 @@ export default function WorkplaceClient({ initialHeadId, initialMessages, initia
         });
     };
 
-    // Slot assign/clear
+    // Slot assign helpers
     const assignSlot = (slot: (typeof SLOTS)[number], url: string) => {
         startTransition(async () => refresh(await actionAssignSlot(headId, slot, url)));
     };
     const assignSlotFromSelection = (slot: (typeof SLOTS)[number]) => {
         startTransition(async () => refresh(await actionAssignSlotFromSelection(headId, slot)));
     };
-    const clearSlot = (slot: (typeof SLOTS)[number]) => {
-        startTransition(async () => refresh(await actionClearSlot(headId, slot)));
-    };
     const bulkAssignFromSelection = () => {
         startTransition(async () => refresh(await actionBulkAssignFromSelection(headId)));
+    };
+
+    // (optional legacy) Clear slot
+    const clearSlot = (slot: (typeof SLOTS)[number]) => {
+        startTransition(async () => refresh(await actionClearSlot(headId, slot)));
     };
 
     // Generate 3D
@@ -201,6 +214,16 @@ export default function WorkplaceClient({ initialHeadId, initialMessages, initia
                                     >
                                         {isSelected ? "Unselect" : "Select"}
                                     </button>
+
+                                    {/* Delete image entirely (from library + unassign everywhere) */}
+                                    <button
+                                        onClick={() => deleteImage(url)}
+                                        className="text-xs border rounded px-2 py-1 hover:bg-red-50"
+                                        disabled={isPending}
+                                        title="Delete this image from the library and unassign it from any slots"
+                                    >
+                                        Delete Image
+                                    </button>
                                 </div>
                             </div>
                         );
@@ -286,13 +309,28 @@ export default function WorkplaceClient({ initialHeadId, initialMessages, initia
                                         From Selected
                                     </button>
 
-                                    {/* Clear this slot */}
+                                    {/* Unassign only (keep image in library) */}
                                     <button
-                                        onClick={() => clearSlot(slot)}
+                                        onClick={() => unassignSlot(slot)}
                                         disabled={isPending}
                                         className="text-xs border rounded px-2 py-1 hover:bg-gray-50 disabled:opacity-60"
+                                        title="Unassign the image from this slot (keeps image)"
                                     >
-                                        Clear
+                                        Unassign
+                                    </button>
+
+                                    {/* Delete the underlying image entirely */}
+                                    <button
+                                        onClick={() => {
+                                            const urlToDelete = designated?.[slot]?.url ?? designated?.[slot]?.src;
+                                            if (!urlToDelete) return;
+                                            deleteImage(urlToDelete);
+                                        }}
+                                        disabled={isPending || !designated?.[slot]}
+                                        className="text-xs border rounded px-2 py-1 hover:bg-red-50 disabled:opacity-60"
+                                        title="Delete this image from the library and unassign it from all slots"
+                                    >
+                                        Delete Image
                                     </button>
                                 </div>
                             </div>

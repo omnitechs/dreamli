@@ -94,6 +94,8 @@ export interface Message {
             | "GENERATE_MODEL"
             | "FORK"
             | "CLEAR_SELECTION"
+            | "UNASSIGN_SLOT"
+            | "DELETE_IMAGE"
             | "REVERT";
 
         payload?: Record<string, any>;
@@ -142,6 +144,8 @@ export type GeneratorActionType =
     | "GENERATE_MODEL"
     | "SELECT_IMAGE"
     | "UNSELECT_IMAGE"
+    | "DELETE_IMAGE"
+    | "UNASSIGN_SLOT"
     | "CLEAR_SELECTION"
 
 export type OnChangeFn = (args: {
