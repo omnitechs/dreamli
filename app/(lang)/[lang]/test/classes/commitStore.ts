@@ -1,8 +1,7 @@
-//commitStore.ts
-import type { UUID } from "./interface";
-import { Commit } from "./commit";
+import type { Commit, UUID } from "./interface";
 
 export interface CommitStore {
     get(id: UUID): Promise<Commit | undefined>;
-    save(commit: Commit): Promise<void>;
+    save(projectId: UUID, commit: Commit): Promise<void>;
+    listByProject(projectId: UUID): Promise<Commit[]>;
 }

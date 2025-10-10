@@ -8,6 +8,19 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model Project {
+  id        String   @id @default(uuid())
+  ownerId   String   // link to your User id (adjust type/name)
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // convenience: store the current head commit id (optional)
+  headId    String?  @db.Uuid
+
+  commits   Commit[]
+}
+
 model Commit {
   id         String   @id @db.Uuid
   parentId   String?  @db.Uuid
@@ -17,9 +30,14 @@ model Commit {
   generator  Json      // Generator snapshot (from gen.toJSON())
   model      Json?     // Model snapshot or null
   messages   Json      // Array<Message> for this commit delta
+
+  // NEW: project relation
+  projectId  String
+  project    Project  @relation(fields: [projectId], references: [id])
   // optional indexing helpers:
   // branchId String? @db.Uuid
   @@index([parentId])
+  @@index([projectId])
 }
 
 model Workspace {

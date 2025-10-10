@@ -1,5 +1,5 @@
 "use server";
-
+import { prisma } from "@/lib/prisma";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
@@ -265,5 +265,22 @@ export async function actionDeleteImage(headId: UUID | undefined, url: string) {
         generator: gen.toJSON(),
         messages: await svc.getAllMessages(),
     };
+}
+
+
+export async function listProjects(ownerId: string) {
+    return prisma.project.findMany({
+        where: { ownerId },
+        orderBy: { createdAt: "desc" },
+        select: { id: true, name: true, headId: true, createdAt: true },
+    });
+}
+
+export async function createProject(ownerId: string, name: string) {
+    const p = await prisma.project.create({
+        data: { ownerId, name },
+        select: { id: true },
+    });
+    return p.id as string;
 }
 
