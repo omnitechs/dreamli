@@ -98,7 +98,7 @@ export async function actionAddImages(projectId: UUID, headId: UUID | undefined,
         await fs.mkdir(path.dirname(filePath), { recursive: true });
         await fs.writeFile(filePath, buf);
         const url = `/uploads/${fname}`;
-        gen.addImage({ id, url } as Image);
+        gen.addImage({ id, src : url } as Image);
         added++;
     }
 
@@ -106,7 +106,7 @@ export async function actionAddImages(projectId: UUID, headId: UUID | undefined,
     const imageUrl = String(formData.get("imageUrl") ?? "").trim();
     if (imageUrl) {
         const id = randomUUID();
-        gen.addImage({ id, url: imageUrl } as Image);
+        gen.addImage({ id, src: imageUrl } as Image);
         added++;
     }
 

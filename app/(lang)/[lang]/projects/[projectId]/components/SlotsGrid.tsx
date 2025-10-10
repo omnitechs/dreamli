@@ -7,7 +7,7 @@ import {
     actionAssignSlotFromSelection,
     actionUnassignSlot,
     actionDeleteImage,
-    actionCreateImages, // ← NEW: generic creator
+    actionCreateImages, // generic creator
 } from '../actions';
 import { ChevronDown, Trash2, X } from 'lucide-react';
 
@@ -26,23 +26,35 @@ interface SlotsGridProps {
     onStateUpdate: (state: ProjectState) => void;
 }
 
-export function SlotsGrid({ designated, images, projectId, headId, onStateUpdate }: SlotsGridProps) {
+export function SlotsGrid({
+                              designated,
+                              images,
+                              projectId,
+                              headId,
+                              onStateUpdate,
+                          }: SlotsGridProps) {
     const [loadingStates, setLoadingStates] = useState<Set<string>>(new Set());
     const [openDropdowns, setOpenDropdowns] = useState<Set<SlotType>>(new Set());
     const [prompts, setPrompts] = useState<Record<SlotType, string>>({
-        front: '', back: '', side: '', threeQuarter: '', top: '', bottom: ''
+        front: '',
+        back: '',
+        side: '',
+        threeQuarter: '',
+        top: '',
+        bottom: '',
     });
 
     const slots: { key: SlotType; label: string }[] = [
-        { key: 'front',         label: 'Front' },
-        { key: 'back',          label: 'Back' },
-        { key: 'side',          label: 'Side' },
-        { key: 'threeQuarter',  label: '¾ View' },
-        { key: 'top',           label: 'Top' },
-        { key: 'bottom',        label: 'Bottom' },
+        { key: 'front', label: 'Front' },
+        { key: 'back', label: 'Back' },
+        { key: 'side', label: 'Side' },
+        { key: 'threeQuarter', label: '¾ View' },
+        { key: 'top', label: 'Top' },
+        { key: 'bottom', label: 'Bottom' },
     ];
 
-    const getImageUrl = (image: { url?: string; src?: string } | null) => {
+    // ✅ Accept undefined as well; return string | null
+    const getImageUrl = (image?: { url?: string; src?: string } | null): string | null => {
         if (!image) return null;
         return image.url || image.src || null;
     };
@@ -58,11 +70,12 @@ export function SlotsGrid({ designated, images, projectId, headId, onStateUpdate
         const loadingKey = `${slot}-assign`;
         if (loadingStates.has(loadingKey)) return;
 
-        setLoadingStates(prev => new Set(prev).add(loadingKey));
+        setLoadingStates((prev) => new Set(prev).add(loadingKey));
         try {
-            const updatedState = await actionAssignSlot(projectId, headId, slot, imageUrl);
+            const updatedState =
+                await actionAssignSlot(projectId, headId, slot, imageUrl);
             onStateUpdate(updatedState);
-            setOpenDropdowns(prev => {
+            setOpenDropdowns((prev) => {
                 const ns = new Set(prev);
                 ns.delete(slot);
                 return ns;
@@ -70,7 +83,7 @@ export function SlotsGrid({ designated, images, projectId, headId, onStateUpdate
         } catch (error) {
             console.error('Failed to assign slot:', error);
         } finally {
-            setLoadingStates(prev => {
+            setLoadingStates((prev) => {
                 const ns = new Set(prev);
                 ns.delete(loadingKey);
                 return ns;
@@ -82,11 +95,12 @@ export function SlotsGrid({ designated, images, projectId, headId, onStateUpdate
         const loadingKey = `${slot}-fromsel`;
         if (loadingStates.has(loadingKey)) return;
 
-        setLoadingStates(prev => new Set(prev).add(loadingKey));
+        setLoadingStates((prev) => new Set(prev).add(loadingKey));
         try {
-            const updatedState = await actionAssignSlotFromSelection(projectId, headId, slot);
+            const updatedState =
+                await actionAssignSlotFromSelection(projectId, headId, slot);
             onStateUpdate(updatedState);
-            setOpenDropdowns(prev => {
+            setOpenDropdowns((prev) => {
                 const ns = new Set(prev);
                 ns.delete(slot);
                 return ns;
@@ -94,7 +108,7 @@ export function SlotsGrid({ designated, images, projectId, headId, onStateUpdate
         } catch (error) {
             console.error('Failed to assign from selection:', error);
         } finally {
-            setLoadingStates(prev => {
+            setLoadingStates((prev) => {
                 const ns = new Set(prev);
                 ns.delete(loadingKey);
                 return ns;
@@ -106,14 +120,14 @@ export function SlotsGrid({ designated, images, projectId, headId, onStateUpdate
         const loadingKey = `${slot}-unassign`;
         if (loadingStates.has(loadingKey)) return;
 
-        setLoadingStates(prev => new Set(prev).add(loadingKey));
+        setLoadingStates((prev) => new Set(prev).add(loadingKey));
         try {
             const updatedState = await actionUnassignSlot(projectId, headId, slot);
             onStateUpdate(updatedState);
         } catch (error) {
             console.error('Failed to unassign slot:', error);
         } finally {
-            setLoadingStates(prev => {
+            setLoadingStates((prev) => {
                 const ns = new Set(prev);
                 ns.delete(loadingKey);
                 return ns;
@@ -123,23 +137,26 @@ export function SlotsGrid({ designated, images, projectId, headId, onStateUpdate
 
     const handleDeleteSlotImage = async (slot: SlotType) => {
         const slotData = designated[slot];
-        if (!slotData) return;
-
         const imageUrl = getImageUrl(slotData);
         if (!imageUrl) return;
 
         const loadingKey = `${slot}-delete`;
         if (loadingStates.has(loadingKey)) return;
-        if (!confirm('Are you sure you want to delete this image? It will be removed from all slots and the image pool.')) return;
+        if (
+            !confirm(
+                'Are you sure you want to delete this image? It will be removed from all slots and the image pool.',
+            )
+        )
+            return;
 
-        setLoadingStates(prev => new Set(prev).add(loadingKey));
+        setLoadingStates((prev) => new Set(prev).add(loadingKey));
         try {
             const updatedState = await actionDeleteImage(projectId, headId, imageUrl);
             onStateUpdate(updatedState);
         } catch (error) {
             console.error('Failed to delete image:', error);
         } finally {
-            setLoadingStates(prev => {
+            setLoadingStates((prev) => {
                 const ns = new Set(prev);
                 ns.delete(loadingKey);
                 return ns;
@@ -158,7 +175,7 @@ export function SlotsGrid({ designated, images, projectId, headId, onStateUpdate
             return;
         }
 
-        setLoadingStates(prev => new Set(prev).add(loadingKey));
+        setLoadingStates((prev) => new Set(prev).add(loadingKey));
         try {
             const updatedState = await actionCreateImages(projectId, headId, {
                 prompt,
@@ -167,11 +184,11 @@ export function SlotsGrid({ designated, images, projectId, headId, onStateUpdate
                 assignSlot: slot,
             });
             onStateUpdate(updatedState);
-            setPrompts(prev => ({ ...prev, [slot]: '' }));
+            setPrompts((prev) => ({ ...prev, [slot]: '' }));
         } catch (error) {
             console.error('Failed to generate slot image:', error);
         } finally {
-            setLoadingStates(prev => {
+            setLoadingStates((prev) => {
                 const ns = new Set(prev);
                 ns.delete(loadingKey);
                 return ns;
@@ -186,19 +203,17 @@ export function SlotsGrid({ designated, images, projectId, headId, onStateUpdate
             {/* Responsive: 1 column on mobile, 2 columns on md+ */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {slots.map(({ key, label }) => {
-                    const slotData = designated[key];
-                    const imageUrl = getImageUrl(slotData);
+                    const slotData = designated[key]; // can be object | null | undefined
+                    const imageUrl = getImageUrl(slotData); // accepts undefined now
                     const hasImage = !!imageUrl;
                     const isDropdownOpen = openDropdowns.has(key);
 
                     return (
                         <div key={key} className="space-y-2">
-                            {/* Slot Label */}
                             <label className="block text-sm font-medium text-gray-700">
                                 {label}
                             </label>
 
-                            {/* Slot Preview */}
                             <div className="relative">
                                 <div className="w-24 h-24 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 flex items-center justify-center overflow-hidden">
                                     {hasImage ? (
@@ -215,17 +230,16 @@ export function SlotsGrid({ designated, images, projectId, headId, onStateUpdate
                                     )}
                                 </div>
 
-                                {/* Loading Overlay */}
-                                {Array.from(loadingStates).some(state => state.startsWith(key)) && (
+                                {Array.from(loadingStates).some((state) =>
+                                    state.startsWith(key),
+                                ) && (
                                     <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 rounded-xl">
                                         <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
                                     </div>
                                 )}
                             </div>
 
-                            {/* Controls */}
                             <div className="space-y-1">
-                                {/* Assign Dropdown */}
                                 {images.length > 0 && (
                                     <div className="relative">
                                         <button
@@ -233,7 +247,11 @@ export function SlotsGrid({ designated, images, projectId, headId, onStateUpdate
                                             className="w-full flex items-center justify-between px-3 py-2 text-sm bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
                                         >
                                             <span>Assign from images...</span>
-                                            <ChevronDown className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                                            <ChevronDown
+                                                className={`w-4 h-4 transition-transform ${
+                                                    isDropdownOpen ? 'rotate-180' : ''
+                                                }`}
+                                            />
                                         </button>
 
                                         {isDropdownOpen && (
@@ -261,7 +279,6 @@ export function SlotsGrid({ designated, images, projectId, headId, onStateUpdate
                                     </div>
                                 )}
 
-                                {/* From Selection */}
                                 <button
                                     onClick={() => handleAssignFromSelection(key)}
                                     disabled={loadingStates.has(`${key}-fromsel`)}
@@ -270,7 +287,6 @@ export function SlotsGrid({ designated, images, projectId, headId, onStateUpdate
                                     From Sel
                                 </button>
 
-                                {/* Unassign/Delete */}
                                 {hasImage && (
                                     <div className="flex gap-1">
                                         <button
@@ -293,17 +309,19 @@ export function SlotsGrid({ designated, images, projectId, headId, onStateUpdate
                                 )}
                             </div>
 
-                            {/* Generate & Assign for this slot */}
                             <div className="space-y-1">
                                 <label className="block text-xs text-gray-600">
-                                    Prompt for {label} (uses up to 2 selected images as references if any)
+                                    Prompt for {label} (uses up to 2 selected images as references
+                                    if any)
                                 </label>
                                 <textarea
                                     rows={2}
                                     className="w-full text-xs border rounded px-2 py-1 resize-none"
                                     placeholder={`e.g., ${label.toLowerCase()} view, consistent with selected images…`}
                                     value={prompts[key] || ''}
-                                    onChange={(e) => setPrompts(prev => ({ ...prev, [key]: e.target.value }))}
+                                    onChange={(e) =>
+                                        setPrompts((prev) => ({ ...prev, [key]: e.target.value }))
+                                    }
                                     disabled={loadingStates.has(`${key}-gen`)}
                                 />
                                 <button
@@ -311,7 +329,9 @@ export function SlotsGrid({ designated, images, projectId, headId, onStateUpdate
                                     disabled={loadingStates.has(`${key}-gen`)}
                                     className="w-full text-xs rounded px-3 py-1 border hover:bg-gray-50 disabled:opacity-60"
                                 >
-                                    {loadingStates.has(`${key}-gen`) ? 'Generating…' : 'Generate & Assign'}
+                                    {loadingStates.has(`${key}-gen`)
+                                        ? 'Generating…'
+                                        : 'Generate & Assign'}
                                 </button>
                             </div>
                         </div>

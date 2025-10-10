@@ -92,15 +92,8 @@ export function GeneratorPanel({ generator, headId, projectId, onStateUpdate }: 
                     </>
                 )}
 
-                {/* TEXT MODE ONLY — nothing to show besides ModePromptCard (it already hides prompt in image mode) */}
-
-                {/* 3D Build (show in both modes; move inside isImageMode if you want only for image mode) */}
-                <Build3DCard
-                    generator={generator}
-                    projectId={projectId}
-                    headId={headId}
-                    onStateUpdate={onStateUpdate}
-                />
+                {/* 3D Build (show in both modes) */}
+                <Build3DCard projectId={projectId} headId={headId} />
             </div>
         </div>
     );
