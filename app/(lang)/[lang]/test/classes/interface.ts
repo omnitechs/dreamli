@@ -84,12 +84,15 @@ export interface Message {
             | "SET_MODE"
             | "UPDATE_TEXT"
             | "ADD_IMAGE"
+            | "SELECT_IMAGE"
+            | "UNSELECT_IMAGE"
             | "ASSIGN_SLOT"
             | "CLEAR_SLOT"
             | "GENERATE_IMAGE"
             | "GENERATE_MODEL"
             | "FORK"
             | "REVERT";
+
         payload?: Record<string, any>;
     };
     attachments?: { type: "image"; imageId: UUID }[];
@@ -131,7 +134,12 @@ export type GeneratorActionType =
     | "UPDATE_TEXT"
     | "ADD_IMAGE"
     | "ASSIGN_SLOT"
-    | "CLEAR_SLOT";
+    | "CLEAR_SLOT"
+    | "GENERATE_IMAGE"
+    | "GENERATE_MODEL"
+    | "SELECT_IMAGE"
+    | "UNSELECT_IMAGE"
+    | "CLEAR_SELECTION"
 
 export type OnChangeFn = (args: {
     type: GeneratorActionType | undefined; // undefined when change is just "new chat message"
