@@ -268,11 +268,49 @@ export async function actionRecordVersion(
     projectId: string,
     headId: string,
     taskId: string,
-    modelUrl: string
+    kind: 'text' | 'image' | 'multi' // ← pass this from the client
 ) {
     const { svc } = await build(projectId, headId);
+    const gen = svc.getGenerator();
+
+    const apiKey = process.env.MESHY_API_KEY!;
+    const headers = { Authorization: `Bearer ${apiKey}` };
+
+    const baseV1 = 'https://api.meshy.ai/openapi/v1';
+    const baseV2 = 'https://api.meshy.ai/openapi/v2';
+    const path =
+        kind === 'text'
+            ? `${baseV2}/text-to-3d/${taskId}`
+            : kind === 'multi'
+                ? `${baseV1}/multi-image-to-3d/${taskId}`
+                : `${baseV1}/image-to-3d/${taskId}`;
+
+    const res = await fetch(path, { headers });
+    if (!res.ok) throw new Error(`Meshy fetch failed (${res.status})`);
+    const final = await res.json();
+
+    // 1) attach to generator.models (saves all formats + meta)
+    gen.ingestMeshyTask(final, {
+        kind,
+        stage: final?.mode,                         // preview | refine (text-to-3d)
+        prompt: gen.textPrompt,
+        imageUrls: gen.getSelectedImageUrls?.() ?? []
+    });
+
+    // 2) pick the best download to show
+    const modelUrl =
+        final?.model_urls?.glb ??
+        final?.model_urls?.fbx ??
+        final?.model_urls?.obj ??
+        final?.model_urls?.usdz;
+
+    if (!modelUrl) throw new Error('Meshy finished but no model URL found.');
+
+    // 3) persist a version commit
     await svc.recordVersion({ id: taskId, url: modelUrl } as any);
-    return { ok: true };
+
+    // return whatever your UI needs
+    return { ok: true, modelUrl };
 }
 
 /** OPTIONAL: blocking version if you ever want to wait server-side.

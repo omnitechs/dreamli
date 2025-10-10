@@ -75,6 +75,7 @@ export default class WorkplaceService {
     }
 
     // ——— internal ———
+    // workplaceService.ts (inside private async createCommit(...))
     private async createCommit(
         type?: NonNullable<Message["action"]>["type"],
         payload?: Record<string, unknown>,
@@ -89,9 +90,16 @@ export default class WorkplaceService {
         if (type) c = c.withActionLog(type, payload);
         if (message) c = c.withMessage(message);
 
+        // NEW: remember which commit state was used to start the Meshy task
+        if (type === "GENERATE_MODEL" && payload && (payload as any).taskId) {
+            const sourceCommitId = c.parentId as string | undefined;
+            if (sourceCommitId) this.gen.markGenerationSource(String((payload as any).taskId), sourceCommitId);
+        }
+
         this.headId = c.id;
         await this.store.save(this.projectId, c);
     }
+
 
     private async collectChainFromRootToHead() {
         const chain: Commit[] = [];

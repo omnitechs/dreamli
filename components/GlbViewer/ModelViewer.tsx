@@ -25,10 +25,11 @@ export default function ModelViewer({ modelUrl, className = '', forceType, activ
     const mountedRef = useRef(false);
     const isTouchRef = useRef(false);
     const t = useTranslations('home.ai.viewer');
-
+    console.log("url",modelUrl);
     useEffect(() => {
         if (!containerRef.current || !modelUrl) return;
         mountedRef.current = true;
+
 
         // detect touch/coarse pointer
         if (typeof window !== 'undefined') {

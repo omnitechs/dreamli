@@ -3,6 +3,7 @@
 
 import { useEffect, useRef, useState, useTransition } from 'react';
 import { actionGenerate3D, actionRecordVersion } from '../actions';
+import LazyGlb from "@/components/GlbViewer";
 
 type Props = { projectId: string; headId: string; };
 
@@ -38,18 +39,17 @@ export default function Build3DCard({ projectId, headId }: Props) {
                         if (typeof data.progress === 'number') setProgress(data.progress);
 
                         if (data.status === 'SUCCEEDED') {
-                            const mu =
+                            const best =
                                 data?.model_urls?.glb ??
                                 data?.model_urls?.fbx ??
                                 data?.model_urls?.obj ??
-                                data?.model_urls?.usdz ??
-                                undefined;
+                                data?.model_urls?.usdz;
 
-                            if (mu) {
-                                setModelUrl(mu);
-                                // create version commit
-                                await actionRecordVersion(projectId, headId, taskId, mu);
-                            }
+                            if (best) setModelUrl(best);
+
+                            // 👇 include `kind` you used for the streamUrl
+                            await actionRecordVersion(projectId, headId, taskId, /* kind: */ new URL(streamUrl, location.href).searchParams.get('kind') as any);
+
                             es.close();
                         }
                     } catch { /* ignore JSON parse errors */ }
@@ -91,7 +91,7 @@ export default function Build3DCard({ projectId, headId }: Props) {
                     ) : null}
                 </div>
             ) : null}
-
+            {modelUrl ? <LazyGlb modelUrl={modelUrl}/> : null}
             {error ? <div className="text-xs text-red-600">Error: {error}</div> : null}
         </div>
     );

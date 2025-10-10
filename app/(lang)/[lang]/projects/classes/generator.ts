@@ -18,16 +18,53 @@ interface MeshyTask {
     id: string;
     status: MeshyTaskStatus;
     progress?: number;
+    // Meshy task objects expose downloadable formats here:
     model_urls?: Partial<Record<'glb' | 'fbx' | 'obj' | 'usdz', string>>;
+    // plus helpful media + texture info:
+    thumbnail_url?: string;
+    video_url?: string;       // sometimes present on text-to-3d tasks
+    texture_urls?: Array<Record<string, string>>;
+    prompt?: string;
+    created_at?: number;
+    finished_at?: number;
     [k: string]: any;
+}
+
+// ---------- NEW: generator-level model record ----------
+export type MeshyKind = 'text' | 'image' | 'multi';
+export type TextStage = 'preview' | 'refine';
+
+export interface ModelFormatUrls {
+    glb?: string;
+    fbx?: string;
+    obj?: string;
+    usdz?: string;
+    [k: string]: string | undefined;
+}
+
+export interface GeneratorModel3D {
+    id: string;                 // internal id for your app (task id by default)
+    provider: 'meshy';
+    taskId: string;             // Meshy task id
+    kind: MeshyKind;            // text | image | multi
+    stage?: TextStage;          // preview | refine (text mode)
+    prompt?: string;
+    imageUrls?: string[];       // inputs used (image mode)
+    modelUrls: ModelFormatUrls; // all downloadable formats from Meshy
+    textureUrls?: Array<Record<string, string>>;
+    thumbnailUrl?: string;
+    previewVideoUrl?: string;
+    createdAt: string;          // ISO
+    sourceCommitId?: string;    // commit used to kick off this generation
+    rawTask?: any;              // full Meshy task for auditing
 }
 
 type AiModel = 'meshy-4' | 'meshy-5' | 'latest';
 
 export interface RequestModelOpts {
     apiKey?: string;
-    baseUrlV1?: string; // default: https://api.meshy.ai/openapi/v1
-    baseUrlV2?: string; // default: https://api.meshy.ai/openapi/v2
+    baseUrlV1?: string;
+    baseUrlV2?: string;
 
     // common geometry / moderation
     aiModel?: AiModel;
@@ -39,23 +76,23 @@ export interface RequestModelOpts {
     moderation?: boolean;
 
     // TEXT mode
-    textStage?: 'preview' | 'refine'; // default: preview
-    prompt?: string;                  // required for preview
+    textStage?: TextStage;      // default: preview
+    prompt?: string;            // required for preview
     artStyle?: 'realistic' | 'sculpture';
     seed?: number;
-    previewTaskId?: string;           // required for refine
+    previewTaskId?: string;     // required for refine
     enablePBR?: boolean;
     texturePrompt?: string;
     textureImageUrl?: string;
 
     // IMAGE mode
-    imageUrls?: string[];             // 1 → single-image endpoint; >1 → multi
-    shouldTexture?: boolean;          // default true
+    imageUrls?: string[];       // 1 → single-image endpoint; >1 → multi
+    shouldTexture?: boolean;    // default true
 
     // progress
     onProgress?: (p: { id: string; status: MeshyTaskStatus; progress?: number }) => void;
     stream?: boolean;
-    pollMs?: number;                  // default 2000
+    pollMs?: number;            // default 2000
     waitFor?: 'none' | 'succeeded' | 'terminal'; // default 'none'
 }
 
@@ -106,7 +143,7 @@ async function waitForTask(
     getFn: () => Promise<MeshyTask>,
     opts: { pollMs?: number; onProgress?: (s: { id: string; status: MeshyTaskStatus; progress?: number }) => void; until?: 'succeeded' | 'terminal' }
 ): Promise<MeshyTask> {
-    const pollMs = opts.pollMs ?? 2000;
+    const pollMs = opts.pollMs ?? 5000;
     const until = opts.until ?? 'succeeded';
     for (;;) {
         const t = await getFn();
@@ -128,6 +165,10 @@ export default class Generator implements GeneratorType {
     selectedImageKeys: Set<string> = new Set();
     private onChange?: OnChangeFn;
 
+    // ---------- NEW: models & provenance ----------
+    models: GeneratorModel3D[] = [];                 // persistable list of generated models
+    private _taskSourceCommit = new Map<string, string>(); // taskId -> sourceCommitId
+
     constructor(type: "text" | "image" = "text", onChange?: OnChangeFn) {
         this.type = type;
         this.textPrompt = "";
@@ -141,6 +182,42 @@ export default class Generator implements GeneratorType {
     private notify(type: GeneratorActionType | undefined, payload?: Record<string, any>, message?: Message) {
         this.dirtySinceLastModel = true;
         this.onChange?.({ type, payload, message });
+    }
+
+    // ---------- NEW: provenance hook called by WorkplaceService ----------
+    /** Called by the service when it creates the GENERATE_MODEL commit. */
+    markGenerationSource(taskId: string, sourceCommitId: string) {
+        this._taskSourceCommit.set(taskId, sourceCommitId);
+    }
+
+    // ---------- NEW: attach finished Meshy task to models[] ----------
+    /** Saves a finished Meshy task into the generator's models[] list. */
+    attachMeshyTaskResult(task: MeshyTask, meta?: { kind?: MeshyKind; stage?: TextStage; prompt?: string; imageUrls?: string[] }) {
+        const modelUrls: ModelFormatUrls = { ...(task.model_urls ?? {}) };
+        const model: GeneratorModel3D = {
+            id: task.id,
+            provider: 'meshy',
+            taskId: task.id,
+            kind: meta?.kind ?? 'image',
+            stage: meta?.stage,
+            prompt: meta?.prompt ?? task.prompt,
+            imageUrls: meta?.imageUrls,
+            modelUrls,
+            textureUrls: task.texture_urls,
+            thumbnailUrl: task.thumbnail_url,
+            previewVideoUrl: task.video_url,
+            createdAt: new Date().toISOString(),
+            sourceCommitId: this._taskSourceCommit.get(task.id),
+            // rawTask: task,
+        };
+        this.models.unshift(model); // newest first
+        // no notify() here; recordVersion (or your next commit) will persist the snapshot including models[]
+        return model;
+    }
+
+    /** If you receive the task object elsewhere (e.g., SSE to client), pass it here. */
+    ingestMeshyTask(task: MeshyTask, meta?: { kind?: MeshyKind; stage?: TextStage; prompt?: string; imageUrls?: string[] }) {
+        return this.attachMeshyTaskResult(task, meta);
     }
 
     setType(type: "text" | "image") { this.type = type; this.notify("SET_MODE", { mode: type }); }
@@ -174,20 +251,12 @@ export default class Generator implements GeneratorType {
             selectedKeys: Array.from(this.selectedImageKeys),
             selectedUrls: this.getSelectedImageUrls(),
             messages: this.messages,
+            // ---------- NEW ----------
+            models: this.models,
         };
     }
 
-    // ---------- Meshy integration (updated) ----------
-    /**
-     * Create a Meshy generation task for text or image mode.
-     * Returns the task id. Optionally waits for completion (see opts.waitFor/stream).
-     *
-     * Endpoints:
-     *   - Text→3D:   POST/GET/STREAM  /openapi/v2/text-to-3d          (mode: preview|refine)
-     *   - Image→3D:  POST/GET/STREAM  /openapi/v1/image-to-3d         (image_url)
-     *   - Multi→3D:  POST/GET/STREAM  /openapi/v1/multi-image-to-3d   (image_urls[])
-     * Docs: Text→3D & Image→3D reference. :contentReference[oaicite:1]{index=1}
-     */
+    // ---------- Meshy integration (unchanged behavior, now with auto-attach on wait) ----------
     async requestModelFromMeshy(opts: RequestModelOpts): Promise<string> {
         const baseUrlV1 = opts.baseUrlV1 ?? "https://api.meshy.ai/openapi/v1";
         const baseUrlV2 = opts.baseUrlV2 ?? "https://api.meshy.ai/openapi/v2";
@@ -195,7 +264,6 @@ export default class Generator implements GeneratorType {
         if (!apiKey) throw new Error("Meshy API key missing. Set MESHY_API_KEY.");
         const headers = buildHeaders(apiKey);
 
-        // Common fields
         const commonGeom: any = {
             ai_model: opts.aiModel,
             topology: opts.topology,
@@ -208,31 +276,24 @@ export default class Generator implements GeneratorType {
 
         // TEXT MODE
         if (this.type === "text") {
-            const stage = opts.textStage ?? "preview";
-
+            const stage: TextStage = opts.textStage ?? "preview";
             if (stage === "preview") {
                 const prompt = (opts.prompt ?? this.textPrompt ?? "").trim();
                 if (!prompt) throw new Error("Meshy: empty text prompt.");
-                const body = {
-                    mode: "preview",
-                    prompt,
-                    art_style: opts.artStyle,
-                    seed: opts.seed,
-                    ...commonGeom,
-                };
+                const body = { mode: "preview", prompt, art_style: opts.artStyle, seed: opts.seed, ...commonGeom };
                 const { result: taskId } = await fetchJSON<{ result: string }>(`${baseUrlV2}/text-to-3d`, {
                     method: "POST", headers, body: JSON.stringify(body),
                 });
-                this.notify("GENERATE_MODEL", { provider: "meshy", taskId, stage: "preview" });
+                this.notify("GENERATE_MODEL", { provider: "meshy", taskId, stage: "preview", kind: 'text' });
 
                 if (opts.waitFor && opts.waitFor !== 'none') {
-                    if (opts.stream) {
-                        await streamTask(`${baseUrlV2}/text-to-3d/${taskId}/stream`, headers, opts.onProgress, opts.waitFor === 'terminal' ? 'terminal' : 'succeeded');
-                    } else {
-                        await waitForTask(() => this.getMeshyTextTask(apiKey, baseUrlV2, taskId), {
+                    const final = opts.stream
+                        ? await streamTask(`${baseUrlV2}/text-to-3d/${taskId}/stream`, headers, opts.onProgress, opts.waitFor === 'terminal' ? 'terminal' : 'succeeded')
+                        : await waitForTask(() => this.getMeshyTextTask(apiKey, baseUrlV2, taskId), {
                             pollMs: opts.pollMs, onProgress: opts.onProgress, until: opts.waitFor === 'terminal' ? 'terminal' : 'succeeded',
                         });
-                    }
+                    // auto attach on success
+                    if (final.status === 'SUCCEEDED') this.attachMeshyTaskResult(final, { kind: 'text', stage: 'preview', prompt });
                 }
                 return taskId;
             }
@@ -251,16 +312,15 @@ export default class Generator implements GeneratorType {
             const { result: taskId } = await fetchJSON<{ result: string }>(`${baseUrlV2}/text-to-3d`, {
                 method: "POST", headers, body: JSON.stringify(body),
             });
-            this.notify("GENERATE_MODEL", { provider: "meshy", taskId, stage: "refine" });
+            this.notify("GENERATE_MODEL", { provider: "meshy", taskId, stage: "refine", kind: 'text' });
 
             if (opts.waitFor && opts.waitFor !== 'none') {
-                if (opts.stream) {
-                    await streamTask(`${baseUrlV2}/text-to-3d/${taskId}/stream`, headers, opts.onProgress, opts.waitFor === 'terminal' ? 'terminal' : 'succeeded');
-                } else {
-                    await waitForTask(() => this.getMeshyTextTask(apiKey, baseUrlV2, taskId), {
+                const final = opts.stream
+                    ? await streamTask(`${baseUrlV2}/text-to-3d/${taskId}/stream`, headers, opts.onProgress, opts.waitFor === 'terminal' ? 'terminal' : 'succeeded')
+                    : await waitForTask(() => this.getMeshyTextTask(apiKey, baseUrlV2, taskId), {
                         pollMs: opts.pollMs, onProgress: opts.onProgress, until: opts.waitFor === 'terminal' ? 'terminal' : 'succeeded',
                     });
-                }
+                if (final.status === 'SUCCEEDED') this.attachMeshyTaskResult(final, { kind: 'text', stage: 'refine' });
             }
             return taskId;
         }
@@ -283,16 +343,15 @@ export default class Generator implements GeneratorType {
             const { result: taskId } = await fetchJSON<{ result: string }>(`${baseUrlV1}/image-to-3d`, {
                 method: "POST", headers, body: JSON.stringify(body),
             });
-            this.notify("GENERATE_MODEL", { provider: "meshy", taskId, images: 1 });
+            this.notify("GENERATE_MODEL", { provider: "meshy", taskId, images: 1, kind: 'image' });
 
             if (opts.waitFor && opts.waitFor !== 'none') {
-                if (opts.stream) {
-                    await streamTask(`${baseUrlV1}/image-to-3d/${taskId}/stream`, headers, opts.onProgress, opts.waitFor === 'terminal' ? 'terminal' : 'succeeded');
-                } else {
-                    await waitForTask(() => this.getMeshyImageTask(apiKey, baseUrlV1, taskId, false), {
+                const final = opts.stream
+                    ? await streamTask(`${baseUrlV1}/image-to-3d/${taskId}/stream`, headers, opts.onProgress, opts.waitFor === 'terminal' ? 'terminal' : 'succeeded')
+                    : await waitForTask(() => this.getMeshyImageTask(apiKey, baseUrlV1, taskId, false), {
                         pollMs: opts.pollMs, onProgress: opts.onProgress, until: opts.waitFor === 'terminal' ? 'terminal' : 'succeeded',
                     });
-                }
+                if (final.status === 'SUCCEEDED') this.attachMeshyTaskResult(final, { kind: 'image', imageUrls: urls });
             }
             return taskId;
         } else {
@@ -301,16 +360,15 @@ export default class Generator implements GeneratorType {
             const { result: taskId } = await fetchJSON<{ result: string }>(`${baseUrlV1}/multi-image-to-3d`, {
                 method: "POST", headers, body: JSON.stringify(body),
             });
-            this.notify("GENERATE_MODEL", { provider: "meshy", taskId, images: urls.length });
+            this.notify("GENERATE_MODEL", { provider: "meshy", taskId, images: urls.length, kind: 'multi' });
 
             if (opts.waitFor && opts.waitFor !== 'none') {
-                if (opts.stream) {
-                    await streamTask(`${baseUrlV1}/multi-image-to-3d/${taskId}/stream`, headers, opts.onProgress, opts.waitFor === 'terminal' ? 'terminal' : 'succeeded');
-                } else {
-                    await waitForTask(() => this.getMeshyImageTask(apiKey, baseUrlV1, taskId, true), {
+                const final = opts.stream
+                    ? await streamTask(`${baseUrlV1}/multi-image-to-3d/${taskId}/stream`, headers, opts.onProgress, opts.waitFor === 'terminal' ? 'terminal' : 'succeeded')
+                    : await waitForTask(() => this.getMeshyImageTask(apiKey, baseUrlV1, taskId, true), {
                         pollMs: opts.pollMs, onProgress: opts.onProgress, until: opts.waitFor === 'terminal' ? 'terminal' : 'succeeded',
                     });
-                }
+                if (final.status === 'SUCCEEDED') this.attachMeshyTaskResult(final, { kind: 'multi', imageUrls: urls });
             }
             return taskId;
         }
@@ -325,14 +383,11 @@ export default class Generator implements GeneratorType {
         return fetchJSON<MeshyTask>(`${baseUrlV1}/${path}/${id}`, { method: 'GET', headers: buildHeaders(apiKey) });
     }
 
-    /**
-     * (Kept for compatibility) Simple poller by task + route kind.
-     * Prefer requestModelFromMeshy({ waitFor: ... }) instead.
-     */
+    // (compat) simple poller
     async pollMeshyTask(opts: {
         apiKey: string;
         taskId: string;
-        kind?: 'text' | 'image' | 'multi'; // NEW: choose correct endpoint
+        kind?: 'text' | 'image' | 'multi';
         baseUrlV1?: string;
         baseUrlV2?: string;
         intervalMs?: number;
@@ -359,7 +414,7 @@ export default class Generator implements GeneratorType {
         }
     }
 
-    // ---------- existing selection/image helpers (unchanged) ----------
+    // ---------- selection helpers (unchanged) ----------
     private collectDesignatedImageUrls(): string[] {
         const urls: string[] = [];
         (["front","back","side","threeQuarter","top","bottom"] as const).forEach(slot => {
@@ -404,6 +459,7 @@ export default class Generator implements GeneratorType {
         return Array.from(new Set(urls));
     }
 
+    // OpenAI image gen kept as-is ...
     async generateImagesWithGPT(opts?: {
         apiKey?: string; prompt?: string; n?: number; size?: "256x256" | "512x512" | "1024x1024"; model?: string;
     }): Promise<string[]> {
