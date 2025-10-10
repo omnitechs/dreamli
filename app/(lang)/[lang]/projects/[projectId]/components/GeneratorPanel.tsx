@@ -7,6 +7,7 @@ import { ImagesGrid } from './ImagesGrid';
 import { SelectionToolbar } from './SelectionToolbar';
 import { SlotsGrid } from './SlotsGrid';
 import Build3DCard from './Build3DCard';
+import ModelsGallery from "@/app/(lang)/[lang]/projects/[projectId]/components/GalleryModels";
 
 interface GeneratorPanelProps {
     generator: GeneratorSnapshot;
@@ -20,7 +21,7 @@ export function GeneratorPanel({ generator, headId, projectId, onStateUpdate }: 
     const isImageMode = generator.type === 'image';
     const selectedCount = generator.selectedUrls?.length || 0;
     const images = generator.images ?? [];
-
+    console.log(generator)
     return (
         <div className="bg-white xl:h-screen flex flex-col">
             {/* Header */}
@@ -94,6 +95,7 @@ export function GeneratorPanel({ generator, headId, projectId, onStateUpdate }: 
 
                 {/* 3D Build (show in both modes) */}
                 <Build3DCard projectId={projectId} headId={headId} />
+                <ModelsGallery models={generator.models ?? []} />
             </div>
         </div>
     );

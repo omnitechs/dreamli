@@ -107,7 +107,7 @@ export default class WorkplaceService {
         while (id) {
             const c = await this.store.get(id);
             if (!c) break;
-            chain.push(c);
+            chain.push(<Commit>c);
             id = (c.parentId as UUID | undefined) ?? undefined;
         }
         chain.reverse();
