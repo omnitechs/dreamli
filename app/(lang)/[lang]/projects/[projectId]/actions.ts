@@ -1,7 +1,6 @@
 // app/projects/[projectId]/actions.ts
 "use server";
 
-
 import fs from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
@@ -98,7 +97,7 @@ export async function actionAddImages(projectId: UUID, headId: UUID | undefined,
         await fs.mkdir(path.dirname(filePath), { recursive: true });
         await fs.writeFile(filePath, buf);
         const url = `/uploads/${fname}`;
-        gen.addImage({ id, src : url } as Image);
+        gen.addImage({ id, src: url } as Image);
         added++;
     }
 
@@ -199,36 +198,6 @@ export async function actionDeleteImage(projectId: UUID, headId: UUID | undefine
     return state(projectId, svc);
 }
 
-// ---------------- Meshy 3D ----------------
-export async function actionGenerate3D(projectId: UUID, headId: UUID | undefined): Promise<ProjectState & { taskId: string; modelUrl?: string; status?: string }> {
-    const { svc } = await build(projectId, headId);
-    const gen = svc.getGenerator();
-    const apiKey = process.env.MESHY_API_KEY;
-    if (!apiKey) throw new Error("MESHY_API_KEY missing");
-
-    // 1) start task
-    const taskId = await gen.requestModelFromMeshy({ apiKey });
-    console.log(taskId)
-
-    // 2) poll
-    const final = await gen.pollMeshyTask({ apiKey, taskId });
-
-    // 3) extract model url
-    const modelUrl =
-        (final?.result as any)?.model_url ??
-        (final as any)?.assets?.glb ??
-        (final as any)?.output_url;
-
-    if (!modelUrl) throw new Error("Meshy finished but no model URL found.");
-
-    // 4) version commit
-    await svc.recordVersion({ id: taskId, url: modelUrl } as any);
-
-    const st = await state(projectId, svc);
-    return { ...st, taskId, modelUrl, status: (final as any)?.status ?? "succeeded" };
-}
-
-
 // --- GENERIC: create images via GPT and optionally assign to a slot ---
 export async function actionCreateImages(
     projectId: string,
@@ -243,7 +212,7 @@ export async function actionCreateImages(
     const { svc } = await build(projectId, headId);
     const gen = svc.getGenerator();
 
-    // 1) generate images (this uses selected refs automatically for edits)
+    // 1) generate images (uses selected refs automatically for edits)
     const urls = await (gen as any).generateImagesWithGPT({
         prompt: payload.prompt,
         n: payload.n ?? 1,
@@ -253,7 +222,7 @@ export async function actionCreateImages(
     // 2) add all to library
     const created: Array<{ id: string; url: string }> = [];
     for (const url of urls) {
-        const id = crypto.randomUUID();
+        const id = randomUUID(); // ✅ fix: use imported randomUUID()
         gen.addImage({ id, url } as any);
         created.push({ id, url });
     }
@@ -268,3 +237,83 @@ export async function actionCreateImages(
     return state(projectId, svc);
 }
 
+function kindFor(gen: any, urls: string[]) {
+    if (gen.type === 'text') return 'text';
+    return urls.length > 1 ? 'multi' : 'image';
+}
+
+// ---------- Meshy actions (fixed to use build(), no getStore) ----------
+export async function actionGenerate3D(projectId: string, headId: string) {
+    const { svc } = await build(projectId, headId);
+    const gen = svc.getGenerator();
+
+    // Kick off the task (no wait so we can stream progress in the UI)
+    const taskId: string = await gen.requestModelFromMeshy({
+        textStage: gen.type === 'text' ? 'preview' : undefined,
+        waitFor: 'none'
+    });
+
+    const urls = gen.getSelectedImageUrls?.() ?? [];
+    const kind = kindFor(gen, urls);
+
+    // UI will connect to this SSE route to get realtime updates
+    return {
+        taskId,
+        status: 'PENDING',
+        streamUrl: `/api/meshy/stream?kind=${kind}&id=${encodeURIComponent(taskId)}`
+    };
+}
+
+export async function actionRecordVersion(
+    projectId: string,
+    headId: string,
+    taskId: string,
+    modelUrl: string
+) {
+    const { svc } = await build(projectId, headId);
+    await svc.recordVersion({ id: taskId, url: modelUrl } as any);
+    return { ok: true };
+}
+
+/** OPTIONAL: blocking version if you ever want to wait server-side.
+ * Uses resource endpoints that return `model_urls` (NOT `output_url`).
+ */
+export async function actionGenerate3DBlocking(projectId: string, headId: string) {
+    const { svc } = await build(projectId, headId);
+    const gen = svc.getGenerator();
+
+    // Wait for completion (polling via the Generator helper)
+    const taskId: string = await gen.requestModelFromMeshy({ waitFor: 'succeeded' });
+
+    // Fetch the final task object from the right endpoint and extract a model URL:
+    const urls = gen.getSelectedImageUrls?.() ?? [];
+    const kind = kindFor(gen, urls);
+
+    const apiKey = process.env.MESHY_API_KEY!;
+    const headers = { Authorization: `Bearer ${apiKey}` };
+
+    const baseV1 = 'https://api.meshy.ai/openapi/v1';
+    const baseV2 = 'https://api.meshy.ai/openapi/v2';
+    const path =
+        kind === 'text'
+            ? `${baseV2}/text-to-3d/${taskId}`
+            : kind === 'multi'
+                ? `${baseV1}/multi-image-to-3d/${taskId}`
+                : `${baseV1}/image-to-3d/${taskId}`;
+
+    const res = await fetch(path, { headers });
+    if (!res.ok) throw new Error(`Meshy fetch failed (${res.status})`);
+    const final = await res.json();
+
+    // ✅ Meshy returns model_urls on the task object
+    const modelUrl =
+        final?.model_urls?.glb ??
+        final?.model_urls?.fbx ??
+        final?.model_urls?.obj ??
+        final?.model_urls?.usdz;
+
+    if (!modelUrl) throw new Error('Meshy finished but no model URL found.');
+
+    await svc.recordVersion({ id: taskId, url: modelUrl } as any);
+    return { status: final?.status ?? 'SUCCEEDED', modelUrl };
+}

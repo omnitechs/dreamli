@@ -1,3 +1,4 @@
+// workplaceService.ts
 import { Commit } from "./commit";
 import Generator from "./generator";
 import { generatorFromSnapshot } from "./rehydrate";
@@ -38,7 +39,6 @@ export default class WorkplaceService {
     getHeadId(): UUID { return this.headId; }
     getProjectId(): UUID { return this.projectId; }
 
-    // Switch head to a specific commit id (checkout)
     async checkout(commitId: UUID) {
         const c = await this.store.get(commitId);
         if (!c) throw new Error("Commit not found");
@@ -116,6 +116,8 @@ export default class WorkplaceService {
             case "UNASSIGN_SLOT": return "Slot unassigned";
             case "DELETE_IMAGE": return "Image deleted";
             case "CLEAR_SELECTION": return "Selection cleared";
+            case "SELECT_IMAGE": return "Image selected";      // NEW
+            case "UNSELECT_IMAGE": return "Image unselected";  // NEW
             case "GENERATE_MODEL": return "3D model generated";
             default: return undefined;
         }

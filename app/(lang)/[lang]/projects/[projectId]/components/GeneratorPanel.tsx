@@ -6,7 +6,7 @@ import { UploadCard } from './UploadCard';
 import { ImagesGrid } from './ImagesGrid';
 import { SelectionToolbar } from './SelectionToolbar';
 import { SlotsGrid } from './SlotsGrid';
-import { Build3DCard } from './Build3DCard';
+import Build3DCard from './Build3DCard';
 
 interface GeneratorPanelProps {
     generator: GeneratorSnapshot;
