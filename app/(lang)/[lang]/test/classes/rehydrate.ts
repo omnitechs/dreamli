@@ -11,6 +11,13 @@ export function generatorFromSnapshot(snapshot: GeneratorShape, onChange?: OnCha
     gen.images = Array.isArray(snapshot.images) ? [...snapshot.images] : [];
     gen.designated = { ...(snapshot.designated ?? {}) };
     gen.dirtySinceLastModel = snapshot.dirtySinceLastModel;
+    const keys = Array.isArray((snapshot as any).selectedKeys) ? (snapshot as any).selectedKeys as string[] : [];
+    gen.selectedImageKeys = new Set(keys);
+
+    // optional: seed messages for the debug view
+    if (Array.isArray((snapshot as any).messages)) {
+        gen.messages = (snapshot as any).messages as Message[];
+    }
 
     // NOTE: messages are *not* part of the generator snapshot by design.
     // Commit.messages contain only deltas since previous commit.

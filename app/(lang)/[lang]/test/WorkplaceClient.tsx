@@ -1,7 +1,21 @@
+// app/(lang)/[lang]/test/workplace/WorkplaceClient.tsx
 "use client";
 
 import { useState, useTransition } from "react";
-import { actionSetPrompt, actionPostMessage, actionRecordVersion } from "./actions";
+import {
+    actionSetPrompt,
+    actionPostMessage,
+    actionAddImages,
+    actionSelectImage,
+    actionUnselectImage,
+    actionClearSelection,
+    actionAssignSlot,
+    actionClearSlot,
+    actionGenerate3D,
+    actionSetMode,
+    actionAssignSlotFromSelection,
+    actionBulkAssignFromSelection,
+} from "./actions";
 import type { Message } from "@/app/(lang)/[lang]/test/classes/interface";
 
 type Props = {
@@ -10,49 +24,129 @@ type Props = {
     initialGenerator: any;
 };
 
+const SLOTS: Array<"front" | "back" | "side" | "threeQuarter" | "top" | "bottom"> = [
+    "front",
+    "back",
+    "side",
+    "threeQuarter",
+    "top",
+    "bottom",
+];
+
 export default function WorkplaceClient({ initialHeadId, initialMessages, initialGenerator }: Props) {
     const [headId, setHeadId] = useState<string>(initialHeadId);
     const [messages, setMessages] = useState<Message[]>(initialMessages);
     const [generator, setGenerator] = useState<any>(initialGenerator);
     const [prompt, setPrompt] = useState<string>(initialGenerator?.textPrompt ?? "");
     const [text, setText] = useState<string>("");
-
+    const [mode, setMode] = useState<"text" | "image">(initialGenerator?.type ?? "text");
     const [isPending, startTransition] = useTransition();
 
-    const doSetPrompt = () => {
-        startTransition(async () => {
-            const { headId: h, messages: m, generator: g } = await actionSetPrompt(headId, prompt);
-            setHeadId(h); setMessages(m); setGenerator(g);
-        });
+    const refresh = (r: any) => {
+        setHeadId(r.headId);
+        setMessages(r.messages);
+        setGenerator(r.generator);
     };
 
+    // Prompt & mode
+    const doSetPrompt = () => {
+        startTransition(async () => refresh(await actionSetPrompt(headId, prompt)));
+    };
+    const doSetMode = (m: "text" | "image") => {
+        setMode(m);
+        startTransition(async () => refresh(await actionSetMode(headId, m)));
+    };
+
+    // Chat
     const doPostMsg = () => {
         if (!text.trim()) return;
         startTransition(async () => {
-            const { headId: h, messages: m, generator: g } = await actionPostMessage(headId, text.trim());
-            setHeadId(h); setMessages(m); setGenerator(g);
+            refresh(await actionPostMessage(headId, text.trim()));
             setText("");
         });
     };
 
-    const doRecordVersion = () => {
+    // Files / URLs
+    const onUploadSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const form = e.currentTarget;
+        const fd = new FormData(form);
+        form.reset(); // avoid pooled event issue
         startTransition(async () => {
-            const { headId: h, messages: m, generator: g } = await actionRecordVersion(headId);
-            setHeadId(h); setMessages(m); setGenerator(g);
+            const r = await actionAddImages(headId, fd);
+            refresh(r);
         });
     };
 
+    // Selection toggle
+    const toggleSelect = (url: string) => {
+        const isSelected = Array.isArray(generator?.selectedUrls)
+            ? generator.selectedUrls.includes(url)
+            : false;
+
+        startTransition(async () => {
+            const r = isSelected ? await actionUnselectImage(headId, url) : await actionSelectImage(headId, url);
+            refresh(r);
+        });
+    };
+
+    // Slot assign/clear
+    const assignSlot = (slot: (typeof SLOTS)[number], url: string) => {
+        startTransition(async () => refresh(await actionAssignSlot(headId, slot, url)));
+    };
+    const assignSlotFromSelection = (slot: (typeof SLOTS)[number]) => {
+        startTransition(async () => refresh(await actionAssignSlotFromSelection(headId, slot)));
+    };
+    const clearSlot = (slot: (typeof SLOTS)[number]) => {
+        startTransition(async () => refresh(await actionClearSlot(headId, slot)));
+    };
+    const bulkAssignFromSelection = () => {
+        startTransition(async () => refresh(await actionBulkAssignFromSelection(headId)));
+    };
+
+    // Generate 3D
+    const doGenerate3D = () => {
+        startTransition(async () => {
+            const r = await actionGenerate3D(headId);
+            refresh(r);
+            alert(`Task ${r.taskId} finished (${r.status}). Model URL: ${r.modelUrl}`);
+        });
+    };
+
+    const imgs: Array<{ url: string }> = (generator?.images ?? [])
+        .map((i: any) => ({ url: i.url ?? i.src }))
+        .filter((x: any) => !!x.url);
+
+    const designated = generator?.designated ?? {};
+
     return (
-        <div className="max-w-5xl mx-auto space-y-8 p-6">
+        <div className="max-w-6xl mx-auto space-y-8 p-6">
             <header className="flex items-center justify-between">
-                <h1 className="text-2xl font-semibold">Workplace Demo</h1>
-                <div className="text-sm opacity-70">
-                    headId: <span className="font-mono">{headId}</span>
-                </div>
+                <h1 className="text-2xl font-semibold">Workplace — 3D Builder</h1>
+                <div className="text-xs opacity-70 font-mono">headId: {headId}</div>
             </header>
 
+            {/* Mode & Prompt */}
             <section className="rounded-2xl border p-4 space-y-3">
-                <h2 className="font-medium">Generator</h2>
+                <h2 className="font-medium">Mode & Prompt</h2>
+
+                <div className="flex gap-2">
+                    <button
+                        onClick={() => doSetMode("text")}
+                        className={`rounded-lg px-3 py-2 border ${mode === "text" ? "bg-gray-100" : "hover:bg-gray-50"}`}
+                        disabled={isPending}
+                    >
+                        Text mode
+                    </button>
+                    <button
+                        onClick={() => doSetMode("image")}
+                        className={`rounded-lg px-3 py-2 border ${mode === "image" ? "bg-gray-100" : "hover:bg-gray-50"}`}
+                        disabled={isPending}
+                    >
+                        Image mode
+                    </button>
+                </div>
+
                 <div className="grid sm:grid-cols-2 gap-3">
                     <div>
                         <label className="text-sm block mb-1">Prompt</label>
@@ -74,13 +168,156 @@ export default function WorkplaceClient({ initialHeadId, initialMessages, initia
                     </div>
                 </div>
 
-                <pre className="mt-3 text-xs bg-gray-50 rounded-lg p-3 overflow-auto">
+                <pre className="mt-3 text-[11px] bg-gray-50 rounded-lg p-3 overflow-auto">
 {JSON.stringify(generator, null, 2)}
         </pre>
             </section>
 
+            {/* Add Images */}
             <section className="rounded-2xl border p-4 space-y-3">
-                <h2 className="font-medium">Chat</h2>
+                <h2 className="font-medium">Add Images</h2>
+                <form onSubmit={onUploadSubmit} className="flex flex-col sm:flex-row gap-3">
+                    <input name="files" type="file" accept="image/*" multiple className="border rounded-lg px-3 py-2" />
+                    <input name="imageUrl" type="url" placeholder="https://…" className="flex-1 border rounded-lg px-3 py-2" />
+                    <button type="submit" className="rounded-lg px-4 py-2 border hover:bg-gray-50 disabled:opacity-60" disabled={isPending}>
+                        Add
+                    </button>
+                </form>
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
+                    {imgs.map(({ url }) => {
+                        const isSelected = Array.isArray(generator?.selectedUrls)
+                            ? generator.selectedUrls.includes(url)
+                            : false;
+
+                        return (
+                            <div key={url} className={`rounded-xl border overflow-hidden ${isSelected ? "ring-2 ring-blue-500" : ""}`}>
+                                <img src={url} alt="" className="w-full h-32 object-cover" />
+                                <div className="p-2 flex items-center justify-between gap-2">
+                                    <button
+                                        onClick={() => toggleSelect(url)}
+                                        className="text-xs border rounded px-2 py-1 hover:bg-gray-50"
+                                        disabled={isPending}
+                                    >
+                                        {isSelected ? "Unselect" : "Select"}
+                                    </button>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </section>
+
+            {/* Designated Slots */}
+            <section className="rounded-2xl border p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                    <h2 className="font-medium">Designated Slots</h2>
+                    <div className="flex items-center gap-2 text-xs">
+            <span className="opacity-60">
+              Selected: {Array.isArray(generator?.selectedUrls) ? generator.selectedUrls.length : 0}
+            </span>
+                        <button
+                            onClick={() => startTransition(async () => refresh(await actionClearSelection(headId)))}
+                            className="border rounded px-3 py-1 hover:bg-gray-50 disabled:opacity-60"
+                            disabled={isPending}
+                            title="Clear current selection"
+                        >
+                            Clear Selection
+                        </button>
+                        <button
+                            onClick={bulkAssignFromSelection}
+                            disabled={isPending}
+                            className="border rounded px-3 py-1 hover:bg-gray-50 disabled:opacity-60"
+                            title="Assign selection to slots in order: front, back, side, threeQuarter, top, bottom"
+                        >
+                            Assign All From Selection
+                        </button>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    {SLOTS.map((slot) => {
+                        const u = designated?.[slot]?.url ?? designated?.[slot]?.src;
+
+                        return (
+                            <div key={slot} className="rounded-xl border p-3 space-y-2">
+                                <div className="text-xs opacity-70 capitalize">{slot}</div>
+
+                                <div className="mt-1 h-28 bg-gray-50 rounded flex items-center justify-center overflow-hidden">
+                                    {u ? (
+                                        <img src={u} alt={slot} className="w-full h-full object-cover" />
+                                    ) : (
+                                        <span className="text-xs opacity-50">empty</span>
+                                    )}
+                                </div>
+
+                                {/* Per-slot controls */}
+                                <div className="flex items-center gap-2">
+                                    {/* Assign from dropdown of all images */}
+                                    <select
+                                        className="flex-1 border rounded px-2 py-1 text-xs"
+                                        defaultValue=""
+                                        onChange={(e) => {
+                                            const url = e.target.value;
+                                            if (!url) return;
+                                            assignSlot(slot, url);
+                                            // reset to placeholder after assign to avoid confusion
+                                            e.currentTarget.selectedIndex = 0;
+                                        }}
+                                        disabled={isPending || imgs.length === 0}
+                                    >
+                                        <option value="" disabled>
+                                            Assign from images…
+                                        </option>
+                                        {imgs.map(({ url }) => (
+                                            <option key={url} value={url}>
+                                                {url}
+                                            </option>
+                                        ))}
+                                    </select>
+
+                                    {/* Assign first selected to this slot */}
+                                    <button
+                                        onClick={() => assignSlotFromSelection(slot)}
+                                        disabled={isPending}
+                                        className="text-xs border rounded px-2 py-1 hover:bg-gray-50 disabled:opacity-60"
+                                        title="Assign the first selected image to this slot"
+                                    >
+                                        From Selected
+                                    </button>
+
+                                    {/* Clear this slot */}
+                                    <button
+                                        onClick={() => clearSlot(slot)}
+                                        disabled={isPending}
+                                        className="text-xs border rounded px-2 py-1 hover:bg-gray-50 disabled:opacity-60"
+                                    >
+                                        Clear
+                                    </button>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </section>
+
+            {/* Build 3D */}
+            <section className="rounded-2xl border p-4 space-y-3">
+                <h2 className="font-medium">Build 3D</h2>
+                <div className="flex gap-2">
+                    <button
+                        onClick={doGenerate3D}
+                        disabled={isPending}
+                        className="rounded-lg px-4 py-2 border hover:bg-gray-50 disabled:opacity-60"
+                    >
+                        Generate 3D (Meshy)
+                    </button>
+                </div>
+            </section>
+
+            {/* Chat / Logs */}
+            <section className="rounded-2xl border p-4 space-y-3">
+                <h2 className="font-medium">Chat / Logs</h2>
                 <div className="flex gap-2">
                     <input
                         className="flex-1 rounded-lg border px-3 py-2"
@@ -95,13 +332,6 @@ export default function WorkplaceClient({ initialHeadId, initialMessages, initia
                     >
                         Send (commit)
                     </button>
-                    <button
-                        onClick={doRecordVersion}
-                        disabled={isPending}
-                        className="rounded-lg px-4 py-2 border hover:bg-gray-50 disabled:opacity-60"
-                    >
-                        Record Version
-                    </button>
                 </div>
 
                 <div className="space-y-2">
@@ -110,7 +340,9 @@ export default function WorkplaceClient({ initialHeadId, initialMessages, initia
                     ) : (
                         messages.map((m) => (
                             <div key={m.id} className="rounded-xl border p-3">
-                                <div className="text-xs opacity-60">{m.role} • {new Date(m.createdAt).toLocaleString()}</div>
+                                <div className="text-xs opacity-60">
+                                    {m.role} • {new Date(m.createdAt).toLocaleString()}
+                                </div>
                                 <div className="mt-1">{m.content}</div>
                                 {m.action ? (
                                     <pre className="mt-2 text-[11px] bg-gray-50 rounded p-2 overflow-auto">

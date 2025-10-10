@@ -66,6 +66,8 @@ export interface Generator {
     approvalSet?: UUID[]; // ordered list of approved images for 3D
     dirtySinceLastModel: boolean;
     messages:Message[]
+    selectedKeys?: string[];
+    selectedUrls?: string[];
 
 }
 
@@ -91,6 +93,7 @@ export interface Message {
             | "GENERATE_IMAGE"
             | "GENERATE_MODEL"
             | "FORK"
+            | "CLEAR_SELECTION"
             | "REVERT";
 
         payload?: Record<string, any>;

@@ -2,9 +2,8 @@ import { initWorkplace } from "./actions";
 import WorkplaceClient from "./WorkplaceClient";
 
 export default async function Page() {
-    // If you track headId elsewhere (e.g., Workspace table / cookies), pass it here.
-    const { headId, messages, generator } = await initWorkplace("b81315d3-0801-4282-9c6a-6c7c250c7e9e");
-
+    // If you have a saved headId per workspace, pass it here; else undefined to start fresh
+    const { headId, messages, generator } = await initWorkplace("6ba729e7-4ad7-4e36-9edb-31a997f7fe31");
     return (
         <div className="py-8">
             <WorkplaceClient

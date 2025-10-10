@@ -50,10 +50,30 @@ export default class WorkplaceService {
         this.gen.dirtySinceLastModel = false;
         await this.store.save(c);
     }
+    /** Follow parentId links back to root, return root→head order */
+    private async collectChainFromRootToHead() {
+        const chain: Commit[] = [];
+        let id: UUID | undefined = this.headId;
 
-    getAllMessages(): Message[] {
-        return this.gen.messages;
+        while (id) {
+            const c = await this.store.get(id);
+            if (!c) break;
+            chain.push(c);
+            id = (c.parentId as UUID | undefined) ?? undefined;
+        }
+        chain.reverse();
+        return chain;
     }
+
+    async getAllMessages(): Promise<Message[]> {
+        const commits = await this.collectChainFromRootToHead();
+        const msgs: Message[] = [];
+        for (const c of commits) {
+            if (c.messages?.length) msgs.push(...c.messages);
+        }
+        return msgs;
+    }
+
 
     // ——— internal ———
     private async createCommit(

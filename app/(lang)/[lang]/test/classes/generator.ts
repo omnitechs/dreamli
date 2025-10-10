@@ -16,7 +16,9 @@ export default class Generator implements GeneratorType {
     dirtySinceLastModel: boolean = false;
     approvalSet?: string[] | undefined;
     messages: Message[];
+    selectedImageKeys: Set<string> = new Set();
     private onChange?: OnChangeFn;
+
 
     constructor(type: "text" | "image" = "text", onChange?: OnChangeFn) {
         this.type = type;
@@ -32,12 +34,15 @@ export default class Generator implements GeneratorType {
             bottom: null,
         };
         this.onChange = onChange;
+
     }
 
     /** Allow wiring the listener later if needed */
     setOnChange(fn?: OnChangeFn) {
         this.onChange = fn;
     }
+
+
 
     private notify(type: GeneratorActionType | undefined, payload?: Record<string, any>, message?: Message) {
         this.dirtySinceLastModel = true;
@@ -52,6 +57,11 @@ export default class Generator implements GeneratorType {
     }
 
     addImage(image: Image) {
+        // NEW: auto switch to image mode if not already
+        if (this.type !== "image") {
+            this.setType("image"); // will notify SET_MODE
+        }
+
         this.images.push(image);
         this.notify("ADD_IMAGE", { count: 1, imageId: (image as any)?.id ?? undefined });
     }
@@ -91,8 +101,13 @@ export default class Generator implements GeneratorType {
             images: this.images,
             designated: this.designated,
             dirtySinceLastModel: this.dirtySinceLastModel,
+            selectedKeys: Array.from(this.selectedImageKeys),
+            selectedUrls: this.getSelectedImageUrls(),
+            messages: this.messages,
         };
     }
+
+
 
     /**
      * Kick off a Meshy.ai generation job.
@@ -260,7 +275,7 @@ export default class Generator implements GeneratorType {
     }
 
     // inside class Generator (add with your other fields)
-    selectedImageKeys: Set<string> = new Set();
+    // selectedImageKeys: Set<string> = new Set();
 
 // helper to build a stable key for any image
     private imageKey(img: Image): string {
@@ -292,33 +307,35 @@ export default class Generator implements GeneratorType {
 
 // resolve currently selected image URLs (in order: designated slots → images list)
     getSelectedImageUrls(): string[] {
-        // if selection is empty, return [] (caller decides fallback)
-        const urlsByKey = new Map<string, string>();
+        const urlByKey = new Map<string, string>();
 
-        // scan designated first (so selected keys can match)
-        const slots: (keyof typeof this.designated)[] = ["front","back","side","threeQuarter","top","bottom"];
+        // designated first (front/back/side/threeQuarter/top/bottom)
+        const slots: (keyof typeof this.designated)[] = [
+            "front", "back", "side", "threeQuarter", "top", "bottom"
+        ];
         for (const slot of slots) {
             const img = this.designated[slot];
             if (!img) continue;
             const url = (img as any)?.url ?? (img as any)?.src;
             if (!url) continue;
-            urlsByKey.set(this.imageKey(img), String(url));
+            urlByKey.set(this.imageKey(img), String(url));
         }
 
-        // scan general images[]
+        // then the general images[]
         for (const img of this.images) {
             const url = (img as any)?.url ?? (img as any)?.src;
             if (!url) continue;
-            urlsByKey.set(this.imageKey(img), String(url));
+            urlByKey.set(this.imageKey(img), String(url));
         }
 
-        // now filter to only selected keys
-        const out: string[] = [];
+        // map selected keys → urls
+        const urls: string[] = [];
         for (const key of this.selectedImageKeys) {
-            const url = urlsByKey.get(key);
-            if (url) out.push(url);
+            const u = urlByKey.get(key);
+            if (u) urls.push(u);
         }
-        return Array.from(new Set(out));
+        // de-dupe
+        return Array.from(new Set(urls));
     }
 
     // inside class Generator
