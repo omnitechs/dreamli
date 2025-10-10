@@ -5,8 +5,6 @@ import type {
     ISODate,
     Model,
     Generator as GeneratorShape,
-    DesignatedSlot,
-    Image,
 } from "./interface";
 
 import uid from "../helper/uuid";
