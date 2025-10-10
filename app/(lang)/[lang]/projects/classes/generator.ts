@@ -6,6 +6,7 @@ import type {
     Message,
     MessageRole, OnChangeFn, GeneratorActionType
 } from "./interface";
+import {safeText,delay,fileNameFromUrl} from "../helper/utils"
 import uid from "../helper/uuid";
 
 export default class Generator implements GeneratorType {
@@ -123,7 +124,8 @@ export default class Generator implements GeneratorType {
         prompt?: string; // explicit override
         extra?: Record<string, unknown>;
     }): Promise<string> {
-        const baseUrl = opts.baseUrl ?? "https://api.meshy.ai/v2";
+        console.log("here we go")
+        const baseUrl = opts.baseUrl ?? "https://api.meshy.ai/openapi/v2";
         const apiKey =
             opts.apiKey ??
             (typeof process !== "undefined" ? process.env.MESHY_API_KEY : undefined);
@@ -140,7 +142,8 @@ export default class Generator implements GeneratorType {
 
             const body: Record<string, unknown> = {
                 prompt,
-                style: opts.style ?? "default",
+                mode:"preview",
+                art_style: opts.style ?? "sculpture",
                 topology: opts.topology ?? "triangle",
                 format: opts.format ?? "glb",
                 unit: opts.unit ?? "meter",
@@ -157,6 +160,7 @@ export default class Generator implements GeneratorType {
                 throw new Error(`Meshy text-to-3d failed (${res.status}): ${t}`);
             }
             const json = await res.json() as { task_id?: string; id?: string };
+            console.log(json)
             const taskId = json.task_id ?? json.id;
             if (!taskId) throw new Error("Meshy: no task id returned for text-to-3d.");
             this.notify("GENERATE_MODEL", { provider: "meshy", taskId });

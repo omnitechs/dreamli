@@ -18,7 +18,7 @@ import {
     actionAssignSlotFromSelection,
     actionBulkAssignFromSelection,
 } from "./actions";
-import type { Message } from "@/app/(lang)/[lang]/test/classes/interface";
+import type { Message } from "@/app/(lang)/[lang]/projects/classes/interface";
 
 type Props = {
     initialHeadId: string;

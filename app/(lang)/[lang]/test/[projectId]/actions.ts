@@ -6,9 +6,9 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
 
-import WorkplaceService from "@/app/(lang)/[lang]/test/classes/service";
-import { CommitStorePrisma } from "@/app/(lang)/[lang]/test/classes/CommitStorePrisma";
-import type { UUID, Message, Image } from "@/app/(lang)/[lang]/test/classes/interface";
+import WorkplaceService from "@/app/(lang)/[lang]/projects/classes/service";
+import { CommitStorePrisma } from "@/app/(lang)/[lang]/projects/classes/CommitStorePrisma";
+import type { UUID, Message, Image } from "@/app/(lang)/[lang]/projects/classes/interface";
 import { prisma } from "@/lib/prisma";
 
 // ---------- helpers ----------

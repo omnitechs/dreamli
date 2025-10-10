@@ -6,9 +6,9 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
 
-import WorkplaceService from "@/app/(lang)/[lang]/test/classes/service";
-import { CommitStorePrisma } from "@/app/(lang)/[lang]/test/classes/CommitStorePrisma";
-import type { UUID, Image } from "@/app/(lang)/[lang]/test/classes/interface";
+import WorkplaceService from "@/app/(lang)/[lang]/projects/classes/service";
+import { CommitStorePrisma } from "@/app/(lang)/[lang]/projects/classes/CommitStorePrisma";
+import type { UUID, Image } from "@/app/(lang)/[lang]/projects/classes/interface";
 import { prisma } from "@/lib/prisma";
 import type { ProjectState } from "../types";
 
@@ -208,6 +208,7 @@ export async function actionGenerate3D(projectId: UUID, headId: UUID | undefined
 
     // 1) start task
     const taskId = await gen.requestModelFromMeshy({ apiKey });
+    console.log(taskId)
 
     // 2) poll
     const final = await gen.pollMeshyTask({ apiKey, taskId });
