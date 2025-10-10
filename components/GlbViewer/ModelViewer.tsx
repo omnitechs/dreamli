@@ -87,6 +87,13 @@ export default function ModelViewer({ modelUrl, className = '', forceType, activ
 
         // Lights
         scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+        // Sky/ground tint
+        scene.add(new THREE.HemisphereLight(0xffffff, 0x333344, 0.7));
+
+// Key light
+        const dir = new THREE.DirectionalLight(0xffffff, 1.4);
+        dir.position.set(3, 5, 4);
+        scene.add(dir);
         const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 0.5);
         scene.add(hemi);
 

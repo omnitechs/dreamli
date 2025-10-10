@@ -1,3 +1,4 @@
+import {GeneratorModel3D} from "@/app/(lang)/[lang]/projects/classes/generator";
 
 export type CommitJSON = {
   id: string;
@@ -26,6 +27,7 @@ export type GeneratorSnapshot = {
   selectedKeys?: string[];
   selectedUrls?: string[];
   messages?: Message[]; // optional debug view
+    models: GeneratorModel3D[]
 };
 
 export type Message = {
