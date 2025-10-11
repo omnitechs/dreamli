@@ -4,13 +4,13 @@ import { optimistic } from '@/app/(lang)/[lang]/projects/state/ProjectStore';
 import { useState, useRef, useLayoutEffect } from 'react';
 import type { Message, ProjectState } from '../../types';
 import { actionPostMessage } from '../actions';
-import { Send, User, Bot, Settings, ChevronDown, ChevronRight } from 'lucide-react';
+import { Send, User, Bot, Settings, ChevronDown, ChevronRight, AlertTriangle } from 'lucide-react';
 
 interface MessagesPanelProps {
     messages: Message[];
     projectId: string;
-    headId: string;            // keep as string; caller can pass '' if needed
-    models?: any[];            // GeneratorModel3D[] (or adapted legacy)
+    headId: string;            // MUST be the UI-selected commit id
+    models?: any[];
     onStateUpdate: (state: ProjectState) => void;
 }
 
@@ -55,17 +55,13 @@ export function MessagesPanel({
         const prevHeight = prevScrollHeightRef.current;
         const nextHeight = el.scrollHeight;
 
-        // keep viewport stable when new content appears above
         if (!userAtBottomRef.current && prevHeight > 0) {
             const delta = nextHeight - prevHeight;
             if (delta !== 0) el.scrollTop += delta;
         }
-
-        // pin to bottom only if the user was already near bottom
         if (userAtBottomRef.current) {
             el.scrollTop = el.scrollHeight;
         }
-
         prevScrollHeightRef.current = nextHeight;
     }, [combinedMessages, models, headId]);
 
@@ -82,6 +78,12 @@ export function MessagesPanel({
         const text = messageText.trim();
         if (!text || sending) return;
 
+        // ❗ Hard guard: we must know which commit to branch from
+        if (!headId) {
+            setErrorText('Select a commit first — messages branch from the selected commit.');
+            return;
+        }
+
         setSending(true);
         setErrorText(null);
 
@@ -92,15 +94,13 @@ export function MessagesPanel({
         if (textareaRef.current) textareaRef.current.style.height = 'auto';
 
         await optimistic(
-            () => actionPostMessage(projectId, headId, text),
+            () => actionPostMessage(projectId, headId, text), // ← branches from selected commit
             (updatedState: ProjectState) => {
-                // success → clear optimistics and reconcile with server
                 setPendingMessages([]);
-                onStateUpdate(updatedState);
+                onStateUpdate(updatedState); // reducer will advance selection if newest.parentId === selectedId
             },
             (err: any) => {
                 console.error('Failed to send message:', err);
-                // rollback optimistic
                 setPendingMessages((prev) => prev.filter((m) => m.id !== temp.id));
                 setErrorText('Message failed to send. Please try again.');
             }
@@ -109,15 +109,12 @@ export function MessagesPanel({
         setSending(false);
     };
 
-    // ⬇️ Updated: Enter sends, Shift+Enter adds newline
+    // Enter sends, Shift+Enter newline
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();            // prevent newline
-            // call the submit handler
-            // casting is fine here because we already prevented default
+            e.preventDefault();
             void handleSendMessage(e as unknown as React.FormEvent);
         }
-        // else: let Shift+Enter fall through to default (newline)
     };
 
     const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -202,18 +199,18 @@ export function MessagesPanel({
                                             <div className="flex flex-wrap items-center gap-2">
                                                 {m?.provider && (
                                                     <span className="text-[10px] uppercase tracking-wide px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
-                                                        {m.provider}
-                                                    </span>
+                            {m.provider}
+                          </span>
                                                 )}
                                                 {m?.kind && (
                                                     <span className="text-[10px] uppercase tracking-wide px-2 py-0.5 rounded-full bg-blue-50 text-blue-700">
-                                                        {m.kind}
-                                                    </span>
+                            {m.kind}
+                          </span>
                                                 )}
                                                 {m?.stage && (
                                                     <span className="text-[10px] uppercase tracking-wide px-2 py-0.5 rounded-full bg-purple-50 text-purple-700">
-                                                        {m.stage}
-                                                    </span>
+                            {m.stage}
+                          </span>
                                                 )}
                                             </div>
                                             {created && <div className="text-xs text-gray-500">{created}</div>}
@@ -247,10 +244,17 @@ export function MessagesPanel({
                 )}
             </div>
 
-            {/* Optional error banner */}
+            {/* Error banners */}
             {errorText && (
-                <div className="mx-4 mb-2 rounded-md bg-red-50 border border-red-200 text-red-700 text-xs px-3 py-2">
+                <div className="mx-4 mb-2 rounded-md bg-red-50 border border-red-200 text-red-700 text-xs px-3 py-2 flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4" />
                     {errorText}
+                </div>
+            )}
+            {!headId && (
+                <div className="mx-4 mb-2 rounded-md bg-amber-50 border border-amber-200 text-amber-800 text-xs px-3 py-2 flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4" />
+                    Select a commit to make new messages branch from that snapshot.
                 </div>
             )}
 
@@ -259,7 +263,7 @@ export function MessagesPanel({
                 ref={scrollRef}
                 onScroll={handleScroll}
                 className="flex-1 overflow-auto p-4 space-y-4"
-                style={{ overflowAnchor: 'none' }} // prevent browser anchoring jumps
+                style={{ overflowAnchor: 'none' }}
             >
                 {combinedMessages.map((message) => {
                     const isOptimistic = message.id.startsWith('optimistic-');
@@ -270,9 +274,9 @@ export function MessagesPanel({
                                 <div className={`flex items-center gap-1 px-2 py-1 rounded-full ${getRoleColor(message.role)}`}>
                                     {getRoleIcon(message.role)}
                                     <span className="font-medium capitalize">
-                                        {message.role}
+                    {message.role}
                                         {isOptimistic ? ' (sending…)' : ''}
-                                    </span>
+                  </span>
                                 </div>
                                 <span>•</span>
                                 <span>{formatTime(message.createdAt)}</span>
@@ -300,9 +304,9 @@ export function MessagesPanel({
 
                                     {expandedActions.has(message.id) && (
                                         <div className="mt-2 p-3 bg-gray-800 rounded-lg">
-                                            <pre className="text-xs text-gray-300 overflow-auto">
-                                                {JSON.stringify((message as any).action, null, 2)}
-                                            </pre>
+                      <pre className="text-xs text-gray-300 overflow-auto">
+                        {JSON.stringify((message as any).action, null, 2)}
+                      </pre>
                                         </div>
                                     )}
                                 </div>
@@ -324,21 +328,22 @@ export function MessagesPanel({
             <div className="border-t border-gray-200 p-4">
                 <form onSubmit={handleSendMessage} className="space-y-3">
                     <div className="relative">
-                        <textarea
-                            ref={textareaRef}
-                            value={messageText}
-                            onChange={handleTextareaChange}
-                            onKeyDown={handleKeyDown}  // ← updated behavior
-                            placeholder="Describe your 3D project or ask a question..."
-                            className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                            style={{ minHeight: '44px', maxHeight: '120px' }}
-                            disabled={sending}
-                            rows={1}
-                        />
+            <textarea
+                ref={textareaRef}
+                value={messageText}
+                onChange={handleTextareaChange}
+                onKeyDown={handleKeyDown}
+                placeholder="Describe your 3D project or ask a question..."
+                className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                style={{ minHeight: '44px', maxHeight: '120px' }}
+                disabled={sending}
+                rows={1}
+            />
                         <button
                             type="submit"
-                            disabled={!messageText.trim() || sending}
+                            disabled={!messageText.trim() || sending || !headId}
                             className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            title={!headId ? 'Select a commit first' : 'Send'}
                         >
                             {sending ? (
                                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />

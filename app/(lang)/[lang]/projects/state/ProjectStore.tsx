@@ -29,7 +29,7 @@ type Store = {
 
     // derived
     generator: GeneratorSnapshot | null;
-    messages: Message[];           // server messages up to selected
+    messages: Message[];           // messages aggregated along parent chain to selected
     optimisticMessages: Message[]; // not merged
     combinedMessages: Message[];   // messages + optimistic
 
@@ -52,16 +52,34 @@ type Store = {
 const Ctx = createContext<Store | null>(null);
 
 /**
- * Given newest-first commits, aggregate messages from root → selected.
- * If commits = [C5, C4, C3, C2, C1] (newest→oldest) and selected=C3 (idx=2),
- * slice(idx) = [C3, C2, C1], reverse() = [C1, C2, C3] (root→selected).
+ * Aggregate messages strictly along the selected commit's *ancestor chain*.
+ * Walk selected → parent → ... → root, then reverse to get root → selected.
+ * This avoids pulling messages from other branches that happen to be "older" in the list.
  */
 function aggregateMessages(commits: CommitJSON[], selectedId: string): Message[] {
-    const selIdx = commits.findIndex((c) => c.id === selectedId);
-    if (selIdx === -1) return [];
-    const slice = commits.slice(selIdx).reverse();
+    if (!selectedId || commits.length === 0) return [];
+
+    // id -> commit lookup (commits are newest-first)
+    const byId = new Map<string, CommitJSON>(commits.map(c => [c.id, c]));
+
+    const chain: CommitJSON[] = [];
+    let cur: CommitJSON | undefined = byId.get(selectedId);
+
+    while (cur) {
+        chain.push(cur);
+        const parentId = cur.parentId as string | undefined;
+        if (!parentId) break;
+        cur = byId.get(parentId);
+    }
+
+    chain.reverse(); // root -> selected
+
     const out: Message[] = [];
-    for (const c of slice) if (c.messages?.length) out.push(...c.messages);
+    for (const c of chain) {
+        if (Array.isArray(c.messages) && c.messages.length) {
+            out.push(...(c.messages as Message[]));
+        }
+    }
     return out;
 }
 
@@ -83,6 +101,7 @@ function reducer(
                 optimisticMessages: [],
             };
         }
+
         case 'SELECT_COMMIT':
             return { ...base, selectedId: action.id };
 
