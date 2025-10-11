@@ -1,6 +1,6 @@
 // app/(lang)/[lang]/projects/types.ts
 import type { CommitJSON } from "@/app/(lang)/[lang]/projects/classes/commit";
-import type { GeneratorSnapshot } from "@/app/(lang)/[lang]/projects/classes/interface";
+import type { GeneratorSnapshot ,Message} from "@/app/(lang)/[lang]/projects/classes/interface";
 // Re-export canonical types from the classes to avoid divergence.
 export type {
     Message,
