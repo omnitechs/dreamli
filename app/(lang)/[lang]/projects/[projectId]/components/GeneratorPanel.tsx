@@ -8,6 +8,7 @@ import { SelectionToolbar } from './SelectionToolbar';
 import { SlotsGrid } from './SlotsGrid';
 import Build3DCard from './Build3DCard';
 import ModelsGallery from "@/app/(lang)/[lang]/projects/[projectId]/components/GalleryModels";
+import {useEffect, useRef} from "react";
 
 interface GeneratorPanelProps {
     generator: GeneratorSnapshot;
@@ -16,12 +17,34 @@ interface GeneratorPanelProps {
     onStateUpdate: (state: ProjectState) => void;
 }
 
+// 1) NEW: safe fallback snapshot
+const EMPTY_SNAPSHOT: GeneratorSnapshot = {
+    type: 'text', textPrompt: '', images: [], designated: {},
+    dirtySinceLastModel: false, selectedKeys: [], selectedUrls: [], messages: [], models: [],
+};
+
 export function GeneratorPanel({ generator, headId, projectId, onStateUpdate }: GeneratorPanelProps) {
     const isTextMode = generator.type === 'text';
     const isImageMode = generator.type === 'image';
     const selectedCount = generator.selectedUrls?.length || 0;
     const images = generator.images ?? [];
-    console.log(generator)
+    const lastGoodGenRef = useRef<GeneratorSnapshot>(EMPTY_SNAPSHOT);
+    // 4) NEW: choose a safe generator to render
+    const safeGen = (() => {
+        const g: any = generator as any;
+        if (g && typeof g === 'object' && (g.type === 'text' || g.type === 'image')) return g as GeneratorSnapshot;
+        return lastGoodGenRef.current ?? EMPTY_SNAPSHOT;
+    })();
+    // 5) CHANGED: guard headId before substring
+    const headShort = headId.length > 0 ? headId.substring(0, 12) : '';
+
+    // 3) NEW: update last good only when incoming is valid
+    useEffect(() => {
+        const g: any = generator as any;
+        if (g && typeof g === 'object' && (g.type === 'text' || g.type === 'image')) {
+            lastGoodGenRef.current = g as GeneratorSnapshot;
+        }
+    }, [generator]);
     return (
         <div className="bg-white xl:h-screen flex flex-col">
             {/* Header */}
@@ -43,7 +66,7 @@ export function GeneratorPanel({ generator, headId, projectId, onStateUpdate }: 
             <div className="flex-1 overflow-auto p-4 space-y-6">
                 {/* Mode & (Prompt only in text mode) */}
                 <ModePromptCard
-                    generator={generator}
+                    generator={safeGen}
                     projectId={projectId}
                     headId={headId}
                     onStateUpdate={onStateUpdate}
@@ -64,7 +87,7 @@ export function GeneratorPanel({ generator, headId, projectId, onStateUpdate }: 
                             <>
                                 <ImagesGrid
                                     images={images}
-                                    selectedUrls={generator.selectedUrls || []}
+                                    selectedUrls={safeGen.selectedUrls || []}
                                     projectId={projectId}
                                     headId={headId}
                                     onStateUpdate={onStateUpdate}
@@ -84,7 +107,7 @@ export function GeneratorPanel({ generator, headId, projectId, onStateUpdate }: 
 
                         {/* Designated Slots */}
                         <SlotsGrid
-                            designated={generator.designated}
+                            designated={safeGen.designated}
                             images={images}
                             projectId={projectId}
                             headId={headId}
@@ -95,7 +118,7 @@ export function GeneratorPanel({ generator, headId, projectId, onStateUpdate }: 
 
                 {/* 3D Build (show in both modes) */}
                 <Build3DCard projectId={projectId} headId={headId} />
-                <ModelsGallery models={generator.models ?? []} />
+                <ModelsGallery models={safeGen.models ?? []} />
             </div>
         </div>
     );
