@@ -96,7 +96,7 @@ export default function ModelsGallery({ models }: { models: GeneratorModel3D[] }
                         {/* Preview area */}
                         {previewSrc ? (
                             <div className="mt-3 overflow-hidden rounded-lg border">
-                                <LazyGlb modelUrl={previewSrc}/>
+                                <LazyGlb modelUrl={previewSrc} offMode={"pause"}/>
                             </div>
                         ) : (
                             <div className="mt-3 rounded-lg border p-3 text-sm opacity-70">

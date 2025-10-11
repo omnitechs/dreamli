@@ -5,15 +5,17 @@ import { useState, useRef, useEffect } from 'react';
 import { Message, ProjectState } from '../../types';
 import { actionPostMessage } from '../actions';
 import { Send, User, Bot, Settings, ChevronDown, ChevronRight } from 'lucide-react';
+import {GeneratorModel3D} from "@/app/(lang)/[lang]/projects/classes/generator";
 
 interface MessagesPanelProps {
   messages: Message[];
   projectId: string;
   headId: string;
   onStateUpdate: (state: ProjectState) => void;
+  models: GeneratorModel3D[];
 }
 
-export function MessagesPanel({ messages, projectId, headId, onStateUpdate }: MessagesPanelProps) {
+export function MessagesPanel({ messages, projectId, headId, onStateUpdate ,models}: MessagesPanelProps) {
   const [messageText, setMessageText] = useState('');
   const [sending, setSending] = useState(false);
   const [expandedActions, setExpandedActions] = useState<Set<string>>(new Set());
@@ -102,6 +104,10 @@ export function MessagesPanel({ messages, projectId, headId, onStateUpdate }: Me
     }
   };
 
+    const pickModelUrl = (m: any): string | undefined => {
+        return m?.modelUrls?.glb || m?.modelUrls?.fbx || m?.modelUrls?.obj || m?.modelUrls?.usdz;
+    }
+
   return (
     <div className="bg-white xl:border-r border-gray-200 xl:h-screen flex flex-col">
       {/* Header */}
@@ -110,6 +116,75 @@ export function MessagesPanel({ messages, projectId, headId, onStateUpdate }: Me
       </div>
 
       {/* Messages List */}
+        <div className="px-4 pt-4">
+            {Array.isArray(models) && models.length > 0 && (
+                <div className="mb-4">
+                    <div className="flex items-center justify-between mb-2">
+                        <h3 className="text-sm font-semibold text-gray-900">Generated 3D Models</h3>
+                        <span className="text-xs text-gray-500">{models.length}</span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        {models.map((m: any) => {
+                            const url = pickModelUrl(m);
+                            const created = m?.createdAt ? new Date(m.createdAt).toLocaleString() : '';
+                            return (
+                                <div key={m?.id} className="border border-gray-200 rounded-xl overflow-hidden bg-white">
+                                    <div className="aspect-video bg-gray-100 flex items-center justify-center overflow-hidden">
+                                        {m?.thumbnailUrl ? (
+                                            // eslint-disable-next-line @next/next/no-img-element
+                                            <img src={m.thumbnailUrl} alt="Model thumbnail" className="w-full h-full object-cover" />
+                                        ) : (
+                                            <div className="text-xs text-gray-400">No thumbnail</div>
+                                        )}
+                                    </div>
+                                    <div className="p-3 space-y-2">
+                                        <div className="flex flex-wrap items-center gap-2">
+                                            {m?.provider && (
+                                                <span className="text-[10px] uppercase tracking-wide px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
+                      {m.provider}
+                    </span>
+                                            )}
+                                            {m?.kind && (
+                                                <span className="text-[10px] uppercase tracking-wide px-2 py-0.5 rounded-full bg-blue-50 text-blue-700">
+                      {m.kind}
+                    </span>
+                                            )}
+                                            {m?.stage && (
+                                                <span className="text-[10px] uppercase tracking-wide px-2 py-0.5 rounded-full bg-purple-50 text-purple-700">
+                      {m.stage}
+                    </span>
+                                            )}
+                                        </div>
+                                        {created && <div className="text-xs text-gray-500">{created}</div>}
+                                        <div className="flex gap-2">
+                                            {url && (
+                                                <a
+                                                    href={url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="flex-1 text-center text-xs font-medium px-3 py-2 rounded-lg bg-gray-900 text-white hover:bg-black transition"
+                                                >
+                                                    Open 3D
+                                                </a>
+                                            )}
+                                            {m?.modelUrls?.glb && (
+                                                <a
+                                                    href={m.modelUrls.glb}
+                                                    download
+                                                    className="text-xs px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50"
+                                                >
+                                                    GLB
+                                                </a>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
+        </div>
       <div className="flex-1 overflow-auto p-4 space-y-4">
         {messages.map((message) => (
           <div key={message.id} className="group">

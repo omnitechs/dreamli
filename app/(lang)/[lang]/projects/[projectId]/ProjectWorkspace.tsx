@@ -66,6 +66,7 @@ export function ProjectWorkspace({ projectId }: ProjectWorkspaceProps) {
           messages={projectState.messages}
           projectId={projectId}
           headId={projectState.headId}
+          models={(projectState.generator as any)?.models ?? []}
           onStateUpdate={setProjectState}
         />
         <GeneratorPanel 
@@ -89,6 +90,7 @@ export function ProjectWorkspace({ projectId }: ProjectWorkspaceProps) {
             messages={projectState.messages}
             projectId={projectId}
             headId={projectState.headId}
+            models={(projectState.generator as any)?.models ?? []}
             onStateUpdate={setProjectState}
           />
           <GeneratorPanel 
