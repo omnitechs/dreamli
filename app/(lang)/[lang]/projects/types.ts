@@ -2,20 +2,20 @@
 import type { CommitJSON } from "@/app/(lang)/[lang]/projects/classes/commit";
 import type { GeneratorSnapshot ,Message} from "@/app/(lang)/[lang]/projects/classes/interface";
 // Re-export canonical types from the classes to avoid divergence.
+// Re-export canonical types from the classes to avoid divergence.
 export type {
     Message,
     GeneratorSnapshot,
 } from "@/app/(lang)/[lang]/projects/classes/interface";
 
 export type {
-    CommitJSON,
+    CommitJSON, // now includes forkedFromId
 } from "@/app/(lang)/[lang]/projects/classes/commit";
 
 export type {
     GeneratorModel3D,
 } from "@/app/(lang)/[lang]/projects/classes/generator";
 
-// UI-only helpers
 export type SlotType =
     | "front"
     | "back"
@@ -27,7 +27,7 @@ export type SlotType =
 export type ProjectState = {
     projectId: string;
     headId: string;
-    commits: CommitJSON[];        // newest first for the sidebar
-    generator: GeneratorSnapshot; // exact snapshot of current head
-    messages: Message[];          // aggregated root->head
+    commits: CommitJSON[];
+    generator: GeneratorSnapshot;
+    messages: Message[];
 };

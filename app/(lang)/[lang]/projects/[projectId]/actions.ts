@@ -16,14 +16,21 @@ const SLOTS = ["front","back","side","threeQuarter","top","bottom"] as const;
 
 async function build(projectId: UUID, headId?: UUID) {
     const store = new CommitStorePrisma();
+
     // pick a head commit (explicit headId wins; else project.headId; else fresh)
     let headCommit = undefined;
+
     if (headId) {
         headCommit = await store.get(headId);
+        // ✅ harden: if a specific headId was requested but not found, fail loudly
+        if (!headCommit) {
+            throw new Error(`Selected commit ${headId} not found; refusing to branch from a different head.`);
+        }
     } else {
         const proj = await prisma.project.findUnique({ where: { id: projectId } });
         if (proj?.headId) headCommit = await store.get(proj.headId);
     }
+
     const svc = new WorkplaceService(store, projectId, headCommit ?? null);
     return { svc, store };
 }
@@ -53,8 +60,8 @@ export async function initProject(projectId: UUID): Promise<ProjectState> {
 }
 
 export async function checkoutCommit(projectId: UUID, commitId: UUID): Promise<ProjectState> {
-    const { svc } = await build(projectId);
-    await svc.checkout(commitId);
+    // ✅ construct the service at the selected commit directly
+    const { svc } = await build(projectId, commitId);
     return state(projectId, svc);
 }
 
@@ -120,7 +127,6 @@ export async function actionAddImages(
                 await fs.mkdir(path.dirname(filePath), { recursive: true });
                 await fs.writeFile(filePath, buf);
             } catch (e: any) {
-                // If this throws in serverless (e.g., Vercel), you need object storage.
                 console.error("[actionAddImages] FS write failed:", e?.message || e);
                 throw new Error(
                     "File system write failed. In serverless environments, use object storage (S3/R2/Supabase) instead of writing to /public."
@@ -143,13 +149,9 @@ export async function actionAddImages(
         // auto-switch to image mode if anything added
         if (added > 0) gen.setType("image");
 
-        // return fully serializable state
         return state(projectId, svc);
     } catch (err: any) {
-        // Convert to serializable error boundary for the client to show nicely
         console.error("[actionAddImages] failed:", err);
-        // Throwing an Error makes Next show the generic message; instead, throw a plain object
-        // and catch on client, or rethrow Error with safe message.
         throw new Error(
             err?.message ||
             "Upload failed. Check server logs (FS permission/storage or serialization issue)."
@@ -251,7 +253,7 @@ export async function actionCreateImages(
         assignSlot?: "front" | "back" | "side" | "threeQuarter" | "top" | "bottom" | null;
     }
 ) {
-    const { svc } = await build(projectId, headId);
+    const { svc } = await build(projectId, headId as any);
     const gen = svc.getGenerator();
 
     // 1) generate images (uses selected refs automatically for edits)
@@ -264,7 +266,7 @@ export async function actionCreateImages(
     // 2) add all to library
     const created: Array<{ id: string; url: string }> = [];
     for (const url of urls) {
-        const id = randomUUID(); // ✅ fix: use imported randomUUID()
+        const id = randomUUID();
         gen.addImage({ id, url } as any);
         created.push({ id, url });
     }
@@ -275,8 +277,7 @@ export async function actionCreateImages(
         gen.assignImage(payload.assignSlot, { id: first.id, url: first.url } as any);
     }
 
-    // 4) return full refreshed state
-    return state(projectId, svc);
+    return state(projectId as any, svc);
 }
 
 function kindFor(gen: any, urls: string[]) {
@@ -286,7 +287,7 @@ function kindFor(gen: any, urls: string[]) {
 
 // ---------- Meshy actions (fixed to use build(), no getStore) ----------
 export async function actionGenerate3D(projectId: string, headId: string) {
-    const { svc } = await build(projectId, headId);
+    const { svc } = await build(projectId as any, headId as any);
     const gen = svc.getGenerator();
 
     // Kick off the task (no wait so we can stream progress in the UI)
@@ -298,7 +299,6 @@ export async function actionGenerate3D(projectId: string, headId: string) {
     const urls = gen.getSelectedImageUrls?.() ?? [];
     const kind = kindFor(gen, urls);
 
-    // UI will connect to this SSE route to get realtime updates
     return {
         taskId,
         status: 'PENDING',
@@ -310,9 +310,9 @@ export async function actionRecordVersion(
     projectId: string,
     headId: string,
     taskId: string,
-    kind: 'text' | 'image' | 'multi' // ← pass this from the client
+    kind: 'text' | 'image' | 'multi'
 ) {
-    const { svc } = await build(projectId, headId);
+    const { svc } = await build(projectId as any, headId as any);
     const gen = svc.getGenerator();
 
     const apiKey = process.env.MESHY_API_KEY!;
@@ -351,21 +351,16 @@ export async function actionRecordVersion(
     // 3) persist a version commit
     await svc.recordVersion({ id: taskId, url: modelUrl } as any);
 
-    // return whatever your UI needs
     return { ok: true, modelUrl };
 }
 
-/** OPTIONAL: blocking version if you ever want to wait server-side.
- * Uses resource endpoints that return `model_urls` (NOT `output_url`).
- */
+/** OPTIONAL: blocking version */
 export async function actionGenerate3DBlocking(projectId: string, headId: string) {
-    const { svc } = await build(projectId, headId);
+    const { svc } = await build(projectId as any, headId as any);
     const gen = svc.getGenerator();
 
-    // Wait for completion (polling via the Generator helper)
     const taskId: string = await gen.requestModelFromMeshy({ waitFor: 'succeeded' });
 
-    // Fetch the final task object from the right endpoint and extract a model URL:
     const urls = gen.getSelectedImageUrls?.() ?? [];
     const kind = kindFor(gen, urls);
 
@@ -385,7 +380,6 @@ export async function actionGenerate3DBlocking(projectId: string, headId: string
     if (!res.ok) throw new Error(`Meshy fetch failed (${res.status})`);
     const final = await res.json();
 
-    // ✅ Meshy returns model_urls on the task object
     const modelUrl =
         final?.model_urls?.glb ??
         final?.model_urls?.fbx ??

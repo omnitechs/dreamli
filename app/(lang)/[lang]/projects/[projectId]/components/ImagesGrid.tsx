@@ -14,7 +14,7 @@ interface ImagesGridProps {
     images: Array<{ id?: string; url?: string; src?: string }>;
     selectedUrls: string[];          // server truth
     projectId: string;
-    headId: string;                  // not used for mutations (avoid stale parent)
+    headId: string;                  // ← **Selected commit id to parent from**
     onStateUpdate: (state: ProjectState) => void;
 }
 
@@ -31,7 +31,7 @@ export function ImagesGrid({
                                images,
                                selectedUrls,
                                projectId,
-                               headId, // eslint-disable-line @typescript-eslint/no-unused-vars
+                               headId, // now actually used
                                onStateUpdate,
                            }: ImagesGridProps) {
     const getUrl = (img: { url?: string; src?: string }) => img.url || img.src || '';
@@ -40,7 +40,6 @@ export function ImagesGrid({
     const serverSelectedRef = useRef<Set<string>>(new Set(selectedUrls));
     useEffect(() => {
         serverSelectedRef.current = new Set(selectedUrls);
-        // If we still have pending intents, merge them on top so UI doesn't revert
         if (pendingCountRef.current > 0) {
             setLocalSelected((prev) => {
                 let merged = new Set(serverSelectedRef.current);
@@ -65,8 +64,7 @@ export function ImagesGrid({
         setLocalImages(images);
     }, [images]);
 
-    // ---------- pending intents (guards against revert) ----------
-    // url -> true (selected) | false (unselected)
+    // ---------- pending intents ----------
     const pendingDesiredRef = useRef<Map<string, boolean>>(new Map());
     const pendingCountRef = useRef<number>(0);
 
@@ -80,10 +78,6 @@ export function ImagesGrid({
             pendingCountRef.current = Math.max(0, pendingCountRef.current - 1);
         }
     };
-    const clearAllPending = () => {
-        pendingDesiredRef.current.clear();
-        pendingCountRef.current = 0;
-    };
 
     // ---------- per-image debounce senders ----------
     type PendingMeta = { desired: boolean; seq: number };
@@ -91,16 +85,10 @@ export function ImagesGrid({
     const pendings = useRef<Map<string, PendingMeta>>(new Map());
     const seqRef = useRef(0);
 
-    const senders = useRef<
-        Map<string, (url: string, seq: number, desired: boolean) => void>
-    >(new Map());
-
     const makeSender = (url: string) =>
         debounce(async (_url: string, seq: number, desired: boolean) => {
-            // If final desired equals current server truth, nothing to send
             const serverHas = serverSelectedRef.current.has(_url);
             if (serverHas === desired) {
-                // still clear pending to stop merge overrides
                 const pm = pendings.current.get(_url);
                 if (pm && pm.seq === seq) {
                     pendings.current.delete(_url);
@@ -111,22 +99,19 @@ export function ImagesGrid({
 
             await enqueue(projectId, async () => {
                 try {
-                    // do NOT pass headId (avoid stale-parent overwrites in service)
+                    // ✅ branch from the UI-selected commit (headId)
                     const updated = desired
-                        ? await actionSelectImage(projectId, undefined as any, _url)
-                        : await actionUnselectImage(projectId, undefined as any, _url);
+                        ? await actionSelectImage(projectId, headId, _url)
+                        : await actionUnselectImage(projectId, headId, _url);
 
-                    // stale response guard
                     const pm = pendings.current.get(_url);
                     if (!pm || pm.seq !== seq) return updated;
 
-                    // apply server state, but preserve other pending intents by merging
                     onStateUpdate(updated);
                     pendings.current.delete(_url);
                     resolvePending(_url);
                     return updated;
                 } catch (e) {
-                    // rollback only if this is still the latest intent
                     const pm = pendings.current.get(_url);
                     if (pm && pm.seq === seq) {
                         setLocalSelected((prev) => {
@@ -141,6 +126,7 @@ export function ImagesGrid({
             });
         }, BOUNCE_MS);
 
+    const senders = useRef(new Map<string, ReturnType<typeof makeSender>>());
     const ensureSender = (url: string) => {
         if (!senders.current.has(url)) {
             senders.current.set(url, makeSender(url));
@@ -152,17 +138,14 @@ export function ImagesGrid({
         const currently = localSelected.has(imageUrl);
         const desired = !currently;
 
-        // optimistic flip immediately
         setLocalSelected((prev) => {
             const next = new Set(prev);
             desired ? next.add(imageUrl) : next.delete(imageUrl);
             return next;
         });
 
-        // remember pending intent (prevents later server snapshot from reverting)
         addPending(imageUrl, desired);
 
-        // sequence & send (debounced per-image)
         seqRef.current += 1;
         const mySeq = seqRef.current;
         pendings.current.set(imageUrl, { desired, seq: mySeq });
@@ -170,7 +153,6 @@ export function ImagesGrid({
     };
 
     const handleDelete = async (imageUrl: string) => {
-        // optimistic removal
         const prevImages = localImages;
         const prevSelected = localSelected;
 
@@ -180,7 +162,6 @@ export function ImagesGrid({
             c.delete(imageUrl);
             return c;
         });
-        // a delete nullifies any pending select/unselect for this url
         if (pendingDesiredRef.current.has(imageUrl)) {
             resolvePending(imageUrl);
             pendings.current.delete(imageUrl);
@@ -188,11 +169,11 @@ export function ImagesGrid({
 
         await enqueue(projectId, async () => {
             try {
-                const updated = await actionDeleteImage(projectId, undefined as any, imageUrl);
+                // ✅ branch from selected commit
+                const updated = await actionDeleteImage(projectId, headId, imageUrl);
                 onStateUpdate(updated);
                 return updated;
             } catch (e) {
-                // rollback fully
                 setLocalImages(prevImages);
                 setLocalSelected(prevSelected);
                 throw e;
@@ -206,7 +187,6 @@ export function ImagesGrid({
         <div className="bg-white border border-gray-200 rounded-2xl p-4 space-y-4">
             <h3 className="font-medium text-gray-900">Images ({localImages.length})</h3>
 
-            {/* smaller thumbnails: more columns = ~half size */}
             <div className="grid grid-cols-3 md:grid-cols-4 gap-2">
                 {localImages.map((image, index) => {
                     const url = getUrl(image);
