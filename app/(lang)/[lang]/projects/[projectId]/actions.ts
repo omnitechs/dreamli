@@ -79,40 +79,82 @@ export async function actionPostMessage(projectId: UUID, headId: UUID | undefine
 }
 
 // ---------------- images: add / select / unselect / clear selection ----------------
-export async function actionAddImages(projectId: UUID, headId: UUID | undefined, formData: FormData): Promise<ProjectState> {
-    const { svc } = await build(projectId, headId);
-    const gen = svc.getGenerator();
+export async function actionAddImages(
+    projectId: UUID,
+    headId: UUID | undefined,
+    formData: FormData
+): Promise<ProjectState> {
+    try {
+        const { svc } = await build(projectId, headId);
+        const gen = svc.getGenerator();
 
-    let added = 0;
+        let added = 0;
 
-    // files[]
-    const files = formData.getAll("files") as File[];
-    for (const file of files) {
-        if (!file || typeof file.arrayBuffer !== "function") continue;
-        const buf = Buffer.from(await file.arrayBuffer());
-        const id = randomUUID();
-        const ext = (file.type?.split("/")[1] || "png").toLowerCase();
-        const fname = `${id}.${ext}`;
-        const filePath = path.join(process.cwd(), "public", "uploads", fname);
-        await fs.mkdir(path.dirname(filePath), { recursive: true });
-        await fs.writeFile(filePath, buf);
-        const url = `/uploads/${fname}`;
-        gen.addImage({ id, src: url } as Image);
-        added++;
+        // helper: make a plain JSON image object (no class refs, no functions)
+        const makeImage = (id: string, src: string): Image => ({
+            id,
+            src,
+            alt: '',
+            createdAt: new Date().toISOString(),
+            source: 'uploaded', // or 'generated' / 'edited' in other flows
+            promptUsed: undefined,
+            referenceImageIds: [],
+            tags: [],
+            angle: undefined,
+            locked: false,
+        });
+
+        // files[]
+        const files = formData.getAll("files") as File[];
+        for (const file of files) {
+            if (!file || typeof file.arrayBuffer !== "function") continue;
+
+            const buf = Buffer.from(await file.arrayBuffer());
+            const id = randomUUID();
+            const ext = (file.type?.split("/")[1] || "png").toLowerCase();
+            const fname = `${id}.${ext}`;
+            const publicRel = path.join("uploads", fname);
+            const filePath = path.join(process.cwd(), "public", publicRel);
+
+            try {
+                await fs.mkdir(path.dirname(filePath), { recursive: true });
+                await fs.writeFile(filePath, buf);
+            } catch (e: any) {
+                // If this throws in serverless (e.g., Vercel), you need object storage.
+                console.error("[actionAddImages] FS write failed:", e?.message || e);
+                throw new Error(
+                    "File system write failed. In serverless environments, use object storage (S3/R2/Supabase) instead of writing to /public."
+                );
+            }
+
+            const url = `/${publicRel.replace(/\\+/g, "/")}`;
+            gen.addImage(makeImage(id, url));
+            added++;
+        }
+
+        // imageUrl (remote)
+        const imageUrl = String(formData.get("imageUrl") ?? "").trim();
+        if (imageUrl) {
+            const id = randomUUID();
+            gen.addImage(makeImage(id, imageUrl));
+            added++;
+        }
+
+        // auto-switch to image mode if anything added
+        if (added > 0) gen.setType("image");
+
+        // return fully serializable state
+        return state(projectId, svc);
+    } catch (err: any) {
+        // Convert to serializable error boundary for the client to show nicely
+        console.error("[actionAddImages] failed:", err);
+        // Throwing an Error makes Next show the generic message; instead, throw a plain object
+        // and catch on client, or rethrow Error with safe message.
+        throw new Error(
+            err?.message ||
+            "Upload failed. Check server logs (FS permission/storage or serialization issue)."
+        );
     }
-
-    // imageUrl field
-    const imageUrl = String(formData.get("imageUrl") ?? "").trim();
-    if (imageUrl) {
-        const id = randomUUID();
-        gen.addImage({ id, src: imageUrl } as Image);
-        added++;
-    }
-
-    // auto-switch to image mode if anything added
-    if (added > 0) gen.setType("image");
-
-    return state(projectId, svc);
 }
 
 export async function actionSelectImage(projectId: UUID, headId: UUID | undefined, url: string): Promise<ProjectState> {

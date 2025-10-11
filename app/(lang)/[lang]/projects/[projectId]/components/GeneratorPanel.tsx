@@ -24,10 +24,9 @@ const EMPTY_SNAPSHOT: GeneratorSnapshot = {
 };
 
 export function GeneratorPanel({ generator, headId, projectId, onStateUpdate }: GeneratorPanelProps) {
-    const isTextMode = generator.type === 'text';
-    const isImageMode = generator.type === 'image';
-    const selectedCount = generator.selectedUrls?.length || 0;
-    const images = generator.images ?? [];
+
+
+
     const lastGoodGenRef = useRef<GeneratorSnapshot>(EMPTY_SNAPSHOT);
     // 4) NEW: choose a safe generator to render
     const safeGen = (() => {
@@ -35,9 +34,11 @@ export function GeneratorPanel({ generator, headId, projectId, onStateUpdate }: 
         if (g && typeof g === 'object' && (g.type === 'text' || g.type === 'image')) return g as GeneratorSnapshot;
         return lastGoodGenRef.current ?? EMPTY_SNAPSHOT;
     })();
+    const selectedCount = safeGen.selectedUrls?.length || 0;
+    const images = safeGen.images ?? [];
     // 5) CHANGED: guard headId before substring
     const headShort = headId.length > 0 ? headId.substring(0, 12) : '';
-
+    const isImageMode = safeGen.type === 'image';
     // 3) NEW: update last good only when incoming is valid
     useEffect(() => {
         const g: any = generator as any;
@@ -51,7 +52,7 @@ export function GeneratorPanel({ generator, headId, projectId, onStateUpdate }: 
             <div className="sticky top-0 bg-white border-b border-gray-200 p-4 z-10">
                 <div className="flex items-center justify-between mb-2">
                     <h2 className="text-lg font-semibold text-gray-900">Generator</h2>
-                    {generator.dirtySinceLastModel && (
+                    {safeGen.dirtySinceLastModel && (
                         <div className="inline-flex items-center px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
                             Unsaved changes
                         </div>
