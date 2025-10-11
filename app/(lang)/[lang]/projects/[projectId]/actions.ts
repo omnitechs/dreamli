@@ -4,7 +4,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
-
+import { prof } from "../helper/utils";
 import WorkplaceService from "@/app/(lang)/[lang]/projects/classes/service";
 import { CommitStorePrisma } from "@/app/(lang)/[lang]/projects/classes/CommitStorePrisma";
 import type { UUID, Image } from "@/app/(lang)/[lang]/projects/classes/interface";
@@ -42,15 +42,60 @@ async function listCommits(projectId: UUID) {
 }
 
 async function state(projectId: UUID, svc: WorkplaceService): Promise<ProjectState> {
-    const commits = await listCommits(projectId);
-    const messages = await svc.getAllMessages();
-    return {
+    const endState = prof("[state] total");
+
+    const endCommits = prof("[state] listCommits");
+    const commits = await listCommits(projectId); // newest-first JSON
+    endCommits();
+
+    // ---------- NEW: derive messages from the chain without extra DB ----------
+    const endMsgs = prof("[state] deriveMessagesFromLoadedCommits");
+    const headId = svc.getHeadId();
+
+    // build a quick index: id -> commitJSON
+    const byId = new Map<string, any>();
+    for (const c of commits) byId.set(c.id, c);
+
+    // walk the chain: head -> ... -> root using parentId
+    const chain: any[] = [];
+    let cur: string | undefined = headId;
+    const guard = commits.length + 5; // safety to avoid infinite loops
+    let hops = 0;
+
+    while (cur && hops < guard) {
+        const c = byId.get(cur);
+        if (!c) break;          // if not found in the list, stop
+        chain.push(c);
+        cur = c.parentId ?? undefined;
+        hops++;
+    }
+    chain.reverse(); // root -> head
+
+    // concatenate messages in chain order
+    const messages: any[] = [];
+    for (const c of chain) {
+        if (Array.isArray(c.messages) && c.messages.length) {
+            messages.push(...c.messages);
+        }
+    }
+    endMsgs();
+    // -------------------------------------------------------------------------
+
+    const endGen = prof("[state] generator.toJSON");
+    const generator = svc.getGenerator().toJSON() as any;
+    endGen();
+
+    const ps: ProjectState = {
         projectId,
-        headId: svc.getHeadId(),
+        headId,
         commits,
-        generator: svc.getGenerator().toJSON() as any,
+        generator,
         messages: messages as any,
     };
+
+
+    endState();
+    return ps;
 }
 
 // ---------------- init & checkout ----------------
@@ -147,7 +192,7 @@ export async function actionAddImages(
         }
 
         // auto-switch to image mode if anything added
-        if (added > 0) gen.setType("image");
+        // if (added > 0) gen.setType("image");
 
         return state(projectId, svc);
     } catch (err: any) {

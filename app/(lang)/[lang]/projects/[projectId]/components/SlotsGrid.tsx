@@ -96,7 +96,7 @@ export function SlotsGrid({
         top: null,
         bottom: null,
     });
-    const BOUNCE_MS = 750; // send only the last change per slot within this window
+    const BOUNCE_MS = 347; // send only the last change per slot within this window
 
     // ✅ Reconcile parent updates: only for slots with NO pending op and NOT changed very recently
     useEffect(() => {
