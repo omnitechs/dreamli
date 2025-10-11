@@ -1,4 +1,4 @@
-// interface.ts
+// app/(lang)/[lang]/projects/classes/interface.ts
 
 // ----------------------------------
 // 🔹 Basic shared types
@@ -56,22 +56,6 @@ export interface Model {
 }
 
 // ----------------------------------
-// 🔹 Generator (Main working object)
-// ----------------------------------
-export interface Generator {
-    type: Mode;
-    textPrompt: string;
-    images: Image[];
-    designated: Partial<Record<DesignatedSlot, Image | null>>;
-    approvalSet?: UUID[]; // ordered list of approved images for 3D
-    dirtySinceLastModel: boolean;
-    messages:Message[]
-    selectedKeys?: string[];
-    selectedUrls?: string[];
-
-}
-
-// ----------------------------------
 // 🔹 Chat Message (Logs every action)
 // ----------------------------------
 export type MessageRole = "user" | "assistant" | "system";
@@ -97,11 +81,39 @@ export interface Message {
             | "UNASSIGN_SLOT"
             | "DELETE_IMAGE"
             | "REVERT";
-
         payload?: Record<string, any>;
     };
     attachments?: { type: "image"; imageId: UUID }[];
 }
+
+// ----------------------------------
+// 🔹 Generator (runtime data shape)
+// ----------------------------------
+export interface Generator {
+    type: Mode;
+    textPrompt: string;
+    images: Image[];
+    designated: Partial<Record<DesignatedSlot, Image | null>>;
+    approvalSet?: UUID[]; // ordered list of approved images for 3D
+    dirtySinceLastModel: boolean;
+    messages: Message[];
+    selectedKeys?: string[];
+    selectedUrls?: string[];
+}
+
+// ---------- 🔹 Snapshot that matches Generator.toJSON() ----------
+import type { GeneratorModel3D } from "./generator";
+
+/**
+ * This shape MUST mirror exactly what Generator.toJSON() returns.
+ * `models` is optional for backward compatibility with older commits.
+ */
+export type GeneratorSnapshot = Generator & {
+    selectedKeys?: string[];
+    selectedUrls?: string[];
+    messages?: Message[];
+    models?: GeneratorModel3D[];
+};
 
 // ----------------------------------
 // 🔹 Commit (Snapshot of progress)
@@ -113,7 +125,7 @@ export interface Commit {
     forkedFromId?: UUID;
     isVersion: boolean; // true if contains generated model
     summary?: string;
-    generator: Generator;
+    generator: GeneratorSnapshot; // snapshot of current head
     model?: Model | null;
     messages: Message[];
 }
@@ -133,7 +145,10 @@ export interface Project {
     commits: Commit[];
     activeCommitId: UUID;
 }
-// Action types reused from Message["action"]["type"]
+
+// ----------------------------------
+// 🔹 Generator action typing
+// ----------------------------------
 export type GeneratorActionType =
     | "SET_MODE"
     | "UPDATE_TEXT"
@@ -146,7 +161,7 @@ export type GeneratorActionType =
     | "UNSELECT_IMAGE"
     | "DELETE_IMAGE"
     | "UNASSIGN_SLOT"
-    | "CLEAR_SELECTION"
+    | "CLEAR_SELECTION";
 
 export type OnChangeFn = (args: {
     type: GeneratorActionType | undefined; // undefined when change is just "new chat message"
@@ -154,8 +169,9 @@ export type OnChangeFn = (args: {
     message?: Message; // if the change *is* a new message
 }) => void;
 
-
-// /core/types.ts (optional helper file)
+// ----------------------------------
+// 🔹 Cross-file helper type
+// ----------------------------------
 export type CommitLike =
-    import("./commit").Commit |
-    import("./interface").Commit; // the plain JSON shape
+    | import("./commit").Commit
+    | import("./interface").Commit; // the plain JSON shape

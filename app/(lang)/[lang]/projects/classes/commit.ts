@@ -1,24 +1,35 @@
-// /core/Commit.ts
+// app/(lang)/[lang]/projects/classes/commit.ts
+
 import type {
     Message,
     UUID,
     ISODate,
     Model,
+    GeneratorSnapshot,     // <- use the snapshot (matches toJSON)
     Generator as GeneratorShape,
 } from "./interface";
 
 import uid from "../helper/uuid";
 
-export type GeneratorLike = GeneratorShape | { toJSON(): GeneratorShape };
-
-function snapshotGenerator(gen: GeneratorLike): GeneratorShape {
-    const base = "toJSON" in gen ? gen.toJSON() : (gen as GeneratorShape);
+// Safe clone helper (handles environments without structuredClone)
+function safeClone<T>(obj: T): T {
     try {
-        return structuredClone ? structuredClone(base) : JSON.parse(JSON.stringify(base));
-    } catch {
-        return JSON.parse(JSON.stringify(base));
-    }
+        // @ts-ignore - structuredClone may not be in lib.dom.d.ts
+        if (typeof structuredClone === "function") return structuredClone(obj);
+    } catch { /* noop */ }
+    return JSON.parse(JSON.stringify(obj));
 }
+
+export type GeneratorLike = GeneratorShape | { toJSON(): GeneratorSnapshot };
+
+/** Always produce the JSON snapshot shape returned by Generator.toJSON() */
+function snapshotGenerator(gen: GeneratorLike): GeneratorSnapshot {
+    const base =
+        "toJSON" in gen ? (gen as { toJSON(): GeneratorSnapshot }).toJSON()
+            : (gen as unknown as GeneratorSnapshot);
+    return safeClone(base);
+}
+
 /** Structure of a serialized commit */
 export interface CommitJSON {
     id: UUID;
@@ -26,7 +37,7 @@ export interface CommitJSON {
     parentId?: UUID;
     isVersion: boolean;
     summary?: string;
-    generator: GeneratorShape;
+    generator: GeneratorSnapshot; // ← snapshot, not bare Generator
     model?: Model | null;
     messages: Message[];
 }
@@ -41,7 +52,7 @@ export class Commit implements CommitJSON {
     readonly parentId?: UUID;
     readonly isVersion: boolean;
     readonly summary?: string;
-    readonly generator: GeneratorShape;
+    readonly generator: GeneratorSnapshot;
     readonly model?: Model | null;
     readonly messages: Message[];
 
@@ -96,15 +107,14 @@ export class Commit implements CommitJSON {
             isVersion: true,
             summary: params.summary ?? "3D model generated",
             generator: snapshotGenerator(params.generator),
-            model: {...params.model},
+            model: { ...params.model },
             messages: params.messages ?? [],
         });
     }
 
     /** Add a new message to this commit; returns a new immutable Commit */
     withMessage(
-        msg: Omit<Message, "id" | "createdAt"> &
-            Partial<Pick<Message, "id" | "createdAt">>
+        msg: Omit<Message, "id" | "createdAt"> & Partial<Pick<Message, "id" | "createdAt">>
     ): Commit {
         const message: Message = {
             id: msg.id ?? uid(),
@@ -112,7 +122,7 @@ export class Commit implements CommitJSON {
             role: msg.role,
             content: msg.content,
             action: msg.action,
-            attachments: msg.attachments,
+            attachments: (msg as any).attachments,
         };
         return new Commit({
             ...this.toJSON(),
@@ -130,7 +140,7 @@ export class Commit implements CommitJSON {
         return this.withMessage({
             role: "system",
             content,
-            action: {type, payload},
+            action: { type, payload },
         });
     }
 
@@ -153,11 +163,11 @@ export class Commit implements CommitJSON {
             parentId: this.parentId,
             isVersion: this.isVersion,
             summary: this.summary,
-            generator: this.generator,
+            generator: safeClone(this.generator),
             model: this.model ?? null,
             messages: this.messages.map((m) => ({
                 ...m,
-                attachments: m.attachments ? [...m.attachments] : undefined,
+                attachments: (m as any).attachments ? [ ...(m as any).attachments ] : undefined,
             })),
         };
     }
@@ -166,9 +176,9 @@ export class Commit implements CommitJSON {
     static fromJSON(json: CommitJSON): Commit {
         return new Commit({
             ...json,
-            generator: snapshotGenerator(json.generator),
-            messages: json.messages.map((m) => ({...m})),
-            model: json.model ? {...json.model} : null,
+            generator: safeClone(json.generator),
+            messages: json.messages.map((m) => ({ ...m })),
+            model: json.model ? { ...json.model } : null,
         });
     }
 
@@ -183,19 +193,19 @@ export class Commit implements CommitJSON {
             case "UPDATE_TEXT":
                 return "Text prompt updated.";
             case "ADD_IMAGE":
-                return `Added new image (${payload?.count ?? "1"}).`;
+                return `Added new image (${(payload as any)?.count ?? "1"}).`;
             case "ASSIGN_SLOT":
-                return `Assigned ${payload?.slot ?? "slot"} image.`;
+                return `Assigned ${(payload as any)?.slot ?? "slot"} image.`;
             case "CLEAR_SLOT":
-                return `Cleared ${payload?.slot ?? "slot"} image.`;
+                return `Cleared ${(payload as any)?.slot ?? "slot"} image.`;
             case "GENERATE_IMAGE":
-                return `Generated ${payload?.count ?? "?"} image(s).`;
+                return `Generated ${(payload as any)?.count ?? "?"} image(s).`;
             case "GENERATE_MODEL":
                 return "3D model generated.";
             case "FORK":
-                return `Forked from ${payload?.from ?? "unknown"}.`;
+                return `Forked from ${(payload as any)?.from ?? "unknown"}.`;
             case "REVERT":
-                return `Reverted to commit ${payload?.to ?? "unknown"}.`;
+                return `Reverted to commit ${(payload as any)?.to ?? "unknown"}.`;
             default:
                 return "System action performed.";
         }
