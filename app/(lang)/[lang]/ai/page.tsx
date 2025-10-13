@@ -11,6 +11,9 @@ import { useCreateCommitMutation } from "./services/api";
 import {fromSnapshot, toSnapshot} from "./libs/snapshots";
 import { persistor } from "./store";
 import {setHead} from "@/app/(lang)/[lang]/ai/store/slices/commitsSlice";
+import {CommitButton} from "@/app/(lang)/[lang]/ai/components/Commit/CommitButton";
+import {Commit} from "@/app/(lang)/[lang]/ai/components/Commit";
+import {ImageGallery} from "@/app/(lang)/[lang]/ai/components/ImageGallery";
 
 export default function GeneratorPlayground() {
     const dispatch = useDispatch();
@@ -40,7 +43,7 @@ export default function GeneratorPlayground() {
                 // simple dev upload — store to /public/uploads
                 const fd = new FormData();
                 fd.append('file', file);
-                const res = await fetch('/api/uploads', { method: 'POST', body: fd });
+                const res = await fetch('/api/uploads/presign', { method: 'POST', body: fd });
                 if (!res.ok) throw new Error('upload failed');
                 const data = await res.json();
                 // swap blob -> public url, keeping same id
@@ -141,40 +144,7 @@ export default function GeneratorPlayground() {
                 Drag & drop images here, or use the Upload button above.
             </div>
 
-            <section>
-                <div className="flex items-center justify-between mb-3">
-                    <h2 className="font-medium">Images ({images.length})</h2>
-                    <div className="text-sm text-gray-600">Selected: {selectedCount}</div>
-                </div>
-                {images.length === 0 ? (
-                    <div className="text-sm text-gray-500">No images yet. Upload or drop files.</div>
-                ) : (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                        {images.map((img: any) => (
-                            <figure key={img.id}
-                                    className={`relative group rounded-2xl overflow-hidden border ${selectedSet.has(img.id) ? 'ring-2 ring-black' : ''}`}>
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img src={img.url} alt={img.meta?.name ?? 'image'} className="w-full h-40 object-cover" />
-                                <div className="absolute inset-0 flex items-start justify-between p-2">
-                                    <button onClick={() => dispatch(toggleSelect(img.id))}
-                                            className={`px-2 py-1 rounded-md text-xs shadow ${selectedSet.has(img.id) ? 'bg-black text-white' : 'bg-white/90'}`}>
-                                        {selectedSet.has(img.id) ? 'Selected' : 'Select'}
-                                    </button>
-                                    <button onClick={() => dispatch(removeImage(img.id))}
-                                            className="px-2 py-1 rounded-md text-xs bg-white/90 hover:bg-white shadow" title="Remove">
-                                        Remove
-                                    </button>
-                                </div>
-                                {img.key && (
-                                    <figcaption className="absolute bottom-0 left-0 right-0 text-[10px] truncate bg-black/60 text-white px-2 py-1">
-                                        {img.key}
-                                    </figcaption>
-                                )}
-                            </figure>
-                        ))}
-                    </div>
-                )}
-            </section>
+            <ImageGallery/>
 
             {/* Messages composer */}
             <section className="bg-white rounded-2xl shadow p-4 border space-y-3">
@@ -260,31 +230,7 @@ export default function GeneratorPlayground() {
                         {Object.values(commits)
                             .filter(Boolean) // <- guard against undefined holes
                             .map((c: any) => (
-                                <li key={c.id} className={`${c.id === headId ? "bg-gray-50" : ""}`}>
-                                    <button
-                                        type="button"
-                                        onClick={() => {
-                                            if (!c?.snapshot) {
-                                                console.warn("Commit has no snapshot:", c);
-                                                return;
-                                            }
-                                            const restored = fromSnapshot(c.snapshot, { messages: gen.messages });
-                                            // Optional: bail if state is identical to avoid no-op
-                                            // if (JSON.stringify(restored) === JSON.stringify(gen)) return;
-                                            console.log('restored', restored);
-                                            dispatch(replaceWithSnapshot(restored));
-                                            dispatch(setHead(c.id));
-                                        }}
-                                        className="w-full text-left flex items-center justify-between rounded-xl border p-2 hover:bg-gray-50 cursor-pointer"
-                                        title="Click to checkout this commit"
-                                    >
-                                        <div className="min-w-0">
-                                            <div className="text-sm font-medium truncate">{c.message ?? "Commit"}</div>
-                                            <div className="text-xs text-gray-500">{new Date(c.createdAt).toLocaleString()}</div>
-                                        </div>
-                                        <code className="text-[10px] text-gray-500 ml-2">{String(c.id).slice(0, 8)}</code>
-                                    </button>
-                                </li>
+                                <Commit key={c.id} type={"li"} commit={c} headId={headId}/>
                             ))}
                     </ul>
                 )}
