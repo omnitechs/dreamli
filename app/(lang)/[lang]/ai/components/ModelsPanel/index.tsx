@@ -18,11 +18,18 @@ function pickBestModelUrl(modelUrls?: Record<string, string | undefined>) {
 export function ModelsPanel() {
     const dispatch = useDispatch();
     const gen = useSelector((s: RootState) => (s as any)?.generator) ?? { textPrompt: "", models: [] };
-    const { streamExistingTask } = useMeshyStream();
+    const { streamExistingTask,resumeAll } = useMeshyStream();
 
     // selected model id for the preview panel below the grid
     const [selectedId, setSelectedId] = React.useState<string | null>(null);
 
+
+    React.useEffect(() => {
+        console.log("loading the resumeAll");
+        if (gen?.models?.length) resumeAll(gen.models);
+        // run once on mount
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     // one button: use generator.textPrompt from Redux, start Meshy text preview
     const startGeneration = async () => {
         const prompt = (gen.textPrompt ?? "").trim();
@@ -46,54 +53,54 @@ export function ModelsPanel() {
 
     const models = gen?.models ?? [];
 
-    // One-time background sync on page load (for any unfinished models)
-    React.useEffect(() => {
-        if (!models?.length) return;
-        const controller = new AbortController();
-
-        (async () => {
-            for (const m of models) {
-                if (m.status === "SUCCEEDED") continue;
-                try {
-                    const res = await fetch(`/api/meshy/task?id=${m.taskId}&kind=${m.kind}`, {
-                        signal: controller.signal,
-                    });
-                    if (!res.ok) continue;
-                    const data = await res.json();
-
-                    if (data?.status && data?.status !== m.status) {
-                        dispatch(
-                            upsertModel({
-                                ...m,
-                                status: data.status,
-                                progress: data.progress ?? m.progress,
-                            })
-                        );
-                    }
-
-                    if (data?.status === "SUCCEEDED" && data?.model_urls) {
-                        dispatch(
-                            finalizeModelFromTask({
-                                ...m,
-                                modelUrls: data.model_urls,
-                                thumbnailUrl: data.thumbnail_url,
-                                previewVideoUrl: data.video_url,
-                                textureUrls: data.texture_urls,
-                                status: "SUCCEEDED",
-                                progress: 100,
-                            })
-                        );
-                    }
-                } catch {
-                    /* silent */
-                }
-            }
-        })();
-
-        return () => controller.abort();
-        // run once on initial mount
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    // // One-time background sync on page load (for any unfinished models)
+    // React.useEffect(() => {
+    //     if (!models?.length) return;
+    //     const controller = new AbortController();
+    //
+    //     (async () => {
+    //         for (const m of models) {
+    //             if (m.status === "SUCCEEDED") continue;
+    //             try {
+    //                 const res = await fetch(`/api/meshy/task?id=${m.taskId}&kind=${m.kind}`, {
+    //                     signal: controller.signal,
+    //                 });
+    //                 if (!res.ok) continue;
+    //                 const data = await res.json();
+    //
+    //                 if (data?.status && data?.status !== m.status) {
+    //                     dispatch(
+    //                         upsertModel({
+    //                             ...m,
+    //                             status: data.status,
+    //                             progress: data.progress ?? m.progress,
+    //                         })
+    //                     );
+    //                 }
+    //
+    //                 if (data?.status === "SUCCEEDED" && data?.model_urls) {
+    //                     dispatch(
+    //                         finalizeModelFromTask({
+    //                             ...m,
+    //                             modelUrls: data.model_urls,
+    //                             thumbnailUrl: data.thumbnail_url,
+    //                             previewVideoUrl: data.video_url,
+    //                             textureUrls: data.texture_urls,
+    //                             status: "SUCCEEDED",
+    //                             progress: 100,
+    //                         })
+    //                     );
+    //                 }
+    //             } catch {
+    //                 /* silent */
+    //             }
+    //         }
+    //     })();
+    //
+    //     return () => controller.abort();
+    //     // run once on initial mount
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, []);
 
     const selectedModel = React.useMemo(
         () => models.find((m: any) => m.id === selectedId) ?? null,

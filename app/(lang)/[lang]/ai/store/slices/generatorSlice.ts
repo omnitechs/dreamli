@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
+import type { RootState } from "@/app/(lang)/[lang]/ai/store";
 export type UUID = string;
 export type Mode = 'text' | 'image';
 
@@ -15,7 +15,10 @@ export interface ModelFormatUrls {
 export type MeshyKind = 'text' | 'image' | 'multi';
 export type TextStage = 'preview' | 'refine';
 export type MeshyTaskStatus = 'PENDING' | 'IN_PROGRESS' | 'SUCCEEDED' | 'FAILED' | 'CANCELED';
-
+function isTerminalStatus(s?: string) {
+    const v = typeof s === 'string' ? s.toUpperCase() : '';
+    return v === 'SUCCEEDED' || v === 'FAILED' || v === 'CANCELED';
+}
 export interface GeneratorModel3D {
     id: string;                  // internal id (task id by default)
     provider: 'meshy';
@@ -36,6 +39,7 @@ export interface GeneratorModel3D {
     status?: MeshyTaskStatus;
     progress?: number;           // 0..100
     error?: string;
+    streaming?: boolean;
 }
 
 /* -------------------- Images & Messages -------------------- */
@@ -90,6 +94,17 @@ const STATUS_SET = new Set<MeshyTaskStatus>([
     'FAILED',
     'CANCELED',
 ]);
+
+function coerceGeneratorShape(state: any) {
+    if (!state) return;
+    if (!Array.isArray(state.images)) state.images = [];
+    if (!Array.isArray(state.selected)) state.selected = [];
+    if (!Array.isArray(state.messages)) state.messages = [];
+    if (!Array.isArray(state.models)) state.models = [];
+    if (!Array.isArray(state.approvalSet)) state.approvalSet = [];
+    if (typeof state.textPrompt !== 'string') state.textPrompt = '';
+    if (state.type !== 'text' && state.type !== 'image') state.type = 'text';
+}
 
 function normalizeStatus(s: unknown): MeshyTaskStatus | undefined {
     if (typeof s !== 'string') return undefined;
@@ -218,68 +233,114 @@ const slice = createSlice({
 
         /* Snapshot */
         replaceWithSnapshot(_state, a: PayloadAction<Generator>) {
-            return a.payload;
+            // Merge over defaults to ensure required arrays exist
+            const next: Generator = {
+                ...initialState,
+                ...a.payload,
+                images: Array.isArray(a.payload.images) ? a.payload.images : [],
+                selected: Array.isArray((a.payload as any).selected) ? (a.payload as any).selected : [],
+                messages: Array.isArray((a.payload as any).messages) ? (a.payload as any).messages : [],
+                models: Array.isArray((a.payload as any).models) ? (a.payload as any).models : [],
+                approvalSet: Array.isArray((a.payload as any).approvalSet) ? (a.payload as any).approvalSet : [],
+            };
+            return next;
         },
         markSynced(state) {
             state.dirtySinceLastModel = false;
         },
 
         /* Models */
-        addModel(state, a: PayloadAction<GeneratorModel3D>) {
-            state.models.push(a.payload);
+        addModel(state, a) {
+            coerceGeneratorShape(state);
+            const p = a.payload as any;
+            if (!p || !p.id) return;
+            state.models.push(p);
             state.dirtySinceLastModel = true;
         },
         upsertModel(state, a) {
-            const i = state.models.findIndex(m => m.id === a.payload.id);
+            const p = a.payload as any;
+            if (!p?.id) return;
+            if (!Array.isArray(state.models)) state.models = [];
+            const i = state.models.findIndex(m => m.id === p.id);
             if (i >= 0) {
                 const prev = state.models[i];
                 state.models[i] = {
                     ...prev,
-                    ...a.payload,
-                    sourceCommitId: a.payload.sourceCommitId ?? prev.sourceCommitId,
+                    ...p,
+                    sourceCommitId: p.sourceCommitId ?? prev.sourceCommitId,
+                    streaming: p.streaming ?? prev.streaming,   // <-- keep flag
                 };
             } else {
-                state.models.unshift(a.payload);
+                state.models.unshift(p);
             }
             state.dirtySinceLastModel = true;
         },
 
-        removeModel(state, a: PayloadAction<string>) {
-            state.models = state.models.filter(m => m.id !== a.payload);
+        removeModel(state, a) {
+            coerceGeneratorShape(state);
+            const id = a.payload as string;
+            if (!id) return;
+            state.models = state.models.filter(m => m.id !== id);
         },
         clearModels(state) {
+            coerceGeneratorShape(state);
             state.models = [];
         },
 
         // Live status (stream-safe)
-        setModelStatus(
-            state,
-            a: PayloadAction<{ id: string; status: unknown; progress?: unknown }>
-        ) {
-            const m = state.models.find(m => m.id === a.payload.id);
+        setModelStatus(state, a) {
+            coerceGeneratorShape(state);
+            const { id, status, progress } = a.payload as any;
+            if (!id) return;
+            const m = state.models.find(m => m.id === id);
             if (!m) return;
-            const st = normalizeStatus(a.payload.status);
-            if (st) m.status = st;
-            const pr = clampProgress(a.payload.progress);
+
+            const st = normalizeStatus(status);
+            if (st) {
+                m.status = st;
+                if (isTerminalStatus(st)) m.streaming = false; // <<< turn off on terminal
+            }
+            const pr = clampProgress(progress);
             if (typeof pr === 'number') m.progress = pr;
         },
-        finalizeModelFromTask(state, a: PayloadAction<GeneratorModel3D>) {
-            const i = state.models.findIndex(m => m.id === a.payload.id);
-            const st = normalizeStatus((a.payload as any).status) ?? 'SUCCEEDED';
-            const pr = clampProgress((a.payload as any).progress) ?? 100;
-            const next = { ...a.payload, status: st, progress: pr };
-            if (i >= 0) state.models[i] = { ...state.models[i], ...next };
-            else state.models.unshift(next);
+        finalizeModelFromTask(state, a) {
+            coerceGeneratorShape(state);
+            const p = a.payload as any;
+            if (!p || !p.id) return;
+            const i = state.models.findIndex(m => m.id === p.id);
+            const st = normalizeStatus(p.status) ?? 'SUCCEEDED';
+            const pr = clampProgress(p.progress) ?? 100;
+            const next = { ...p, status: st, progress: pr, streaming: false }; // <<< off
+            if (i >= 0) {
+                const prev = state.models[i];
+                state.models[i] = {
+                    ...prev,
+                    ...next,
+                    sourceCommitId: next.sourceCommitId ?? prev.sourceCommitId,
+                    streaming: false, // <<< off
+                };
+            } else {
+                state.models.unshift(next);
+            }
         },
         failModel(state, a: PayloadAction<{ id: string; error?: string }>) {
             const m = state.models.find(m => m.id === a.payload.id);
             if (m) {
                 m.status = 'FAILED';
                 m.error = a.payload.error ?? 'Failed';
+                m.streaming = false; // <<< off
             }
         },
     },
 });
+export const selectNormalizedModels = (state: RootState) => {
+    const models = (state as any)?.generator?.models ?? [];
+    return models.map((m: any) =>
+        isTerminalStatus(m?.status) ? { ...m, streaming: false } : m
+    );
+};
+
+
 
 /* -------------------- Exports -------------------- */
 export const {
@@ -312,5 +373,6 @@ export const {
     finalizeModelFromTask,
     failModel,
 } = slice.actions;
+
 
 export default slice.reducer;
