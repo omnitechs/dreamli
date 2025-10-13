@@ -1,4 +1,4 @@
-// app/(lang)[lang]/privacy/page.tsx
+// app/(lang)[lang]/privacy/test.tsx
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';

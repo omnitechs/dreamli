@@ -1,4 +1,4 @@
-// app/(lang)[lang]/terms/page.tsx
+// app/(lang)[lang]/terms/test.tsx
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { languages, languageCodes, type LanguageCode } from '@/config/i18n';

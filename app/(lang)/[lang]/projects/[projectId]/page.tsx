@@ -1,4 +1,4 @@
-// app/projects/[projectId]/page.tsx
+// app/projects/[projectId]/test.tsx
 import { ProjectWorkspace } from './ProjectWorkspace';
 
 export async function generateStaticParams() {

@@ -69,6 +69,12 @@ export interface Generator {
     dirtySinceLastModel: boolean;
     messages: Message[];
     models: GeneratorModel3D[];
+    /** NEW: hydration bookkeeping */
+    __meta?: {
+        projectId?: string;
+        loadedFromCommitId?: string;
+        loadedAt?: string; // ISO
+    };
 }
 
 const initialState: Generator = {
@@ -80,6 +86,7 @@ const initialState: Generator = {
     dirtySinceLastModel: false,
     messages: [],
     models: [],
+    __meta: undefined,
 };
 
 /* -------------------- Helpers -------------------- */
@@ -122,6 +129,35 @@ const slice = createSlice({
     name: 'generator',
     initialState,
     reducers: {
+        hydrateFromCommit(
+            _state,
+            a: PayloadAction<{ projectId: string; commitId: string; snapshot: any }>
+        ) {
+            const next: Generator = {
+                ...initialState,
+                ...a.payload.snapshot, // <-- your snapshot shape must already match Generator via fromSnapshot()
+                __meta: {
+                    projectId: a.payload.projectId,
+                    loadedFromCommitId: a.payload.commitId,
+                    loadedAt: new Date().toISOString(),
+                },
+            };
+            return next;
+        },
+        // NEW: flush generator when switching projects
+        resetForProject(
+            _state,
+            a: PayloadAction<{ projectId: string }>
+        ) {
+            return {
+                ...initialState,
+                __meta: {
+                    projectId: a.payload.projectId,
+                    loadedFromCommitId: undefined,
+                    loadedAt: new Date().toISOString(),
+                },
+            };
+        },
         /* Core */
         setMode(state, a: PayloadAction<Mode>) {
             state.type = a.payload;
@@ -368,10 +404,11 @@ export const {
     upsertModel,
     removeModel,
     clearModels,
-
+    hydrateFromCommit,
     setModelStatus,
     finalizeModelFromTask,
     failModel,
+    resetForProject
 } = slice.actions;
 
 

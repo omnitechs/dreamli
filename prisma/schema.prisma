@@ -8,40 +8,62 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// model Project {
+//   id        String   @id @default(uuid())
+//   ownerId   String   // link to your User id (adjust type/name)
+//   name      String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//
+//   // convenience: store the current head commit id (optional)
+//   headId    String?  @db.Uuid
+//
+//   commits   Commit[]
+// }
+//
+// model Commit {
+//   id         String   @id @db.Uuid
+//   parentId   String?  @db.Uuid
+//   timestamp  DateTime
+//   isVersion  Boolean
+//   summary    String?
+//   generator  Json      // Generator snapshot (from gen.toJSON())
+//   model      Json?     // Model snapshot or null
+//   messages   Json      // Array<Message> for this commit delta
+//
+//   // NEW: project relation
+//   projectId  String
+//   project    Project  @relation(fields: [projectId], references: [id])
+//   // optional indexing helpers:
+//   // branchId String? @db.Uuid
+//   @@index([parentId])
+//   @@index([projectId])
+// }
+//
+// model Workspace {
+//   id           String  @id @db.Uuid
+//   name         String
+//   headCommitId String? @db.Uuid
+// }
+
+
 model Project {
-  id        String   @id @default(uuid())
-  ownerId   String   // link to your User id (adjust type/name)
+  id        String   @id @default(cuid())
   name      String
+  ownerId   String
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // convenience: store the current head commit id (optional)
-  headId    String?  @db.Uuid
-
   commits   Commit[]
 }
 
 model Commit {
-  id         String   @id @db.Uuid
-  parentId   String?  @db.Uuid
-  timestamp  DateTime
-  isVersion  Boolean
-  summary    String?
-  generator  Json      // Generator snapshot (from gen.toJSON())
-  model      Json?     // Model snapshot or null
-  messages   Json      // Array<Message> for this commit delta
-
-  // NEW: project relation
+  id         String   @id @default(cuid())
   projectId  String
-  project    Project  @relation(fields: [projectId], references: [id])
-  // optional indexing helpers:
-  // branchId String? @db.Uuid
-  @@index([parentId])
-  @@index([projectId])
-}
+  parentId   String?
+  snapshot   Json
+  message    String?
+  createdAt  DateTime @default(now())
 
-model Workspace {
-  id           String  @id @db.Uuid
-  name         String
-  headCommitId String? @db.Uuid
+  project    Project  @relation(fields: [projectId], references: [id])
+  parent     Commit?  @relation("CommitParent", fields: [parentId], references: [id])
+  children   Commit[] @relation("CommitParent")
 }

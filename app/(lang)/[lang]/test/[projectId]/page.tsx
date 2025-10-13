@@ -1,4 +1,4 @@
-// app/projects/[projectId]/page.tsx
+// app/projects/[projectId]/test.tsx
 import { initProject } from "./actions";
 import ProjectClient from "./project-client";
 
