@@ -6,8 +6,8 @@ import {
     setModelStatus,
     finalizeModelFromTask,
     failModel,
-    type GeneratorModel3D,
 } from "../store/slices/generatorSlice";
+import {GeneratorModel3D} from "@/app/(lang)/[lang]/ai/types";
 
 type Terminal = "SUCCEEDED" | "FAILED" | "CANCELED";
 const TERMINAL: Record<string, true> = { SUCCEEDED: true, FAILED: true, CANCELED: true };

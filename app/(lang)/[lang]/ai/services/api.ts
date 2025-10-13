@@ -1,8 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { nanoid } from '@reduxjs/toolkit';
 import { addOne, setHead, upsertMany as upsertManyCommits } from '../store/slices/commitsSlice';
-
-type UUID = string;
+import {UUID} from "@/app/(lang)/[lang]/ai/types";
 
 export type Project = { id: UUID; name: string; createdAt: string };
 

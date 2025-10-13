@@ -4,8 +4,9 @@ import type { RootState } from '../index';
 import {
     finalizeModelFromTask,
     upsertModel,
-    type GeneratorModel3D,
 } from '../slices/generatorSlice';
+
+import {GeneratorModel3D} from "@/app/(lang)/[lang]/ai/types";
 import { setHead, addOne as addCommit } from '../slices/commitsSlice';
 import { api } from '../../services/api';
 import { toSnapshot } from '../../libs/snapshots';

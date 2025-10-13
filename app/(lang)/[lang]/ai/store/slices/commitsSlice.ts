@@ -1,6 +1,5 @@
 import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
-
-export type UUID = string;
+import {UUID} from "@/app/(lang)/[lang]/ai/types"
 
 export interface Commit {
     id: UUID;

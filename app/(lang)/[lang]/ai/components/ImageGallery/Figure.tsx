@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
-import {removeImage, toggleSelect,Image} from "@/app/(lang)/[lang]/ai/store/slices/generatorSlice";
+import {removeImage, toggleSelect} from "@/app/(lang)/[lang]/ai/store/slices/generatorSlice";
+import {Image} from "@/app/(lang)/[lang]/ai/types";
 import {useMemo} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import type {RootState} from "@/app/(lang)/[lang]/ai/store";

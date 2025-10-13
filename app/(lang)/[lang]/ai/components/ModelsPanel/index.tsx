@@ -4,10 +4,7 @@ import * as React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "@/app/(lang)/[lang]/ai/store";
 import { useMeshyStream } from "@/app/(lang)/[lang]/ai/hooks/useMeshyStream";
-import {
-    finalizeModelFromTask,
-    upsertModel,
-} from "@/app/(lang)/[lang]/ai/store/slices/generatorSlice";
+
 import LazyGlb from "@/components/GlbViewer";
 
 function pickBestModelUrl(modelUrls?: Record<string, string | undefined>) {

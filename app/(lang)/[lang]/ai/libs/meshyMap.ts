@@ -1,5 +1,4 @@
-import type { GeneratorModel3D, MeshyKind, TextStage, ModelFormatUrls } from "../store/slices/generatorSlice";
-
+import {GeneratorModel3D,ModelFormatUrls,MeshyKind,TextStage} from "@/app/(lang)/[lang]/ai/types";
 export function mapTaskToModel(
     task: any,
     meta?: { kind?: MeshyKind; stage?: TextStage; prompt?: string; imageUrls?: string[]; sourceCommitId?: string | null }

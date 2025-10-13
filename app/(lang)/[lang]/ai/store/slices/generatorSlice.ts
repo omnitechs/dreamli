@@ -1,62 +1,13 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { RootState } from "@/app/(lang)/[lang]/ai/store";
-export type UUID = string;
-export type Mode = 'text' | 'image';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import type {RootState} from "@/app/(lang)/[lang]/ai/store";
+import {GeneratorModel3D, MeshyTaskStatus, Image, Message, Mode, UUID} from "@/app/(lang)/[lang]/ai/types"
 
-/* -------------------- 3D Model Types -------------------- */
-export interface ModelFormatUrls {
-    glb?: string;
-    fbx?: string;
-    obj?: string;
-    usdz?: string;
-    [k: string]: string | undefined;
-}
 
-export type MeshyKind = 'text' | 'image' | 'multi';
-export type TextStage = 'preview' | 'refine';
-export type MeshyTaskStatus = 'PENDING' | 'IN_PROGRESS' | 'SUCCEEDED' | 'FAILED' | 'CANCELED';
 function isTerminalStatus(s?: string) {
     const v = typeof s === 'string' ? s.toUpperCase() : '';
     return v === 'SUCCEEDED' || v === 'FAILED' || v === 'CANCELED';
 }
-export interface GeneratorModel3D {
-    id: string;                  // internal id (task id by default)
-    provider: 'meshy';
-    taskId: string;              // Meshy task id
-    kind: MeshyKind;             // text | image | multi
-    stage?: TextStage;           // preview | refine
-    prompt?: string;
-    imageUrls?: string[];
-    modelUrls: ModelFormatUrls;  // downloadable formats
-    textureUrls?: Array<Record<string, string>>;
-    thumbnailUrl?: string;
-    previewVideoUrl?: string;
-    createdAt: string;           // ISO
-    sourceCommitId?: string;
-    rawTask?: any;
 
-    // live status
-    status?: MeshyTaskStatus;
-    progress?: number;           // 0..100
-    error?: string;
-    streaming?: boolean;
-}
-
-/* -------------------- Images & Messages -------------------- */
-export interface Image {
-    id: UUID;
-    url: string;
-    key?: string;
-    meta?: Record<string, any>;
-}
-
-export type MessageRole = 'user' | 'assistant' | 'system';
-export interface Message {
-    id: UUID;
-    role: MessageRole;
-    content: string;
-    createdAt: string;
-}
 
 /* -------------------- Generator State -------------------- */
 export interface Generator {
@@ -326,7 +277,7 @@ const slice = createSlice({
         // Live status (stream-safe)
         setModelStatus(state, a) {
             coerceGeneratorShape(state);
-            const { id, status, progress } = a.payload as any;
+            const {id, status, progress} = a.payload as any;
             if (!id) return;
             const m = state.models.find(m => m.id === id);
             if (!m) return;
@@ -346,7 +297,7 @@ const slice = createSlice({
             const i = state.models.findIndex(m => m.id === p.id);
             const st = normalizeStatus(p.status) ?? 'SUCCEEDED';
             const pr = clampProgress(p.progress) ?? 100;
-            const next = { ...p, status: st, progress: pr, streaming: false }; // <<< off
+            const next = {...p, status: st, progress: pr, streaming: false}; // <<< off
             if (i >= 0) {
                 const prev = state.models[i];
                 state.models[i] = {
@@ -372,10 +323,9 @@ const slice = createSlice({
 export const selectNormalizedModels = (state: RootState) => {
     const models = (state as any)?.generator?.models ?? [];
     return models.map((m: any) =>
-        isTerminalStatus(m?.status) ? { ...m, streaming: false } : m
+        isTerminalStatus(m?.status) ? {...m, streaming: false} : m
     );
 };
-
 
 
 /* -------------------- Exports -------------------- */
