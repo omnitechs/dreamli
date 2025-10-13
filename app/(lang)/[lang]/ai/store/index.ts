@@ -5,15 +5,12 @@ import { commitsReducer } from './slices/commitsSlice';
 import {
     persistReducer,
     persistStore,
-    FLUSH,
-    REHYDRATE,
-    PAUSE,
-    PERSIST,
-    PURGE,
-    REGISTER,
+    FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER,
 } from 'redux-persist';
 
-// SSR-safe localStorage fallback
+import { api } from '../services/api'; // <-- ADD THIS
+
+// SSR-safe storage
 const createNoopStorage = () => ({
     getItem: async () => null,
     setItem: async () => {},
@@ -25,31 +22,27 @@ const storage =
         ? require('redux-persist/lib/storage').default
         : createNoopStorage();
 
-// Configure persistence
 const persistConfig = {
     key: 'dreamli:redux:v1',
-    version: 1,
+    version: 2,
     storage,
-    whitelist: ['generator', 'commits'],
+    whitelist: ['generator', 'commits'], // 'api' will NOT be persisted
 };
 
-// Combine reducers
 const rootReducer = combineReducers({
     generator: generatorReducer,
     commits: commitsReducer,
+    [api.reducerPath]: api.reducer, // <-- ADD THIS
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-// Create store
 export const store = configureStore({
     reducer: persistedReducer,
-    middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware({
-            serializableCheck: {
-                ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-            },
-        }),
+    middleware: (gDM) =>
+        gDM({
+            serializableCheck: { ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER] },
+        }).concat(api.middleware), // <-- ADD THIS
 });
 
 export const persistor = persistStore(store);
