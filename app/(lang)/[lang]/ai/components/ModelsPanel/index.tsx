@@ -8,31 +8,37 @@ import {
     finalizeModelFromTask,
     upsertModel,
 } from "@/app/(lang)/[lang]/ai/store/slices/generatorSlice";
+import LazyGlb from "@/components/GlbViewer";
+
+function pickBestModelUrl(modelUrls?: Record<string, string | undefined>) {
+    if (!modelUrls) return undefined;
+    return modelUrls.glb || modelUrls.fbx || modelUrls.obj || modelUrls.usdz || undefined;
+}
 
 export function ModelsPanel() {
     const dispatch = useDispatch();
-    const gen = useSelector((s: RootState) => (s as any)?.generator);
+    const gen = useSelector((s: RootState) => (s as any)?.generator) ?? { textPrompt: "", models: [] };
     const { streamExistingTask } = useMeshyStream();
 
-    const [prompt, setPrompt] = React.useState(gen?.textPrompt ?? "");
-    const [kind, setKind] = React.useState<"text" | "image" | "multi">("text");
+    // selected model id for the preview panel below the grid
+    const [selectedId, setSelectedId] = React.useState<string | null>(null);
 
-    /** 🔹 Start a new generation */
+    // one button: use generator.textPrompt from Redux, start Meshy text preview
     const startGeneration = async () => {
-        if (!prompt.trim()) return;
+        const prompt = (gen.textPrompt ?? "").trim();
+        if (!prompt) return;
         try {
             const res = await fetch("/api/meshy/text", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ prompt: prompt.trim() }),
+                body: JSON.stringify({ prompt }),
             });
             if (!res.ok) {
                 console.error("Meshy start failed:", await res.text());
                 return;
             }
             const { taskId } = await res.json();
-            console.log("[Meshy] new taskId:", taskId);
-            streamExistingTask(taskId, kind, { prompt });
+            streamExistingTask(taskId, "text", { prompt, stage: "preview" });
         } catch (err) {
             console.error("Generation error:", err);
         }
@@ -40,11 +46,7 @@ export function ModelsPanel() {
 
     const models = gen?.models ?? [];
 
-    /**
-     * 🔄 One-time background sync on page load
-     * Checks each model that isn't SUCCEEDED and fetches its latest state from Meshy.
-     * This ensures that any models finished while the user was away get their final URLs.
-     */
+    // One-time background sync on page load (for any unfinished models)
     React.useEffect(() => {
         if (!models?.length) return;
         const controller = new AbortController();
@@ -59,7 +61,6 @@ export function ModelsPanel() {
                     if (!res.ok) continue;
                     const data = await res.json();
 
-                    // If progress advanced or status changed, update it
                     if (data?.status && data?.status !== m.status) {
                         dispatch(
                             upsertModel({
@@ -70,7 +71,6 @@ export function ModelsPanel() {
                         );
                     }
 
-                    // If the final result is available now
                     if (data?.status === "SUCCEEDED" && data?.model_urls) {
                         dispatch(
                             finalizeModelFromTask({
@@ -84,25 +84,28 @@ export function ModelsPanel() {
                             })
                         );
                     }
-                } catch (_) {
+                } catch {
                     /* silent */
                 }
             }
         })();
 
         return () => controller.abort();
-    }, []); // only run once, on first load
+        // run once on initial mount
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const selectedModel = React.useMemo(
+        () => models.find((m: any) => m.id === selectedId) ?? null,
+        [models, selectedId]
+    );
+
+    const selectedModelUrl = pickBestModelUrl(selectedModel?.modelUrls);
 
     return (
-        <section className="bg-white rounded-2xl shadow p-4 border space-y-4">
-            {/* Input prompt + trigger */}
-            <div className="flex items-center gap-2">
-                <input
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    placeholder="Type a 3D prompt…"
-                    className="flex-1 rounded-lg border p-2 text-sm"
-                />
+        <section className="bg-white rounded-2xl shadow p-4 border space-y-6">
+            {/* Single action button — uses Redux generator state under the hood */}
+            <div className="flex items-center justify-end">
                 <button
                     onClick={startGeneration}
                     className="px-3 py-2 rounded-xl shadow text-sm border bg-black text-white"
@@ -116,12 +119,17 @@ export function ModelsPanel() {
                 <div className="text-sm text-gray-500">No models yet.</div>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {models.map((m) => (
-                        <article key={m.id} className="rounded-xl border p-3 space-y-2">
+                    {models.map((m: any) => (
+                        <article
+                            key={m.id}
+                            onClick={() => setSelectedId(m.id)}
+                            className={`rounded-xl border p-3 space-y-2 cursor-pointer transition ${
+                                selectedId === m.id ? "ring-2 ring-black" : "hover:bg-gray-50"
+                            }`}
+                            title="Click to preview below"
+                        >
                             <div className="flex items-center justify-between">
-                                <div className="text-sm font-medium truncate">
-                                    {m.prompt ?? m.kind}
-                                </div>
+                                <div className="text-sm font-medium truncate">{m.prompt ?? m.kind}</div>
                                 <span className="text-[10px] px-2 py-0.5 rounded bg-gray-100">
                   {m.status ?? "—"}
                 </span>
@@ -129,11 +137,8 @@ export function ModelsPanel() {
 
                             <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
                                 {m.thumbnailUrl ? (
-                                    <img
-                                        src={m.thumbnailUrl}
-                                        alt="thumb"
-                                        className="w-full h-full object-cover"
-                                    />
+                                    // eslint-disable-next-line @next/next/no-img-element
+                                    <img src={m.thumbnailUrl} alt="thumb" className="w-full h-full object-cover" />
                                 ) : (
                                     <div className="text-xs text-gray-500">No thumbnail</div>
                                 )}
@@ -144,9 +149,7 @@ export function ModelsPanel() {
                                     <div className="w-full h-2 bg-gray-200 rounded">
                                         <div
                                             className="h-2 rounded bg-black transition-all"
-                                            style={{
-                                                width: `${Math.max(0, Math.min(100, m.progress ?? 0))}%`,
-                                            }}
+                                            style={{ width: `${Math.max(0, Math.min(100, m.progress ?? 0))}%` }}
                                         />
                                     </div>
                                 )}
@@ -157,10 +160,11 @@ export function ModelsPanel() {
                                         url ? (
                                             <a
                                                 key={fmt}
-                                                href={url}
+                                                href={String(url)}
                                                 target="_blank"
                                                 rel="noreferrer"
                                                 className="underline"
+                                                onClick={(e) => e.stopPropagation()}
                                             >
                                                 {fmt}
                                             </a>
@@ -174,6 +178,33 @@ export function ModelsPanel() {
                             </div>
                         </article>
                     ))}
+                </div>
+            )}
+
+            {/* Preview panel (below the grid) */}
+            {selectedModel && (
+                <div className="mt-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                        <div className="text-sm font-medium truncate">
+                            Preview: {selectedModel.prompt ?? selectedModel.kind}
+                        </div>
+                        <button
+                            className="text-xs underline text-gray-600"
+                            onClick={() => setSelectedId(null)}
+                        >
+                            Close
+                        </button>
+                    </div>
+
+                    {selectedModelUrl ? (
+                        <LazyGlb
+                            key={selectedModelUrl || selectedModel.id}
+                            modelUrl={selectedModelUrl} />
+                    ) : (
+                        <div className="text-sm text-gray-500">
+                            No previewable URL yet. (We look for <code>.glb</code> first, then <code>.fbx</code>, <code>.obj</code>, <code>.usdz</code>.)
+                        </div>
+                    )}
                 </div>
             )}
         </section>

@@ -1,4 +1,4 @@
-import type { Generator, Image, Message, UUID } from '../store/slices/generatorSlice';
+import {Generator, GeneratorModel3D, Image, Message, UUID} from '../store/slices/generatorSlice';
 
 // A compact, serializable commit payload
 export type GeneratorSnapshot = {
@@ -8,6 +8,7 @@ export type GeneratorSnapshot = {
     selected: UUID[];
     approvalSet: UUID[];
     dirtySinceLastModel: boolean;
+    models: GeneratorModel3D[]
     messages: Message[]; // <-- include messages now
 };
 
@@ -24,6 +25,7 @@ export function toSnapshot(gen: Generator): GeneratorSnapshot {
         selected: [...(gen.selected ?? [])],
         approvalSet: [...(gen.approvalSet ?? [])],
         dirtySinceLastModel: gen.dirtySinceLastModel,
+        models:[...(gen.models ?? [])],
         messages: Array.isArray(gen.messages) ? gen.messages.map(m => ({ ...m })) : [],
     };
 }
@@ -36,6 +38,7 @@ export function fromSnapshot(snap: Partial<GeneratorSnapshot>): Generator {
         selected: Array.isArray(snap.selected) ? snap.selected : [],
         approvalSet: Array.isArray(snap.approvalSet) ? snap.approvalSet : [],
         dirtySinceLastModel: false,
+        models: [...(snap.models ?? [])],
         messages: Array.isArray(snap.messages) ? snap.messages as Message[] : [], // <-- restore messages
     };
 }

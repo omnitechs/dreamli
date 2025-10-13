@@ -8,7 +8,8 @@ import {
     FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER,
 } from 'redux-persist';
 
-import { api } from '../services/api'; // <-- ADD THIS
+import { api } from '../services/api';
+import { modelCommitListener } from './listeners/modelCommitListener';
 
 // SSR-safe storage
 const createNoopStorage = () => ({
@@ -26,13 +27,13 @@ const persistConfig = {
     key: 'dreamli:redux:v1',
     version: 2,
     storage,
-    whitelist: ['generator', 'commits'], // 'api' will NOT be persisted
+    whitelist: ['generator', 'commits'], // 'api' is not persisted
 };
 
 const rootReducer = combineReducers({
     generator: generatorReducer,
     commits: commitsReducer,
-    [api.reducerPath]: api.reducer, // <-- ADD THIS
+    [api.reducerPath]: api.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -42,7 +43,9 @@ export const store = configureStore({
     middleware: (gDM) =>
         gDM({
             serializableCheck: { ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER] },
-        }).concat(api.middleware), // <-- ADD THIS
+        })
+            .concat(api.middleware)
+            .concat(modelCommitListener.middleware), // <-- register listener
 });
 
 export const persistor = persistStore(store);

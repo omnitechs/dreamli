@@ -229,12 +229,21 @@ const slice = createSlice({
             state.models.push(a.payload);
             state.dirtySinceLastModel = true;
         },
-        upsertModel(state, a: PayloadAction<GeneratorModel3D>) {
+        upsertModel(state, a) {
             const i = state.models.findIndex(m => m.id === a.payload.id);
-            if (i >= 0) state.models[i] = { ...state.models[i], ...a.payload };
-            else state.models.unshift(a.payload);
+            if (i >= 0) {
+                const prev = state.models[i];
+                state.models[i] = {
+                    ...prev,
+                    ...a.payload,
+                    sourceCommitId: a.payload.sourceCommitId ?? prev.sourceCommitId,
+                };
+            } else {
+                state.models.unshift(a.payload);
+            }
             state.dirtySinceLastModel = true;
         },
+
         removeModel(state, a: PayloadAction<string>) {
             state.models = state.models.filter(m => m.id !== a.payload);
         },
