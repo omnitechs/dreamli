@@ -3,6 +3,42 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export type UUID = string;
 export type Mode = 'text' | 'image';
 
+/* -------------------- 3D Model Types -------------------- */
+export interface ModelFormatUrls {
+    glb?: string;
+    fbx?: string;
+    obj?: string;
+    usdz?: string;
+    [k: string]: string | undefined;
+}
+
+export type MeshyKind = 'text' | 'image' | 'multi';
+export type TextStage = 'preview' | 'refine';
+export type MeshyTaskStatus = 'PENDING' | 'IN_PROGRESS' | 'SUCCEEDED' | 'FAILED' | 'CANCELED';
+
+export interface GeneratorModel3D {
+    id: string;                  // internal id (task id by default)
+    provider: 'meshy';
+    taskId: string;              // Meshy task id
+    kind: MeshyKind;             // text | image | multi
+    stage?: TextStage;           // preview | refine
+    prompt?: string;
+    imageUrls?: string[];
+    modelUrls: ModelFormatUrls;  // downloadable formats
+    textureUrls?: Array<Record<string, string>>;
+    thumbnailUrl?: string;
+    previewVideoUrl?: string;
+    createdAt: string;           // ISO
+    sourceCommitId?: string;
+    rawTask?: any;
+
+    // live status
+    status?: MeshyTaskStatus;
+    progress?: number;           // 0..100
+    error?: string;
+}
+
+/* -------------------- Images & Messages -------------------- */
 export interface Image {
     id: UUID;
     url: string;
@@ -18,6 +54,7 @@ export interface Message {
     createdAt: string;
 }
 
+/* -------------------- Generator State -------------------- */
 export interface Generator {
     type: Mode;
     textPrompt: string;
@@ -27,6 +64,7 @@ export interface Generator {
     approvalSet?: UUID[];
     dirtySinceLastModel: boolean;
     messages: Message[];
+    models: GeneratorModel3D[];
 }
 
 const initialState: Generator = {
@@ -37,16 +75,39 @@ const initialState: Generator = {
     approvalSet: [],
     dirtySinceLastModel: false,
     messages: [],
+    models: [],
 };
 
-function uniq(ids: string[]): string[] {
+/* -------------------- Helpers -------------------- */
+function uniq<T>(ids: T[]): T[] {
     return Array.from(new Set(ids));
 }
 
+const STATUS_SET = new Set<MeshyTaskStatus>([
+    'PENDING',
+    'IN_PROGRESS',
+    'SUCCEEDED',
+    'FAILED',
+    'CANCELED',
+]);
+
+function normalizeStatus(s: unknown): MeshyTaskStatus | undefined {
+    if (typeof s !== 'string') return undefined;
+    const v = s.toUpperCase();
+    return STATUS_SET.has(v as MeshyTaskStatus) ? (v as MeshyTaskStatus) : undefined;
+}
+
+function clampProgress(p: unknown): number | undefined {
+    if (typeof p !== 'number' || Number.isNaN(p)) return undefined;
+    return Math.max(0, Math.min(100, p));
+}
+
+/* -------------------- Slice -------------------- */
 const slice = createSlice({
     name: 'generator',
     initialState,
     reducers: {
+        /* Core */
         setMode(state, a: PayloadAction<Mode>) {
             state.type = a.payload;
             state.dirtySinceLastModel = true;
@@ -55,27 +116,33 @@ const slice = createSlice({
             state.textPrompt = a.payload;
             state.dirtySinceLastModel = true;
         },
+
+        /* Images + Selection */
         addImages(state, a: PayloadAction<Image[]>) {
-            // --- SAFETY: coerce missing fields from old persisted state ---
+            // coerce legacy shapes
             if (!Array.isArray(state.selected)) state.selected = [];
             if (!Array.isArray(state.images)) state.images = [];
-            if (!state.messages) state.messages = [];
-            if (!state.approvalSet) state.approvalSet = [];
+            if (!Array.isArray(state.messages)) state.messages = [];
+            if (!Array.isArray(state.approvalSet)) state.approvalSet = [];
 
             const incomingById = new Map(a.payload.map(i => [i.id, i]));
             const next: Image[] = [];
             const seen = new Set<string>();
 
             for (const img of state.images) {
-                if (incomingById.has(img.id)) { next.push(incomingById.get(img.id)!); seen.add(img.id); }
-                else { next.push(img); seen.add(img.id); }
+                if (incomingById.has(img.id)) {
+                    next.push(incomingById.get(img.id)!);
+                    seen.add(img.id);
+                } else {
+                    next.push(img);
+                    seen.add(img.id);
+                }
             }
             for (const img of a.payload) if (!seen.has(img.id)) next.push(img);
             state.images = next;
 
             const valid = new Set(state.images.map(i => i.id));
             state.selected = (state.selected ?? []).filter(id => valid.has(id));
-
             state.dirtySinceLastModel = true;
         },
         removeImage(state, a: PayloadAction<UUID>) {
@@ -84,14 +151,11 @@ const slice = createSlice({
             state.selected = state.selected.filter(sid => sid !== id);
             state.dirtySinceLastModel = true;
         },
-
-        /** Replace selected with a unique, valid subset */
         setSelected(state, a: PayloadAction<UUID[]>) {
             const valid = new Set(state.images.map(i => i.id));
             state.selected = uniq(a.payload.filter(id => valid.has(id)));
             state.dirtySinceLastModel = true;
         },
-        /** Add one to selection if exists */
         selectImage(state, a: PayloadAction<UUID>) {
             const id = a.payload;
             if (state.images.some(i => i.id === id) && !state.selected.includes(id)) {
@@ -99,14 +163,12 @@ const slice = createSlice({
                 state.dirtySinceLastModel = true;
             }
         },
-        /** Remove one from selection */
         deselectImage(state, a: PayloadAction<UUID>) {
             const id = a.payload;
             const before = state.selected.length;
             state.selected = state.selected.filter(sid => sid !== id);
             if (state.selected.length !== before) state.dirtySinceLastModel = true;
         },
-        /** Toggle one */
         toggleSelect(state, a: PayloadAction<UUID>) {
             const id = a.payload;
             if (!state.images.some(i => i.id === id)) return;
@@ -131,36 +193,90 @@ const slice = createSlice({
             state.dirtySinceLastModel = true;
         },
 
-        // ---- messages ----
+        /* Messages */
         addMessage(state, a: PayloadAction<Message>) {
             state.messages.push(a.payload);
             state.dirtySinceLastModel = true;
         },
         editMessage(state, a: PayloadAction<{ id: UUID; content: string }>) {
             const m = state.messages.find(m => m.id === a.payload.id);
-            if (m) { m.content = a.payload.content; state.dirtySinceLastModel = true; }
+            if (m) {
+                m.content = a.payload.content;
+                state.dirtySinceLastModel = true;
+            }
         },
         removeMessage(state, a: PayloadAction<UUID>) {
             state.messages = state.messages.filter(m => m.id !== a.payload);
             state.dirtySinceLastModel = true;
         },
         clearMessages(state) {
-            if (state.messages.length) { state.messages = []; state.dirtySinceLastModel = true; }
+            if (state.messages.length) {
+                state.messages = [];
+                state.dirtySinceLastModel = true;
+            }
         },
 
-        /** Full replace (e.g., checkout snapshot) */
+        /* Snapshot */
         replaceWithSnapshot(_state, a: PayloadAction<Generator>) {
             return a.payload;
         },
         markSynced(state) {
             state.dirtySinceLastModel = false;
         },
+
+        /* Models */
+        addModel(state, a: PayloadAction<GeneratorModel3D>) {
+            state.models.push(a.payload);
+            state.dirtySinceLastModel = true;
+        },
+        upsertModel(state, a: PayloadAction<GeneratorModel3D>) {
+            const i = state.models.findIndex(m => m.id === a.payload.id);
+            if (i >= 0) state.models[i] = { ...state.models[i], ...a.payload };
+            else state.models.unshift(a.payload);
+            state.dirtySinceLastModel = true;
+        },
+        removeModel(state, a: PayloadAction<string>) {
+            state.models = state.models.filter(m => m.id !== a.payload);
+        },
+        clearModels(state) {
+            state.models = [];
+        },
+
+        // Live status (stream-safe)
+        setModelStatus(
+            state,
+            a: PayloadAction<{ id: string; status: unknown; progress?: unknown }>
+        ) {
+            const m = state.models.find(m => m.id === a.payload.id);
+            if (!m) return;
+            const st = normalizeStatus(a.payload.status);
+            if (st) m.status = st;
+            const pr = clampProgress(a.payload.progress);
+            if (typeof pr === 'number') m.progress = pr;
+        },
+        finalizeModelFromTask(state, a: PayloadAction<GeneratorModel3D>) {
+            const i = state.models.findIndex(m => m.id === a.payload.id);
+            const st = normalizeStatus((a.payload as any).status) ?? 'SUCCEEDED';
+            const pr = clampProgress((a.payload as any).progress) ?? 100;
+            const next = { ...a.payload, status: st, progress: pr };
+            if (i >= 0) state.models[i] = { ...state.models[i], ...next };
+            else state.models.unshift(next);
+        },
+        failModel(state, a: PayloadAction<{ id: string; error?: string }>) {
+            const m = state.models.find(m => m.id === a.payload.id);
+            if (m) {
+                m.status = 'FAILED';
+                m.error = a.payload.error ?? 'Failed';
+            }
+        },
     },
 });
 
+/* -------------------- Exports -------------------- */
 export const {
     setMode,
     updateText,
+
     addImages,
     removeImage,
     setSelected,
@@ -168,11 +284,24 @@ export const {
     deselectImage,
     toggleSelect,
     clearSelected,
+    removeSelectedImages,
+
     addMessage,
+    editMessage,
+    removeMessage,
+    clearMessages,
+
     replaceWithSnapshot,
     markSynced,
-    removeSelectedImages,
-    editMessage, removeMessage, clearMessages,
+
+    addModel,
+    upsertModel,
+    removeModel,
+    clearModels,
+
+    setModelStatus,
+    finalizeModelFromTask,
+    failModel,
 } = slice.actions;
 
 export default slice.reducer;

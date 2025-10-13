@@ -14,6 +14,7 @@ import {setHead} from "@/app/(lang)/[lang]/ai/store/slices/commitsSlice";
 import {CommitButton} from "@/app/(lang)/[lang]/ai/components/Commit/CommitButton";
 import {Commit} from "@/app/(lang)/[lang]/ai/components/Commit";
 import {ImageGallery} from "@/app/(lang)/[lang]/ai/components/ImageGallery";
+import {ModelsPanel} from "@/app/(lang)/[lang]/ai/components/ModelsPanel";
 
 export default function GeneratorPlayground() {
     const dispatch = useDispatch();
@@ -235,6 +236,7 @@ export default function GeneratorPlayground() {
                     </ul>
                 )}
             </section>
+            <ModelsPanel/>
 
             {/* Debug */}
             <details className="bg-white rounded-2xl shadow p-4 border" open>
