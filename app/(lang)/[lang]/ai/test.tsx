@@ -1,20 +1,17 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {Commit} from "@/app/(lang)/[lang]/ai/components/Commit";
+import React from "react";
+import {CommitsPanel} from "@/app/(lang)/[lang]/ai/components/CommitsPanel";
 import {ImageGallery} from "@/app/(lang)/[lang]/ai/components/ImageGallery";
-import {ModelsPanel} from "@/app/(lang)/[lang]/ai/components/ModelsPanel";
-import useImages from "@/app/(lang)/[lang]/ai/hooks/useImages";
-import useCommit from "@/app/(lang)/[lang]/ai/hooks/useCommit";
-import useMessage from "@/app/(lang)/[lang]/ai/hooks/useMessage";
-import usePersistor from "@/app/(lang)/[lang]/ai/hooks/usePersistor";
-import useMode from "@/app/(lang)/[lang]/ai/hooks/useMode";
-import usePrompt from "@/app/(lang)/[lang]/ai/hooks/usePrompt";
+import {ModelsPanel} from "@/app/(lang)/[lang]/ai/components/GeneratorPanel/ModelsPanel";
 import {RawGenerator} from "@/app/(lang)/[lang]/ai/components/RawGenerator";
 import {Messanger} from "@/app/(lang)/[lang]/ai/components/Messanger";
 import {Prompt} from "@/app/(lang)/[lang]/ai/components/Prompt";
 import {CommandCenter} from "@/app/(lang)/[lang]/ai/components/CommandCenter";
+import Build3DCard from "@/app/(lang)/[lang]/ai/components/GeneratorPanel/Build3DCard";
+import ModelsGallery from "@/app/(lang)/[lang]/ai/components/GeneratorPanel/ModelGallery";
+import {GeneratorPanel} from "@/app/(lang)/[lang]/ai/components/GeneratorPanel";
+
 
 
 type Props ={
@@ -26,11 +23,15 @@ export default function GeneratorPlayground(props:Props): JSX.Element {
     return (
         <div className="max-w-7xl mx-auto p-6 space-y-6">
             <CommandCenter projectId={projectId}/>
+            {/*<CommitsPanel/>*/}
            <Prompt/>
             <ImageGallery/>
             <Messanger/>
-            <Commit/>
+            <CommitsPanel/>
+            <Build3DCard projectId={projectId}/>
             <ModelsPanel/>
+            <ModelsGallery/>
+            <GeneratorPanel projectId={projectId}/>
             <RawGenerator/>
         </div>
     );

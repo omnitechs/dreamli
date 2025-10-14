@@ -31,7 +31,7 @@ export function CommandCenter(props: Props) {
                        onChange={(e) => handleFiles(e.target.files)} />
                 <button onClick={()=>onCommit(projectId)} disabled={savingCommit}
                         className="px-3 py-2 rounded-xl shadow text-sm border bg-black text-white disabled:opacity-50">
-                    {savingCommit ? 'Saving…' : 'Commit Snapshot'}
+                    {savingCommit ? 'Saving…' : 'CommitsPanel Snapshot'}
                 </button>
 
                 {/* Playground tools */}

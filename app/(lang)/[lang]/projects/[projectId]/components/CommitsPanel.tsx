@@ -129,7 +129,7 @@ export function CommitsPanel({
                                         )}
 
                                         <div className="flex items-start gap-3">
-                                            {/* Commit Icon */}
+                                            {/* CommitsPanel Icon */}
                                             <div
                                                 className={`
                           flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center
@@ -143,7 +143,7 @@ export function CommitsPanel({
                                                 )}
                                             </div>
 
-                                            {/* Commit Content */}
+                                            {/* CommitsPanel Content */}
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex items-center justify-between mb-1">
                           <span className="text-xs text-gray-500 font-mono">

@@ -108,7 +108,7 @@ modelCommitListener.startListening({
 
         // Success path
         if ('data' in result && result.data) {
-            const data: any = result.data; // expect your /api/commits POST to return the full Commit
+            const data: any = result.data; // expect your /api/commits POST to return the full CommitsPanel
             const newCommitId: string | undefined = data?.id;
 
             if (!newCommitId) {

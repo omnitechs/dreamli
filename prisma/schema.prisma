@@ -18,10 +18,10 @@ generator client {
 //   // convenience: store the current head commit id (optional)
 //   headId    String?  @db.Uuid
 //
-//   commits   Commit[]
+//   commits   CommitsPanel[]
 // }
 //
-// model Commit {
+// model CommitsPanel {
 //   id         String   @id @db.Uuid
 //   parentId   String?  @db.Uuid
 //   timestamp  DateTime

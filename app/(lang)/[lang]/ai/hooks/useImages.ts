@@ -38,10 +38,15 @@ export default function useImages(){
             }
         }
     }, [dispatch]);
+    const removeImageById = useCallback((id:any) => dispatch(removeImage(id)), [dispatch]);
     const images = gen.images ?? [];
     const selectedCount = (gen.selected ?? []).length;
     const selectedSet = useMemo(() => new Set(gen.selected ?? []), [gen.selected]);
+    const selected = gen.selected
+    const setSelectedHandler =(sel:any) => {
+        dispatch(setSelected(sel));
+    }
 
-
-    return {selectAll, clearSel, removeSelected,onPickFiles,handleFiles,fileInputRef,images,selectedCount,selectedSet};
+    return {selectAll,removeImageById,
+        clearSel, removeSelected,onPickFiles,handleFiles,fileInputRef,images,selectedCount,selectedSet,selected,setSelectedHandler};
 }

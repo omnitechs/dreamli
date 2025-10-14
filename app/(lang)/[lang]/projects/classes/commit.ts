@@ -43,7 +43,7 @@ export interface CommitJSON {
 }
 
 /**
- * Commit = immutable snapshot of the generator + messages since previous commit.
+ * CommitsPanel = immutable snapshot of the generator + messages since previous commit.
  * If a 3D model was generated, isVersion = true and `model` is present.
  */
 export class Commit implements CommitJSON {
@@ -112,7 +112,7 @@ export class Commit implements CommitJSON {
         });
     }
 
-    /** Add a new message to this commit; returns a new immutable Commit */
+    /** Add a new message to this commit; returns a new immutable CommitsPanel */
     withMessage(
         msg: Omit<Message, "id" | "createdAt"> & Partial<Pick<Message, "id" | "createdAt">>
     ): Commit {
