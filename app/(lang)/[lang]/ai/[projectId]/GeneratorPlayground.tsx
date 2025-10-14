@@ -2,7 +2,7 @@
 
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "./store";
+import type { RootState } from "../store";
 import {Commit} from "@/app/(lang)/[lang]/ai/components/Commit";
 import {ImageGallery} from "@/app/(lang)/[lang]/ai/components/ImageGallery";
 import {ModelsPanel} from "@/app/(lang)/[lang]/ai/components/ModelsPanel";
@@ -12,6 +12,7 @@ import useMessage from "@/app/(lang)/[lang]/ai/hooks/useMessage";
 import usePersistor from "@/app/(lang)/[lang]/ai/hooks/usePersistor";
 import useMode from "@/app/(lang)/[lang]/ai/hooks/useMode";
 import usePrompt from "@/app/(lang)/[lang]/ai/hooks/usePrompt";
+import {RawGenerator} from "@/app/(lang)/[lang]/ai/components/RawGenerator";
 
 
 type Props ={
@@ -183,14 +184,8 @@ export default function GeneratorPlayground(props:Props): JSX.Element {
                 )}
             </section>
             <ModelsPanel/>
-
-            {/* Debug */}
-            <details className="bg-white rounded-2xl shadow p-4 border" open>
-                <summary className="cursor-pointer font-medium">Debug: Generator JSON</summary>
-                <pre className="text-xs overflow-auto mt-2 p-3 bg-gray-50 rounded-xl border">
-{JSON.stringify(gen, null, 2)}
-        </pre>
-            </details>
+asdfsadf
+            <RawGenerator/>
         </div>
     );
 }

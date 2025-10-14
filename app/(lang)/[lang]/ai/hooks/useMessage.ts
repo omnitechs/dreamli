@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {addMessage,clearMessages} from "@/app/(lang)/[lang]/ai/store/slices/generatorSlice";
+import {addMessage,clearMessages,removeMessage} from "@/app/(lang)/[lang]/ai/store/slices/generatorSlice";
 import {useDispatch, useSelector} from "react-redux";
 import useGenerator from "@/app/(lang)/[lang]/ai/hooks/useGenerator";
 
@@ -21,6 +21,9 @@ export default function useMessage() {
     const clearMessage =()=>{
         dispatch(clearMessages())
     }
+    const removeMessageById =(id:string)=>{
+        dispatch(removeMessage(id))
+    }
     const messages = gen.messages;
-    return {msgRole, msgText,setMsgText,setMsgRole,addMsg,clearMessage,messages};
+    return {msgRole, msgText,setMsgText,setMsgRole,addMsg,clearMessage,messages,removeMessageById};
 }

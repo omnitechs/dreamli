@@ -1,23 +1,26 @@
 // @flow
 import * as React from 'react';
-import {Commit as CommitType} from "@/app/(lang)/[lang]/ai/store/slices/commitsSlice";
-import {CommitButton} from "@/app/(lang)/[lang]/ai/components/Commit/CommitButton";
+import useCommit from "@/app/(lang)/[lang]/ai/hooks/useCommit";
+import {CommitButtonWithContainer} from "@/app/(lang)/[lang]/ai/components/Commit/CommitButtonWithContainer";
 
-type Props = {
-    type: "div" | "li"
-    commit: CommitType
-    headId: string
-};
 
-export function Commit(props: Props) {
-    const {type, commit, headId} = props;
-    if (type === "div") {
-        return (<div key={commit.id} className={`${commit.id === headId ? "bg-gray-50" : ""}`}>
-            <CommitButton commit={commit}/>
-        </div>)
-    } else {
-        return (<li key={commit.id} className={`${commit.id === headId ? "bg-gray-50" : ""}`}>
-            <CommitButton commit={commit}/>
-        </li>)
-    }
+export function Commit() {
+    const {headId,onCommit,commits,savingCommit,} = useCommit();
+    return(
+        <section className="bg-white rounded-2xl shadow p-4 border">
+            <h2 className="font-medium mb-3">Commit Timeline</h2>
+
+            {(!commits || commits.length === 0) ? (
+                <div className="text-sm text-gray-500">No commits yet. Create one above.</div>
+            ) : (
+                <ul className="space-y-2">
+                    {Object.values(commits)
+                        .filter(Boolean) // <- guard against undefined holes
+                        .map((c: any) => (
+                            <CommitButtonWithContainer key={c.id} type={"li"} commit={c} headId={headId}/>
+                        ))}
+                </ul>
+            )}
+        </section>
+    )
 };
