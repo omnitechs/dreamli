@@ -10,11 +10,12 @@ import {
 import { useCreateCommitMutation } from "./services/api";
 import {fromSnapshot, toSnapshot} from "./libs/snapshots";
 import { persistor } from "./store";
-import {setHead} from "@/app/(lang)/[lang]/ai/store/slices/commitsSlice";
-import {CommitButton} from "@/app/(lang)/[lang]/ai/components/Commit/CommitButton";
 import {Commit} from "@/app/(lang)/[lang]/ai/components/Commit";
 import {ImageGallery} from "@/app/(lang)/[lang]/ai/components/ImageGallery";
 import {ModelsPanel} from "@/app/(lang)/[lang]/ai/components/ModelsPanel";
+import useImages from "@/app/(lang)/[lang]/ai/hooks/useImages";
+import useCommit from "@/app/(lang)/[lang]/ai/hooks/useCommit";
+import useMessage from "@/app/(lang)/[lang]/ai/hooks/useMessage";
 
 
 type Props ={
@@ -23,82 +24,24 @@ type Props ={
 export default function GeneratorPlayground(props:Props): JSX.Element {
     const projectId = props.projectId ?? null;
     const dispatch = useDispatch();
-    const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const {onPickFiles,handleFiles,fileInputRef,removeSelected,selectAll,clearSel,selectedCount,images} = useImages()
+    const {headId,onCommit,commits,savingCommit,} = useCommit();
     const [isDragging, setIsDragging] = useState(false);
-
+    const {addMsg,setMsgText,msgText,msgRole,setMsgRole}=useMessage()
     const gen = useSelector((s: RootState) => (s as any)?.generator) ?? {
         type: 'text', textPrompt: '', images: [], selected: [],
         approvalSet: [], dirtySinceLastModel: false, messages: [],
     };
-    console.log(gen)
-    const commitsState = useSelector((s: RootState) => (s as any)?.commits) ?? { entities: {}, headId: null };
-    const commits = Object.values(commitsState.entities ?? {});
-    const headId = commitsState.headId ?? null;
-
-    const [createCommit, { isLoading: savingCommit }] = useCreateCommitMutation();
-
-    // ---------- uploads ----------
-    const onPickFiles = useCallback(() => fileInputRef.current?.click(), []);
-    const handleFiles = useCallback(async (files: FileList | null) => {
-        if (!files) return;
-        for (const file of Array.from(files)) {
-            const tempId = crypto.randomUUID();
-            const tempUrl = URL.createObjectURL(file);
-            // optimistic add
-            dispatch(addImages([{ id: tempId, url: tempUrl, meta: { name: file.name, size: file.size, type: file.type } }]));
-            try {
-                // simple dev upload — store to /public/uploads
-                const fd = new FormData();
-                fd.append('file', file);
-                const res = await fetch('/api/uploads/presign', { method: 'POST', body: fd });
-                if (!res.ok) throw new Error('upload failed');
-                const data = await res.json();
-                // swap blob -> public url, keeping same id
-                dispatch(addImages([{ id: tempId, url: data.url, key: data.key } as any]));
-            } catch {
-                dispatch(removeImage(tempId));
-            }
-        }
-    }, [dispatch]);
-
     const onDrop = useCallback((e: React.DragEvent) => {
         e.preventDefault(); setIsDragging(false); handleFiles(e.dataTransfer.files);
     }, [handleFiles]);
 
-    // ---------- commit ----------
-    const onCommit = useCallback(async () => {
-        const snapshot = toSnapshot(gen as any);
-        await createCommit({
-            projectId: projectId,
-            parentId: headId ?? null,
-            snapshot,
-            message: `Checkpoint: ${new Date().toLocaleString()}`,
-        });
-    }, [createCommit, gen, headId]);
-
     // ---------- tools ----------
-    const selectAll = () => dispatch(setSelected(gen.images.map((i: any) => i.id)));
-    const clearSel = () => dispatch(setSelected([]));
-    const removeSelected = () => dispatch(removeSelectedImages());
     const purgePersist = async () => { await persistor.purge(); location.reload(); };
 
-    // ---------- messages ----------
-    const [msgRole, setMsgRole] = useState<'user' | 'assistant' | 'system'>('user');
-    const [msgText, setMsgText] = useState('');
-    const addMsg = () => {
-        if (!msgText.trim()) return;
-        const id = crypto.randomUUID();
-        // const attachments = (gen.selected ?? []).map((imageId: string) => ({ type: 'image', imageId })) as any;
-        dispatch(addMessage({
-            id, role: msgRole, content: msgText.trim(),
-            createdAt: new Date().toISOString(),
-        }));
-        setMsgText('');
-    };
 
-    const selectedSet = useMemo(() => new Set(gen.selected ?? []), [gen.selected]);
-    const images = gen.images ?? [];
-    const selectedCount = (gen.selected ?? []).length;
+
+
 
     return (
         <div className="max-w-7xl mx-auto p-6 space-y-6">
@@ -115,7 +58,7 @@ export default function GeneratorPlayground(props:Props): JSX.Element {
                     </button>
                     <input ref={fileInputRef} type="file" accept="image/*" multiple className="hidden"
                            onChange={(e) => handleFiles(e.target.files)} />
-                    <button onClick={onCommit} disabled={savingCommit}
+                    <button onClick={()=>onCommit(projectId)} disabled={savingCommit}
                             className="px-3 py-2 rounded-xl shadow text-sm border bg-black text-white disabled:opacity-50">
                         {savingCommit ? 'Saving…' : 'Commit Snapshot'}
                     </button>
