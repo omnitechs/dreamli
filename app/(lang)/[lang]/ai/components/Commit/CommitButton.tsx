@@ -3,6 +3,8 @@
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { Commit, setHead } from '@/app/(lang)/[lang]/ai/store/slices/commitsSlice';
+import {hydrateFromCommit} from "@/app/(lang)/[lang]/ai/store/slices/generatorSlice";
+import {fromSnapshot} from "@/app/(lang)/[lang]/ai/libs/snapshots";
 
 type Props = { commit: Commit };
 
@@ -18,6 +20,12 @@ export function CommitButton(props: Props) {
                 e.stopPropagation();
                 // 👉 Only update head; hydration will happen in the page effect
                 dispatch(setHead(commit.id));
+                dispatch(
+                    hydrateFromCommit({
+                        projectId: commit.projectId,
+                        commitId: commit.id,
+                        snapshot: fromSnapshot(commit.snapshot),
+                    }))
             }}
             className="w-full text-left flex items-center justify-between rounded-xl border p-2 hover:bg-gray-50 cursor-pointer"
             title="Click to checkout this commit"

@@ -30,6 +30,7 @@ export default function GeneratorPlayground(props:Props): JSX.Element {
         type: 'text', textPrompt: '', images: [], selected: [],
         approvalSet: [], dirtySinceLastModel: false, messages: [],
     };
+    console.log(gen)
     const commitsState = useSelector((s: RootState) => (s as any)?.commits) ?? { entities: {}, headId: null };
     const commits = Object.values(commitsState.entities ?? {});
     const headId = commitsState.headId ?? null;

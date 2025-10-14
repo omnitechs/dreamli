@@ -100,6 +100,7 @@ const slice = createSlice({
             _state,
             a: PayloadAction<{ projectId: string }>
         ) {
+            console.log("reset generator")
             return {
                 ...initialState,
                 __meta: {
