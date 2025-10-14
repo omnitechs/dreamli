@@ -1,11 +1,13 @@
 import {useState} from "react";
-import {addMessage} from "@/app/(lang)/[lang]/ai/store/slices/generatorSlice";
-import {useDispatch} from "react-redux";
+import {addMessage,clearMessages} from "@/app/(lang)/[lang]/ai/store/slices/generatorSlice";
+import {useDispatch, useSelector} from "react-redux";
+import useGenerator from "@/app/(lang)/[lang]/ai/hooks/useGenerator";
 
 export default function useMessage() {
     const dispatch = useDispatch();
     const [msgRole, setMsgRole] = useState<'user' | 'assistant' | 'system'>('user');
     const [msgText, setMsgText] = useState('');
+    const {gen} = useGenerator()
     const addMsg = () => {
         if (!msgText.trim()) return;
         const id = crypto.randomUUID();
@@ -16,5 +18,9 @@ export default function useMessage() {
         }));
         setMsgText('');
     };
-    return {msgRole, msgText,setMsgText,setMsgRole,addMsg};
+    const clearMessage =()=>{
+        dispatch(clearMessages())
+    }
+    const messages = gen.messages;
+    return {msgRole, msgText,setMsgText,setMsgRole,addMsg,clearMessage,messages};
 }

@@ -3,19 +3,15 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "./store";
-import {
-    addImages, removeImage, toggleSelect, setMode, updateText,
-    addMessage, clearMessages, removeSelectedImages, setSelected, replaceWithSnapshot,
-} from "./store/slices/generatorSlice";
-import { useCreateCommitMutation } from "./services/api";
-import {fromSnapshot, toSnapshot} from "./libs/snapshots";
-import { persistor } from "./store";
 import {Commit} from "@/app/(lang)/[lang]/ai/components/Commit";
 import {ImageGallery} from "@/app/(lang)/[lang]/ai/components/ImageGallery";
 import {ModelsPanel} from "@/app/(lang)/[lang]/ai/components/ModelsPanel";
 import useImages from "@/app/(lang)/[lang]/ai/hooks/useImages";
 import useCommit from "@/app/(lang)/[lang]/ai/hooks/useCommit";
 import useMessage from "@/app/(lang)/[lang]/ai/hooks/useMessage";
+import usePersistor from "@/app/(lang)/[lang]/ai/hooks/usePersistor";
+import useMode from "@/app/(lang)/[lang]/ai/hooks/useMode";
+import usePrompt from "@/app/(lang)/[lang]/ai/hooks/usePrompt";
 
 
 type Props ={
@@ -27,7 +23,10 @@ export default function GeneratorPlayground(props:Props): JSX.Element {
     const {onPickFiles,handleFiles,fileInputRef,removeSelected,selectAll,clearSel,selectedCount,images} = useImages()
     const {headId,onCommit,commits,savingCommit,} = useCommit();
     const [isDragging, setIsDragging] = useState(false);
-    const {addMsg,setMsgText,msgText,msgRole,setMsgRole}=useMessage()
+    const {addMsg,setMsgText,msgText,msgRole,setMsgRole,clearMessage,messages}=useMessage()
+    const {purgePersist} = usePersistor()
+    const {toggleMode,modeType} = useMode()
+    const {prompt,updatePrompt} = usePrompt()
     const gen = useSelector((s: RootState) => (s as any)?.generator) ?? {
         type: 'text', textPrompt: '', images: [], selected: [],
         approvalSet: [], dirtySinceLastModel: false, messages: [],
@@ -36,8 +35,6 @@ export default function GeneratorPlayground(props:Props): JSX.Element {
         e.preventDefault(); setIsDragging(false); handleFiles(e.dataTransfer.files);
     }, [handleFiles]);
 
-    // ---------- tools ----------
-    const purgePersist = async () => { await persistor.purge(); location.reload(); };
 
 
 
@@ -50,8 +47,8 @@ export default function GeneratorPlayground(props:Props): JSX.Element {
                 <h1 className="text-2xl font-semibold">Generator Playground</h1>
                 <div className="flex flex-wrap gap-2">
                     <button className="px-3 py-2 rounded-xl shadow text-sm border hover:bg-gray-50"
-                            onClick={() => dispatch(setMode(gen.type === 'text' ? 'image' : 'text'))}>
-                        Mode: {gen.type}
+                            onClick={toggleMode}>
+                        Mode: {modeType}
                     </button>
                     <button className="px-3 py-2 rounded-xl shadow text-sm border hover:bg-gray-50" onClick={onPickFiles}>
                         Upload Images
@@ -83,7 +80,7 @@ export default function GeneratorPlayground(props:Props): JSX.Element {
             {/* Text prompt */}
             <div className="bg-white rounded-2xl shadow p-4 border">
                 <label className="block text-sm text-gray-600 mb-2">Text Prompt</label>
-                <textarea value={gen.textPrompt} onChange={(e) => dispatch(updateText(e.target.value))}
+                <textarea value={prompt} onChange={(e) => updatePrompt(e.target.value)}
                           placeholder="Describe your idea…" className="w-full min-h-[90px] rounded-xl border p-3" />
             </div>
 
@@ -99,8 +96,8 @@ export default function GeneratorPlayground(props:Props): JSX.Element {
             {/* Messages composer */}
             <section className="bg-white rounded-2xl shadow p-4 border space-y-3">
                 <div className="flex items-center justify-between">
-                    <h2 className="font-medium">Messages ({gen.messages?.length ?? 0})</h2>
-                    <button className="px-3 py-2 rounded-xl shadow text-sm border hover:bg-gray-50" onClick={() => dispatch(clearMessages())}>
+                    <h2 className="font-medium">Messages ({messages?.length ?? 0})</h2>
+                    <button className="px-3 py-2 rounded-xl shadow text-sm border hover:bg-gray-50" onClick={clearMessage}>
                         Clear Messages
                     </button>
                 </div>
@@ -137,9 +134,9 @@ export default function GeneratorPlayground(props:Props): JSX.Element {
                 )}
 
                 {/* Messages list */}
-                {gen.messages?.length ? (
+                {messages?.length ? (
                     <ul className="divide-y">
-                        {gen.messages.map((m: any) => (
+                        {messages.map((m: any) => (
                             <li key={m.id} className="py-2 flex gap-3">
                                 <span className="text-[10px] uppercase tracking-wide px-2 py-1 rounded bg-gray-100 self-start">{m.role}</span>
                                 <div className="flex-1 min-w-0">
