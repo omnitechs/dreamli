@@ -26,25 +26,13 @@ export function GeneratorPanel(props: {projectId: string}) {
             <div className="flex-1 overflow-auto p-4 space-y-6">
                 {/* Mode & Prompt */}
                 <ModePromptCard/>
-
-                {/* IMAGE MODE ONLY */}
                 {isImageMode && (
                     <>
                         <UploadCard />
-
-                        {images.length > 0 && (
-                            <>
-                                <ImagesGrid/>
-
-                            </>
-                        )}
-
+                        {images.length > 0 && <ImagesGrid/>}
                     </>
                 )}
-
-                {/* 3D Build + Models */}
                 <Build3DCard projectId={projectId} />
-                {/*<ModelsGallery/> /!* ✅ now dynamic *!/*/}
             </div>
         </div>
     );

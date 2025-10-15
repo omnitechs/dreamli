@@ -2,35 +2,23 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-
-import { useDispatch } from 'react-redux';
 import { Check, Trash2 } from 'lucide-react';
 import useImages from "@/app/(lang)/[lang]/ai/hooks/useImages";
 
-
-
-type Img = { id?: string; url?: string; src?: string };
+type Img = { id?: string; url?: string; src?: string; meta?: any };
 const getUrl = (img: Img) => img.url || img.src || '';
-const getId = (img: Img) => img.id || getUrl(img); // fallback to URL if no id yet (optimistic)
+const getId = (img: Img) => img.id || getUrl(img); // fallback to URL if no id yet
 
 export function ImagesGrid() {
-    const dispatch = useDispatch();
-    const {images,selected,selectedSet,setSelectedHandler,removeImageById} = useImages()
+    const { images, selectedSet, setSelectedHandler, removeImageById } = useImages();
 
-
-    // Prefer Redux state; fall back to props if store empty (just in case)
-    const storeImages: Img[] = Array.isArray(images) && images.length ? images : images ?? [];
-    const storeSelectedIds: string[] =
-        Array.isArray(selected) && selected.length
-            ? selected
-            : []; // ignore selectedUrls prop to avoid mixing ids/urls
-
-    // Local view state mirrors the store for snappy UI (no server queue anymore)
+    const storeImages: Img[] = Array.isArray(images) && images.length ? images : (images ?? []);
     const [localImages, setLocalImages] = useState<Img[]>(storeImages);
-    useEffect(() => setLocalImages(storeImages), [storeImages]);
 
+    useEffect(() => {
+        setLocalImages(storeImages);
+    }, [storeImages]);
 
-    // Toggle by ID; if an image has no id yet (optimistic add), we fallback to its URL as a temporary id
     const toggle = (img: Img) => {
         const id = String(getId(img));
         if (!id) return;
@@ -40,13 +28,10 @@ export function ImagesGrid() {
         setSelectedHandler(Array.from(next));
     };
 
-    // Delete image locally and in Redux store
     const handleDelete = (img: Img) => {
         const id = String(getId(img));
         if (!id) return;
-        // local optimistic remove for instant UI
-        setLocalImages((prev) => prev.filter((x) => String(getId(x)) !== id));
-        // Redux remove
+        setLocalImages(prev => prev.filter(x => String(getId(x)) !== id));
         removeImageById(id);
     };
 
@@ -61,10 +46,11 @@ export function ImagesGrid() {
                     const url = getUrl(image);
                     const id = String(getId(image));
                     const isSelected = selectedSet.has(id);
+                    const cardKey = `${id}:${url}`; // remount on URL change
 
                     return (
                         <div
-                            key={id || url || index}
+                            key={cardKey}
                             className={`relative group rounded-lg overflow-hidden border-2 transition-all ${
                                 isSelected ? 'border-blue-500 ring-2 ring-blue-200' : 'border-gray-200 hover:border-gray-300'
                             }`}
@@ -72,6 +58,7 @@ export function ImagesGrid() {
                             <div className="aspect-square bg-gray-100 relative">
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img
+                                    key={url}
                                     src={url}
                                     alt={`Image ${index + 1}`}
                                     className="w-full h-full object-cover"
@@ -79,7 +66,7 @@ export function ImagesGrid() {
                                     decoding="async"
                                     onError={(e) => {
                                         (e.target as HTMLImageElement).src =
-                                            'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIGZpbGw9IiNGM0Y0RjYiLz48cGF0aCBkPSJNMTIgMTZDOC42ODYyOSAxNiA2IDEzLjMxMzcgNiAxMEM2IDYuNjg2MjkgOC42ODYyOSA0IDEyIDRDMTUuMzEzNyA0IDE4IDYuNjg2MjkgMTggMTBDMTggMTMuMzEzNyAxNS4zMTM3IDE2IDEyIDE2WiIgc3Ryb2tlPSIjOUNBNEFGIiBzdHJva2Utd2lkdGg9IjIiLz48L3N2Zz4=';
+                                            'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIGZpbGw9IiNGM0Y0RjYiLz48cGF0aCBkPSJNMTIgMTZDOC42ODYyOSAxNiA2IDEzLjMxMzcgNiAxMEM2IDYuNjg2MjkgOC42ODYyOSAwIDEyIDRDMTUuMzEzNyA0IDE4IDYuNjg2MjkgMTggMTBDMTggMTMuMzEzNyAxNS4zMTM3IDE2IDEyIDE2WiIgc3Ryb2tlPSIjOUNBNEFGIiBzdHJva2Utd2lkdGg9IjIiLz48L3N2Zz4=';
                                     }}
                                 />
                             </div>
@@ -104,8 +91,17 @@ export function ImagesGrid() {
                                     </button>
                                 </div>
 
-                                {isSelected && (
+                                {image?.meta?.status && (
                                     <div className="absolute bottom-1 left-1">
+                                        <div className="px-2 py-0.5 rounded bg-black/60 text-white text-[10px]">
+                                            {image.meta.status}
+                                            {image?.meta?.streamId ? ` · ${String(image.meta.streamId).slice(0, 8)}` : ''}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {isSelected && (
+                                    <div className="absolute bottom-1 right-1">
                                         <div className="w-5 h-5 bg-blue-600 text-white rounded-full flex items-center justify-center">
                                             <Check className="w-3 h-3" />
                                         </div>

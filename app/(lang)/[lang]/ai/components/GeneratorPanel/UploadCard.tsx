@@ -6,6 +6,7 @@ import { Upload, Link2, Plus } from 'lucide-react';
 import useImages from '@/app/(lang)/[lang]/ai/hooks/useImages';
 import { useDispatch } from 'react-redux';
 import { addImages } from '@/app/(lang)/[lang]/ai/store/slices/generatorSlice';
+import CreateWithAI from "@/app/(lang)/[lang]/ai/components/GeneratorPanel/CreateWithAI";
 
 
 export function UploadCard() {
@@ -163,6 +164,7 @@ export function UploadCard() {
                         Add
                     </button>
                 </div>
+                <CreateWithAI/>
             </form>
         </div>
     );
