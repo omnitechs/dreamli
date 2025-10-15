@@ -8,6 +8,12 @@ import {
     failModel,
 } from "../store/slices/generatorSlice";
 import {GeneratorModel3D} from "@/app/(lang)/[lang]/ai/types";
+import usePrompt from "@/app/(lang)/[lang]/ai/hooks/usePrompt";
+import React, {useRef, useState, useTransition} from "react";
+import useMode from "@/app/(lang)/[lang]/ai/hooks/useMode";
+import useModels from "@/app/(lang)/[lang]/ai/hooks/useModels";
+import useImages from "@/app/(lang)/[lang]/ai/hooks/useImages";
+import useCommit from "@/app/(lang)/[lang]/ai/hooks/useCommit";
 
 type Terminal = "SUCCEEDED" | "FAILED" | "CANCELED";
 const TERMINAL: Record<string, true> = { SUCCEEDED: true, FAILED: true, CANCELED: true };
@@ -24,6 +30,20 @@ async function pollTask(taskId: string, kind: string) {
 
 export function useMeshyStream() {
     const dispatch = useDispatch();
+    const {prompt} = usePrompt();
+
+    const [isPending, startTransition] = useTransition();
+    const [status, setStatus] = useState('');
+    const [progress, setProgress] = useState(0);
+    const [modelUrl, setModelUrl] = useState<string>();
+    const [error, setError] = useState<string | null>(null);
+    const {images} = useImages()
+    const {headId,onCommit} = useCommit()
+    const esRef = useRef<EventSource | null>(null);
+    // const {models} = useModels()
+
+
+
 
     function openStream(base: GeneratorModel3D) {
         console.log("openStream");
@@ -172,5 +192,88 @@ export function useMeshyStream() {
         (models ?? []).forEach(resumeModel);
     }
 
-    return { streamExistingTask, resumeModel, resumeAll };
+    // one button: use generator.textPrompt from Redux, start Meshy text preview
+    const startGenerationFromPrompt = async () => {
+        if (!prompt) return;
+        try {
+            const res = await fetch("/api/meshy/text", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ prompt }),
+            });
+            if (!res.ok) {
+                console.error("Meshy start failed:", await res.text());
+                return;
+            }
+            const { taskId } = await res.json();
+            streamExistingTask(taskId, "text", { prompt, stage: "preview" });
+        } catch (err) {
+            console.error("Generation error:", err);
+        }
+    };
+
+
+    /** 🔹 Start 3D generation via Meshy stream API */
+    const onGenerate = (projectId: string) => {
+        if (!projectId || !headId) return;
+        setError(null);
+        setStatus('');
+        setProgress(0);
+        setModelUrl(undefined);
+
+        startTransition(async () => {
+            try {
+                const res = await fetch(`/api/ai/meshy/start?projectId=${projectId}&commitId=${headId}`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        prompt: prompt ?? '',
+                        images: images ?? [],
+                    }),
+                });
+
+                if (!res.ok) throw new Error(`Failed to start 3D generation (${res.status})`);
+                const {streamUrl} = await res.json();
+
+                setStatus('PENDING');
+
+                const es = new EventSource(streamUrl);
+                esRef.current = es;
+
+                es.onmessage = async (evt) => {
+                    try {
+                        const data = JSON.parse(evt.data);
+                        if (typeof data.status === 'string') setStatus(data.status);
+                        if (typeof data.progress === 'number') setProgress(data.progress);
+
+                        if (data.status === 'SUCCEEDED') {
+                            const best =
+                                data?.model_urls?.glb ??
+                                data?.model_urls?.fbx ??
+                                data?.model_urls?.obj ??
+                                data?.model_urls?.usdz;
+
+                            if (best) {
+                                setModelUrl(best);
+                                await onCommit('Generated 3D Model'); // ✅ now uses proper commit hook
+                            }
+
+                            es.close();
+                        }
+                    } catch (err) {
+                        console.warn('SSE parse error', err);
+                    }
+                };
+
+                es.onerror = () => {
+                    setError('Stream disconnected.');
+                    es.close();
+                };
+            } catch (e: any) {
+                setError(e?.message ?? String(e));
+            }
+        });
+    };
+
+    return { streamExistingTask, resumeModel, resumeAll,startGenerationFromPrompt ,useRef,onGenerate};
 }

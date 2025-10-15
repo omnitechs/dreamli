@@ -5,86 +5,36 @@ import useCommit from '@/app/(lang)/[lang]/ai/hooks/useCommit';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/app/(lang)/[lang]/ai/store';
 import LazyGlb from '@/components/GlbViewer';
+import {useMeshyStream} from "@/app/(lang)/[lang]/ai/hooks/useMeshyStream";
+import useModels from "@/app/(lang)/[lang]/ai/hooks/useModels";
 
 export default function Build3DCard({ projectId }: { projectId: string }) {
-    const { headId, onCommit, savingCommit } = useCommit();
-    const generator = useSelector((s: RootState) => (s as any)?.generator);
-
     const [isPending, startTransition] = useTransition();
     const [status, setStatus] = useState('');
     const [progress, setProgress] = useState(0);
     const [modelUrl, setModelUrl] = useState<string>();
     const [error, setError] = useState<string | null>(null);
-    const esRef = useRef<EventSource | null>(null);
+    const { streamExistingTask,resumeAll ,startGenerationFromPrompt} = useMeshyStream();
+    const {models} = useModels()
+    const [selectedId, setSelectedId] = React.useState<string | null>(null);
 
-    // Cleanup on unmount
-    useEffect(() => {
-        return () => {
-            esRef.current?.close();
-        };
+    function pickBestModelUrl(modelUrls?: Record<string, string | undefined>) {
+        if (!modelUrls) return undefined;
+        return modelUrls.glb || modelUrls.fbx || modelUrls.obj || modelUrls.usdz || undefined;
+    }
+    React.useEffect(() => {
+        console.log("loading the resumeAll");
+        if (models?.length) resumeAll(models);
     }, []);
 
-    /** 🔹 Start 3D generation via Meshy stream API */
-    const onGenerate = () => {
-        if (!projectId || !headId) return;
-        setError(null);
-        setStatus('');
-        setProgress(0);
-        setModelUrl(undefined);
+    const selectedModel = React.useMemo(
+        () => models.find((m: any) => m.id === selectedId) ?? null,
+        [models, selectedId]
+    );
 
-        startTransition(async () => {
-            try {
-                const res = await fetch(`/api/ai/meshy/start?projectId=${projectId}&commitId=${headId}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        prompt: generator.textPrompt ?? '',
-                        images: generator.images ?? [],
-                    }),
-                });
+    const selectedModelUrl = pickBestModelUrl(selectedModel?.modelUrls);
 
-                if (!res.ok) throw new Error(`Failed to start 3D generation (${res.status})`);
-                const { streamUrl } = await res.json();
 
-                setStatus('PENDING');
-
-                const es = new EventSource(streamUrl);
-                esRef.current = es;
-
-                es.onmessage = async (evt) => {
-                    try {
-                        const data = JSON.parse(evt.data);
-                        if (typeof data.status === 'string') setStatus(data.status);
-                        if (typeof data.progress === 'number') setProgress(data.progress);
-
-                        if (data.status === 'SUCCEEDED') {
-                            const best =
-                                data?.model_urls?.glb ??
-                                data?.model_urls?.fbx ??
-                                data?.model_urls?.obj ??
-                                data?.model_urls?.usdz;
-
-                            if (best) {
-                                setModelUrl(best);
-                                await onCommit('Generated 3D Model'); // ✅ now uses proper commit hook
-                            }
-
-                            es.close();
-                        }
-                    } catch (err) {
-                        console.warn('SSE parse error', err);
-                    }
-                };
-
-                es.onerror = () => {
-                    setError('Stream disconnected.');
-                    es.close();
-                };
-            } catch (e: any) {
-                setError(e?.message ?? String(e));
-            }
-        });
-    };
 
     return (
         <div className="rounded-xl border p-4 space-y-3 bg-white shadow-sm">
@@ -93,7 +43,7 @@ export default function Build3DCard({ projectId }: { projectId: string }) {
             </div>
 
             <button
-                onClick={onGenerate}
+                onClick={startGenerationFromPrompt}
                 disabled={isPending}
                 className="rounded-lg px-4 py-2 border border-gray-300 hover:bg-gray-50 disabled:opacity-60"
             >
@@ -120,13 +70,99 @@ export default function Build3DCard({ projectId }: { projectId: string }) {
                 </div>
             )}
 
-            {modelUrl && (
-                <div className="rounded-lg overflow-hidden border mt-2">
-                    <LazyGlb modelUrl={modelUrl} />
+            {/* Models grid */}
+            {models.length === 0 ? (
+                <div className="text-sm text-gray-500">No models yet.</div>
+            ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {models.map((m: any) => (
+                        <article
+                            key={m.id}
+                            onClick={() => setSelectedId(m.id)}
+                            className={`rounded-xl border p-3 space-y-2 cursor-pointer transition ${
+                                selectedId === m.id ? "ring-2 ring-black" : "hover:bg-gray-50"
+                            }`}
+                            title="Click to preview below"
+                        >
+                            <div className="flex items-center justify-between">
+                                <div className="text-sm font-medium truncate">{m.prompt ?? m.kind}</div>
+                                <span className="text-[10px] px-2 py-0.5 rounded bg-gray-100">
+                  {m.status ?? "—"}
+                </span>
+                            </div>
+
+                            <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+                                {m.thumbnailUrl ? (
+                                    // eslint-disable-next-line @next/next/no-img-element
+                                    <img src={m.thumbnailUrl} alt="thumb" className="w-full h-full object-cover" />
+                                ) : (
+                                    <div className="text-xs text-gray-500">No thumbnail</div>
+                                )}
+                            </div>
+
+                            {typeof m.progress === "number" &&
+                                (m.status === "PENDING" || m.status === "IN_PROGRESS") && (
+                                    <div className="w-full h-2 bg-gray-200 rounded">
+                                        <div
+                                            className="h-2 rounded bg-black transition-all"
+                                            style={{ width: `${Math.max(0, Math.min(100, m.progress ?? 0))}%` }}
+                                        />
+                                    </div>
+                                )}
+
+                            {m.status === "SUCCEEDED" && (
+                                <div className="flex flex-wrap gap-2 text-xs">
+                                    {Object.entries(m.modelUrls ?? {}).map(([fmt, url]) =>
+                                        url ? (
+                                            <a
+                                                key={fmt}
+                                                href={String(url)}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="underline"
+                                                onClick={(e) => e.stopPropagation()}
+                                            >
+                                                {fmt}
+                                            </a>
+                                        ) : null
+                                    )}
+                                </div>
+                            )}
+
+                            <div className="text-[10px] text-gray-500">
+                                {new Date(m.createdAt ?? Date.now()).toLocaleString()}
+                            </div>
+                        </article>
+                    ))}
                 </div>
             )}
 
-            {error && <div className="text-xs text-red-600">Error: {error}</div>}
+            {/* Preview panel (below the grid) */}
+            {selectedModel && (
+                <div className="mt-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                        <div className="text-sm font-medium truncate">
+                            Preview: {selectedModel.prompt ?? selectedModel.kind}
+                        </div>
+                        <button
+                            className="text-xs underline text-gray-600"
+                            onClick={() => setSelectedId(null)}
+                        >
+                            Close
+                        </button>
+                    </div>
+
+                    {selectedModelUrl ? (
+                        <LazyGlb
+                            key={selectedModelUrl || selectedModel.id}
+                            modelUrl={selectedModelUrl} />
+                    ) : (
+                        <div className="text-sm text-gray-500">
+                            No previewable URL yet. (We look for <code>.glb</code> first, then <code>.fbx</code>, <code>.obj</code>, <code>.usdz</code>.)
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
     );
 }

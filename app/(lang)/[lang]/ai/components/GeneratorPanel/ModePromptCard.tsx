@@ -14,21 +14,10 @@ import useGenerator from "@/app/(lang)/[lang]/ai/hooks/useGenerator";
 export function ModePromptCard() {
     const { modeType, toggleMode } = useMode();
     const { prompt, updatePrompt } = usePrompt();
-    const {gen} = useGenerator()
 
     // mimic the old "committing…" pill without server calls
     const [saving, setSaving] = useState<null | 'mode' | 'prompt'>(null);
 
-
-    // keep UI in sync if incoming generator differs from store (defensive)
-    useEffect(() => {
-        // if generator.type differs from Redux mode, we leave Redux as source of truth
-        // prompt: if generator has text and Redux is empty, hydrate once
-        if ((gen?.textPrompt ?? '') && !(prompt ?? '')) {
-            updatePrompt(gen.textPrompt ?? '');
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [gen?.textPrompt]);
 
     const setMode = async (target: 'text' | 'image') => {
         if (target === modeType) return;
@@ -87,7 +76,7 @@ export function ModePromptCard() {
                     <div className="relative">
             <textarea
                 value={prompt ?? ''}
-                onChange={toggleMode}
+                onChange={(event)=>updatePrompt(event.target.value)}
                 placeholder="Describe what you want to create in 3D..."
                 className="w-full px-4 py-3 border border-gray-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 rows={3}

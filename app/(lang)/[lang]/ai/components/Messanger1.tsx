@@ -6,7 +6,7 @@ type Props = {
 
 };
 
-export function Messanger(props: Props) {
+export function Messanger1(props: Props) {
     const {addMsg,setMsgText,msgText,msgRole,setMsgRole,clearMessage,messages,removeMessageById}=useMessage()
     return (
         <section className="bg-white rounded-2xl shadow p-4 border space-y-3">
