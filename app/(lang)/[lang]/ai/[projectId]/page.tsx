@@ -6,7 +6,7 @@ import GeneratorPlayground from '@/app/(lang)/[lang]/ai/test';
 
 export default function ProjectPage() {
     const { projectId } = useParams<{ projectId: string }>();
-    console.log(projectId);
+
     const { isFetching, isError, isSuccess, error } = useGetCommitsQuery(
         { projectId },
         {

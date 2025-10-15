@@ -12,6 +12,7 @@ import {
 } from '../store/slices/generatorSlice';
 import { fromSnapshot } from '@/app/(lang)/[lang]/ai/libs/snapshots';
 import type { UUID } from '@/app/(lang)/[lang]/ai/types';
+import {RootState} from "../store/index"
 
 export type Project = { id: UUID; name: string; createdAt: string };
 
@@ -54,31 +55,48 @@ export const api = createApi({
             providesTags: (_res, _err, arg) => [{ type: 'Commits', id: arg.projectId }],
 
             // auto-hydrate logic: executed once data arrives
-            async onQueryStarted({ projectId }, { dispatch, queryFulfilled }) {
+            async onQueryStarted({ projectId }, { dispatch,getState, queryFulfilled }) {
                 console.log("onQueryStarted")
                 try {
                     const { data: commits } = await queryFulfilled;
 
+                    // (Optional) ensure newest-first if your API doesn't
+                    const sorted = [...commits].sort(
+                        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+                    );
+                    const latest = sorted[0];
+                    const state = getState() as RootState;
+                    const activeProjectId =
+                        (state as any)?.generator?.__meta?.projectId ?? null;
 
-                    // Clear previous project data
-                    dispatch(resetForProjectGenerator({ projectId }));
-                    dispatch(resetForProjectCommits({ projectId }));
+                    const projectChanged =
+                        activeProjectId !== null && activeProjectId !== projectId;
+
+                    if (projectChanged) {
+                        console.log("changed",activeProjectId,projectId)
+                        // Only reset when switching to a *different* project
+                        dispatch(resetForProjectGenerator({ projectId }));
+                        dispatch(resetForProjectCommits({ projectId }));
+                        if (latest) {
+                            dispatch(setHead(latest.id));
+                            dispatch(
+                                hydrateFromCommit({
+                                    projectId,
+                                    commitId: latest.id,
+                                    snapshot: fromSnapshot(latest.snapshot),
+                                })
+                            );
+                        }
+                        dispatch(setHead(latest?.id));
+                    }
+                    // // Clear previous project data
+                    // dispatch(resetForProjectGenerator({ projectId }));
+                    // dispatch(resetForProjectCommits({ projectId }));
 
                     // Merge new commits into store
-                    dispatch(upsertManyCommits(commits));
+                    dispatch(upsertManyCommits(sorted));
 
-                    // Select latest commit (first item if sorted desc)
-                    const latest = commits[0];
-                    dispatch(setHead(latest?.id));
 
-                    // Hydrate generator state
-                    dispatch(
-                        hydrateFromCommit({
-                            projectId,
-                            commitId: latest?.id,
-                            snapshot: fromSnapshot(latest?.snapshot),
-                        })
-                    );
                 } catch (err) {
                     console.error('Failed to fetch commits:', err);
                 }

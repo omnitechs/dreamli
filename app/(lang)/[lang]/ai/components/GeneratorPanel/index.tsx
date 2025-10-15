@@ -44,7 +44,7 @@ export function GeneratorPanel(props: {projectId: string}) {
 
                 {/* 3D Build + Models */}
                 <Build3DCard projectId={projectId} />
-                <ModelsGallery/> {/* ✅ now dynamic */}
+                {/*<ModelsGallery/> /!* ✅ now dynamic *!/*/}
             </div>
         </div>
     );
