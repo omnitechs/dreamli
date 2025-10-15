@@ -1,6 +1,6 @@
 // app/(lang)/[lang]/ai/hooks/useMeshyStream.ts
 "use client";
-import { useDispatch } from "react-redux";
+import {useDispatch} from "react-redux";
 import {
     upsertModel,
     setModelStatus,
@@ -8,33 +8,52 @@ import {
     failModel,
 } from "../store/slices/generatorSlice";
 import {GeneratorModel3D} from "@/app/(lang)/[lang]/ai/types";
+import usePrompt from "@/app/(lang)/[lang]/ai/hooks/usePrompt";
+import React, {useRef, useState, useTransition} from "react";
+import useMode from "@/app/(lang)/[lang]/ai/hooks/useMode";
+import useModels from "@/app/(lang)/[lang]/ai/hooks/useModels";
+import useImages from "@/app/(lang)/[lang]/ai/hooks/useImages";
+import useCommit from "@/app/(lang)/[lang]/ai/hooks/useCommit";
 
 type Terminal = "SUCCEEDED" | "FAILED" | "CANCELED";
-const TERMINAL: Record<string, true> = { SUCCEEDED: true, FAILED: true, CANCELED: true };
+const TERMINAL: Record<string, true> = {SUCCEEDED: true, FAILED: true, CANCELED: true};
 
 // One EventSource per taskId (in-memory, reset on full reload)
 const activeStreams = new Map<string, EventSource>();
 
 async function pollTask(taskId: string, kind: string) {
     const url = `/api/meshy/task?id=${encodeURIComponent(taskId)}&kind=${encodeURIComponent(kind)}`;
-    const res = await fetch(url, { cache: "no-store" });
+    const res = await fetch(url, {cache: "no-store"});
     if (!res.ok) throw new Error(String(res.status));
     return res.json();
 }
 
 export function useMeshyStream() {
     const dispatch = useDispatch();
+    const {prompt} = usePrompt();
+
+    const [isPending, startTransition] = useTransition();
+    const [status, setStatus] = useState('');
+    const [progress, setProgress] = useState(0);
+    const [modelUrl, setModelUrl] = useState<string>();
+    const [error, setError] = useState<string | null>(null);
+    const {images} = useImages()
+    const {headId, onCommit} = useCommit()
+    const esRef = useRef<EventSource | null>(null);
+
+    // const {models} = useModels()
+
 
     function openStream(base: GeneratorModel3D) {
         console.log("openStream");
-        const { taskId, kind, id } = base;
+        const {taskId, kind, id} = base;
         if (!taskId) return;
 
         // ✅ hard guard: if we already have a live ES for this task, bail
         if (activeStreams.has(taskId)) return;
 
         // ✅ mark streaming in Redux so resumeAll/streamExistingTask won't double open
-        dispatch(upsertModel({ ...base, streaming: true }));
+        dispatch(upsertModel({...base, streaming: true}));
 
         const url = `/api/meshy/stream?id=${encodeURIComponent(taskId)}&kind=${encodeURIComponent(kind)}`;
         const es = new EventSource(url);
@@ -44,11 +63,14 @@ export function useMeshyStream() {
         let watchdog: ReturnType<typeof setInterval> | null = null;
 
         const clearAll = () => {
-            try { es.close(); } catch {}
+            try {
+                es.close();
+            } catch {
+            }
             activeStreams.delete(taskId);
             if (watchdog) clearInterval(watchdog);
             // clear streaming flag
-            dispatch(upsertModel({ id, taskId, kind, streaming: false } as any));
+            dispatch(upsertModel({id, taskId, kind, streaming: false} as any));
         };
 
         const startWatchdog = () => {
@@ -61,7 +83,7 @@ export function useMeshyStream() {
                         const status = String(data?.status ?? "").toUpperCase();
                         const progress = typeof data?.progress === "number" ? data.progress : undefined;
 
-                        if (status) dispatch(setModelStatus({ id: taskId, status, progress }));
+                        if (status) dispatch(setModelStatus({id: taskId, status, progress}));
 
                         if (status === "SUCCEEDED") {
                             dispatch(finalizeModelFromTask({
@@ -79,7 +101,7 @@ export function useMeshyStream() {
                         }
 
                         if (TERMINAL[status]) {
-                            dispatch(failModel({ id: taskId, error: status || "Failed" }));
+                            dispatch(failModel({id: taskId, error: status || "Failed"}));
                             clearAll();
                             return;
                         }
@@ -106,7 +128,7 @@ export function useMeshyStream() {
                 const status = String(data?.status ?? "").toUpperCase();
                 const progress = typeof data?.progress === "number" ? data.progress : 0;
 
-                if (status) dispatch(setModelStatus({ id: taskId, status, progress }));
+                if (status) dispatch(setModelStatus({id: taskId, status, progress}));
 
                 if (status === "SUCCEEDED") {
                     dispatch(finalizeModelFromTask({
@@ -120,7 +142,7 @@ export function useMeshyStream() {
                     }));
                     clearAll();
                 } else if (TERMINAL[status]) {
-                    dispatch(failModel({ id: taskId, error: status || "Failed" }));
+                    dispatch(failModel({id: taskId, error: status || "Failed"}));
                     clearAll();
                 }
             } catch {
@@ -160,11 +182,11 @@ export function useMeshyStream() {
 
     /** Re-attach one unfinished model after refresh */
     function resumeModel(m: GeneratorModel3D) {
-        console.log(m.streaming)
+        // console.log(m.streaming)
         const st = String(m.status ?? "").toUpperCase();
         if (TERMINAL[st]) return;
         // if (m.streaming) return;          // ✅ already streaming per Redux flag
-        openStream({ ...m, streaming: true });
+        openStream({...m, streaming: true});
     }
 
     /** Re-attach all unfinished models (call once after rehydrate) */
@@ -172,5 +194,36 @@ export function useMeshyStream() {
         (models ?? []).forEach(resumeModel);
     }
 
-    return { streamExistingTask, resumeModel, resumeAll };
+    // one button: use generator.textPrompt from Redux, start Meshy text preview
+    const startGenerationFromPrompt = async () => {
+
+        if (!prompt) return;
+        setError(null);
+        setStatus('');
+        setProgress(0);
+        setModelUrl(undefined);
+
+        startTransition(async () => {
+            try {
+                const res = await fetch("/api/meshy/text", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({prompt}),
+                });
+                if (!res.ok) {
+                    console.error("Meshy start failed:", await res.text());
+                    return;
+                }
+                const {taskId} = await res.json();
+                streamExistingTask(taskId, "text", {prompt, stage: "preview"});
+            } catch (err) {
+                console.error("Generation error:", err);
+            }
+        })
+    };
+
+
+
+
+    return {streamExistingTask, resumeModel, resumeAll, startGenerationFromPrompt, useRef, isPending};
 }

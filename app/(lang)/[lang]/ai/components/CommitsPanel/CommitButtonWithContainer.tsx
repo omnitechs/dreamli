@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import {Commit as CommitType} from "@/app/(lang)/[lang]/ai/store/slices/commitsSlice";
-import {CommitButton} from "@/app/(lang)/[lang]/ai/components/Commit/CommitButton";
+import {CommitButton} from "@/app/(lang)/[lang]/ai/components/CommitsPanel/CommitButton";
 
 type Props = {
     type: "div" | "li"
@@ -9,7 +9,7 @@ type Props = {
     headId: string
 };
 
-export function Commit(props: Props) {
+export function CommitButtonWithContainer(props: Props) {
     const {type, commit, headId} = props;
     if (type === "div") {
         return (<div key={commit.id} className={`${commit.id === headId ? "bg-gray-50" : ""}`}>

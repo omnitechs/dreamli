@@ -41,7 +41,7 @@ export default class WorkplaceService {
 
     async checkout(commitId: UUID) {
         const c = await this.store.get(commitId);
-        if (!c) throw new Error("Commit not found");
+        if (!c) throw new Error("CommitsPanel not found");
         this.headId = c.id;
         this.gen = generatorFromSnapshot(c.generator, ({ type, payload, message }) => {
             void this.createCommit(type, payload, message);

@@ -32,7 +32,7 @@ export default function ProjectClient({ initial }: Props) {
 
     const refresh = (r: any) => setState(r);
 
-    // Commit selection
+    // CommitsPanel selection
     const selectCommit = (id: string) => {
         startTransition(async () => refresh(await checkoutCommit(state.projectId, id)));
     };

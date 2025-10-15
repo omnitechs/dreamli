@@ -3,8 +3,8 @@
  * ----------------
  * Purpose:
  *  - `toSnapshot(generator)`: take the in-memory Generator Redux state and build a
- *    compact, **serializable** payload suitable for saving in a Commit.
- *  - `fromSnapshot(snapshot)`: take a stored Commit payload and reconstruct a clean
+ *    compact, **serializable** payload suitable for saving in a CommitsPanel.
+ *  - `fromSnapshot(snapshot)`: take a stored CommitsPanel payload and reconstruct a clean
  *    Generator state object that your reducers/components can consume.
  *
  * Design goals:

@@ -1,13 +1,28 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { nanoid } from '@reduxjs/toolkit';
-import { addOne, setHead, upsertMany as upsertManyCommits } from '../store/slices/commitsSlice';
-import {UUID} from "@/app/(lang)/[lang]/ai/types";
+import {
+    addOne,
+    setHead,
+    upsertMany as upsertManyCommits,
+    resetForProject as resetForProjectCommits,
+} from '../store/slices/commitsSlice';
+import {
+    hydrateFromCommit,
+    resetForProject as resetForProjectGenerator,
+} from '../store/slices/generatorSlice';
+import { fromSnapshot } from '@/app/(lang)/[lang]/ai/libs/snapshots';
+import type { UUID } from '@/app/(lang)/[lang]/ai/types';
+import {RootState} from "../store/index"
 
 export type Project = { id: UUID; name: string; createdAt: string };
 
 export type Commit = {
-    id: UUID; projectId: UUID; parentId: UUID | null;
-    snapshot: any; message?: string; createdAt: string;
+    id: UUID;
+    projectId: UUID;
+    parentId: UUID | null;
+    snapshot: any;
+    message?: string;
+    createdAt: string;
 };
 
 type PresignReq = { filename: string; type: string };
@@ -18,6 +33,7 @@ export const api = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
     tagTypes: ['Commits', 'Projects'],
     endpoints: (builder) => ({
+
         // uploads
         presignUpload: builder.mutation<PresignRes, PresignReq>({
             query: (body) => ({ url: 'uploads/presign', method: 'POST', body }),
@@ -37,6 +53,54 @@ export const api = createApi({
         getCommits: builder.query<Commit[], { projectId: UUID }>({
             query: ({ projectId }) => ({ url: `projects/${projectId}/commits` }),
             providesTags: (_res, _err, arg) => [{ type: 'Commits', id: arg.projectId }],
+
+            // auto-hydrate logic: executed once data arrives
+            async onQueryStarted({ projectId }, { dispatch,getState, queryFulfilled }) {
+                console.log("onQueryStarted")
+                try {
+                    const { data: commits } = await queryFulfilled;
+
+                    // (Optional) ensure newest-first if your API doesn't
+                    const sorted = [...commits].sort(
+                        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+                    );
+                    const latest = sorted[0];
+                    const state = getState() as RootState;
+                    const activeProjectId =
+                        (state as any)?.generator?.__meta?.projectId ?? null;
+
+                    const projectChanged =
+                        activeProjectId !== null && activeProjectId !== projectId;
+
+                    if (projectChanged) {
+                        console.log("changed",activeProjectId,projectId)
+                        // Only reset when switching to a *different* project
+                        dispatch(resetForProjectGenerator({ projectId }));
+                        dispatch(resetForProjectCommits({ projectId }));
+                        if (latest) {
+                            dispatch(setHead(latest.id));
+                            dispatch(
+                                hydrateFromCommit({
+                                    projectId,
+                                    commitId: latest.id,
+                                    snapshot: fromSnapshot(latest.snapshot),
+                                })
+                            );
+                        }
+                        dispatch(setHead(latest?.id));
+                    }
+                    // // Clear previous project data
+                    // dispatch(resetForProjectGenerator({ projectId }));
+                    // dispatch(resetForProjectCommits({ projectId }));
+
+                    // Merge new commits into store
+                    dispatch(upsertManyCommits(sorted));
+
+
+                } catch (err) {
+                    console.error('Failed to fetch commits:', err);
+                }
+            },
         }),
 
         createCommit: builder.mutation<
@@ -63,14 +127,15 @@ export const api = createApi({
 
                 try {
                     const { data } = await queryFulfilled;
-                    // replace optimistic with actual; simplest is upsert actual & set head to it
                     dispatch(upsertManyCommits([data]));
                     dispatch(setHead(data.id));
                 } catch {
-                    // Optional: rollback optimistic
+                    // Optional rollback if request fails
                 }
             },
-            invalidatesTags: (_res, _err, { projectId }) => [{ type: 'Commits', id: projectId }],
+            invalidatesTags: (_res, _err, { projectId }) => [
+                { type: 'Commits', id: projectId },
+            ],
         }),
     }),
 });

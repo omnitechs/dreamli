@@ -48,6 +48,7 @@ const slice = createSlice({
         // NEW: reset when switching project (prevents leaking old project commits)
         resetForProject(state, action) {
             const projectId = action.payload as string;
+            console.log("reset commits")
             const cleared = adapter.getInitialState({
                 headId: null,
                 selectedId: null,

@@ -22,7 +22,7 @@ export function ModelsPanel() {
 
 
     React.useEffect(() => {
-        console.log("loading the resumeAll");
+
         if (gen?.models?.length) resumeAll(gen.models);
         // run once on mount
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -42,6 +42,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
             items.push(item);
         }
     }
-    console.log(items)
+
     return items;
 }

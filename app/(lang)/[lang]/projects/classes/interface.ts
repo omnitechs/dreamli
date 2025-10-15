@@ -116,7 +116,7 @@ export type GeneratorSnapshot = Generator & {
 };
 
 // ----------------------------------
-// 🔹 Commit (Snapshot of progress)
+// 🔹 CommitsPanel (Snapshot of progress)
 // ----------------------------------
 export interface Commit {
     id: UUID;
