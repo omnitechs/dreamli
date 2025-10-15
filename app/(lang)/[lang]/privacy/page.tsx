@@ -1,4 +1,4 @@
-// app/(lang)[lang]/privacy/test.tsx
+// app/(lang)[lang]/privacy/GeneratorPlayground.tsx
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';

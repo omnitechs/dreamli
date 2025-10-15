@@ -2,7 +2,7 @@
 
 import { useParams } from 'next/navigation';
 import { useGetCommitsQuery } from '@/app/(lang)/[lang]/ai/services/api';
-import GeneratorPlayground from '@/app/(lang)/[lang]/ai/test';
+import GeneratorPlayground from '@/app/(lang)/[lang]/ai/GeneratorPlayground';
 
 export default function ProjectPage() {
     const { projectId } = useParams<{ projectId: string }>();

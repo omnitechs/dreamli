@@ -39,6 +39,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
                 alternates: { languages: altObj },
             };
 
+            // @ts-ignore
             items.push(item);
         }
     }
