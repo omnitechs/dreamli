@@ -67,3 +67,34 @@ model Commit {
   parent     Commit?  @relation("CommitParent", fields: [parentId], references: [id])
   children   Commit[] @relation("CommitParent")
 }
+
+// prisma/schema.prisma
+model ImageJob {
+  id         String   @id @default(cuid())
+  prompt     String
+  size       String   // '512x512' | '1024x1024' | '2048x2048'
+  n          Int
+  status     String   // 'QUEUED' | 'RUNNING' | 'SUCCEEDED' | 'FAILED' | 'CANCELED'
+  error      String?  // reason if failed/canceled
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // basic accounting to let UI show progress quickly
+  emitted    Int      @default(0)
+
+  chunks     ImageChunk[]
+}
+
+model ImageChunk {
+  id         String   @id @default(cuid())
+  jobId      String
+  index      Int      // 0..n-1 sequence of emitted images
+  // store a durable URL (after you upload); if upload fails, keep base64 for replay
+  url        String?
+  base64     String?  // short-lived fallback; clear later if you want
+  createdAt  DateTime @default(now())
+
+  job        ImageJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, index])
+}
