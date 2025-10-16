@@ -114,6 +114,9 @@ function toImage(partial: Partial<StoreImage> & { id: string }): StoreImage {
     };
 }
 
+type Img = { id?: string; url?: string; src?: string; meta?: any };
+const getUrl = (img: Img) => img.url || img.src || '';
+
 /* ---------------- Hook ---------------- */
 export default function useImages() {
     const dispatch = useDispatch();
@@ -193,6 +196,7 @@ export default function useImages() {
         const selTokens: string[] = (gen.selected ?? [])
             .map((t: any) => (t && typeof t === "object" ? String(t.id ?? "") : String(t ?? "")))
             .filter(Boolean);
+        console.log("selected tokens are",selTokens);
 
         // 2) Lookup maps
         const byId = new Map<string, any>();
@@ -257,6 +261,21 @@ export default function useImages() {
     const buildHttpRefsFromSelection = useCallback(async () => {
         return collectRefsForModel();
     }, [collectRefsForModel]);
+
+    // ✅ NEW: expose a handy resolver so callers can get refs outside generateAIImages
+    const getCurrentRefs = useCallback(() => {
+        return collectRefsForModel();
+    }, [collectRefsForModel]);
+
+    // ✅ NEW: a helper that mirrors your inline ternary:
+    // refs ? refs : await collectRefsForModel()
+    const resolveRefs = useCallback(
+        async (maybeRefs?: string[]) => {
+            if (Array.isArray(maybeRefs) && maybeRefs.length) return maybeRefs;
+            return collectRefsForModel();
+        },
+        [collectRefsForModel]
+    );
 
     /* ---------- placeholders ---------- */
     const ensurePlaceholders = useCallback(
@@ -467,6 +486,40 @@ export default function useImages() {
         // including generateAIImages is safe thanks to the resumedOnceRef guard
     }, [dispatch, gen.images, generateAIImages]);
 
+    const getSelectedImageUrls=()  => {
+        const all = ((gen.images ?? []) as any[]).filter(Boolean);
+        console.log("selected",gen.selected)
+        // normalize selection tokens -> ids (accept objects or strings)
+        const selTokens: string[] = (gen.selected ?? [])
+            .map((t: any) => (t && typeof t === "object" ? String(t.id ?? "") : String(t ?? "")))
+            .filter(Boolean);
+
+        // fast lookup
+        const byId = new Map<string, any>();
+        const byUrl = new Map<string, any>();
+        for (const img of all) {
+            const id = String(img?.id ?? "");
+            const href = extractUrl(img);
+            if (id) byId.set(id, img);
+            if (href) byUrl.set(href, img);
+        }
+
+        // resolve selected tokens to image objects
+        const selectedImages: any[] = [];
+        for (const token of selTokens) {
+            let match = byId.get(token);
+            if (!match && looksLikeUrl(token)) match = byUrl.get(token);
+            if (match) selectedImages.push(match);
+        }
+
+        // map to URLs (absolute when local)
+        const urls = selectedImages
+            .map((img) => toAbsoluteIfLocal(extractUrl(img)))
+            .filter(looksLikeUrl);
+
+        return urls;
+    }
+
     /* ---------- expose API ---------- */
     return {
         // selection
@@ -491,5 +544,10 @@ export default function useImages() {
         // AI streaming
         generateAIImages,
         activeStreams,
+
+        //refs
+        getCurrentRefs,   // -> Promise<string[]>
+        resolveRefs,      // -> Promise<string[]>
+        getSelectedImageUrls
     };
 }

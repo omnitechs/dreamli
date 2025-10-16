@@ -78,7 +78,7 @@ model ImageJob {
   error      String?  // reason if failed/canceled
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-
+  refs      Json?    // <-- add this
   // basic accounting to let UI show progress quickly
   emitted    Int      @default(0)
 

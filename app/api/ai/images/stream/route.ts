@@ -177,6 +177,7 @@ export async function POST(req: NextRequest) {
                         return;
                     }
 
+                    // return
                     // Real streaming call (event API)
                     const rsp = await openai.responses.stream({
                         model: 'gpt-5',

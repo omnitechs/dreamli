@@ -7,7 +7,7 @@ type ImgSize = '512x512' | '1024x1024' | '2048x2048';
 const DRY = process.env.AI_DRY_RUN === '1';
 
 // false => use real /api/ai/images/stream ; true => use /mock
-const USE_MOCK_STREAM = true;
+const USE_MOCK_STREAM = false;
 const MOCK_PATH   = '/api/ai/images/stream/mock';
 const STREAM_PATH = '/api/ai/images/stream';
 
@@ -117,6 +117,7 @@ export async function runImageJob(jobId: string) {
     const size: ImgSize = (job.size as ImgSize) || '1024x1024';
     const prompt: string = String(job.prompt ?? '');
     const refs: string[] = Array.isArray(job?.refs) ? job.refs : [];
+    console.log("refs",refs)
 
     JobBus.publish(jobId, { type: 'context', prompt, refs, size, n });
 

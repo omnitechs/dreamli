@@ -5,6 +5,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addImages } from '@/app/(lang)/[lang]/ai/store/slices/generatorSlice';
 import {data} from "autoprefixer";
+import useImages from "@/app/(lang)/[lang]/ai/hooks/useImages";
+
 
 const TRANSPARENT_1PX_SVG =
     'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB2aWV3Qm94PSIwIDAgMSAxIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9Im5vbmUiLz48L3N2Zz4=';
@@ -33,8 +35,13 @@ type ImgSize = '512x512' | '1024x1024' | '2048x2048';
 type JobStatus = 'QUEUED' | 'RUNNING' | 'SUCCEEDED' | 'FAILED' | 'CANCELED';
 const isTerminal = (s?: JobStatus) => s === 'SUCCEEDED' || s === 'FAILED' || s === 'CANCELED';
 
+
+type Img = { id?: string; url?: string; src?: string; meta?: any };
+const getUrl = (img: Img) => img.url || img.src || '';
+
 export default function useImageJobs() {
     const dispatch = useDispatch();
+    const {getSelectedImageUrls} = useImages()
     const [activeJobIds, setActive] = useState<string[]>([]);
     const sources = useRef<Map<string, EventSource>>(new Map());
     const jobStatus = useRef<Map<string, JobStatus>>(new Map());
@@ -59,13 +66,7 @@ export default function useImageJobs() {
     // Immediate swap to data: URL (UI updates), then upload in background (no await in handler)
     const swapToBase64ThenUpload = useCallback((phId: string, base64: string) => {
         const dataUrl = `data:image/png;base64,${base64}`;
-        console.log("here we are updating the image");
         // 1) Instant UI update
-        console.log("image",toImage({
-            id: phId,
-            url: dataUrl,
-            meta: { swappedAt: Date.now(), fromStream: true },
-        }));
         dispatch(
             addImages([
                 toImage({
@@ -126,13 +127,10 @@ export default function useImageJobs() {
 
         es.onmessage = (e) => {
             try {
-                console.log("try to onmessage");
                 const payload = JSON.parse(e.data);
-                console.log("onmessage", payload);
-                console.log("type is:",payload?.type);
                 switch (payload?.type) {
                     case 'image': {
-                        console.log("on image")
+
                         const index = Number(payload.index ?? 0);
                         const phId = ensurePlaceholder(jobId, index); // self-heal: make sure id exists
                         if (payload.base64) {
@@ -182,11 +180,15 @@ export default function useImageJobs() {
 
     /* ---------------- start job ---------------- */
 
-    const startJob = useCallback(async ({ prompt, n = 1, size = '1024x1024' as ImgSize }) => {
+    const startJob = async ({ prompt, n = 1, size = '1024x1024' as ImgSize }) => {
+
+        console.log('startjob')
+
+        const refs = getSelectedImageUrls()
         const res = await fetch('/api/ai/images/jobs', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt, n, size }),
+            body: JSON.stringify({ prompt, n, size, refs }),
         });
         if (!res.ok) throw new Error('Failed to start job');
         const { jobId, placeholderIds } = await res.json();
@@ -205,7 +207,7 @@ export default function useImageJobs() {
         jobStatus.current.set(jobId, 'RUNNING');
         attach(jobId);
         return jobId;
-    }, [attach, ensurePlaceholder, dispatch]);
+    };
 
     /* ---------------- auto-resume ---------------- */
 
