@@ -1,6 +1,7 @@
 // app/(lang)/[lang]/ai/server/runImageJob.ts
 import { prisma } from '@/lib/prisma';
 import { JobBus } from './jobBus';
+export const runtime = 'nodejs';
 
 type ImgSize = '512x512' | '1024x1024' | '2048x2048';
 
