@@ -4,6 +4,7 @@ const nextConfig = {
  // output: "export",
   images: {
     unoptimized: true,
+      domains: ['blob.vercel-storage.com'],
   },
   typescript: {
     ignoreBuildErrors: true,
