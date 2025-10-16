@@ -11,7 +11,7 @@ export default function ProjectPage() {
         { projectId },
         {
             refetchOnMountOrArgChange: true,
-            refetchOnFocus: true,
+            refetchOnFocus: false,
         }
     );
 
