@@ -1,5 +1,6 @@
-import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
-import {UUID} from "@/app/(lang)/[lang]/ai/types"
+// app/(lang)/[lang]/ai/store/slices/commitsSlice.ts
+import { createEntityAdapter, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { UUID } from '@/app/(lang)/[lang]/ai/types';
 
 export interface Commit {
     id: UUID;
@@ -11,7 +12,7 @@ export interface Commit {
 }
 
 const adapter = createEntityAdapter<Commit>({
-    sortComparer: (a, b) => (a.createdAt < b.createdAt ? 1 : -1),
+    sortComparer: (a, b) => (a.createdAt < b.createdAt ? 1 : -1), // newest first
 });
 
 type Meta = { projectId: string | null; lastSyncedAt?: string | null };
@@ -30,25 +31,31 @@ const slice = createSlice({
     name: 'commits',
     initialState: initial,
     reducers: {
-        // NEW: replace everything with server truth
+        // Replace entire list with server truth (rarely used; upsertMany is usually enough)
         setAll: adapter.setAll,
 
-        // keep existing APIs
+        // Merge/insert server commits
         upsertMany: adapter.upsertMany,
+
+        // Add a single commit (used for optimistic temp)
         addOne: adapter.addOne,
 
-        setHead(state, action) {
+        // 🔑 Remove a single commit by id (used to drop the optimistic temp after success)
+        removeOne: adapter.removeOne,
+
+        // Update head/selection pointers
+        setHead(state, action: PayloadAction<UUID | null>) {
             state.headId = action.payload;
-            state.selectedId = action.payload;
-        },
-        selectCommit(state, action) {
-            state.selectedId = action.payload;
+            state.selectedId = action.payload ?? null;
         },
 
-        // NEW: reset when switching project (prevents leaking old project commits)
-        resetForProject(state, action) {
-            const projectId = action.payload as string;
-            console.log("reset commits")
+        selectCommit(state, action: PayloadAction<UUID | null>) {
+            state.selectedId = action.payload ?? null;
+        },
+
+        // Reset slice when switching project (prevents leakage from previous project)
+        resetForProject(state, action: PayloadAction<string>) {
+            const projectId = action.payload;
             const cleared = adapter.getInitialState({
                 headId: null,
                 selectedId: null,
@@ -57,19 +64,21 @@ const slice = createSlice({
             Object.assign(state, cleared);
         },
 
-        // NEW: mark we synced from server for this project
-        markSynced(state, action) {
-            state.__meta.projectId = action.payload as string;
+        // Mark last sync moment (optional, for diagnostics/UI)
+        markSynced(state, action: PayloadAction<string>) {
+            state.__meta.projectId = action.payload;
             state.__meta.lastSyncedAt = new Date().toISOString();
         },
     },
 });
 
 export const commitsReducer = slice.reducer;
+
 export const {
     setAll,
     upsertMany,
     addOne,
+    removeOne,      // <- export for use in api.ts
     setHead,
     selectCommit,
     resetForProject,
