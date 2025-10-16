@@ -1,4 +1,3 @@
-// middleware.ts
 import createIntlMiddleware from 'next-intl/middleware';
 import {NextRequest, NextResponse} from 'next/server';
 
@@ -10,26 +9,26 @@ const handleI18n = createIntlMiddleware({
 });
 
 export const config = {
-    matcher: ['/((?!_next|.*\\..*).*)']
+    // exclude api + static + _next
+    matcher: ['/((?!api|_next|.*\\..*).*)'],
 };
 
 export default function middleware(req: NextRequest) {
-    // Let next-intl handle routing first
-    const intlRes = handleI18n(req);
+    // hard skip for APIs
+    if (req.nextUrl.pathname.startsWith('/api')) {
+        return NextResponse.next();
+    }
 
-    // If it redirected or rewrote, return as-is
+    const intlRes = handleI18n(req);
     if (intlRes.headers.has('x-middleware-redirect') ||
         intlRes.headers.has('x-middleware-rewrite')) {
         return intlRes;
     }
 
-    // Otherwise, inject x-pathname for server components
     const requestHeaders = new Headers(req.headers);
     requestHeaders.set('x-pathname', req.nextUrl.pathname);
 
     const res = NextResponse.next({ request: { headers: requestHeaders } });
-
-    // Preserve cookies set by next-intl
     intlRes.cookies.getAll().forEach(c => res.cookies.set(c));
     return res;
 }

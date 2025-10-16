@@ -1,10 +1,10 @@
-// app/api/ai/images/jobs/[jobId]/events/route.ts
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 import type { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { JobBus } from '@/app/(lang)/[lang]/ai/services/jobBus';
+import { runImageJob } from '@/app/(lang)/[lang]/ai/services/runImageJob';
 
 const enc = new TextEncoder();
 const send = (c: ReadableStreamDefaultController<Uint8Array>, payload: unknown) =>
@@ -13,7 +13,17 @@ const send = (c: ReadableStreamDefaultController<Uint8Array>, payload: unknown) 
 export async function GET(_req: NextRequest, { params }: { params: { jobId: string } }) {
     const { jobId } = await params;
 
-    // 1) Fetch job + all previously emitted chunks for *replay*
+    // ✅ Try to atomically claim the job (QUEUED → RUNNING) so only one connection starts it
+    const claimed = await prisma.imageJob.updateMany({
+        where: { id: jobId, status: 'QUEUED' },
+        data: { status: 'RUNNING' },
+    });
+    if (claimed.count === 1) {
+        // only the winner starts the runner (do not await)
+        runImageJob(jobId).catch(() => {});
+    }
+
+    // Get current status after the claim attempt
     const job = await prisma.imageJob.findUnique({
         where: { id: jobId },
         select: { id: true, status: true, emitted: true },
@@ -28,26 +38,30 @@ export async function GET(_req: NextRequest, { params }: { params: { jobId: stri
 
     const stream = new ReadableStream<Uint8Array>({
         async start(controller) {
-            // 2) First: replay history so refresh shows *everything already produced*
-            //    (UI expects `type: 'image'` frames)
+            // 1) replay history so refresh shows everything already produced
             send(controller, { type: 'status', status: job.status });
             for (const c of past) {
-                send(controller, { type: 'image', index: c.index, base64: c.base64 ?? undefined, url: c.url ?? undefined });
+                send(controller, {
+                    type: 'image',
+                    index: c.index,
+                    base64: c.base64 ?? undefined,
+                    url: c.url ?? undefined,
+                });
             }
 
-            // If job already finished, end stream.
+            // If terminal, end stream
             if (job.status === 'SUCCEEDED' || job.status === 'FAILED' || job.status === 'CANCELED') {
                 send(controller, { type: 'done' });
                 try { controller.close(); } catch {}
                 return;
             }
 
-            // 3) Subscribe to *live* events for anything that comes after we attached
+            // 2) subscribe to live bus
             const unsubscribe = JobBus.subscribe(jobId, (ev) => {
                 try { send(controller, ev); } catch {}
             });
 
-            // 4) Keep the SSE alive with a heartbeat; also auto-timeout
+            // 3) heartbeat + auto-timeout
             const heartbeat = setInterval(() => {
                 try { send(controller, { type: 'heartbeat' }); } catch {}
             }, 25_000);
@@ -57,9 +71,8 @@ export async function GET(_req: NextRequest, { params }: { params: { jobId: stri
                 try { controller.close(); } catch {}
                 clearInterval(heartbeat);
                 unsubscribe();
-            }, 30 * 60 * 1000); // 30 minutes cap
+            }, 30 * 60 * 1000); // 30 minutes
 
-            // Cleanup on client disconnect
             (controller as any)._cleanup = () => {
                 clearInterval(heartbeat);
                 clearTimeout(kill);
@@ -67,7 +80,7 @@ export async function GET(_req: NextRequest, { params }: { params: { jobId: stri
             };
         },
         cancel() {
-            // Client went away; nothing special here.
+            // client disconnected
         },
     });
 
