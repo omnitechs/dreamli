@@ -8,7 +8,7 @@ type ImgSize = '512x512' | '1024x1024' | '2048x2048';
 const DRY = process.env.AI_DRY_RUN === '1';
 
 // false => use real /api/ai/images/stream ; true => use /mock
-const USE_MOCK_STREAM = false;
+const USE_MOCK_STREAM = true;
 const MOCK_PATH   = '/api/ai/images/stream/mock';
 const STREAM_PATH = '/api/ai/images/stream';
 
