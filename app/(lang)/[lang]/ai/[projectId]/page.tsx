@@ -10,7 +10,7 @@ export default function ProjectPage() {
     const { isFetching, isError, isSuccess, error } = useGetCommitsQuery(
         { projectId },
         {
-            refetchOnMountOrArgChange: true,
+            refetchOnMountOrArgChange: false,
             refetchOnFocus: false,
         }
     );
