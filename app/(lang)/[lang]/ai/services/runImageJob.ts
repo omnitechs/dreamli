@@ -205,7 +205,7 @@ export async function runImageJob(jobId: string) {
         const baseContent: any[] = [
             ...refs
                 .filter((u: unknown) => typeof u === 'string' && /^https?:\/\//i.test(u))
-                .map((url: string) => ({ type: 'input_image', image_url: { url } })),
+                .map((url: string) => ({ type: 'input_image', image_url:  url  })),
             { type: 'input_text', text: instruction },
         ];
 
@@ -217,6 +217,7 @@ export async function runImageJob(jobId: string) {
         });
 
         rsp.on('event', (ev: any) => {
+            console.log(JSON.stringify(ev));
             enqueue(async () => {
                 // extract base64 candidates
                 const tmp: string[] = [];
@@ -273,6 +274,7 @@ export async function runImageJob(jobId: string) {
         await rsp.done();
 
     } catch (e: any) {
+        console.log('Error:', e);
         await prisma.imageJob.update({
             where: { id: jobId },
             data: { status: 'FAILED', error: e?.message ?? 'Failed' },

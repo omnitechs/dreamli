@@ -180,6 +180,7 @@ export default function useImageJobs() {
 
     /* ---------------- start job ---------------- */
 
+    // @ts-ignore
     const startJob = async ({ prompt, n = 1, size = '1024x1024' as ImgSize }) => {
 
         console.log('startjob')
