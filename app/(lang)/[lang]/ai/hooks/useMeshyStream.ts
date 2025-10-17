@@ -37,7 +37,7 @@ export function useMeshyStream() {
     const [progress, setProgress] = useState(0);
     const [modelUrl, setModelUrl] = useState<string>();
     const [error, setError] = useState<string | null>(null);
-    const {images} = useImages()
+    const {images, getSelectedImageUrls} = useImages()
     const {headId, onCommit} = useCommit()
     const esRef = useRef<EventSource | null>(null);
 
@@ -222,8 +222,46 @@ export function useMeshyStream() {
         })
     };
 
+    // one button: use generator.textPrompt from Redux, start Meshy text preview
+    const startGenerationFromImage = async () => {
+        const urls = getSelectedImageUrls?.() ?? [];
+        if (!urls.length) {
+            console.warn("No images selected for image-to-3D generation.");
+            return;
+        }
+
+        setError(null);
+        setStatus('');
+        setProgress(0);
+        setModelUrl(undefined);
+
+        const body: any = { };
+        if (prompt) body.prompt = prompt;
+        if (urls.length === 1) body.imageUrl = urls[0]; else body.imageUrls = urls;
+
+        const kind = urls.length > 1 ? "multi" : "image";
+
+        startTransition(async () => {
+            try {
+                const res = await fetch("/api/meshy/image", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(body),
+                });
+                if (!res.ok) {
+                    console.error("Meshy start failed:", await res.text());
+                    return;
+                }
+                const {taskId} = await res.json();
+                streamExistingTask(taskId, kind as any, {prompt, stage: "preview", imageUrls: urls});
+            } catch (err) {
+                console.error("Generation error:", err);
+            }
+        })
+    };
 
 
 
-    return {streamExistingTask, resumeModel, resumeAll, startGenerationFromPrompt, useRef, isPending};
+
+    return {streamExistingTask, resumeModel, resumeAll, startGenerationFromPrompt, useRef, isPending,startGenerationFromImage};
 }
