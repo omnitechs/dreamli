@@ -1,6 +1,6 @@
 // app/(lang)/[lang]/projects/[projectId]/components/UploadCard.tsx
 'use client';
-
+// import crypto from 'crypto';
 import { useState } from 'react';
 import { Upload, Link2, Plus } from 'lucide-react';
 import useImages from '@/app/(lang)/[lang]/ai/hooks/useImages';
@@ -68,7 +68,9 @@ export function UploadCard() {
         // Optimistic add by URL (no upload)
         setUploading(true);
         try {
-            const id = crypto.randomUUID();
+            const id = typeof globalThis.crypto?.randomUUID === 'function'
+                ? globalThis.crypto.randomUUID()
+                : Math.random().toString(36).slice(2) + Date.now().toString(36);
             dispatch(
                 addImages([
                     {
