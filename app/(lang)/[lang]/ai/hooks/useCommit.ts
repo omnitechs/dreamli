@@ -5,10 +5,13 @@ import {useCreateCommitMutation} from "@/app/(lang)/[lang]/ai/services/api";
 import {useCallback} from "react";
 import {toSnapshot} from "@/app/(lang)/[lang]/ai/libs/snapshots";
 import useGenerator from "@/app/(lang)/[lang]/ai/hooks/useGenerator";
+import { commitsSelectors } from "@/app/store/slices/commitsSlice";
 
 export default function useCommit() {
-    const commitsState = useSelector((s: RootState) => (s as any)?.commits) ?? { entities: {}, headId: null };
-    const commits = Object.values(commitsState.entities ?? {});
+    // Full slice (for headId, etc.)
+    const commitsState = useSelector((s: RootState) => (s as any)?.commits) ?? { entities: {}, ids: [], headId: null } as any;
+    // Use adapter selector to get a stable, correctly sorted array (newest first)
+    const commits = useSelector((s: RootState) => commitsSelectors.selectAll(s as any));
     const {gen} = useGenerator()
     const headId = commitsState.headId ?? null;
     const [createCommit, { isLoading: savingCommit }] = useCreateCommitMutation();

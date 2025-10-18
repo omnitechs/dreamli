@@ -12,7 +12,14 @@ export interface Commit {
 }
 
 const adapter = createEntityAdapter<Commit>({
-    sortComparer: (a, b) => (a.createdAt < b.createdAt ? 1 : -1), // newest first
+    // newest first; break ties by id to ensure deterministic order
+    sortComparer: (a, b) => {
+        const at = new Date(a.createdAt).getTime();
+        const bt = new Date(b.createdAt).getTime();
+        if (bt !== at) return bt - at; // newer first
+        // Tie-breaker: compare ids (descending) to keep latest-inserted (lexicographically larger) first
+        return b.id.localeCompare(a.id);
+    },
 });
 
 type Meta = { projectId: string | null; lastSyncedAt?: string | null };
