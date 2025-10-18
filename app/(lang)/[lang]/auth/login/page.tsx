@@ -8,19 +8,24 @@ export default async function LoginPage({
   searchParams,
 }: {
   params: { lang: string };
-  searchParams?: { redirect?: string };
+  // Next 15: searchParams must be awaited before accessing
+  searchParams: Promise<{ redirect?: string | string[] }>;
 }) {
   const session = await auth();
   const lang = params?.lang ?? "en";
 
+  const sp = await searchParams;
+  const rp = sp?.redirect;
+  const redirectTo = Array.isArray(rp) ? rp[0] : rp;
+
   if (session) {
     // If already signed in, go to the intended redirect or the localized account page
     const fallback = `/${lang}/auth/account`;
-    const dest = searchParams?.redirect && searchParams.redirect.startsWith("/")
-      ? searchParams.redirect
-      : fallback;
+    const dest = redirectTo && redirectTo.startsWith("/") ? redirectTo : fallback;
     redirect(dest);
   }
+
+  const registerHref = `/${lang}/auth/register` + (redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : "");
 
   return (
     <main className="mx-auto max-w-md p-6">
@@ -28,10 +33,7 @@ export default async function LoginPage({
       <LoginForm />
       <p className="mt-4 text-sm text-gray-500">
         Don’t have an account?{" "}
-        <a
-          className="underline"
-          href={`/${lang}/auth/register${searchParams?.redirect ? `?redirect=${encodeURIComponent(searchParams.redirect)}` : ""}`}
-        >
+        <a className="underline" href={registerHref}>
           Create one
         </a>
       </p>
