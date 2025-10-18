@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { auth } from '@/lib/auth';
 
 type UUID = string;
 type Params = { projectId: UUID };
@@ -9,12 +10,19 @@ export async function GET(
     _req: Request,
     ctx: { params: Promise<Params> } // 👈 dynamic params are a Promise in API routes
 ) {
+    const session = await auth();
+    const userId = (session as any)?.user?.id as string | undefined;
+    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
     const { projectId } = await ctx.params;
 
-    // (optional) ensure project exists
+    // ensure project exists and belongs to user
     const project = await prisma.project.findUnique({ where: { id: projectId } });
     if (!project) {
         return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    }
+    if (project.ownerId !== userId) {
+        return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     const commits = await prisma.commit.findMany({
@@ -27,6 +35,10 @@ export async function GET(
 
 // POST /api/projects/:projectId/commits
 export async function POST(req: Request, ctx: { params: Promise<Params> }) {
+    const session = await auth();
+    const userId = (session as any)?.user?.id as string | undefined;
+    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
     const { projectId } = await ctx.params;
 
     const body = await req.json();
@@ -37,10 +49,13 @@ export async function POST(req: Request, ctx: { params: Promise<Params> }) {
         return NextResponse.json({ error: 'snapshot required' }, { status: 400 });
     }
 
-    // make sure project exists (still a hard error if it doesn’t)
+    // ensure project exists and belongs to user
     const project = await prisma.project.findUnique({ where: { id: projectId } });
     if (!project) {
         return NextResponse.json({ error: 'Project not found' }, { status: 404 });
+    }
+    if (project.ownerId !== userId) {
+        return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     // ---- parentId normalization: coerce to null on empty/invalid/mismatched ----
