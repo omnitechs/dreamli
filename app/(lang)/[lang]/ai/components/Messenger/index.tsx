@@ -9,6 +9,7 @@ import useModels from '@/app/(lang)/[lang]/ai/hooks/useModels';
 import useCommit from "@/app/(lang)/[lang]/ai/hooks/useCommit";
 import ModelGallery from "../GeneratorPanel/ModelGallery"
 import useImages from '@/app/(lang)/[lang]/ai/hooks/useImages';
+import useGenerator from '@/app/(lang)/[lang]/ai/hooks/useGenerator';
 import { useDispatch } from 'react-redux';
 import { addMessage as addMsgAction, editMessage as editMsgAction } from '@/app/store/slices/generatorSlice';
 
@@ -17,7 +18,8 @@ export function Messenger() {
     // Redux messages composer + store
     const { messages: storeMessages, msgText, setMsgText, addMsg, setMsgRole } = useMessage();
     const { models } = useModels(); // live models from Redux (streaming)
-    const {headId} = useCommit()
+    const { headId, commitsState, onCommit } = useCommit();
+    const { gen } = useGenerator();
     const dispatch = useDispatch();
     const { getSelectedImageUrls } = useImages();
 
@@ -154,6 +156,7 @@ export function Messenger() {
             const reader = res.body.getReader();
             const decoder = new TextDecoder();
             let buffer = '';
+            let didCommit = false;
 
             const append = (chunk: string) => {
                 if (!chunk) return;
@@ -184,13 +187,33 @@ export function Messenger() {
                         } else if (evt.type === 'response.output_text' && typeof evt.text === 'string') {
                             append(evt.text);
                         } else if (evt.type === 'response.completed') {
-                            // done
+                            // AI has finished responding → create a commit so chat survives refresh
+                            try {
+                                const pid = (gen as any)?.__meta?.projectId
+                                    || (commitsState?.headId ? (commitsState as any).entities?.[commitsState.headId]?.projectId : null)
+                                    || 'demo-project';
+                                await onCommit(String(pid));
+                                didCommit = true;
+                            } catch (e) {
+                                console.error('Failed to create chat commit:', e);
+                            }
                         } else if (evt.type === 'error' || evt.error) {
                             append('\n\n⚠️ ' + (evt.error?.message || 'Stream error'));
                         }
                     } catch {
                         append(data);
                     }
+                }
+            }
+            // Fallback: if completion was reached without receiving response.completed, commit once.
+            if (!didCommit) {
+                try {
+                    const pid = (gen as any)?.__meta?.projectId
+                        || (commitsState?.headId ? (commitsState as any).entities?.[commitsState.headId]?.projectId : null)
+                        || 'demo-project';
+                    await onCommit(String(pid));
+                } catch (e) {
+                    console.error('Failed to create chat commit (fallback):', e);
                 }
             }
         } catch (err) {

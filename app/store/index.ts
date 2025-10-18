@@ -12,6 +12,7 @@ import {
 
 import { api } from '../(lang)/[lang]/ai/services/api';
 import { modelCommitListener } from '@/app/store/listeners/modelCommitListener';
+import { imageCommitListener } from '@/app/store/listeners/imageCommitListener';
 
 // SSR-safe storage
 const createNoopStorage = () => ({
@@ -49,7 +50,8 @@ export const store = configureStore({
             serializableCheck: { ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER] },
         })
             .concat(api.middleware)
-            .concat(modelCommitListener.middleware), // <-- register listener
+            .concat(modelCommitListener.middleware)
+            .concat(imageCommitListener.middleware), // <-- register listeners
 });
 
 export const persistor = persistStore(store);
