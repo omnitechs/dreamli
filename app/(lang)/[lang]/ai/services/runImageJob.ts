@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import { JobBus } from './jobBus';
 import OpenAI from 'openai';
+import { addCredits } from '@/lib/credits';
 
 export const runtime = 'nodejs';
 
@@ -160,7 +161,21 @@ export async function runImageJob(jobId: string) {
     const n: number  = Math.min(10, Math.max(1, Number(job.n ?? 1)));
     const size: ImgSize = (job.size as ImgSize) || '1024x1024';
     const prompt: string = String(job.prompt ?? '');
-    const refs: string[] = Array.isArray(job?.refs) ? job.refs : [];
+
+    let refs: string[] = [];
+    let reserveMeta: undefined | { idHash: string; estimated: number; userId: string };
+    const rawRefs: any = job?.refs;
+    if (Array.isArray(rawRefs)) {
+        refs = rawRefs as string[];
+    } else if (rawRefs && typeof rawRefs === 'object') {
+        if (Array.isArray(rawRefs.urls)) refs = rawRefs.urls as string[];
+        if (rawRefs.reserve && typeof rawRefs.reserve === 'object') {
+            const r = rawRefs.reserve as any;
+            if (typeof r.idHash === 'string' && typeof r.estimated === 'number' && typeof r.userId === 'string') {
+                reserveMeta = { idHash: r.idHash, estimated: r.estimated, userId: r.userId };
+            }
+        }
+    }
 
     try {
         if (DRY) {
@@ -251,6 +266,10 @@ export async function runImageJob(jobId: string) {
 
         rsp.on('error', async (e: any) => {
             await queue;
+            // refund on error if we had reserved
+            if (reserveMeta) {
+                addCredits({ userId: reserveMeta.userId, amount: reserveMeta.estimated, reason: `openai:image:${size}:cancel`, idempotencyKey: `img-cancel:${reserveMeta.idHash}`, reference: reserveMeta.idHash }).catch(() => {});
+            }
             await prisma.imageJob.update({
                 where: { id: jobId },
                 data: { status: 'FAILED', error: e?.message || 'Stream error' },
@@ -263,6 +282,10 @@ export async function runImageJob(jobId: string) {
         rsp.on('end', async () => {
             await queue; // ensure all pending writes finished
             const ok = emitted > 0;
+            if (!ok && reserveMeta) {
+                // No images produced → refund
+                addCredits({ userId: reserveMeta.userId, amount: reserveMeta.estimated, reason: `openai:image:${size}:no_output_refund`, idempotencyKey: `img-refund:${reserveMeta.idHash}`, reference: reserveMeta.idHash }).catch(() => {});
+            }
             await prisma.imageJob.update({
                 where: { id: jobId },
                 data: { status: ok ? 'SUCCEEDED' : 'FAILED', error: ok ? null : 'No images emitted' },
@@ -275,6 +298,10 @@ export async function runImageJob(jobId: string) {
 
     } catch (e: any) {
         console.log('Error:', e);
+        // Refund on early failure if we had reserved at creation
+        if (reserveMeta) {
+            addCredits({ userId: reserveMeta.userId, amount: reserveMeta.estimated, reason: `openai:image:${size}:cancel`, idempotencyKey: `img-cancel:${reserveMeta.idHash}`, reference: reserveMeta.idHash }).catch(() => {});
+        }
         await prisma.imageJob.update({
             where: { id: jobId },
             data: { status: 'FAILED', error: e?.message ?? 'Failed' },

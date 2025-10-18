@@ -1,5 +1,7 @@
 // app/api/chat/route.ts
 import OpenAI from "openai";
+import { auth } from "@/lib/auth";
+import { reserveOpenAiCredits, finalizeOpenAiReservation, roughTokenEstimate, cancelOpenAiReservation } from "@/lib/ai/cost";
 
 export const runtime = "edge";
 
@@ -13,6 +15,10 @@ export async function GET() {
 type ClientMsg = { from: "ai" | "user"; text: string };
 
 export async function POST(req: Request) {
+    const session = await auth();
+    const userId = (session?.user as any)?.id as string | undefined;
+    if (!userId) return new Response("Unauthorized", { status: 401 });
+
     const { message, history = [] } = (await req.json()) as {
         message: string;
         history?: ClientMsg[];
@@ -29,6 +35,30 @@ export async function POST(req: Request) {
         ...historyAsItems,
         { role: "user", content: message },
     ];
+
+    // Pricing + reservation
+    const messagesJson = JSON.stringify(input);
+    const MAX_OUT = 400; // assumed upper bound for output tokens
+    const model = process.env.OPENAI_MODEL || 'gpt-4o-mini';
+    // idempotency base: hash of user + messages
+    const baseData = new TextEncoder().encode(userId + ":" + messagesJson);
+    const hashBuf = await crypto.subtle.digest("SHA-256", baseData);
+    const hashArr = Array.from(new Uint8Array(hashBuf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    const idempotencyBase = `chat:${hashArr}`;
+
+    let reservedAmount = 0;
+    try {
+        const resv = await reserveOpenAiCredits({
+            userId,
+            model,
+            messagesJson,
+            maxOutputTokens: MAX_OUT,
+            idempotencyBase,
+        });
+        reservedAmount = resv.estimatedCost;
+    } catch (e) {
+        return new Response(JSON.stringify({ error: 'INSUFFICIENT_CREDITS' }), { status: 402 });
+    }
 
     // Stream with stored prompt
     const stream = openai.responses.stream({
@@ -63,7 +93,21 @@ export async function POST(req: Request) {
                         if ((evt as any).type === "response.completed") break;
                     }
                     controller.enqueue(encoder.encode("data: [DONE]\n\n"));
+
+                    // finalize credits (use same estimates to net to zero delta)
+                    const inputTokens = roughTokenEstimate(messagesJson);
+                    const outputTokens = MAX_OUT;
+                    await finalizeOpenAiReservation({
+                        userId,
+                        model,
+                        inputTokens,
+                        outputTokens,
+                        idempotencyBase,
+                        reservedAmount,
+                    });
                 } catch (err) {
+                    // refund on error
+                    await cancelOpenAiReservation({ userId, reservedAmount, idempotencyBase, model });
                     controller.enqueue(
                         encoder.encode(
                             `data: ${JSON.stringify({
@@ -77,6 +121,10 @@ export async function POST(req: Request) {
                 }
             })();
         },
+        cancel() {
+            // client aborted → refund
+            cancelOpenAiReservation({ userId, reservedAmount, idempotencyBase, model }).catch(() => {})
+        }
     });
 
     return new Response(sse, {

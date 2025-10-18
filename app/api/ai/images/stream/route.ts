@@ -4,6 +4,9 @@ export const dynamic = 'force-dynamic';
 
 import type { NextRequest } from 'next/server';
 import OpenAI from 'openai';
+import { auth } from '@/lib/auth';
+import { addCredits, deductCredits } from '@/lib/credits';
+import { estimateOpenAiImageCredits } from '@/lib/ai/pricing';
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
 const DRY = process.env.AI_DRY_RUN === '1'; // set to '1' to skip OpenAI costs while testing refs
@@ -72,6 +75,10 @@ export async function POST(req: NextRequest) {
     const err = (...args: any[]) => console.error(`[AI/STREAM ${reqId}]`, ...args);
 
     try {
+        const session = await auth();
+        const userId = (session?.user as any)?.id as string | undefined;
+        if (!userId) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+
         const body = await req.json().catch(() => ({}));
         const prompt: string = (body?.prompt ?? '').toString();
         const refsInput: unknown = body?.refs;
@@ -81,6 +88,19 @@ export async function POST(req: NextRequest) {
         const size: ImgSize = isImgSize(body?.size) ? body.size : '1024x1024';
         const nRaw = Number(body?.n ?? 1);
         const n = Number.isFinite(nRaw) && nRaw > 0 ? Math.min(10, Math.floor(nRaw)) : 1;
+
+        // Reserve credits upfront (flat per image by size)
+        const estimated = estimateOpenAiImageCredits(size, n);
+        const idBaseRaw = `${userId}:${prompt}:${httpRefs.join(',')}:${size}:${n}`;
+        const idData = new TextEncoder().encode(idBaseRaw);
+        const idHashBuf = await crypto.subtle.digest('SHA-256', idData);
+        const idHash = Array.from(new Uint8Array(idHashBuf)).map(b => b.toString(16).padStart(2, '0')).join('');
+        const reserveKey = `img-reserve:${idHash}`;
+        try {
+            await deductCredits({ userId, amount: estimated, reason: `openai:image:${size}:reserve`, idempotencyKey: reserveKey, reference: idHash });
+        } catch (e) {
+            return new Response(JSON.stringify({ error: 'INSUFFICIENT_CREDITS' }), { status: 402 });
+        }
 
         if (!process.env.OPENAI_API_KEY && !DRY) {
             err('Missing OPENAI_API_KEY');
@@ -133,6 +153,8 @@ export async function POST(req: NextRequest) {
                 };
                 const onAbort = () => {
                     warn(t(), 'Client aborted.');
+                    // refund on abort
+                    addCredits({ userId, amount: estimated, reason: `openai:image:${size}:cancel`, idempotencyKey: `img-cancel:${idHash}`, reference: idHash }).catch(() => {});
                     safeClose();
                 };
 
@@ -235,12 +257,18 @@ export async function POST(req: NextRequest) {
                     rsp.on('error', (e: any) => {
                         err(t(), 'STREAM ERROR', e?.message);
                         safeSend({ type: 'error', message: e?.message || 'Stream error' });
+                        // refund on error
+                        addCredits({ userId, amount: estimated, reason: `openai:image:${size}:cancel`, idempotencyKey: `img-cancel:${idHash}`, reference: idHash }).catch(() => {});
                     });
 
                     rsp.on('end', () => {
                         log(t(), `END: events=${eventCount}, emitted=${emitted}`);
                         safeSend({ type: 'debug_summary', emitted, eventCount });
-                        if (emitted === 0) safeSend({ type: 'no_image' });
+                        if (emitted === 0) {
+                            // No images produced → refund
+                            addCredits({ userId, amount: estimated, reason: `openai:image:${size}:no_output_refund`, idempotencyKey: `img-refund:${idHash}`, reference: idHash }).catch(() => {});
+                            safeSend({ type: 'no_image' });
+                        }
                         safeSend({ type: 'done' });
                         safeClose();
                     });

@@ -18,7 +18,8 @@ export default async function Header({ lang }: { lang: LanguageCode }) {
         { label: t('nav.shop'),        href: `https://shop.dreamli.nl/${lang}` },
         { label: t('nav.keychains'),   href: `${base}/keychains` },
         { label: t('nav.lithophanes'), href: `${base}/lithophanes` },
-        { label: t('nav.contact'),     href: `${base}/contact` }
+        { label: t('nav.contact'),     href: `${base}/contact` },
+        { label: "AI",     href: `${base}/ai` }
     ] as const;
 
     return (
@@ -63,6 +64,7 @@ export default async function Header({ lang }: { lang: LanguageCode }) {
                         <Suspense fallback={<>...</>}>
                             <LangSwitcher lang={lang} languages={languages as readonly Language[]} />
                         </Suspense>
+                        <Link href={`${base}/credits`} className="px-3 py-2 rounded-xl text-sm text-white bg-purple-600 hover:bg-purple-700 transition-all">Buy credits</Link>
                         <UserNav base={base} />
                     </div>
 

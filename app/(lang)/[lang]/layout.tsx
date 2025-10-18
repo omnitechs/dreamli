@@ -13,6 +13,7 @@ import 'remixicon/fonts/remixicon.css';
 import Providers from '@/app/providers'
 import { ReduxProvider } from '@/app/store/provider'
 import { SessionProvider } from 'next-auth/react'
+import CreditsModal from '@/components/CreditsModal'
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
@@ -133,6 +134,7 @@ export default async function LangLayout({
                 <ReduxProvider>
                     <MailchimpSubscriptionCoupon />
                     <Header lang={lang} />
+                    <CreditsModal />
                     {children}
                     <Footer lang={lang} />
                 </ReduxProvider>

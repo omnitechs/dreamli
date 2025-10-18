@@ -73,6 +73,12 @@ export function useChatController(opts: Options) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
             });
+            if (res.status === 402) {
+                try { sessionStorage.setItem('insufficient_credits_msg', 'Your balance is not enough. Please add credits.'); } catch {}
+                const ev = new CustomEvent('open-credits-modal', { detail: { lang: locale || 'en' } });
+                window.dispatchEvent(ev);
+                return;
+            }
             if (!res.body) throw new Error('No response body');
 
             const reader = res.body.getReader();

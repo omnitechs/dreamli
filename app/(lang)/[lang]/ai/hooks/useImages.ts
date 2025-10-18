@@ -379,6 +379,13 @@ export default function useImages() {
                     signal: ac.signal,
                 });
 
+                if (resp.status === 402) {
+                    try { sessionStorage.setItem('insufficient_credits_msg', 'Your balance is not enough. Please add credits.'); } catch {}
+                    const seg = (typeof window !== 'undefined' ? (window.location.pathname.split('/')[1] || 'en') : 'en');
+                    try { window.dispatchEvent(new CustomEvent('open-credits-modal', { detail: { lang: seg } })); } catch {}
+                    return streamId;
+                }
+
                 if (!resp.ok || !resp.body) throw new Error(`Stream failed (${resp.status})`);
 
                 const reader = resp.body.getReader();

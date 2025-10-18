@@ -191,6 +191,12 @@ export default function useImageJobs() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ prompt, n, size, refs }),
         });
+        if (res.status === 402) {
+            try { sessionStorage.setItem('insufficient_credits_msg', 'Your balance is not enough. Please add credits.'); } catch {}
+            const seg = (typeof window !== 'undefined' ? (window.location.pathname.split('/')[1] || 'en') : 'en');
+            try { window.dispatchEvent(new CustomEvent('open-credits-modal', { detail: { lang: seg } })); } catch {}
+            return null;
+        }
         if (!res.ok) throw new Error('Failed to start job');
         const { jobId, placeholderIds } = await res.json();
 
