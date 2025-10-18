@@ -3,9 +3,14 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import type {LanguageCode} from "@/config/i18n";
+import { useDispatch, useSelector } from 'react-redux';
+import type { AppDispatch, RootState } from '@/app/store';
+import { hydrateMe } from '@/app/store/slices/accountUserSlice';
 
 export default async function CreditsPage(props: { params: Promise<{ lang: LanguageCode }>}) {
   const { lang } = await props.params;
+  const dispatch = useDispatch<AppDispatch>();
+  const me = useSelector((s: RootState) => s.accountUser.me);
   const [balance, setBalance] = useState<number | null>(null)
   const [loading, setLoading] = useState(false)
   const [amount, setAmount] = useState(100)
@@ -16,7 +21,13 @@ export default async function CreditsPage(props: { params: Promise<{ lang: Langu
       const res = await fetch('/api/credits/balance', { cache: 'no-store' })
       if (!res.ok) throw new Error('Failed to load balance')
       const js = await res.json()
-      setBalance(Number(js.balance) || 0)
+      const num = Number(js.balance) || 0
+      setBalance(num)
+      // push into global user state so header updates
+      if (me) {
+        (dispatch as AppDispatch)(hydrateMe({ ...me, creditsBalance: num.toFixed(2) } as any))
+      }
+      try { window.dispatchEvent(new Event('credits-updated')); } catch {}
     } catch {
       setBalance(null)
     }

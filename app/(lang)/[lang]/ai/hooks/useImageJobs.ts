@@ -198,6 +198,8 @@ export default function useImageJobs() {
             return null;
         }
         if (!res.ok) throw new Error('Failed to start job');
+        // reservation completed → notify header to refresh
+        try { window.dispatchEvent(new Event('credits-updated')); } catch {}
         const { jobId, placeholderIds } = await res.json();
 
         // Create placeholders deterministically; if server provided IDs, use them

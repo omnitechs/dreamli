@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
+import { deductCredits } from "@/lib/credits";
+import { estimateMeshyCredits } from "@/lib/ai/pricing";
 
 export const runtime = "nodejs"; // ensure server-side fetch
 
@@ -13,6 +16,10 @@ export const runtime = "nodejs"; // ensure server-side fetch
  */
 export async function POST(req: NextRequest) {
   try {
+    const session = await auth();
+    const userId = (session?.user as any)?.id as string | undefined;
+    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
     const body = await req.json().catch(() => ({}));
     const imageUrl: unknown = body?.imageUrl;
     const imageUrls: unknown = body?.imageUrls;
@@ -29,6 +36,18 @@ export async function POST(req: NextRequest) {
 
     if (urls.length === 0) {
       return NextResponse.json({ error: "Missing imageUrl or imageUrls" }, { status: 400 });
+    }
+
+    // Reserve/charge credits upfront (flat per generation)
+    const estimated = estimateMeshyCredits('generation');
+    const idBase = `${userId}:meshy:image:${(urls.join(','))}:${String(prompt ?? '')}`;
+    const enc = new TextEncoder();
+    const buf = await crypto.subtle.digest('SHA-256', enc.encode(idBase));
+    const key = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    try {
+      await deductCredits({ userId, amount: estimated, reason: `meshy:generation:reserve`, idempotencyKey: `meshy:reserve:${key}`, reference: key });
+    } catch (e) {
+      return NextResponse.json({ error: 'INSUFFICIENT_CREDITS' }, { status: 402 });
     }
 
     const apiKey = process.env.MESHY_API_KEY;

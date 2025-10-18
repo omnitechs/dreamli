@@ -57,6 +57,44 @@ export default function UserNav({ base }: Props) {
     }
   }, [status, session, me, dispatch]);
 
+  // Live-sync credits: on mount, focus/visibility change, and custom events
+  useEffect(() => {
+    if (!me) return;
+
+    let aborted = false;
+    async function refreshBalance() {
+      try {
+        const res = await fetch('/api/credits/balance', { cache: 'no-store' });
+        if (!res.ok) return;
+        const js = await res.json();
+        if (aborted) return;
+        const num = Number(js?.balance ?? 0);
+        const next = Number.isFinite(num) ? num.toFixed(2) : '0.00';
+        if (me && next !== me.creditsBalance) {
+          (dispatch as AppDispatch)(hydrateMe({ ...me, creditsBalance: next } as any));
+        }
+      } catch {}
+    }
+
+    // Initial fetch
+    refreshBalance();
+
+    const onFocus = () => refreshBalance();
+    const onVis = () => { if (document.visibilityState === 'visible') refreshBalance(); };
+    const onEvent = () => refreshBalance();
+
+    window.addEventListener('focus', onFocus);
+    document.addEventListener('visibilitychange', onVis);
+    window.addEventListener('credits-updated', onEvent as EventListener);
+
+    return () => {
+      aborted = true;
+      window.removeEventListener('focus', onFocus);
+      document.removeEventListener('visibilitychange', onVis);
+      window.removeEventListener('credits-updated', onEvent as EventListener);
+    };
+  }, [me, dispatch]);
+
   if (!me) {
     // Not logged in: show sign-in button
     return (

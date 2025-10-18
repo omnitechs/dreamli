@@ -79,6 +79,8 @@ export function useChatController(opts: Options) {
                 window.dispatchEvent(ev);
                 return;
             }
+            // reservation succeeded, deduction likely occurred → notify header to refresh
+            try { window.dispatchEvent(new Event('credits-updated')); } catch {}
             if (!res.body) throw new Error('No response body');
 
             const reader = res.body.getReader();

@@ -3,17 +3,18 @@
 
 export type AiProvider = 'openai' | 'meshy'
 
-// Tune these numbers to your business needs. Values are in "credits".
+// Tune these numbers to your business needs. Values are in euros.
 const PRICES = {
   openai: {
-    // credits per 1k tokens
+    // euros per 1k tokens (text chat only; image calls are flat-fee below)
     'gpt-4o-mini': { inputPer1k: 3, outputPer1k: 12 },
     'gpt-4o': { inputPer1k: 10, outputPer1k: 30 },
     // default fallback
     default: { inputPer1k: 4, outputPer1k: 14 },
   },
   meshy: {
-    base: { generation: 25, upscale: 10 }, // flat per operation
+    // Flat-fee per call
+    base: { generation: 0.5, upscale: 10 },
   },
 } as const
 
@@ -32,8 +33,7 @@ export function estimateMeshyCredits(kind: 'generation' | 'upscale') {
   return kind === 'generation' ? tier.generation : tier.upscale
 }
 
-// Simple OpenAI image generation pricing per image by size
-export function estimateOpenAiImageCredits(size: string, count: number) {
-  const perImage = size === '2048x2048' ? 30 : size === '1024x1024' ? 20 : 12
-  return perImage * Math.max(1, count || 1)
+// OpenAI image generation: flat €0.50 per call regardless of size or count
+export function estimateOpenAiImageCredits(_size: string, _count: number) {
+  return 0.5;
 }

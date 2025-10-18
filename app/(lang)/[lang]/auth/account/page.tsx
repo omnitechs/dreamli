@@ -1,4 +1,6 @@
 // app/account/page.tsx
+import type {LanguageCode} from "@/config/i18n";
+
 export const dynamic = "force-dynamic";
 
 import { auth } from "@/lib/auth";
@@ -8,10 +10,9 @@ import { prisma } from "@/lib/prisma";
 import AdminUsersManager from "./AdminUsersManager";
 import AccountClient from "./AccountClient";
 
-type Props = { params: { lang: string } };
-export default async function AccountPage({ params }: Props) {
+export default async function AccountPage(props: { params: Promise<{ lang: LanguageCode }> }) {
   const session = await auth();
-  const lang = params?.lang ?? "en";
+    const { lang } = await props.params;
   if (!session) {
     redirect(`/${lang}/auth/login?redirect=/${lang}/auth/account`);
   }

@@ -210,10 +210,18 @@ export function useMeshyStream() {
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify({prompt}),
                 });
+                if (res.status === 402) {
+                    try { sessionStorage.setItem('insufficient_credits_msg', 'Your balance is not enough. Please add credits.'); } catch {}
+                    const seg = (typeof window !== 'undefined' ? (window.location.pathname.split('/')[1] || 'en') : 'en');
+                    try { window.dispatchEvent(new CustomEvent('open-credits-modal', { detail: { lang: seg } })); } catch {}
+                    return;
+                }
                 if (!res.ok) {
                     console.error("Meshy start failed:", await res.text());
                     return;
                 }
+                // credits reserved successfully → notify header
+                try { window.dispatchEvent(new Event('credits-updated')); } catch {}
                 const {taskId} = await res.json();
                 streamExistingTask(taskId, "text", {prompt, stage: "preview"});
             } catch (err) {
@@ -248,6 +256,12 @@ export function useMeshyStream() {
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify(body),
                 });
+                if (res.status === 402) {
+                    try { sessionStorage.setItem('insufficient_credits_msg', 'Your balance is not enough. Please add credits.'); } catch {}
+                    const seg = (typeof window !== 'undefined' ? (window.location.pathname.split('/')[1] || 'en') : 'en');
+                    try { window.dispatchEvent(new CustomEvent('open-credits-modal', { detail: { lang: seg } })); } catch {}
+                    return;
+                }
                 if (!res.ok) {
                     console.error("Meshy start failed:", await res.text());
                     return;

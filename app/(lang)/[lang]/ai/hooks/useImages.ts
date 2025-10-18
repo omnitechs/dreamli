@@ -387,6 +387,8 @@ export default function useImages() {
                 }
 
                 if (!resp.ok || !resp.body) throw new Error(`Stream failed (${resp.status})`);
+                // deduction reserved on server → notify header to refresh
+                try { window.dispatchEvent(new Event('credits-updated')); } catch {}
 
                 const reader = resp.body.getReader();
                 const decoder = new TextDecoder();
