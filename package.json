@@ -11,16 +11,17 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.0",
-    "@prisma/client": "^6.17.0",
+    "@prisma/client": "^6.17.1",
     "@prisma/extension-accelerate": "^2.0.2",
     "@reduxjs/toolkit": "^2.9.0",
     "@supabase/supabase-js": "^2.38.0",
     "@types/three": "^0.158.3",
     "@vercel/blob": "^2.0.0",
+    "bcryptjs": "^3.0.2",
     "framer-motion": "^10.16.5",
     "lucide-react": "^0.294.0",
     "next": "15.4.7",
-    "next-auth": "^4.24.11",
+    "next-auth": "^5.0.0-beta.29",
     "next-intl": "^4.3.9",
     "next-themes": "^0.2.1",
     "openai": "^6.1.0",
@@ -36,7 +37,8 @@
     "remark-gfm": "^4.0.1",
     "remixicon": "^4.6.0",
     "three": "^0.160.1",
-    "three-csg-ts": "^3.2.0"
+    "three-csg-ts": "^3.2.0",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@types/node": "20.19.19",

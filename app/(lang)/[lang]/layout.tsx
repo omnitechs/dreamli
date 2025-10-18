@@ -10,7 +10,7 @@ import Footer from '@/components/Footer';
 import MailchimpSubscriptionCoupon from '@/components/MailchimpSubscriptionCoupon';
 import Script from 'next/script';
 import 'remixicon/fonts/remixicon.css';
-
+import Providers from '@/app/providers'
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
