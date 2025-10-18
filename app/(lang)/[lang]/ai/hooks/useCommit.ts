@@ -1,5 +1,5 @@
 import {useSelector} from "react-redux";
-import type {RootState} from "@/app/(lang)/[lang]/ai/store";
+import type {RootState} from "@/app/store";
 import {useCreateCommitMutation} from "@/app/(lang)/[lang]/ai/services/api";
 import {useCallback} from "react";
 import {toSnapshot} from "@/app/(lang)/[lang]/ai/libs/snapshots";

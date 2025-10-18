@@ -1,4 +1,4 @@
-import {persistor} from "@/app/(lang)/[lang]/ai/store";
+import {persistor} from "@/app/store";
 
 export default function usePersistor() {
     const purgePersist = async () => { await persistor.purge(); location.reload(); };

@@ -1,7 +1,7 @@
 'use client';
 
 import { useSelector } from 'react-redux';
-import type { RootState } from '@/app/(lang)/[lang]/ai/store';
+import type { RootState } from '@/app/store';
 import { useEffect } from 'react';
 import { useMeshyStream } from './useMeshyStream';
 

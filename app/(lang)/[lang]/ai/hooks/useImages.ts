@@ -6,7 +6,7 @@ import {
     removeImage,
     removeSelectedImages,
     setSelected,
-} from "@/app/(lang)/[lang]/ai/store/slices/generatorSlice";
+} from "@/app/store/slices/generatorSlice";
 import { useDispatch } from "react-redux";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useGenerator from "@/app/(lang)/[lang]/ai/hooks/useGenerator";

@@ -2,8 +2,8 @@
 'use client';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
-import { Commit, setHead } from '@/app/(lang)/[lang]/ai/store/slices/commitsSlice';
-import {hydrateFromCommit} from "@/app/(lang)/[lang]/ai/store/slices/generatorSlice";
+import { Commit, setHead } from '@/app/store/slices/commitsSlice';
+import {hydrateFromCommit} from "@/app/store/slices/generatorSlice";
 import {fromSnapshot} from "@/app/(lang)/[lang]/ai/libs/snapshots";
 
 type Props = { commit: Commit };

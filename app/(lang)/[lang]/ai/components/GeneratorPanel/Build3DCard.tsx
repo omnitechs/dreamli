@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState, useTransition } from 'react';
 import useCommit from '@/app/(lang)/[lang]/ai/hooks/useCommit';
 import { useSelector } from 'react-redux';
-import type { RootState } from '@/app/(lang)/[lang]/ai/store';
+import type { RootState } from '@/app/store';
 import LazyGlb from '@/components/GlbViewer';
 import {useMeshyStream} from "@/app/(lang)/[lang]/ai/hooks/useMeshyStream";
 import useModels from "@/app/(lang)/[lang]/ai/hooks/useModels";

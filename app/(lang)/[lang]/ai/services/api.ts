@@ -7,14 +7,14 @@ import {
     upsertMany as upsertManyCommits,
     resetForProject as resetForProjectCommits,
     removeOne, // <- make sure this exists in commitsSlice
-} from '../store/slices/commitsSlice';
+} from '@/app/store/slices/commitsSlice';
 import {
     hydrateFromCommit,
     resetForProject as resetForProjectGenerator,
-} from '../store/slices/generatorSlice';
+} from '@/app/store/slices/generatorSlice';
 import { fromSnapshot } from '@/app/(lang)/[lang]/ai/libs/snapshots';
 import type { UUID } from '@/app/(lang)/[lang]/ai/types';
-import type { RootState } from '../store';
+import type { RootState } from '../../../../store';
 
 export type Project = { id: UUID; name: string; createdAt: string };
 

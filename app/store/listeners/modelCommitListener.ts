@@ -4,11 +4,11 @@ import type { RootState } from '../index';
 import {
     finalizeModelFromTask,
     upsertModel,
-} from '../slices/generatorSlice';
+} from '@/app/store/slices/generatorSlice';
 import { GeneratorModel3D } from "@/app/(lang)/[lang]/ai/types";
-import { setHead, addOne as addCommit } from '../slices/commitsSlice';
-import { api } from '../../services/api';
-import { toSnapshot } from '../../libs/snapshots';
+import { setHead, addOne as addCommit } from '@/app/store/slices/commitsSlice';
+import { api } from '../../(lang)/[lang]/ai/services/api';
+import { toSnapshot } from '../../(lang)/[lang]/ai/libs/snapshots';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import type { SerializedError } from '@reduxjs/toolkit';
 

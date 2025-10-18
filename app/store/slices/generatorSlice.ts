@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import type {RootState} from "@/app/(lang)/[lang]/ai/store";
+import type {RootState} from "@/app/store";
 import {GeneratorModel3D, MeshyTaskStatus, Image, Message, Mode, UUID} from "@/app/(lang)/[lang]/ai/types"
 
 

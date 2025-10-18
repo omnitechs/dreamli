@@ -6,7 +6,7 @@ import {
     setModelStatus,
     finalizeModelFromTask,
     failModel,
-} from "../store/slices/generatorSlice";
+} from "@/app/store/slices/generatorSlice";
 import {GeneratorModel3D} from "@/app/(lang)/[lang]/ai/types";
 import usePrompt from "@/app/(lang)/[lang]/ai/hooks/usePrompt";
 import React, {useRef, useState, useTransition} from "react";

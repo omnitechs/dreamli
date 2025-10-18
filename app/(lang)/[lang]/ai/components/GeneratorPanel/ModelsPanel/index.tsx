@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import type { RootState } from "@/app/(lang)/[lang]/ai/store";
+import type { RootState } from "@/app/store";
 import { useMeshyStream } from "@/app/(lang)/[lang]/ai/hooks/useMeshyStream";
 
 import LazyGlb from "@/components/GlbViewer";

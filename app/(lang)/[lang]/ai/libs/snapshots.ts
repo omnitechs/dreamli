@@ -13,7 +13,7 @@
  *  - Avoid accidental shared references (always deep-copy arrays/objects you return).
  */
 
-import {Generator } from '../store/slices/generatorSlice';
+import {Generator } from '@/app/store/slices/generatorSlice';
 import {GeneratorModel3D, Image, Message, UUID} from "@/app/(lang)/[lang]/ai/types";
 
 /**

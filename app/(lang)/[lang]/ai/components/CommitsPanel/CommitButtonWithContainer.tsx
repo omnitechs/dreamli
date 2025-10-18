@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import {Commit as CommitType} from "@/app/(lang)/[lang]/ai/store/slices/commitsSlice";
+import {Commit as CommitType} from "@/app/store/slices/commitsSlice";
 import {CommitButton} from "@/app/(lang)/[lang]/ai/components/CommitsPanel/CommitButton";
 
 type Props = {

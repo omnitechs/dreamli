@@ -3,7 +3,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addImages } from '@/app/(lang)/[lang]/ai/store/slices/generatorSlice';
+import { addImages } from '@/app/store/slices/generatorSlice';
 import {data} from "autoprefixer";
 import useImages from "@/app/(lang)/[lang]/ai/hooks/useImages";
 

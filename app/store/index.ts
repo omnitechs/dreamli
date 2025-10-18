@@ -1,6 +1,8 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import generatorReducer from './slices/generatorSlice';
-import { commitsReducer } from './slices/commitsSlice';
+import generatorReducer from '@/app/store/slices/generatorSlice';
+import { commitsReducer } from '@/app/store/slices/commitsSlice';
+import accountUserReducer from '@/app/store/slices/accountUserSlice';
+import adminUsersReducer from '@/app/store/slices/adminUsersSlice';
 
 import {
     persistReducer,
@@ -8,8 +10,8 @@ import {
     FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER,
 } from 'redux-persist';
 
-import { api } from '../services/api';
-import { modelCommitListener } from './listeners/modelCommitListener';
+import { api } from '../(lang)/[lang]/ai/services/api';
+import { modelCommitListener } from '@/app/store/listeners/modelCommitListener';
 
 // SSR-safe storage
 const createNoopStorage = () => ({
@@ -33,6 +35,8 @@ const persistConfig = {
 const rootReducer = combineReducers({
     generator: generatorReducer,
     commits: commitsReducer,
+    accountUser: accountUserReducer,
+    adminUsers: adminUsersReducer,
     [api.reducerPath]: api.reducer,
 });
 

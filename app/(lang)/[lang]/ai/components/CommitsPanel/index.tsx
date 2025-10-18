@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import { GitBranch, Clock, Star } from 'lucide-react';
 import useCommit from '@/app/(lang)/[lang]/ai/hooks/useCommit';
 import { CommitButtonWithContainer } from '@/app/(lang)/[lang]/ai/components/CommitsPanel/CommitButtonWithContainer';
-import type { Commit } from '@/app/(lang)/[lang]/ai/store/slices/commitsSlice';
+import type { Commit } from '@/app/store/slices/commitsSlice';
 
 /**
  * Unified Commits Panel

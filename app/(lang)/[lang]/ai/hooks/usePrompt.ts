@@ -1,4 +1,4 @@
-import {updateText} from "@/app/(lang)/[lang]/ai/store/slices/generatorSlice";
+import {updateText} from "@/app/store/slices/generatorSlice";
 import {useDispatch} from "react-redux";
 import useGenerator from "@/app/(lang)/[lang]/ai/hooks/useGenerator";
 

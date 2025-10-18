@@ -1,5 +1,5 @@
 import {useSelector} from "react-redux";
-import type {RootState} from "@/app/(lang)/[lang]/ai/store";
+import type {RootState} from "@/app/store";
 
 export default function useGenerator() {
     const gen = useSelector((s: RootState) => (s as any)?.generator) ?? {
