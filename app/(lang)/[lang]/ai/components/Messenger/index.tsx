@@ -8,6 +8,9 @@ import useMessage from '@/app/(lang)/[lang]/ai/hooks/useMessage';
 import useModels from '@/app/(lang)/[lang]/ai/hooks/useModels';
 import useCommit from "@/app/(lang)/[lang]/ai/hooks/useCommit";
 import ModelGallery from "../GeneratorPanel/ModelGallery"
+import useImages from '@/app/(lang)/[lang]/ai/hooks/useImages';
+import { useDispatch } from 'react-redux';
+import { addMessage as addMsgAction, editMessage as editMsgAction } from '@/app/store/slices/generatorSlice';
 
 
 export function Messenger() {
@@ -15,6 +18,8 @@ export function Messenger() {
     const { messages: storeMessages, msgText, setMsgText, addMsg, setMsgRole } = useMessage();
     const { models } = useModels(); // live models from Redux (streaming)
     const {headId} = useCommit()
+    const dispatch = useDispatch();
+    const { getSelectedImageUrls } = useImages();
 
     // default role: user
     useState(() => setMsgRole('user' as const));
@@ -73,8 +78,8 @@ export function Messenger() {
     const pickModelUrl = (m: any): string | undefined =>
         m?.modelUrls?.glb || m?.modelUrls?.fbx || m?.modelUrls?.obj || m?.modelUrls?.usdz;
 
-    // send (Redux-only)
-    const handleSendMessage = (e: React.FormEvent) => {
+    // send via AI chat API (streams) with access to page images and model thumbnails
+    const handleSendMessage = async (e: React.FormEvent) => {
         e.preventDefault();
         const text = (msgText ?? '').trim();
         if (!text || sending) return;
@@ -87,14 +92,113 @@ export function Messenger() {
         setSending(true);
         setErrorText(null);
 
-        // immediate add to Redux
+        // 1) Add the user message immediately to Redux (keeps current behavior)
         addMsg();
+
+        // 2) Prepare assets and history for the AI endpoint
+        // Prefer currently selected images in the generator UI
+        let imageUrls: string[] = [];
+        try { imageUrls = getSelectedImageUrls() || []; } catch { imageUrls = []; }
+
+        const modelImageUrls: string[] = Array.isArray(models)
+            ? models.map((m: any) => m?.thumbnailUrl).filter((u: any) => typeof u === 'string' && /^https?:\/\//i.test(u))
+            : [];
+
+        // Store for other parts of the app that rely on sessionStorage keys
+        try {
+            sessionStorage.setItem('ai_context_urls', JSON.stringify(imageUrls));
+            sessionStorage.setItem('ai_model_thumbnails', JSON.stringify(modelImageUrls));
+        } catch {}
+
+        const history = (storeMessages || []).slice(-12).map((m: any) => ({
+            from: m.role === 'assistant' ? 'ai' : 'user',
+            text: String(m.content ?? ''),
+        }));
+
+        // 3) Create an assistant placeholder and stream into it
+        const aiId = crypto.randomUUID();
+        const createdAt = new Date().toISOString();
+        const dispatchLocal = (window as any).__redux_dispatch || dispatch;
+        dispatchLocal(addMsgAction({ id: aiId, role: 'assistant', content: '', createdAt } as any));
 
         // reset composer height
         if (textareaRef.current) textareaRef.current.style.height = 'auto';
 
-        // no server call; just clear sending quickly
-        setTimeout(() => setSending(false), 100);
+        let aiText = '';
+        try {
+            const res = await fetch('/api/ai/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: text, history, imageUrls, modelImageUrls }),
+            });
+
+            if (res.status === 402) {
+                // insufficient credits → show modal and annotate message
+                const seg = (typeof window !== 'undefined' ? (window.location.pathname.split('/')[1] || 'en') : 'en');
+                try { sessionStorage.setItem('insufficient_credits_msg', 'Your balance is not enough. Please add credits.'); } catch {}
+                try { window.dispatchEvent(new CustomEvent('open-credits-modal', { detail: { lang: seg } })); } catch {}
+                aiText = '⚠️ Insufficient credits. Please add credits to continue.';
+                dispatchLocal(editMsgAction({ id: aiId, content: aiText } as any));
+                return;
+            }
+
+            if (!res.ok || !res.body) {
+                aiText = '⚠️ Failed to start AI response.';
+                dispatchLocal(editMsgAction({ id: aiId, content: aiText } as any));
+                return;
+            }
+
+            // reservation succeeded → notify header to refresh balance
+            try { window.dispatchEvent(new Event('credits-updated')); } catch {}
+
+            const reader = res.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = '';
+
+            const append = (chunk: string) => {
+                if (!chunk) return;
+                aiText += chunk;
+                dispatchLocal(editMsgAction({ id: aiId, content: aiText } as any));
+            };
+
+            while (true) {
+                const { value, done } = await reader.read();
+                if (done) break;
+                buffer += decoder.decode(value, { stream: true });
+                const events = buffer.split('\n\n');
+                buffer = events.pop() || '';
+                for (const event of events) {
+                    const line = event.trim();
+                    if (!line.startsWith('data:')) continue;
+                    const data = line.replace(/^data:\s*/, '');
+                    if (data === '[DONE]') break;
+                    try {
+                        const evt = JSON.parse(data);
+                        if (evt.type === 'response.output_text.delta' && typeof evt.delta === 'string') {
+                            append(evt.delta);
+                        } else if (evt.type?.endsWith('.delta') && Array.isArray(evt.output)) {
+                            for (const part of evt.output) {
+                                if (typeof part?.delta === 'string') append(part.delta);
+                                else if (typeof part?.text === 'string') append(part.text);
+                            }
+                        } else if (evt.type === 'response.output_text' && typeof evt.text === 'string') {
+                            append(evt.text);
+                        } else if (evt.type === 'response.completed') {
+                            // done
+                        } else if (evt.type === 'error' || evt.error) {
+                            append('\n\n⚠️ ' + (evt.error?.message || 'Stream error'));
+                        }
+                    } catch {
+                        append(data);
+                    }
+                }
+            }
+        } catch (err) {
+            aiText = '⚠️ Error contacting AI service.';
+            dispatchLocal(editMsgAction({ id: aiId, content: aiText } as any));
+        } finally {
+            setSending(false);
+        }
     };
 
     // Enter sends, Shift+Enter newline

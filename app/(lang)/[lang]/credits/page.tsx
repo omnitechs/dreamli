@@ -7,8 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '@/app/store';
 import { hydrateMe } from '@/app/store/slices/accountUserSlice';
 
-export default async function CreditsPage(props: { params: Promise<{ lang: LanguageCode }>}) {
-  const { lang } = await props.params;
+export default function CreditsPage(props: { params: { lang: LanguageCode } }) {
+  const { lang } = props.params;
   const dispatch = useDispatch<AppDispatch>();
   const me = useSelector((s: RootState) => s.accountUser.me);
   const [balance, setBalance] = useState<number | null>(null)

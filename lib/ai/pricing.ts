@@ -3,14 +3,18 @@
 
 export type AiProvider = 'openai' | 'meshy'
 
-// Tune these numbers to your business needs. Values are in euros.
+// Values are in euros.
+const CHAT_COST_CAP_EUR = 0.02; // hard cap per chat call
+
 const PRICES = {
   openai: {
-    // euros per 1k tokens (text chat only; image calls are flat-fee below)
-    'gpt-4o-mini': { inputPer1k: 3, outputPer1k: 12 },
-    'gpt-4o': { inputPer1k: 10, outputPer1k: 30 },
+    // Realistic euro-cent-level pricing per 1k tokens for text chat
+    // These are internal credits denominated in EUR, not USD.
+    'gpt-5':        { inputPer1k: 0.003, outputPer1k: 0.009 },
+    'gpt-4o-mini':  { inputPer1k: 0.002, outputPer1k: 0.006 },
+    'gpt-4o':       { inputPer1k: 0.004, outputPer1k: 0.012 },
     // default fallback
-    default: { inputPer1k: 4, outputPer1k: 14 },
+    default:        { inputPer1k: 0.0025, outputPer1k: 0.0075 },
   },
   meshy: {
     // Flat-fee per call
@@ -18,14 +22,20 @@ const PRICES = {
   },
 } as const
 
+function round2(n: number) { return Math.round(n * 100) / 100; }
+
 export function estimateOpenAiCredits(model: string, promptTokens: number, maxOutputTokens: number) {
   const tier = (PRICES.openai as any)[model] ?? PRICES.openai.default
-  return Math.ceil((promptTokens / 1000) * tier.inputPer1k + (maxOutputTokens / 1000) * tier.outputPer1k)
+  const raw = (promptTokens / 1000) * tier.inputPer1k + (maxOutputTokens / 1000) * tier.outputPer1k
+  const cost = round2(raw)
+  return Math.min(cost, CHAT_COST_CAP_EUR)
 }
 
 export function finalizeOpenAiCredits(model: string, inputTokens: number, outputTokens: number) {
   const tier = (PRICES.openai as any)[model] ?? PRICES.openai.default
-  return Math.ceil((inputTokens / 1000) * tier.inputPer1k + (outputTokens / 1000) * tier.outputPer1k)
+  const raw = (inputTokens / 1000) * tier.inputPer1k + (outputTokens / 1000) * tier.outputPer1k
+  const cost = round2(raw)
+  return Math.min(cost, CHAT_COST_CAP_EUR)
 }
 
 export function estimateMeshyCredits(kind: 'generation' | 'upscale') {
