@@ -12,6 +12,7 @@ import Script from 'next/script';
 import 'remixicon/fonts/remixicon.css';
 import Providers from '@/app/providers'
 import { ReduxProvider } from '@/app/store/provider'
+import { SessionProvider } from 'next-auth/react'
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
@@ -128,12 +129,14 @@ export default async function LangLayout({
         </head>
         <body>
         <NextIntlClientProvider key={lang} locale={lang} messages={messages}>
-            <MailchimpSubscriptionCoupon />
-            <Header lang={lang} />
-            <ReduxProvider>
-                {children}
-            </ReduxProvider>
-            <Footer lang={lang} />
+            <SessionProvider>
+                <ReduxProvider>
+                    <MailchimpSubscriptionCoupon />
+                    <Header lang={lang} />
+                    {children}
+                    <Footer lang={lang} />
+                </ReduxProvider>
+            </SessionProvider>
         </NextIntlClientProvider>
 
         {/* Microsoft Clarity */}

@@ -6,6 +6,7 @@ import LangSwitcher from './LangSwitcher';
 import MobileDropdown from './MobileDropdown';
 import { Suspense } from 'react'
 import Image from 'next/image';
+import UserNav from './UserNav';
 export default async function Header({ lang }: { lang: LanguageCode }) {
     // use your actual namespace if you have one, else omit "namespace"
     const t = await getTranslations({ locale: lang, namespace: '' });
@@ -58,10 +59,11 @@ export default async function Header({ lang }: { lang: LanguageCode }) {
                     </nav>
 
                     {/* Right side */}
-                    <div className="ml-auto flex items-center gap-2">
+                    <div className="ml-auto flex items-center gap-3">
                         <Suspense fallback={<>...</>}>
-                        <LangSwitcher lang={lang} languages={languages as readonly Language[]} />
+                            <LangSwitcher lang={lang} languages={languages as readonly Language[]} />
                         </Suspense>
+                        <UserNav base={base} />
                     </div>
 
                     {/* Mobile menu */}
