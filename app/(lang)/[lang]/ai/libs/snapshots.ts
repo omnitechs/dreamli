@@ -75,20 +75,42 @@ export function toSnapshot(gen: Generator): GeneratorSnapshot {
         return { ...rest };
     };
 
+    // Treat only fully persisted images as commit-safe
+    const isHttp = (u: unknown) => typeof u === 'string' && /^https?:\/\//i.test(u);
+    const isCommitSafeImage = (img: Image) => {
+        // Exclude transient blob:/data: urls and empty urls
+        if (!img || !img.id) return false;
+        if (!img.url || typeof img.url !== 'string') return false;
+        if (!isHttp(img.url)) return false; // require public http(s) URL
+        // key is optional for backward compatibility, but prefer it if available
+        return true;
+    };
+
+    const persistedImages: Array<{ id: string; url: string; key: string | null; meta: Record<string, any> }> =
+        (gen.images ?? [])
+            .filter(isCommitSafeImage)
+            .map((i: Image) => ({
+                id: i.id,
+                url: i.url,
+                key: i.key ?? null,
+                meta: i.meta ?? {},
+            }));
+
+    // Intersect selection with the images that will be saved
+    const validIds = new Set(persistedImages.map((i) => i.id));
+    const selected = Array.isArray(gen.selected)
+        ? gen.selected.filter((id: any) => typeof id === 'string' && validIds.has(id))
+        : [];
+
     return {
         type: gen.type,
         textPrompt: gen.textPrompt,
 
-        // Serialize images compactly and predictably
-        images: (gen.images ?? []).map((i: Image) => ({
-            id: i.id,
-            url: i.url,
-            key: i.key ?? null,
-            meta: i.meta ?? {},
-        })),
+        // Serialize only persisted images (with http(s) URL)
+        images: persistedImages,
 
         // Always copy arrays to avoid shared references with Redux state
-        selected: Array.isArray(gen.selected) ? [...gen.selected] : [],
+        selected,
         approvalSet: Array.isArray(gen.approvalSet) ? [...gen.approvalSet] : [],
 
         // Persist the flag as-is (may be reset on hydration depending on your policy)
@@ -116,7 +138,7 @@ export function fromSnapshot(snap: Partial<GeneratorSnapshot>): Generator {
     const s: any = snap && typeof snap === 'object' ? { ...snap } : {};
 
     // Normalize images (array of {id,url,key,meta})
-    const images: Generator['images'] = Array.isArray(s.images)
+    const allImages: Generator['images'] = Array.isArray(s.images)
         ? s.images.map((img: any) => ({
             id: String(img?.id ?? ''),
             url: String(img?.url ?? ''),
@@ -126,6 +148,10 @@ export function fromSnapshot(snap: Partial<GeneratorSnapshot>): Generator {
         }))
         : [];
 
+    // Drop any images that have non-http(s) URLs (e.g., blob:/data:) which won't survive reloads
+    const isHttp = (u: unknown) => typeof u === 'string' && /^https?:\/\//i.test(u);
+    const images = allImages.filter((img: any) => img?.id && isHttp(img?.url));
+
     // MIGRATION: support legacy commits that used `selectedKeys` (image.key) instead of image ids.
     // If `selected` is not present but `selectedKeys` is, map keys → ids using the current image list.
     let selected: UUID[] = Array.isArray(s.selected) ? s.selected.slice() : [];
@@ -134,6 +160,10 @@ export function fromSnapshot(snap: Partial<GeneratorSnapshot>): Generator {
         for (const img of images) if (img?.key) keyToId.set(img.key, img.id);
         selected = s.selectedKeys.map((k: any) => keyToId.get(String(k))).filter(Boolean) as UUID[];
     }
+
+    // Intersect selection with remaining valid images
+    const validIds = new Set(images.map((i: any) => i.id));
+    selected = selected.filter((id: any) => typeof id === 'string' && validIds.has(id));
 
     // Messages (deep copy, default empty)
     const messages: Message[] = Array.isArray(s.messages) ? s.messages.map((m: any) => ({ ...m })) : [];
