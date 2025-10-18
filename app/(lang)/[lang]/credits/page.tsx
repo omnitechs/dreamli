@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import type {LanguageCode} from "@/config/i18n";
 
-export default function CreditsPage({ params }: { params: { lang: string } }) {
-  const lang = params?.lang || 'en'
+export default async function CreditsPage(props: { params: Promise<{ lang: LanguageCode }>}) {
+  const { lang } = await props.params;
   const [balance, setBalance] = useState<number | null>(null)
   const [loading, setLoading] = useState(false)
   const [amount, setAmount] = useState(100)
