@@ -6,6 +6,7 @@ import type { RootState } from "@/app/store";
 import { useMeshyStream } from "@/app/(lang)/[lang]/ai/hooks/useMeshyStream";
 
 import LazyGlb from "@/components/GlbViewer";
+import { useParams, useRouter } from "next/navigation";
 
 function pickBestModelUrl(modelUrls?: Record<string, string | undefined>) {
     if (!modelUrls) return undefined;
@@ -16,6 +17,10 @@ export function ModelsPanel() {
     const dispatch = useDispatch();
     const gen = useSelector((s: RootState) => (s as any)?.generator) ?? { textPrompt: "", models: [] };
     const { streamExistingTask,resumeAll } = useMeshyStream();
+
+    const router = useRouter();
+    const params = useParams();
+    const lang = (params as any)?.lang as string | undefined;
 
     // selected model id for the preview panel below the grid
     const [selectedId, setSelectedId] = React.useState<string | null>(null);
@@ -49,55 +54,6 @@ export function ModelsPanel() {
     };
 
     const models = gen?.models ?? [];
-
-    // // One-time background sync on page load (for any unfinished models)
-    // React.useEffect(() => {
-    //     if (!models?.length) return;
-    //     const controller = new AbortController();
-    //
-    //     (async () => {
-    //         for (const m of models) {
-    //             if (m.status === "SUCCEEDED") continue;
-    //             try {
-    //                 const res = await fetch(`/api/meshy/task?id=${m.taskId}&kind=${m.kind}`, {
-    //                     signal: controller.signal,
-    //                 });
-    //                 if (!res.ok) continue;
-    //                 const data = await res.json();
-    //
-    //                 if (data?.status && data?.status !== m.status) {
-    //                     dispatch(
-    //                         upsertModel({
-    //                             ...m,
-    //                             status: data.status,
-    //                             progress: data.progress ?? m.progress,
-    //                         })
-    //                     );
-    //                 }
-    //
-    //                 if (data?.status === "SUCCEEDED" && data?.model_urls) {
-    //                     dispatch(
-    //                         finalizeModelFromTask({
-    //                             ...m,
-    //                             modelUrls: data.model_urls,
-    //                             thumbnailUrl: data.thumbnail_url,
-    //                             previewVideoUrl: data.video_url,
-    //                             textureUrls: data.texture_urls,
-    //                             status: "SUCCEEDED",
-    //                             progress: 100,
-    //                         })
-    //                     );
-    //                 }
-    //             } catch {
-    //                 /* silent */
-    //             }
-    //         }
-    //     })();
-    //
-    //     return () => controller.abort();
-    //     // run once on initial mount
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, []);
 
     const selectedModel = React.useMemo(
         () => models.find((m: any) => m.id === selectedId) ?? null,
@@ -177,8 +133,23 @@ export function ModelsPanel() {
                                 </div>
                             )}
 
-                            <div className="text-[10px] text-gray-500">
-                                {new Date(m.createdAt ?? Date.now()).toLocaleString()}
+                            <div className="flex items-center justify-between">
+                                <div className="text-[10px] text-gray-500">
+                                    {new Date(m.createdAt ?? Date.now()).toLocaleString()}
+                                </div>
+                                {m.status === 'SUCCEEDED' ? (
+                                    <button
+                                        className="text-[10px] sm:text-xs px-2 py-1 rounded border hover:bg-gray-50"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            const path = `/${lang ?? ''}/ai/purchase?modelId=${encodeURIComponent(m.id)}`.replace('//', '/');
+                                            router.push(path);
+                                        }}
+                                        title="Purchase this model"
+                                    >
+                                        Purchase
+                                    </button>
+                                ) : null}
                             </div>
                         </article>
                     ))}

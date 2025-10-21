@@ -5,10 +5,34 @@ import LazyGlb from '@/components/GlbViewer';
 import useModels from '@/app/(lang)/[lang]/ai/hooks/useModels';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useMeshyStream } from '@/app/(lang)/[lang]/ai/hooks/useMeshyStream';
+import { useParams, useRouter } from 'next/navigation';
 
 function pickBestModelUrl(modelUrls?: Record<string, string | undefined>) {
     if (!modelUrls) return undefined;
     return modelUrls.glb || modelUrls.fbx || modelUrls.obj || modelUrls.usdz || undefined;
+}
+
+function PurchaseButton({ modelId, onClick }: { modelId: string; onClick?: React.MouseEventHandler }) {
+    const router = useRouter();
+    const params = useParams();
+    const lang = (params as any)?.lang as string | undefined;
+
+    const go = (e: React.MouseEvent) => {
+        onClick?.(e);
+        e.stopPropagation();
+        const path = `/${lang ?? ''}/ai/purchase?modelId=${encodeURIComponent(modelId)}`.replace('//', '/');
+        router.push(path);
+    };
+
+    return (
+        <button
+            className="text-[10px] sm:text-xs px-2 py-1 rounded border hover:bg-gray-50"
+            onClick={go}
+            title="Purchase this model"
+        >
+            Purchase
+        </button>
+    );
 }
 
 export default function ModelsGallery() {
@@ -111,8 +135,13 @@ export default function ModelsGallery() {
                                     </div>
                                 )}
 
-                                <div className="text-[10px] text-gray-500">
-                                    {new Date(m.createdAt ?? Date.now()).toLocaleString()}
+                                <div className="flex items-center justify-between">
+                                    <div className="text-[10px] text-gray-500">
+                                        {new Date(m.createdAt ?? Date.now()).toLocaleString()}
+                                    </div>
+                                    {m.status === 'SUCCEEDED' ? (
+                                        <PurchaseButton modelId={m.id} onClick={(e) => e.stopPropagation()} />
+                                    ) : null}
                                 </div>
                             </article>
                         ))}
