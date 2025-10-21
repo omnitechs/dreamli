@@ -30,6 +30,7 @@ export default function PurchasePage() {
   const [typeSlug, setTypeSlug] = useState<string>('hs2lo'); // Basic
   const [colorSlug, setColorSlug] = useState<string | null>(null);
   const [qty, setQty] = useState<number>(1);
+  const [fullSpectrum, setFullSpectrum] = useState<boolean>(false);
 
   // Model metrics + ratio tracking
   const [metrics, setMetrics] = useState<{
@@ -112,62 +113,61 @@ export default function PurchasePage() {
 
   // Estimate weight at the selected cm size by scaling base volume (returns null when not computable)
   const estimatedWeightG = useMemo(() => {
-    try {
-      if (!metrics || !ratiosRef.current) return null;
-      const { volumeMm3 } = metrics;
-      if (!Number.isFinite(volumeMm3)) return null;
-      const { maxSizeMm, rx, ry, rz } = ratiosRef.current;
-      if (![maxSizeMm, rx, ry, rz, widthCm, heightCm, depthCm].every((v) => Number.isFinite(v))) return null;
-      const currentLargestCm = Math.max(widthCm / (rx || 1), heightCm / (ry || 1), depthCm / (rz || 1));
-      if (!Number.isFinite(currentLargestCm)) return null;
-      const k = (currentLargestCm * 10) / (maxSizeMm || 1);
-      if (!Number.isFinite(k)) return null;
-      const volScaled = volumeMm3 * k * k * k;
-      if (!Number.isFinite(volScaled)) return null;
-      const densityPLA = 1.24e-3; // g/mm^3
-      const infill = 0.2;
-      const grams = volScaled * infill * densityPLA;
-      return Number.isFinite(grams) ? grams : null;
-    } catch {
-      return null;
-    }
-  }, [metrics, widthCm, heightCm, depthCm]);
+    const vals = [widthCm, heightCm, depthCm];
+    if (!vals.every((v) => Number.isFinite(v) && v > 0)) return null;
+    const volumeCm3 = widthCm * heightCm * depthCm;
+    const gramsPerCm3 = 0.1; // calibrated so 25×20×45 cm ≈ 225 g
+    const grams = volumeCm3 * gramsPerCm3;
+    return Number.isFinite(grams) ? grams : null;
+  }, [widthCm, heightCm, depthCm]);
 
-  // Pricing: prefer material-based (by estimated grams) with fallback to size-based heuristic
+  // Pricing: base from weight, then type percent, optional full spectrum fixed surcharge, times quantity
   const pricing = useMemo(() => {
     const qtySafe = Number.isFinite(qty) && qty > 0 ? Math.floor(qty) : 1;
+    const grams = estimatedWeightG != null && Number.isFinite(estimatedWeightG as number) ? (estimatedWeightG as number) : null;
+
+    // Base from weight (target: 25×20×45 cm ≈ 225 g → ~€18–€19)
+    const handling = 10; // €
+    const pricePerGram = 0.12; // €/g
+    let base = 10; // minimum
+    if (grams != null) base = Math.max(10, handling + grams * pricePerGram);
+
+    // Type percent surcharge (from JSON)
     const type = TYPE_OPTIONS.find((t) => t.slug === typeSlug);
     const extraPercent = type && type.pricing_type === 'percent' ? type.pricing_amount : 0;
-
-    let base: number;
-    if (estimatedWeightG != null && Number.isFinite(estimatedWeightG as number)) {
-      const grams = estimatedWeightG as number;
-      const handling = 6; // €
-      const pricePerGram = 0.06; // €/g
-      base = Math.max(10, handling + grams * pricePerGram);
-    } else {
-      // Fallback: previous size-based heuristic
-      const w = clamp(widthCm, 0, 25);
-      const h = clamp(heightCm, 0, 25);
-      const d = clamp(depthCm, 0, 25);
-      const maxVol = 25 * 25 * 25;
-      const vol = w * h * d;
-      const fraction = maxVol === 0 ? 0 : clamp(vol / maxVol, 0, 1);
-      base = 10 + 20 * fraction; // €10 .. €30
-    }
-
     const typeSurcharge = base * (extraPercent / 100);
-    const perUnit = base + typeSurcharge;
+    const perUnitBeforeFS = base + typeSurcharge;
+
+    // Full Spectrum (by human) fixed surcharge tiers based on weight
+    const fsAmount = grams != null ? (grams <= 150 ? 60 : grams <= 300 ? 90 : 120) : 60;
+    const fsSurcharge = fullSpectrum ? fsAmount : 0;
+
+    const perUnit = perUnitBeforeFS + fsSurcharge;
     const total = perUnit * qtySafe;
-    return { base, typePercent: extraPercent, typeLabel: type?.label ?? 'Basic', typeSurcharge, perUnit, total, qty: qtySafe };
-  }, [widthCm, heightCm, depthCm, estimatedWeightG, typeSlug, qty]);
+
+    return {
+      base,
+      grams,
+      typePercent: extraPercent,
+      typeLabel: type?.label ?? 'Basic',
+      typeSurcharge,
+      perUnitBeforeFS,
+      fsEnabled: fullSpectrum,
+      fsSurcharge,
+      perUnit,
+      total,
+      qty: qtySafe,
+    };
+  }, [estimatedWeightG, typeSlug, qty, fullSpectrum]);
 
   const onProceed = () => {
     if (sizeErrors.length) return;
     // Placeholder: integrate with checkout/cart later
     const typeLine = `Type: ${pricing.typeLabel}${pricing.typePercent ? ` (+${pricing.typePercent}%)` : ''}`;
     const colorLine = `Color: ${colorSlug ?? '—'}`;
-    alert(`Order summary:\nModel: ${model?.prompt ?? model?.kind ?? modelId ?? "(unknown)"}\nSize: ${widthCm}×${heightCm}×${depthCm} cm\n${typeLine}\n${colorLine}\nQuantity: ${pricing.qty}\nTotal: €${pricing.total.toFixed(2)}`);
+    const weightLine = `Estimated weight: ${pricing.grams != null ? `${pricing.grams.toFixed(1)} g` : 'N/A'}`;
+    const fsLine = `Finish: ${fullSpectrum ? `Full Spectrum (+€${pricing.fsSurcharge.toFixed(2)})` : 'Standard'}`;
+    alert(`Order summary:\nModel: ${model?.prompt ?? model?.kind ?? modelId ?? "(unknown)"}\nSize: ${widthCm}×${heightCm}×${depthCm} cm\n${weightLine}\n${typeLine}\n${colorLine}\n${fsLine}\nQuantity: ${pricing.qty}\nTotal: €${pricing.total.toFixed(2)}`);
   };
 
   return (
@@ -204,6 +204,76 @@ export default function PurchasePage() {
           <div className="font-medium">Choose Size (cm)</div>
           <div className="text-xs text-gray-500">
             Max 25 cm in each dimension. {loadingMetrics ? "Analyzing model…" : metrics ? `Model ratio locked` : null}
+          </div>
+          <div className="flex flex-wrap gap-2 pt-1">
+            <button
+              type="button"
+              className="px-2 py-1 text-xs border rounded"
+              onClick={() => {
+                const S = 5;
+                const r = ratiosRef.current;
+                if (r) {
+                  setWidthCm(Number((r.rx * S).toFixed(2)));
+                  setHeightCm(Number((r.ry * S).toFixed(2)));
+                  setDepthCm(Number((r.rz * S).toFixed(2)));
+                } else {
+                  setWidthCm(S); setHeightCm(S); setDepthCm(S);
+                }
+              }}
+            >
+              Small (max ~5cm)
+            </button>
+            <button
+              type="button"
+              className="px-2 py-1 text-xs border rounded"
+              onClick={() => {
+                const S = 10;
+                const r = ratiosRef.current;
+                if (r) {
+                  setWidthCm(Number((r.rx * S).toFixed(2)));
+                  setHeightCm(Number((r.ry * S).toFixed(2)));
+                  setDepthCm(Number((r.rz * S).toFixed(2)));
+                } else {
+                  setWidthCm(S); setHeightCm(S); setDepthCm(S);
+                }
+              }}
+            >
+              Medium (max ~10cm)
+            </button>
+            <button
+              type="button"
+              className="px-2 py-1 text-xs border rounded"
+              onClick={() => {
+                const S = 15;
+                const r = ratiosRef.current;
+                if (r) {
+                  setWidthCm(Number((r.rx * S).toFixed(2)));
+                  setHeightCm(Number((r.ry * S).toFixed(2)));
+                  setDepthCm(Number((r.rz * S).toFixed(2)));
+                } else {
+                  setWidthCm(S); setHeightCm(S); setDepthCm(S);
+                }
+              }}
+            >
+              Large (max ~15cm)
+            </button>
+            <button
+              type="button"
+              className="px-2 py-1 text-xs border rounded"
+              onClick={() => {
+                const S = 25;
+                const r = ratiosRef.current;
+                if (r) {
+                  setWidthCm(Number((r.rx * S).toFixed(2)));
+                  setHeightCm(Number((r.ry * S).toFixed(2)));
+                  setDepthCm(Number((r.rz * S).toFixed(2)));
+                } else {
+                  setWidthCm(S); setHeightCm(S); setDepthCm(S);
+                }
+              }}
+            >
+              Max (25cm)
+            </button>
           </div>
           <div className="grid grid-cols-3 gap-3">
             <label className="text-xs space-y-1">
@@ -243,14 +313,14 @@ export default function PurchasePage() {
               />
             </label>
           </div>
-          {metrics && (
-            <div className="text-xs text-gray-600">
+          <div className="text-xs text-gray-600">
+            {metrics ? (
               <div>Model bounding box (mm): {metrics.sizeMm.x.toFixed(1)} × {metrics.sizeMm.y.toFixed(1)} × {metrics.sizeMm.z.toFixed(1)}</div>
-              <div>
-                Estimated print weight (20% infill PLA): {estimatedWeightG != null && Number.isFinite(estimatedWeightG as number) ? `${(estimatedWeightG as number).toFixed(1)} g` : 'N/A'}
-              </div>
+            ) : null}
+            <div>
+              Estimated weight (from size): {estimatedWeightG != null && Number.isFinite(estimatedWeightG as number) ? `${(estimatedWeightG as number).toFixed(1)} g` : 'N/A'}
             </div>
-          )}
+          </div>
           {sizeErrors.length > 0 && (
             <div className="text-xs text-red-600">
               {sizeErrors.map((e, i) => (
@@ -306,19 +376,41 @@ export default function PurchasePage() {
               )}
             </div>
           </div>
+          <div className="mt-4 border-t pt-3">
+            <div className="font-medium text-sm">Finish Options</div>
+            <label className="mt-2 flex items-center justify-between text-sm">
+              <div>
+                <div>Full Spectrum color (by human)</div>
+                <div className="text-xs text-gray-500">Hand-painted multi-color finish. Price depends on weight.</div>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="text-sm">+€{(estimatedWeightG != null ? ((estimatedWeightG as number) <= 150 ? 60 : (estimatedWeightG as number) <= 300 ? 90 : 120) : 60).toFixed(2)}</span>
+                <input type="checkbox" checked={fullSpectrum} onChange={(e) => setFullSpectrum(e.target.checked)} />
+              </div>
+            </label>
+          </div>
         </div>
 
         {/* Price summary */}
-        <div className="rounded-xl border p-4 space-y-3">
+        <div className="rounded-xl border p-4 space-y-3 lg:sticky lg:top-4">
           <div className="font-medium">Price</div>
           <div className="text-sm flex items-center justify-between">
             <span>Base (per unit)</span>
             <span>€{pricing.base.toFixed(2)}</span>
           </div>
+          <div className="text-xs text-gray-500 text-right">
+            Estimated weight: {pricing.grams != null ? `${pricing.grams.toFixed(1)} g` : 'N/A'}
+          </div>
           <div className="text-sm flex items-center justify-between">
             <span>Type: {pricing.typeLabel}{pricing.typePercent ? ` (+${pricing.typePercent}%)` : ''}</span>
             <span>€{pricing.typeSurcharge.toFixed(2)}</span>
           </div>
+          {pricing.fsEnabled ? (
+            <div className="text-sm flex items-center justify-between">
+              <span>Full Spectrum (by human)</span>
+              <span>€{pricing.fsSurcharge.toFixed(2)}</span>
+            </div>
+          ) : null}
           <div className="text-sm flex items-center justify-between">
             <span>Quantity</span>
             <input
