@@ -493,7 +493,8 @@
     "shop": "Boutique",
     "keychains": "Porte-clés",
     "lithophanes": "Lithophanies",
-    "contact": "Contact"
+    "contact": "Contact",
+    "buyCredits": "Acheter du crédit"
   },
   "aria": {
     "home": "Accueil Dreamli",

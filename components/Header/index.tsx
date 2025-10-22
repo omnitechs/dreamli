@@ -64,7 +64,7 @@ export default async function Header({ lang }: { lang: LanguageCode }) {
                         <Suspense fallback={<>...</>}>
                             <LangSwitcher lang={lang} languages={languages as readonly Language[]} />
                         </Suspense>
-                        <Link href={`${base}/credits`} className="px-3 py-2 rounded-xl text-sm text-white bg-purple-600 hover:bg-purple-700 transition-all">Buy credits</Link>
+                        <Link href={`${base}/credits`} className="px-3 py-2 rounded-xl text-sm text-white bg-purple-600 hover:bg-purple-700 transition-all">{t('nav.buyCredits')}</Link>
                         <UserNav base={base} />
                     </div>
 

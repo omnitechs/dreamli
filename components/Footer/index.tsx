@@ -23,13 +23,14 @@ export default async function Footer({ lang }: { lang: LanguageCode }) {
         // else assume production / secure
         origin = `https://${host}`;
     }
+    const base = `/${lang}`;
     return (
         <footer className="bg-gradient-to-br from-gray-50 to-gray-100 py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid md:grid-cols-4 gap-8">
                     {/* Logo and tagline */}
                     <div>
-                        <Link href="/home" className="cursor-pointer mb-4 inline-block" aria-label={t('aria.home')}>
+                        <Link href={base || '/'} className="cursor-pointer mb-4 inline-block" aria-label={t('aria.home')}>
                             <Image
                                 src="/logo.avif"
                                 alt={t('logoAlt')}
@@ -119,7 +120,7 @@ export default async function Footer({ lang }: { lang: LanguageCode }) {
                         <h4 className="text-lg font-semibold mb-4 text-purple-800">{t('collab.heading')}</h4>
                         <ul className="space-y-2">
                             <li>
-                                <Link href="/collaboration" className="text-gray-600 hover:text-purple-600 transition-colors">
+                                <Link href={`${base}/collaboration`} className="text-gray-600 hover:text-purple-600 transition-colors">
                                     {t('collab.partner')}
                                 </Link>
                             </li>
