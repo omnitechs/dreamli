@@ -5,6 +5,7 @@ import {CommitsPanel} from "@/app/(lang)/[lang]/ai/components/CommitsPanel";
 import {Messenger} from "@/app/(lang)/[lang]/ai/components/Messenger";
 import {CommandCenter} from "@/app/(lang)/[lang]/ai/components/CommandCenter";
 import {GeneratorPanel} from "@/app/(lang)/[lang]/ai/components/GeneratorPanel";
+import { useSession } from "next-auth/react";
 
 
 
@@ -13,10 +14,13 @@ type Props ={
 }
 export default function GeneratorPlayground(props:Props): JSX.Element {
     const projectId = props.projectId ?? null;
+    const { data: session } = useSession();
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <CommandCenter projectId={projectId}/>
+            {((session?.user as any)?.role === 'admin') && (
+                <CommandCenter projectId={projectId}/>
+            )}
             {/* Desktop 3-pane layout */}
             <div className="hidden xl:grid xl:grid-cols-[280px_minmax(0,0.7fr)_minmax(0,1fr)] min-h-screen">
                 <CommitsPanel/>

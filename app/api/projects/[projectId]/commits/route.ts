@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/lib/auth';
+import { fromSnapshot, toSnapshot } from '@/app/(lang)/[lang]/ai/libs/snapshots';
 
 type UUID = string;
 type Params = { projectId: UUID };
@@ -25,10 +26,25 @@ export async function GET(
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    const commits = await prisma.commit.findMany({
+    let commits = await prisma.commit.findMany({
         where: { projectId },
         orderBy: { createdAt: 'desc' },
     });
+
+    // Auto-create an initial commit with the generator's initial snapshot on first access if none exist
+    if (commits.length === 0) {
+        // Build a canonical initial snapshot using snapshot helpers
+        const initialSnapshot = toSnapshot(fromSnapshot({} as any));
+        const initial = await prisma.commit.create({
+            data: {
+                projectId,
+                parentId: null,
+                snapshot: initialSnapshot,
+                message: 'Initial commit',
+            },
+        });
+        commits = [initial];
+    }
 
     return NextResponse.json(commits);
 }
