@@ -2,6 +2,8 @@
 // Digital currency configuration and helpers
 
 export const DIGITAL_PER_EUR = 1370; // 1 EUR = 1370 Digital Credits (DC)
+// Signup bonus in Digital Credits (DC)
+export const SIGNUP_BONUS_DC = 3425;
 
 export type PurchasePackage = {
   id: string;

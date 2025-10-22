@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
+import { addCredits } from "@/lib/credits";
+import { SIGNUP_BONUS_DC } from "@/lib/currency";
 
 const schema = z.object({
     email: z.email(),
@@ -29,7 +31,20 @@ export async function POST(req: NextRequest) {
             select: { id: true, email: true }
         });
 
-        return NextResponse.json({ ok: true, user });
+        // Award signup bonus credits (idempotent)
+        try {
+            await addCredits({
+                userId: user.id,
+                amount: SIGNUP_BONUS_DC,
+                reason: "signup_bonus",
+                idempotencyKey: `signup_bonus:${user.id}`,
+                reference: "register",
+            });
+        } catch (e) {
+            console.error("Failed to award signup bonus", e);
+        }
+
+        return NextResponse.json({ ok: true, user, bonusApplied: true, bonusAmount: SIGNUP_BONUS_DC });
     } catch (err: any) {
         return NextResponse.json({ error: err?.message ?? "Bad Request" }, { status: 400 });
     }

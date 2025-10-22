@@ -6,6 +6,8 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
+import { addCredits } from "@/lib/credits";
+import { SIGNUP_BONUS_DC } from "@/lib/currency";
 
 const credentialsSchema = z.object({
     email: z.email(),
@@ -66,6 +68,23 @@ export const {
                 (session.user as any).role = (token as any).role ?? "user";
             }
             return session;
+        },
+    },
+    events: {
+        // Award signup bonus for first-time OAuth/social signups (and adapter-created users)
+        async createUser({ user }) {
+            try {
+                if (!user?.id) return;
+                await addCredits({
+                    userId: user.id,
+                    amount: SIGNUP_BONUS_DC,
+                    reason: "signup_bonus",
+                    idempotencyKey: `signup_bonus:${user.id}`,
+                    reference: "oauth",
+                });
+            } catch (e) {
+                console.error("Failed to award signup bonus on createUser", e);
+            }
         },
     },
     // optional: debug in dev
