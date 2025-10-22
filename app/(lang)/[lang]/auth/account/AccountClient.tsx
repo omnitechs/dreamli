@@ -77,7 +77,7 @@ export default function AccountClient({ me, lang }: { me: MeProp; lang: string }
               <div className="text-sm text-gray-500">Current balance</div>
               <div className="mt-1 text-3xl font-semibold tracking-tight text-purple-700">€ {credits.toFixed(2)}</div>
             </div>
-            <a href="/shop" className="inline-flex items-center gap-2 rounded-full bg-gradient-to-tr from-purple-600 to-fuchsia-500 px-4 py-2 text-sm font-medium text-white shadow-md hover:brightness-105 active:brightness-95">
+            <a href={`/${lang}/credits`} className="inline-flex items-center gap-2 rounded-full bg-gradient-to-tr from-purple-600 to-fuchsia-500 px-4 py-2 text-sm font-medium text-white shadow-md hover:brightness-105 active:brightness-95">
               Add credit
             </a>
           </div>

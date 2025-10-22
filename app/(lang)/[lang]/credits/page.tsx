@@ -15,6 +15,7 @@ export default function CreditsPage(props: { params: { lang: LanguageCode } }) {
   const [loading, setLoading] = useState(false)
   const [amount, setAmount] = useState(100)
   const [notice, setNotice] = useState<string | null>(null)
+  const [noticeKind, setNoticeKind] = useState<'info' | 'success' | 'error' | 'warning'>('warning')
 
   async function refresh() {
     try {
@@ -35,11 +36,35 @@ export default function CreditsPage(props: { params: { lang: LanguageCode } }) {
 
   useEffect(() => {
     refresh()
+    // Handle Stripe return statuses via query params
+    try {
+      const url = new URL(window.location.href)
+      const status = url.searchParams.get('status')
+      if (status) {
+        if (status === 'success') {
+          setNotice('Payment successful! Your credits will appear shortly.')
+          setNoticeKind('success')
+          // refresh immediately and shortly after to catch webhook update
+          refresh()
+          try { setTimeout(() => { refresh().catch(() => {}) }, 1500) } catch {}
+        } else if (status === 'cancel') {
+          setNotice('Payment canceled. No charges were made.')
+          setNoticeKind('warning')
+        } else if (status === 'failed') {
+          setNotice('Payment failed. Please try again or use a different card.')
+          setNoticeKind('error')
+        }
+        url.searchParams.delete('status')
+        window.history.replaceState({}, '', url.toString())
+      }
+    } catch {}
+
     // check if we came from an insufficient credits redirect
     try {
       const msg = sessionStorage.getItem('insufficient_credits_msg')
       if (msg) {
         setNotice(msg)
+        setNoticeKind('warning')
         sessionStorage.removeItem('insufficient_credits_msg')
       }
     } catch {}
@@ -49,16 +74,23 @@ export default function CreditsPage(props: { params: { lang: LanguageCode } }) {
     const add = a ?? amount
     setLoading(true)
     try {
-      const res = await fetch('/api/credits/topup', {
+      const res = await fetch('/api/stripe/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount: add }),
       })
-      if (!res.ok) throw new Error('Top-up failed')
-      await refresh()
-      setNotice(`Added ${add} credits to your balance.`)
+      if (!res.ok) {
+        const t = await res.text();
+        throw new Error(t || 'Checkout failed')
+      }
+      const js = await res.json();
+      if (js?.url) {
+        window.location.href = js.url as string
+        return
+      }
+      throw new Error('Checkout URL missing')
     } catch (e: any) {
-      setNotice(e?.message || 'Top-up failed')
+      setNotice(e?.message || 'Checkout failed')
     } finally {
       setLoading(false)
     }
@@ -67,10 +99,20 @@ export default function CreditsPage(props: { params: { lang: LanguageCode } }) {
   return (
     <div className="max-w-xl mx-auto p-6 space-y-6">
       <h1 className="text-2xl font-semibold">Buy credits</h1>
-      <p className="text-sm text-gray-600">For now, adding credits is instant and free (no payment flow). Click a preset or enter a custom amount.</p>
+      <p className="text-sm text-gray-600">Purchase credits securely via Stripe. Choose a preset or enter a custom amount.</p>
 
       {notice && (
-        <div className="rounded-lg border border-amber-300 bg-amber-50 text-amber-800 px-3 py-2 text-sm">
+        <div
+          className={`rounded-lg px-3 py-2 text-sm ${
+            noticeKind === 'success'
+              ? 'border border-green-300 bg-green-50 text-green-800'
+              : noticeKind === 'error'
+              ? 'border border-red-300 bg-red-50 text-red-800'
+              : noticeKind === 'info'
+              ? 'border border-blue-300 bg-blue-50 text-blue-800'
+              : 'border border-amber-300 bg-amber-50 text-amber-800'
+          }`}
+        >
           {notice}
         </div>
       )}
