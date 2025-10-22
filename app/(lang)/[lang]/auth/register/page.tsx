@@ -1,15 +1,20 @@
-// app/register/page.tsx
+// app/(lang)/[lang]/auth/register/page.tsx
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import RegisterForm from "../RegisterForm";
+import { getTranslations } from "next-intl/server";
 
 export default async function RegisterPage({
+  params,
   searchParams,
 }: {
+  params: { lang: string };
   // Next 15: searchParams must be awaited before using its properties
   searchParams: Promise<{ redirect?: string | string[] }>;
 }) {
   const session = await auth();
+  const lang = params?.lang ?? "en";
+  const t = await getTranslations("Auth.register");
 
   const sp = await searchParams;
   const redirectRaw = sp?.redirect;
@@ -18,21 +23,21 @@ export default async function RegisterPage({
     : redirectRaw;
 
   if (session) {
-    redirect(redirectTo ?? "/");
+    const fallback = `/${lang}/auth/account`;
+    const dest = redirectTo && redirectTo.startsWith("/") ? redirectTo : fallback;
+    redirect(dest);
   }
 
-  const loginHref = redirectTo
-    ? `/login?redirect=${encodeURIComponent(redirectTo)}`
-    : "/login";
+  const loginHref = `/${lang}/auth/login` + (redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : "");
 
   return (
     <main className="mx-auto max-w-md p-6">
-      <h1 className="mb-4 text-2xl font-semibold">Create account</h1>
+      <h1 className="mb-4 text-2xl font-semibold">{t("title")}</h1>
       <RegisterForm />
       <p className="mt-4 text-sm text-gray-500">
-        Already have an account?{" "}
+        {t("haveAccount")} {" "}
         <a className="underline" href={loginHref}>
-          Sign in
+          {t("signIn")}
         </a>
       </p>
     </main>

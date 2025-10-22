@@ -2,10 +2,14 @@
 "use client";
 
 import { useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { useTranslations } from "next-intl";
 
 export default function RegisterForm() {
+    const t = useTranslations("Auth.register");
+    const tl = useTranslations("Auth.login");
+
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
@@ -14,6 +18,22 @@ export default function RegisterForm() {
 
     const params = useSearchParams();
     const router = useRouter();
+    const pathname = usePathname();
+
+    function currentLang() {
+        const seg = pathname?.split("/").filter(Boolean)[0] || "en";
+        return seg;
+    }
+
+    function computeFallback(): string {
+        return `/${currentLang()}/auth/account`;
+    }
+
+    function computeRedirect() {
+        const r = params.get("redirect");
+        if (r && r.startsWith("/")) return r;
+        return computeFallback();
+    }
 
     async function onSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -35,7 +55,7 @@ export default function RegisterForm() {
         }
 
         // 2) Auto-login with credentials
-        const redirectTo = params.get("redirect") ?? "/";
+        const redirectTo = computeRedirect();
 
         const login = await signIn("credentials", {
             email,
@@ -50,13 +70,37 @@ export default function RegisterForm() {
         } else {
             // Fallback: go to login with prefilled redirect
             router.replace(
-                `/login?redirect=${encodeURIComponent(redirectTo)}`
+                `/${currentLang()}/auth/login?redirect=${encodeURIComponent(redirectTo)}`
             );
         }
     }
 
+    async function onGoogle() {
+        setBusy(true);
+        setError(null);
+        const callbackUrl = computeRedirect();
+        await signIn("google", { callbackUrl });
+        setBusy(false);
+    }
+
     return (
-        <form onSubmit={onSubmit} className="space-y-3">
+        <>
+            <button
+                type="button"
+                onClick={onGoogle}
+                className="w-full rounded border px-4 py-2"
+                disabled={busy}
+            >
+                {tl("withGoogle")}
+            </button>
+
+            <div className="flex items-center gap-3 text-sm text-gray-500">
+                <div className="h-px flex-1 bg-gray-200" />
+                <span>{tl("or")}</span>
+                <div className="h-px flex-1 bg-gray-200" />
+            </div>
+
+            <form onSubmit={onSubmit} className="space-y-3">
             {error && (
                 <div className="rounded border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-700">
                     {error}
@@ -64,7 +108,7 @@ export default function RegisterForm() {
             )}
 
             <div className="space-y-1">
-                <label className="block text-sm">Name</label>
+                <label className="block text-sm">{t("name")}</label>
                 <input
                     type="text"
                     autoComplete="name"
@@ -76,7 +120,7 @@ export default function RegisterForm() {
             </div>
 
             <div className="space-y-1">
-                <label className="block text-sm">Email</label>
+                <label className="block text-sm">{t("email")}</label>
                 <input
                     type="email"
                     autoComplete="email"
@@ -88,7 +132,7 @@ export default function RegisterForm() {
             </div>
 
             <div className="space-y-1">
-                <label className="block text-sm">Password</label>
+                <label className="block text-sm">{t("password")}</label>
                 <input
                     type="password"
                     autoComplete="new-password"
@@ -105,8 +149,9 @@ export default function RegisterForm() {
                 className="w-full rounded border px-4 py-2"
                 disabled={busy}
             >
-                {busy ? "Creating…" : "Create account"}
+                {busy ? t("creating") : t("submit")}
             </button>
         </form>
+        </>
     );
 }

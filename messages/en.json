@@ -812,6 +812,28 @@
         "phone": "+31 6 4555 9587"
       }
     }
+  },
+  "Auth": {
+    "login": {
+      "title": "Sign in",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "signingIn": "Signing in…",
+      "withGoogle": "Continue with Google",
+      "or": "or",
+      "noAccount": "Don’t have an account?",
+      "createOne": "Create one"
+    },
+    "register": {
+      "title": "Create account",
+      "name": "Name",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Create account",
+      "creating": "Creating…",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in"
+    }
   }
-
 }

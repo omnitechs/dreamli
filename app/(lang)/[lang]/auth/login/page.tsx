@@ -1,7 +1,8 @@
-// app/login/page.tsx
+// app/(lang)/[lang]/auth/login/page.tsx
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import LoginForm from "../LoginForm";
+import { getTranslations } from "next-intl/server";
 
 export default async function LoginPage({
   params,
@@ -13,6 +14,7 @@ export default async function LoginPage({
 }) {
   const session = await auth();
   const lang = params?.lang ?? "en";
+  const t = await getTranslations("Auth.login");
 
   const sp = await searchParams;
   const rp = sp?.redirect;
@@ -29,12 +31,12 @@ export default async function LoginPage({
 
   return (
     <main className="mx-auto max-w-md p-6">
-      <h1 className="mb-4 text-2xl font-semibold">Sign in</h1>
+      <h1 className="mb-4 text-2xl font-semibold">{t("title")}</h1>
       <LoginForm />
       <p className="mt-4 text-sm text-gray-500">
-        Don’t have an account?{" "}
+        {t("noAccount")} {" "}
         <a className="underline" href={registerHref}>
-          Create one
+          {t("createOne")}
         </a>
       </p>
     </main>

@@ -806,5 +806,28 @@
         "phone": "+31 6 4555 9587"
       }
     }
+  },
+  "Auth": {
+    "login": {
+      "title": "Inloggen",
+      "email": "E-mailadres",
+      "password": "Wachtwoord",
+      "submit": "Inloggen",
+      "signingIn": "Bezig met inloggen…",
+      "withGoogle": "Doorgaan met Google",
+      "or": "of",
+      "noAccount": "Nog geen account?",
+      "createOne": "Maak er een aan"
+    },
+    "register": {
+      "title": "Account aanmaken",
+      "name": "Naam",
+      "email": "E-mailadres",
+      "password": "Wachtwoord",
+      "submit": "Account aanmaken",
+      "creating": "Bezig met aanmaken…",
+      "haveAccount": "Heb je al een account?",
+      "signIn": "Inloggen"
+    }
   }
 }
