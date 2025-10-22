@@ -33,7 +33,7 @@ type PresignRes = { uploadUrl?: string; publicUrl?: string; key?: string; url?: 
 export const api = createApi({
     reducerPath: 'api',
     baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
-    tagTypes: ['Commits', 'Projects'],
+    tagTypes: ['Commits', 'Projects', 'Marketplace'],
     endpoints: (builder) => ({
         // --- uploads ---
         presignUpload: builder.mutation<PresignRes, PresignReq>({
@@ -147,6 +147,21 @@ export const api = createApi({
             // If your server returns additional computed fields, you can keep this:
             // invalidatesTags: (_res, _err, { projectId }) => [{ type: 'Commits', id: projectId }],
         }),
+
+        // --- marketplace ---
+        getMarketplaceModels: builder.query<{ items: any[]; page: number; pageSize: number; total: number; hasMore: boolean }, { page?: number } | void>({
+            query: (arg) => {
+                const page = (arg as any)?.page || 1;
+                return { url: `marketplace/models?page=${encodeURIComponent(page)}` };
+            },
+            providesTags: ['Marketplace'],
+        }),
+        getModelById: builder.query<any, { modelId: string }>({
+            query: ({ modelId }) => ({ url: `models/${modelId}` }),
+        }),
+        getPublicCommitById: builder.query<any, { commitId: string }>({
+            query: ({ commitId }) => ({ url: `public/commits/${commitId}` }),
+        }),
     }),
 });
 
@@ -156,4 +171,7 @@ export const {
     useCreateProjectMutation,
     useGetCommitsQuery,
     useCreateCommitMutation,
+    useGetMarketplaceModelsQuery,
+    useGetModelByIdQuery,
+    useGetPublicCommitByIdQuery,
 } = api;

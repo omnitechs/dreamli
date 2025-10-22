@@ -6,6 +6,7 @@ import useModels from "@/app/(lang)/[lang]/ai/hooks/useModels";
 import LazyGlb from "@/components/GlbViewer";
 import { analyzeModelUrl } from "@/lib/ai/model-metrics";
 import { TYPE_OPTIONS, COLOR_OPTIONS_BY_TYPE } from "@/lib/ai/color-data";
+import { useGetModelByIdQuery } from "@/app/(lang)/[lang]/ai/services/api";
 
 function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
@@ -21,7 +22,12 @@ export default function PurchasePage() {
   const modelId = search.get("modelId") ?? undefined;
   const { models } = useModels();
   const model = useMemo(() => models?.find((m: any) => m.id === modelId), [models, modelId]);
-  const modelUrl = pickBestModelUrl(model?.modelUrls);
+
+  // Fetch from API if model is not present locally (e.g., coming from Marketplace)
+  const { data: fetchedModel } = useGetModelByIdQuery({ modelId: modelId as string }, { skip: !modelId || !!model });
+  const effectiveModel: any = model || fetchedModel;
+
+  const modelUrl = pickBestModelUrl(effectiveModel?.modelUrls);
 
   // Dimensions in centimeters (each max 25)
   const [widthCm, setWidthCm] = useState<number>(10);
@@ -183,9 +189,8 @@ export default function PurchasePage() {
 
             // ✅ Find the best preview image
             const previewImage =
-                model?.images?.[0]?.url ||
-                model?.thumbnailUrl ||
-                model?.imageUrls?.[0] ||
+                effectiveModel?.thumbnailUrl ||
+                effectiveModel?.imageUrls?.[0] ||
                 '';
 
             // ✅ Build FormData for new API
@@ -199,14 +204,14 @@ export default function PurchasePage() {
             fd.append(
                 'figurine_data',
                 JSON.stringify({
-                    modelId: model?.id || modelId,
+                    modelId: (effectiveModel?.id || modelId),
                     modelUrl:
-                        model?.modelUrls?.glb ||
-                        model?.modelUrls?.fbx ||
-                        model?.modelUrls?.obj ||
+                        effectiveModel?.modelUrls?.glb ||
+                        effectiveModel?.modelUrls?.fbx ||
+                        effectiveModel?.modelUrls?.obj ||
                         modelUrl ||
                         '',
-                    prompt: model?.prompt || model?.kind || '',
+                    prompt: effectiveModel?.prompt || effectiveModel?.kind || '',
                     size: { widthCm, heightCm, depthCm },
                     weightG: pricing.grams,
                     typeSlug,
@@ -264,22 +269,22 @@ export default function PurchasePage() {
     <div className="max-w-5xl mx-auto p-4 space-y-6">
       <h1 className="text-2xl font-semibold">Purchase 3D Model</h1>
 
-      {model ? (
+      {effectiveModel ? (
         <div className="rounded-xl border p-3">
           <div className="flex items-center justify-between mb-3">
-            <div className="text-sm font-medium truncate">{model.prompt ?? model.kind}</div>
+            <div className="text-sm font-medium truncate">{effectiveModel?.prompt ?? effectiveModel?.kind}</div>
             <div className="text-[10px] text-gray-500">
-              {new Date(model.createdAt ?? Date.now()).toLocaleString()}
+              {new Date((effectiveModel?.createdAt ?? Date.now())).toLocaleString()}
             </div>
           </div>
           {/* Preview if possible */}
           {modelUrl ? (
             <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
-              <LazyGlb key={modelUrl || model.id} modelUrl={modelUrl} />
+              <LazyGlb key={modelUrl || effectiveModel?.id} modelUrl={modelUrl} />
             </div>
-          ) : model.thumbnailUrl ? (
+          ) : effectiveModel?.thumbnailUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={model.thumbnailUrl} alt="thumb" className="w-full rounded-lg" />
+            <img src={effectiveModel?.thumbnailUrl} alt="thumb" className="w-full rounded-lg" />
           ) : null}
         </div>
       ) : (
