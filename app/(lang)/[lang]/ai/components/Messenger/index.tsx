@@ -246,7 +246,7 @@ export function Messenger() {
     };
 
     return (
-        <div className="bg-white xl:border-r border-gray-200 xl:h-screen flex flex-col">
+        <div className="bg-white xl:border-r border-gray-200 xl:h-full min-h-0 flex flex-col">
             {/* Header */}
             <div className="sticky top-0 bg-white border-b border-gray-200 p-4 z-10">
                 <h2 className="text-lg font-semibold text-gray-900">Messages & Logs</h2>

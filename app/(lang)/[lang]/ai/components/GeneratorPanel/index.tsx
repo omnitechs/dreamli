@@ -21,7 +21,7 @@ export function GeneratorPanel(props: {projectId: string}) {
     const isImageMode = modeType === "image";
 
     return (
-        <div className="bg-white xl:h-screen flex flex-col">
+        <div className="bg-white xl:h-full min-h-0 flex flex-col">
             {/* Content */}
             <div className="flex-1 overflow-auto p-4 space-y-6">
                 {/* Mode & Prompt */}

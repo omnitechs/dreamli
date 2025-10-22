@@ -51,7 +51,7 @@ export function CommitsPanel() {
 
     if (!commits || Object.keys(commits).length === 0) {
         return (
-            <section className="bg-white border rounded-2xl shadow p-6 flex flex-col items-center justify-center text-center text-gray-500">
+            <section className="bg-white border rounded-2xl shadow p-6 flex flex-col items-center justify-center text-center text-gray-500 h-full min-h-0">
                 <GitBranch className="w-8 h-8 mb-3 text-gray-300" />
                 <p className="text-sm">No commits yet</p>
             </section>
@@ -66,7 +66,7 @@ export function CommitsPanel() {
         });
 
     return (
-        <section className="bg-white border rounded-2xl shadow overflow-hidden flex flex-col">
+        <section className="bg-white border rounded-2xl shadow overflow-hidden flex flex-col h-full min-h-0">
             {/* Header */}
             <div className="border-b px-5 py-3 flex items-center justify-between bg-white sticky top-0 z-10">
                 <h2 className="text-lg font-semibold flex items-center gap-2 text-gray-900">
