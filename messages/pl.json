@@ -808,7 +808,69 @@
         "phone": "+31 6 4555 9587"
       }
     }
+  },
+  "Account": {
+    "title": "Moje konto",
+    "signOut": "Wyloguj się",
+    "profile": {
+      "fallbackName": "Użytkownik",
+      "memberSince": "Członek od {date}",
+      "role": "Rola: {role}"
+    },
+    "balance": {
+      "current": "Bieżące saldo (DC)",
+      "add": "Dodaj Kredyty Cyfrowe"
+    },
+    "quick": {
+      "title": "Szybkie działania",
+      "manageProfile": "Zarządzaj profilem",
+      "orderHistory": "Historia zamówień"
+    },
+    "activity": {
+      "title": "Ostatnia aktywność",
+      "empty": "Twoja ostatnia aktywność kredytowa pojawi się tutaj."
+    },
+    "invoices": {
+      "title": "Faktury",
+      "none": "Brak faktur.",
+      "date": "Data",
+      "amount": "Kwota",
+      "credits": "Kredyty",
+      "actions": "Działania",
+      "downloadPdf": "Pobierz PDF",
+      "viewReceipt": "Zobacz paragon"
+    },
+    "ref": {
+      "title": "Program poleceń",
+      "tagline": "Udostępniaj i zarabiaj",
+      "linkLabel": "Twój link polecający",
+      "copy": "Skopiuj link",
+      "copied": "Skopiowano!",
+      "note": "Każda osoba, która zarejestruje się przez Twój link, daje Ci {bonus} DC oraz {percent}% od każdej doładowanej kwoty.",
+      "totalEarned": "Łącznie zarobiono z poleceń",
+      "totalJoined": "Łącznie dołączyło dzięki Tobie",
+      "tableTitle": "Poleceni użytkownicy",
+      "empty": "Brak poleconych użytkowników. Udostępnij swój link, aby zacząć zarabiać.",
+      "user": "Użytkownik",
+      "joined": "Dołączył",
+      "youEarned": "Zarobiłeś"
+    },
+    "admin": {
+      "title": "Administrator",
+      "loading": "Ładowanie użytkowników…",
+      "allUsers": "Wszyscy użytkownicy",
+      "name": "Imię i nazwisko",
+      "email": "E-mail",
+      "role": "Rola",
+      "credits": "Kredyty",
+      "actions": "Działania",
+      "add": "Dodaj",
+      "deduct": "Odejmij",
+      "amount": "Kwota",
+      "reason": "Powód",
+      "apply": "Zastosuj",
+      "enterPositive": "Wprowadź dodatnią kwotę",
+      "operationFailed": "Operacja nie powiodła się"
+    }
   }
-
-
 }

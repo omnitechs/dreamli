@@ -830,5 +830,69 @@
       "haveAccount": "Heb je al een account?",
       "signIn": "Inloggen"
     }
+  },
+  "Account": {
+    "title": "Mijn account",
+    "signOut": "Uitloggen",
+    "profile": {
+      "fallbackName": "Gebruiker",
+      "memberSince": "Lid sinds {date}",
+      "role": "Rol: {role}"
+    },
+    "balance": {
+      "current": "Huidig saldo (DC)",
+      "add": "Digitale credits toevoegen"
+    },
+    "quick": {
+      "title": "Snelle acties",
+      "manageProfile": "Profiel beheren",
+      "orderHistory": "Bestelgeschiedenis"
+    },
+    "activity": {
+      "title": "Recente activiteit",
+      "empty": "Je recente kredietactiviteit verschijnt hier."
+    },
+    "invoices": {
+      "title": "Facturen",
+      "none": "Nog geen facturen.",
+      "date": "Datum",
+      "amount": "Bedrag",
+      "credits": "Credits",
+      "actions": "Acties",
+      "downloadPdf": "PDF downloaden",
+      "viewReceipt": "Bon bekijken"
+    },
+    "ref": {
+      "title": "Verwijsprogramma",
+      "tagline": "Delen en verdienen",
+      "linkLabel": "Jouw verwijzingslink",
+      "copy": "Link kopiëren",
+      "copied": "Gekopieerd!",
+      "note": "Iedereen die zich aanmeldt via jouw link levert je {bonus} DC op, plus {percent}% van elke tegoedaanvulling die ze kopen.",
+      "totalEarned": "Totaal verdiend via verwijzingen",
+      "totalJoined": "Totaal via jou aangemeld",
+      "tableTitle": "Verwezen gebruikers",
+      "empty": "Nog geen verwezen gebruikers. Deel je link om te beginnen met verdienen.",
+      "user": "Gebruiker",
+      "joined": "Aangemeld",
+      "youEarned": "Door jou verdiend"
+    },
+    "admin": {
+      "title": "Beheer",
+      "loading": "Gebruikers laden…",
+      "allUsers": "Alle gebruikers",
+      "name": "Naam",
+      "email": "E-mailadres",
+      "role": "Rol",
+      "credits": "Credits",
+      "actions": "Acties",
+      "add": "Toevoegen",
+      "deduct": "Aftrekken",
+      "amount": "Bedrag",
+      "reason": "Reden",
+      "apply": "Toepassen",
+      "enterPositive": "Voer een positief bedrag in",
+      "operationFailed": "Bewerking mislukt"
+    }
   }
 }

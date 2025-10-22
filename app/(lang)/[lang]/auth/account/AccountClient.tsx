@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { RootState, AppDispatch } from '@/app/store';
 import { hydrateMe } from '@/app/store/slices/accountUserSlice';
 import { signOut } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
 
 export type MeProp = {
   id: string;
@@ -23,6 +24,7 @@ function initialsFrom(name?: string | null) {
 export default function AccountClient({ me, lang }: { me: MeProp; lang: string }) {
   const dispatch = useDispatch<AppDispatch>();
   const my = useSelector((s: RootState) => s.accountUser.me);
+  const t = useTranslations('Account');
 
   useEffect(() => {
     dispatch(hydrateMe(me));
@@ -39,6 +41,9 @@ export default function AccountClient({ me, lang }: { me: MeProp; lang: string }
   if (!my) return null;
 
   const credits = Number(my.creditsBalance ?? '0') || 0;
+  const fallbackName = t('profile.fallbackName');
+  const memberSince = new Date(my.createdAt).toLocaleDateString?.(lang as any) ?? '—';
+  const roleStr = String(my.role).toUpperCase();
 
   return (
     <div className="space-y-6">
@@ -46,12 +51,12 @@ export default function AccountClient({ me, lang }: { me: MeProp; lang: string }
       <div className="rounded-2xl border border-gray-200 bg-white/70 backdrop-blur p-5 shadow-sm">
         <div className="flex items-center gap-4">
           <div className={`h-14 w-14 rounded-full bg-gradient-to-br ${avatarBg} flex items-center justify-center text-lg font-semibold text-gray-800`}>
-            {initialsFrom(my.name || my.email || 'User')}
+            {initialsFrom(my.name || my.email || fallbackName)}
           </div>
           <div className="min-w-0">
-            <div className="text-lg font-semibold text-gray-900 truncate">{my.name || my.email || 'User'}</div>
+            <div className="text-lg font-semibold text-gray-900 truncate">{my.name || my.email || fallbackName}</div>
             <div className="text-sm text-gray-500 truncate">{my.email ?? '—'}</div>
-            <div className="text-xs text-gray-400">Member since {new Date(my.createdAt).toLocaleDateString?.() ?? '—'} • Role: {String(my.role).toUpperCase()}</div>
+            <div className="text-xs text-gray-400">{t('profile.memberSince', { date: memberSince })} • {t('profile.role', { role: roleStr })}</div>
           </div>
         </div>
       </div>
@@ -65,7 +70,7 @@ export default function AccountClient({ me, lang }: { me: MeProp; lang: string }
           }}
           className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-white px-4 py-2 text-sm font-medium text-red-600 shadow-sm hover:bg-red-50"
         >
-          Sign out
+          {t('signOut')}
         </button>
       </div>
 
@@ -74,27 +79,27 @@ export default function AccountClient({ me, lang }: { me: MeProp; lang: string }
         <div className="sm:col-span-2 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-sm text-gray-500">Current balance (DC)</div>
-              <div className="mt-1 text-3xl font-semibold tracking-tight text-purple-700">{Math.round(credits).toLocaleString()} DC</div>
+              <div className="text-sm text-gray-500">{t('balance.current')}</div>
+              <div className="mt-1 text-3xl font-semibold tracking-tight text-purple-700">{Math.round(credits).toLocaleString(lang as any)} DC</div>
             </div>
             <a href={`/${lang}/credits`} className="inline-flex items-center gap-2 rounded-full bg-gradient-to-tr from-purple-600 to-fuchsia-500 px-4 py-2 text-sm font-medium text-white shadow-md hover:brightness-105 active:brightness-95">
-              Add Digital Credits
+              {t('balance.add')}
             </a>
           </div>
         </div>
         <div className="rounded-2xl border border-gray-200 bg-gradient-to-br from-purple-50 to-fuchsia-50 p-5 shadow-sm">
-          <div className="text-sm text-gray-600">Quick actions</div>
+          <div className="text-sm text-gray-600">{t('quick.title')}</div>
           <div className="mt-3 flex flex-col gap-2">
-            <a href="/settings" className="text-sm text-purple-700 hover:underline">Manage profile</a>
-            <a href="/orders" className="text-sm text-purple-700 hover:underline">Order history</a>
+            <a href={`/${lang}/settings`} className="text-sm text-purple-700 hover:underline">{t('quick.manageProfile')}</a>
+            <a href={`/${lang}/orders`} className="text-sm text-purple-700 hover:underline">{t('quick.orderHistory')}</a>
           </div>
         </div>
       </div>
 
       {/* Activity placeholder */}
       <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-        <div className="mb-2 text-sm font-medium text-gray-900">Recent activity</div>
-        <div className="text-sm text-gray-500">Your recent credits activity will appear here.</div>
+        <div className="mb-2 text-sm font-medium text-gray-900">{t('activity.title')}</div>
+        <div className="text-sm text-gray-500">{t('activity.empty')}</div>
       </div>
     </div>
   );

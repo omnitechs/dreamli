@@ -809,7 +809,69 @@
         "phone": "+31 6 4555 9587"
       }
     }
+  },
+  "Account": {
+    "title": "Mon compte",
+    "signOut": "Se déconnecter",
+    "profile": {
+      "fallbackName": "Utilisateur",
+      "memberSince": "Membre depuis {date}",
+      "role": "Rôle : {role}"
+    },
+    "balance": {
+      "current": "Solde actuel (DC)",
+      "add": "Ajouter des crédits numériques"
+    },
+    "quick": {
+      "title": "Actions rapides",
+      "manageProfile": "Gérer le profil",
+      "orderHistory": "Historique des commandes"
+    },
+    "activity": {
+      "title": "Activité récente",
+      "empty": "Vos activités de crédits récentes apparaîtront ici."
+    },
+    "invoices": {
+      "title": "Factures",
+      "none": "Pas encore de factures.",
+      "date": "Date",
+      "amount": "Montant",
+      "credits": "Crédits",
+      "actions": "Actions",
+      "downloadPdf": "Télécharger le PDF",
+      "viewReceipt": "Voir le reçu"
+    },
+    "ref": {
+      "title": "Programme de parrainage",
+      "tagline": "Partager et gagner",
+      "linkLabel": "Votre lien de parrainage",
+      "copy": "Copier le lien",
+      "copied": "Copié !",
+      "note": "Toute personne s’inscrivant via votre lien vous rapporte {bonus} DC, plus {percent}% de chaque rechargement qu’elle achète.",
+      "totalEarned": "Total gagné grâce aux parrainages",
+      "totalJoined": "Total inscrit grâce à vous",
+      "tableTitle": "Utilisateurs parrainés",
+      "empty": "Aucun utilisateur parrainé pour le moment. Partagez votre lien pour commencer à gagner.",
+      "user": "Utilisateur",
+      "joined": "Inscription",
+      "youEarned": "Vous avez gagné"
+    },
+    "admin": {
+      "title": "Admin",
+      "loading": "Chargement des utilisateurs…",
+      "allUsers": "Tous les utilisateurs",
+      "name": "Nom",
+      "email": "E-mail",
+      "role": "Rôle",
+      "credits": "Crédits",
+      "actions": "Actions",
+      "add": "Ajouter",
+      "deduct": "Déduire",
+      "amount": "Montant",
+      "reason": "Motif",
+      "apply": "Appliquer",
+      "enterPositive": "Saisissez un montant positif",
+      "operationFailed": "L’opération a échoué"
+    }
   }
-
-
 }

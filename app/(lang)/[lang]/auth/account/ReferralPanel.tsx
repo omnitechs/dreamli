@@ -1,14 +1,17 @@
 "use client";
 import React, { useMemo, useState } from "react";
+import { useTranslations } from 'next-intl';
 
 export default function ReferralPanel(props: {
   lang: string;
   referralCode: string;
   totalEarned: number; // DC
   referred: Array<{ id: string; name: string | null; email: string | null; createdAt: string; earned: number }>;
+  referralBonusDc: number;
 }) {
-  const { lang, referralCode, totalEarned, referred } = props;
+  const { lang, referralCode, totalEarned, referred, referralBonusDc } = props;
   const [copied, setCopied] = useState(false);
+  const t = useTranslations('Account');
 
   const link = useMemo(() => {
     const origin = typeof window !== 'undefined' ? window.location.origin : '';
@@ -30,12 +33,12 @@ export default function ReferralPanel(props: {
   return (
     <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Referral program</h2>
-        <span className="text-sm text-gray-500">Share and earn</span>
+        <h2 className="text-xl font-semibold">{t('ref.title')}</h2>
+        <span className="text-sm text-gray-500">{t('ref.tagline')}</span>
       </div>
 
       <div className="rounded-xl border bg-gray-50 p-4">
-        <div className="text-sm text-gray-600">Your referral link</div>
+        <div className="text-sm text-gray-600">{t('ref.linkLabel')}</div>
         <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center">
           <input
             readOnly
@@ -43,46 +46,46 @@ export default function ReferralPanel(props: {
             className="flex-1 rounded border px-3 py-2 text-sm bg-white select-all"
           />
           <button onClick={copy} className="inline-flex items-center justify-center rounded-md bg-purple-600 px-3 py-2 text-sm font-medium text-white shadow hover:brightness-105 active:brightness-95">
-            {copied ? 'Copied!' : 'Copy link'}
+            {copied ? t('ref.copied') : t('ref.copy')}
           </button>
         </div>
-        <div className="mt-2 text-xs text-gray-500">Anyone who signs up using your link grants you 6800 DC, plus 10% of every top-up they purchase.</div>
+        <div className="mt-2 text-xs text-gray-500">{t('ref.note', { bonus: referralBonusDc, percent: 10 })}</div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
         <div className="rounded-xl border p-4 bg-gradient-to-br from-purple-50 to-fuchsia-50">
-          <div className="text-xs text-gray-500">Total earned from referrals</div>
+          <div className="text-xs text-gray-500">{t('ref.totalEarned')}</div>
           <div className="mt-1 text-2xl font-semibold text-purple-700">{totalDc.toLocaleString()} DC</div>
         </div>
         <div className="rounded-xl border p-4">
-          <div className="text-xs text-gray-500">Total joined via you</div>
+          <div className="text-xs text-gray-500">{t('ref.totalJoined')}</div>
           <div className="mt-1 text-2xl font-semibold">{totalPeople}</div>
         </div>
       </div>
 
       <div>
-        <div className="mb-2 text-sm font-medium text-gray-900">Referred users</div>
+        <div className="mb-2 text-sm font-medium text-gray-900">{t('ref.tableTitle')}</div>
         {referred.length === 0 ? (
-          <div className="text-sm text-gray-500">No referred users yet. Share your link to start earning.</div>
+          <div className="text-sm text-gray-500">{t('ref.empty')}</div>
         ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full text-sm">
               <thead>
                 <tr className="text-left text-gray-500">
-                  <th className="px-2 py-2">User</th>
-                  <th className="px-2 py-2">Joined</th>
-                  <th className="px-2 py-2 text-right">You earned</th>
+                  <th className="px-2 py-2">{t('ref.user')}</th>
+                  <th className="px-2 py-2">{t('ref.joined')}</th>
+                  <th className="px-2 py-2 text-right">{t('ref.youEarned')}</th>
                 </tr>
               </thead>
               <tbody>
                 {referred.map(u => (
                   <tr key={u.id} className="border-t">
                     <td className="px-2 py-2">
-                      <div className="font-medium text-gray-900">{u.name || u.email || 'User'}</div>
+                      <div className="font-medium text-gray-900">{u.name || u.email || t('profile.fallbackName')}</div>
                       <div className="text-gray-500">{u.email ?? '—'}</div>
                     </td>
-                    <td className="px-2 py-2 text-gray-600">{new Date(u.createdAt).toLocaleDateString?.() ?? ''}</td>
-                    <td className="px-2 py-2 text-right font-medium">{Math.round(u.earned || 0).toLocaleString()} DC</td>
+                    <td className="px-2 py-2 text-gray-600">{new Date(u.createdAt).toLocaleDateString?.(lang as any) ?? ''}</td>
+                    <td className="px-2 py-2 text-right font-medium">{Math.round(u.earned || 0).toLocaleString(lang as any)} DC</td>
                   </tr>
                 ))}
               </tbody>

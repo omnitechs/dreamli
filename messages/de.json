@@ -809,7 +809,69 @@
         "phone": "+31 6 4555 9587"
       }
     }
+  },
+  "Account": {
+    "title": "Mein Konto",
+    "signOut": "Abmelden",
+    "profile": {
+      "fallbackName": "Benutzer",
+      "memberSince": "Mitglied seit {date}",
+      "role": "Rolle: {role}"
+    },
+    "balance": {
+      "current": "Aktuelles Guthaben (DC)",
+      "add": "Digitale Credits aufladen"
+    },
+    "quick": {
+      "title": "Schnellaktionen",
+      "manageProfile": "Profil verwalten",
+      "orderHistory": "Bestellverlauf"
+    },
+    "activity": {
+      "title": "Letzte Aktivitäten",
+      "empty": "Deine jüngsten Guthabenaktivitäten erscheinen hier."
+    },
+    "invoices": {
+      "title": "Rechnungen",
+      "none": "Noch keine Rechnungen.",
+      "date": "Datum",
+      "amount": "Betrag",
+      "credits": "Credits",
+      "actions": "Aktionen",
+      "downloadPdf": "PDF herunterladen",
+      "viewReceipt": "Beleg anzeigen"
+    },
+    "ref": {
+      "title": "Empfehlungsprogramm",
+      "tagline": "Teilen und verdienen",
+      "linkLabel": "Dein Empfehlungslink",
+      "copy": "Link kopieren",
+      "copied": "Kopiert!",
+      "note": "Jeder, der sich über deinen Link registriert, bringt dir {bonus} DC sowie {percent}% jeder Aufladung, die er kauft.",
+      "totalEarned": "Insgesamt über Empfehlungen verdient",
+      "totalJoined": "Insgesamt über dich beigetreten",
+      "tableTitle": "Empfohlene Nutzer",
+      "empty": "Noch keine empfohlenen Nutzer. Teile deinen Link, um zu verdienen.",
+      "user": "Nutzer",
+      "joined": "Beitritt",
+      "youEarned": "Du hast verdient"
+    },
+    "admin": {
+      "title": "Admin",
+      "loading": "Benutzer werden geladen…",
+      "allUsers": "Alle Benutzer",
+      "name": "Name",
+      "email": "E-Mail",
+      "role": "Rolle",
+      "credits": "Guthaben",
+      "actions": "Aktionen",
+      "add": "Hinzufügen",
+      "deduct": "Abziehen",
+      "amount": "Betrag",
+      "reason": "Grund",
+      "apply": "Anwenden",
+      "enterPositive": "Bitte einen positiven Betrag eingeben",
+      "operationFailed": "Vorgang fehlgeschlagen"
+    }
   }
-
-
 }

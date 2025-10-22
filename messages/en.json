@@ -836,5 +836,69 @@
       "haveAccount": "Already have an account?",
       "signIn": "Sign in"
     }
+  },
+  "Account": {
+    "title": "My account",
+    "signOut": "Sign out",
+    "profile": {
+      "fallbackName": "User",
+      "memberSince": "Member since {date}",
+      "role": "Role: {role}"
+    },
+    "balance": {
+      "current": "Current balance (DC)",
+      "add": "Add Digital Credits"
+    },
+    "quick": {
+      "title": "Quick actions",
+      "manageProfile": "Manage profile",
+      "orderHistory": "Order history"
+    },
+    "activity": {
+      "title": "Recent activity",
+      "empty": "Your recent credits activity will appear here."
+    },
+    "invoices": {
+      "title": "Invoices",
+      "none": "No invoices yet.",
+      "date": "Date",
+      "amount": "Amount",
+      "credits": "Credits",
+      "actions": "Actions",
+      "downloadPdf": "Download PDF",
+      "viewReceipt": "View receipt"
+    },
+    "ref": {
+      "title": "Referral program",
+      "tagline": "Share and earn",
+      "linkLabel": "Your referral link",
+      "copy": "Copy link",
+      "copied": "Copied!",
+      "note": "Anyone who signs up using your link grants you {bonus} DC, plus {percent}% of every top-up they purchase.",
+      "totalEarned": "Total earned from referrals",
+      "totalJoined": "Total joined via you",
+      "tableTitle": "Referred users",
+      "empty": "No referred users yet. Share your link to start earning.",
+      "user": "User",
+      "joined": "Joined",
+      "youEarned": "You earned"
+    },
+    "admin": {
+      "title": "Admin",
+      "loading": "Loading users…",
+      "allUsers": "All users",
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "credits": "Credits",
+      "actions": "Actions",
+      "add": "Add",
+      "deduct": "Deduct",
+      "amount": "Amount",
+      "reason": "Reason",
+      "apply": "Apply",
+      "enterPositive": "Enter a positive amount",
+      "operationFailed": "Operation failed"
+    }
   }
 }

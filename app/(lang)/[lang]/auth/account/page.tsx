@@ -13,14 +13,16 @@ import ReferralPanel from "./ReferralPanel";
 import { cookies } from "next/headers";
 import { addCredits } from "@/lib/credits";
 import { REFERRAL_BONUS_DC } from "@/lib/currency";
+import { getTranslations } from "next-intl/server";
 
 export default async function AccountPage(props: { params: Promise<{ lang: LanguageCode }> }) {
   const session = await auth();
-    const { lang } = await props.params;
+  const { lang } = await props.params;
   if (!session) {
     redirect(`/${lang}/auth/login?redirect=/${lang}/auth/account`);
   }
 
+  const t = await getTranslations('Account');
 
   // Load full user info including credits (defensive: prefer id, fallback to email)
   const userId = (session!.user as any)?.id as string | undefined;
@@ -130,7 +132,7 @@ export default async function AccountPage(props: { params: Promise<{ lang: Langu
   return (
     <main className="mx-auto max-w-4xl p-6 md:p-8 space-y-8">
       <section className="space-y-4">
-        <h1 className="text-3xl font-semibold tracking-tight">My account</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">{t('title')}</h1>
         <AccountClient me={clientMe} lang={lang} />
       </section>
 
@@ -140,35 +142,36 @@ export default async function AccountPage(props: { params: Promise<{ lang: Langu
           referralCode={me.referralCode}
           totalEarned={totalReferralEarned}
           referred={referredUsers}
+          referralBonusDc={Number(REFERRAL_BONUS_DC)}
         />
       )}
 
       {me && (
         <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-          <h2 className="mb-3 text-xl font-semibold">Invoices</h2>
+          <h2 className="mb-3 text-xl font-semibold">{t('invoices.title')}</h2>
           {invoices.length === 0 ? (
-            <div className="text-sm text-gray-500">No invoices yet.</div>
+            <div className="text-sm text-gray-500">{t('invoices.none')}</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
                 <thead>
                   <tr className="text-left text-gray-500">
-                    <th className="px-2 py-2">Date</th>
-                    <th className="px-2 py-2">Amount</th>
-                    <th className="px-2 py-2">Credits</th>
-                    <th className="px-2 py-2">Actions</th>
+                    <th className="px-2 py-2">{t('invoices.date')}</th>
+                    <th className="px-2 py-2">{t('invoices.amount')}</th>
+                    <th className="px-2 py-2">{t('invoices.credits')}</th>
+                    <th className="px-2 py-2">{t('invoices.actions')}</th>
                   </tr>
                 </thead>
                 <tbody>
                   {invoices.map(inv => (
                     <tr key={inv.id} className="border-t">
-                      <td className="px-2 py-2 text-gray-700">{new Date(inv.createdAt).toLocaleDateString?.() ?? ''}</td>
+                      <td className="px-2 py-2 text-gray-700">{new Date(inv.createdAt).toLocaleDateString?.(lang as any) ?? ''}</td>
                       <td className="px-2 py-2">€{inv.amountEur.toFixed(2)}</td>
-                      <td className="px-2 py-2">{Math.round(inv.creditsGranted).toLocaleString()} DC</td>
+                      <td className="px-2 py-2">{Math.round(inv.creditsGranted).toLocaleString(lang as any)} DC</td>
                       <td className="px-2 py-2">
                         <div className="flex gap-2">
-                          <a href={`/api/invoices/${inv.id}/pdf`} target="_blank" className="text-purple-700 hover:underline">Download PDF</a>
-                          {inv.receiptUrl && <a href={inv.receiptUrl} target="_blank" className="text-gray-600 hover:underline">View receipt</a>}
+                          <a href={`/api/invoices/${inv.id}/pdf`} target="_blank" className="text-purple-700 hover:underline">{t('invoices.downloadPdf')}</a>
+                          {inv.receiptUrl && <a href={inv.receiptUrl} target="_blank" className="text-gray-600 hover:underline">{t('invoices.viewReceipt')}</a>}
                         </div>
                       </td>
                     </tr>
@@ -182,7 +185,7 @@ export default async function AccountPage(props: { params: Promise<{ lang: Langu
 
       {((session.user as any)?.role === "admin") && (
         <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-          <h2 className="mb-3 text-xl font-semibold">Admin</h2>
+          <h2 className="mb-3 text-xl font-semibold">{t('admin.title')}</h2>
           <AdminUsersManager />
         </section>
       )}
