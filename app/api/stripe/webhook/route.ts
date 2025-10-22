@@ -1,5 +1,7 @@
 // app/api/stripe/webhook/route.ts
 import { addCredits } from "@/lib/credits";
+import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 
 export const runtime = 'nodejs';
 
@@ -40,8 +42,25 @@ export async function POST(req: Request) {
       const legacy = amountCreditsStr ? Number(amountCreditsStr) : NaN;
       const amountToCredit = Number.isFinite(dc) && dc > 0 ? dc : (Number.isFinite(legacy) && legacy > 0 ? legacy : NaN);
 
+      // Determine EUR paid and Stripe receipt URL
+      let eurCents: number | undefined = typeof session?.amount_total === 'number' ? session.amount_total : undefined;
+      let receiptUrl: string | undefined = undefined;
+      let chargeId: string | undefined = undefined;
+      try {
+        if (paymentIntentId) {
+          const pi: any = await stripe.paymentIntents.retrieve(paymentIntentId, { expand: ['charges.data'] } as any);
+          eurCents = eurCents || (typeof pi?.amount_received === 'number' ? pi.amount_received : (typeof pi?.amount === 'number' ? pi.amount : undefined));
+          const firstCharge = pi?.charges?.data?.[0];
+          receiptUrl = firstCharge?.receipt_url || receiptUrl;
+          chargeId = firstCharge?.id || chargeId;
+        }
+      } catch (e) {
+        console.warn('Could not retrieve payment intent details', e);
+      }
+
       if (userId && Number.isFinite(amountToCredit) && amountToCredit > 0) {
         const idem = `stripe:${paymentIntentId || session.id}`;
+        // 1) Credit buyer (idempotent)
         await addCredits({
           userId,
           amount: amountToCredit,
@@ -49,6 +68,53 @@ export async function POST(req: Request) {
           idempotencyKey: idem,
           reference: paymentIntentId || session.id,
         });
+
+        // 2) Save invoice record (idempotent via PI)
+        try {
+          const eur = eurCents ? (eurCents / 100) : 0;
+          await prisma.invoice.upsert({
+            where: { stripePaymentIntentId: (paymentIntentId || session?.id) as string },
+            update: {
+              userId,
+              amountEur: new Prisma.Decimal(eur.toFixed(2)),
+              creditsGranted: new Prisma.Decimal(String(amountToCredit)),
+              stripeSessionId: session?.id,
+              stripeChargeId: chargeId || null,
+              receiptUrl: receiptUrl || null,
+            },
+            create: {
+              userId,
+              amountEur: new Prisma.Decimal(eur.toFixed(2)),
+              creditsGranted: new Prisma.Decimal(String(amountToCredit)),
+              stripeSessionId: session?.id,
+              stripePaymentIntentId: (paymentIntentId || session?.id) as string,
+              stripeChargeId: chargeId || null,
+              receiptUrl: receiptUrl || null,
+            },
+          });
+        } catch (e) {
+          console.error('Failed to upsert invoice record', e);
+        }
+
+        // 3) Award 10% referral revenue to inviter (if any)
+        try {
+          const me = await prisma.user.findUnique({ where: { id: userId }, select: { referredById: true } });
+          const inviterId = me?.referredById || null;
+          if (inviterId && inviterId !== userId) {
+            const commission = Math.floor(Number(amountToCredit) * 0.10);
+            if (commission > 0) {
+              await addCredits({
+                userId: inviterId,
+                amount: commission,
+                reason: 'referral_revenue',
+                idempotencyKey: `referral_revenue:${paymentIntentId || session.id}`,
+                reference: `referral_purchase:${userId}`,
+              });
+            }
+          }
+        } catch (e) {
+          console.error('Failed to award referral revenue share', e);
+        }
       }
     } else if (event.type === 'checkout.session.async_payment_failed' || event.type === 'checkout.session.expired') {
       // No credits to add; log for observability

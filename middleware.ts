@@ -1,4 +1,4 @@
-// middleware.ts
+// middleware.ts (root)
 import createIntlMiddleware from 'next-intl/middleware';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -16,14 +16,32 @@ export default function middleware(req: NextRequest) {
         return NextResponse.next();
     }
 
+    // Capture referral code from the incoming URL once
+    const url = req.nextUrl;
+    const refParam = url.searchParams.get('ref') || url.searchParams.get('referral') || url.searchParams.get('refcode');
+    const isValidRef = !!refParam && /^[a-zA-Z0-9_-]{4,64}$/.test(refParam!);
+
     // Let next-intl handle routing/redirects/rewrite first
     const intlRes = handleI18n(req);
 
-    // If next-intl already decided to redirect/rewrite, return that response
+    // If next-intl already decided to redirect/rewrite, attach cookie to that response and return
     if (
         intlRes.headers.has('x-middleware-redirect') ||
         intlRes.headers.has('x-middleware-rewrite')
     ) {
+        try {
+            if (isValidRef) {
+                const existing = req.cookies.get('ref');
+                if (!existing || existing.value !== refParam) {
+                    intlRes.cookies.set('ref', refParam as string, {
+                        path: '/',
+                        httpOnly: false, // allow client to read if needed
+                        sameSite: 'lax',
+                        maxAge: 60 * 60 * 24 * 30, // 30 days
+                    });
+                }
+            }
+        } catch {}
         return intlRes;
     }
 
@@ -33,15 +51,12 @@ export default function middleware(req: NextRequest) {
 
     const res = NextResponse.next({ request: { headers: requestHeaders } });
 
-    // Capture referral codes in URL and set a durable cookie (30 days)
+    // Set referral cookie on normal responses
     try {
-        const url = req.nextUrl;
-        const refParam = url.searchParams.get('ref') || url.searchParams.get('referral') || url.searchParams.get('refcode');
-        if (refParam && /^[a-zA-Z0-9_-]{4,64}$/.test(refParam)) {
-            // Only set if not already set to avoid hijacking
+        if (isValidRef) {
             const existing = req.cookies.get('ref');
             if (!existing || existing.value !== refParam) {
-                res.cookies.set('ref', refParam, {
+                res.cookies.set('ref', refParam as string, {
                     path: '/',
                     httpOnly: false, // allow client to read if needed
                     sameSite: 'lax',

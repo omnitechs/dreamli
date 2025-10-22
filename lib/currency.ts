@@ -4,6 +4,8 @@
 export const DIGITAL_PER_EUR = 1370; // 1 EUR = 1370 Digital Credits (DC)
 // Signup bonus in Digital Credits (DC)
 export const SIGNUP_BONUS_DC = 3425;
+// Referral bonus for inviter when a referred user registers
+export const REFERRAL_BONUS_DC = 6800;
 
 export type PurchasePackage = {
   id: string;

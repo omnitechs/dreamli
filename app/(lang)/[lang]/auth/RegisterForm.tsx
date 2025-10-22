@@ -66,7 +66,13 @@ export default function RegisterForm() {
         setBusy(false);
 
         if (login?.ok) {
-            router.replace(redirectTo);
+            // Force a full reload so session cookie is applied everywhere (header, server components)
+            if (typeof window !== 'undefined') {
+                window.location.assign(redirectTo);
+            } else {
+                router.replace(redirectTo);
+                router.refresh();
+            }
         } else {
             // Fallback: go to login with prefilled redirect
             router.replace(

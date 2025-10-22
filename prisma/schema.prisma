@@ -81,12 +81,21 @@ model User {
   // Auth.js relations
   accounts      Account[]
   sessions      Session[]
-  creditLedger   CreditLedger[]
+  creditLedger  CreditLedger[]
+  invoices      Invoice[]
 
   creditsBalance Decimal @default(0) @db.Decimal(20, 2)
 
+  // Referral system
+  referralCode   String   @unique @default(cuid())
+  referredById   String?
+  referredBy     User?    @relation("UserReferrals", fields: [referredById], references: [id])
+  referrals      User[]   @relation("UserReferrals")
+
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+
+  @@index([referredById])
 }
 
 model Account {
@@ -139,6 +148,21 @@ model CreditLedger {
   createdAt       DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+model Invoice {
+  id                     String   @id @default(cuid())
+  userId                 String
+  user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amountEur              Decimal  @db.Decimal(10, 2)
+  creditsGranted         Decimal  @db.Decimal(20, 2)
+  stripeSessionId        String?
+  stripePaymentIntentId  String?  @unique
+  stripeChargeId         String?
+  receiptUrl             String?
+  createdAt              DateTime @default(now())
 
   @@index([userId, createdAt])
 }
