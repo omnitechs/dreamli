@@ -873,5 +873,154 @@
       "enterPositive": "Bitte einen positiven Betrag eingeben",
       "operationFailed": "Vorgang fehlgeschlagen"
     }
+  },
+  "AI": {
+    "meta": {
+      "title": "KI-Geschenkcreator & 3D-Marktplatz | Dreamli",
+      "description": "Verwandle Ideen in 3D-Modelle und stöbere in Community-Modellen. Erstelle Projekte, sieh dir Vorschauen an und kaufe 3D-Drucke."
+    },
+    "Project": {
+      "loading": "Wird geladen…",
+      "error": "Commits konnten nicht geladen werden (Status {status}): {details}"
+    },
+    "Commits": {
+      "title": "Commit-Zeitleiste",
+      "empty": "Noch keine Commits",
+      "today": "Heute",
+      "yesterday": "Gestern",
+      "modelReady": "3D‑Modell bereit"
+    },
+    "Messenger": {
+      "title": "Nachrichten & Logs",
+      "roles": { "user": "Du", "assistant": "KI", "system": "System" },
+      "errors": {
+        "needCommit": "Wähle zuerst einen Commit — Nachrichten verzweigen vom ausgewählten Commit.",
+        "needCommitBanner": "Wähle einen Commit, damit neue Nachrichten von diesem Snapshot verzweigen.",
+        "insufficientCreditsModal": "Dein Guthaben ist nicht ausreichend. Bitte lade Credits auf.",
+        "insufficientCredits": "⚠️ Unzureichende Credits. Bitte lade Credits auf, um fortzufahren.",
+        "failedStart": "⚠️ KI-Antwort konnte nicht gestartet werden.",
+        "stream": "Stream-Fehler",
+        "contactFailed": "⚠️ Fehler beim Kontaktieren des KI-Dienstes."
+      },
+      "empty": {
+        "noMessages": "Noch keine Nachrichten",
+        "hint": "Beginne damit, zu beschreiben, was du erstellen möchtest"
+      },
+      "composer": {
+        "placeholder": "Beschreibe dein 3D‑Projekt oder stelle eine Frage...",
+        "needCommitTitle": "Zuerst einen Commit wählen",
+        "send": "Senden",
+        "hint": "Enter zum Senden • Shift+Enter für Zeilenumbruch"
+      },
+      "actions": {
+        "actionType": "Aktion: {type}"
+      }
+    },
+    "Page": {
+      "projects": "Projekte",
+      "newProjectPlaceholder": "Neuer Projektname",
+      "create": "Erstellen",
+      "creating": "Wird erstellt…",
+      "loading": "Wird geladen…",
+      "noProjects": "Noch keine Projekte.",
+      "open": "Öffnen",
+      "marketplaceTitle": "Marktplatz: 3D-Modelle",
+      "noModels": "Noch keine Modelle verfügbar.",
+      "noPreview": "Keine Vorschau",
+      "modelAlt": "3D-Modell",
+      "userFallback": "Nutzer",
+      "view": "Ansehen",
+      "buy": "Kaufen",
+      "download": "Download",
+      "prev": "Zurück",
+      "next": "Weiter",
+      "page": "Seite {page}",
+      "Create": {
+        "title": "Mit KI erstellen",
+        "promptPlaceholder": "Beschreibe das zu generierende Bild…",
+        "count": "Anzahl",
+        "generate": "Generieren",
+        "activeJobs": "Aktive Jobs",
+        "working": "Wird ausgeführt…"
+      },
+      "Upload": {
+        "title": "Bilder hinzufügen",
+        "ariaUpload": "Bilder hochladen",
+        "uploading": "Wird hochgeladen…",
+        "dropOrClick": "Bilder hier ablegen oder klicken zum Auswählen",
+        "typesHint": "JPG, PNG, WEBP bis 10 MB",
+        "urlLabel": "Per URL hinzufügen",
+        "urlPlaceholder": "Bild-URL einfügen (https://…)",
+        "add": "Hinzufügen"
+      },
+      "Models": {
+        "generateStream": "Vorschau-Stream generieren",
+        "noModels": "Noch keine Modelle",
+        "clickToPreview": "Für Vorschau klicken",
+        "thumbAlt": "Modell-Miniatur",
+        "noThumbnail": "Keine Miniatur",
+        "purchaseTitle": "Kaufen",
+        "purchase": "Kaufen",
+        "previewLabel": "Vorschau:",
+        "close": "Schließen",
+        "noPreviewable": "Keine 3D-Datei zur Vorschau"
+      },
+      "ImagesGrid": {
+        "title": "Bilder ({count})",
+        "alt": "Bild {n}",
+        "select": "Auswählen",
+        "unselect": "Abwählen",
+        "delete": "Löschen"
+      },
+      "ImageGallery": {
+        "title": "Bilder ({count})",
+        "selectedLabel": "Ausgewählt: {count}",
+        "empty": "Noch keine Bilder. Lade Dateien hoch oder ziehe sie hierher.",
+        "select": "Auswählen",
+        "selected": "Ausgewählt",
+        "remove": "Entfernen",
+        "alt": "Bild {name}"
+      },
+      "Build": {
+        "title": "3D-Modellgenerierung",
+        "generateBtn": "3D generieren (Meshy)",
+        "generating": "Wird generiert…"
+      }
+    },
+    "Purchase": {
+      "title": "3D-Modell kaufen",
+      "noModel": "Kein spezifisches Modell ausgewählt. Du kannst Größe und Finish trotzdem konfigurieren.",
+      "chooseSize": "Größe wählen (cm)",
+      "sizeInfo": "Maximal 25 cm in jeder Dimension.",
+      "analyzing": "Modell wird analysiert…",
+      "ratioLocked": "Modellverhältnis gesperrt",
+      "small": "Klein (max ~5cm)",
+      "medium": "Mittel (max ~10cm)",
+      "large": "Groß (max ~15cm)",
+      "max": "Max (25cm)",
+      "width": "Breite",
+      "height": "Höhe",
+      "depth": "Tiefe",
+      "modelBox": "Modellbegrenzungsrahmen (mm): {x} × {y} × {z}",
+      "estimatedWeight": "Geschätztes Gewicht (aus Größe): {g} g",
+      "errorMax": "Maximal 25 cm in jeder Dimension.",
+      "errorPositive": "Alle Maße müssen größer als 0 sein.",
+      "typeColor": "Typ & Farbe",
+      "colorHelp": "Bist du verwirrt? Klick hier!",
+      "selectColor": "Farbe auswählen",
+      "noColors": "Für diesen Typ sind keine Farben verfügbar.",
+      "finishOptions": "Finish-Optionen",
+      "fullSpectrum": "Full Spectrum Farbe (von Hand)",
+      "fullSpectrumDesc": "Handbemaltes Mehrfarben-Finish. Preis abhängig vom Gewicht.",
+      "price": "Preis",
+      "basePerUnit": "Basis (pro Stück)",
+      "type": "Typ",
+      "quantity": "Menge",
+      "total": "Gesamt",
+      "adding": "Wird zum Warenkorb hinzugefügt…",
+      "proceed": "Zur Kasse",
+      "failedAddToCart": "Zum Warenkorb hinzufügen fehlgeschlagen. Bitte versuche es erneut.",
+      "previewAlt": "Vorschaubild"
+    }
   }
 }

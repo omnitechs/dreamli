@@ -7,9 +7,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '@/app/store';
 import { hydrateMe } from '@/app/store/slices/accountUserSlice';
 import { CREDIT_PACKAGES, computePackageDcTotal } from '@/lib/currency';
+import { useParams } from 'next/navigation';
 
-export default function CreditsPage(props: { params: { lang: LanguageCode } }) {
-  const { lang } = props.params;
+export default function CreditsPage() {
+  const { lang } = useParams<{ lang: LanguageCode }>();
   const dispatch = useDispatch<AppDispatch>();
   const me = useSelector((s: RootState) => s.accountUser.me);
   const [balance, setBalance] = useState<number | null>(null)

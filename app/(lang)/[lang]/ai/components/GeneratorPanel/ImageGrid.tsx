@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import { Check, Trash2 } from 'lucide-react';
 import useImages from "@/app/(lang)/[lang]/ai/hooks/useImages";
+import {useTranslations} from 'next-intl';
 
 type Img = { id?: string; url?: string; src?: string; meta?: any };
 const getUrl = (img: Img) => img.url || img.src || '';
@@ -11,6 +12,7 @@ const getId = (img: Img) => img.id || getUrl(img); // fallback to URL if no id y
 
 export function ImagesGrid() {
     const { images, selectedSet, setSelectedHandler, removeImageById } = useImages();
+    const t = useTranslations('AI.Page.ImagesGrid');
 
     const storeImages: Img[] = Array.isArray(images) && images.length ? images : (images ?? []);
     const [localImages, setLocalImages] = useState<Img[]>(storeImages);
@@ -39,7 +41,7 @@ export function ImagesGrid() {
 
     return (
         <div className="bg-white border border-gray-200 rounded-2xl p-4 space-y-4">
-            <h3 className="font-medium text-gray-900">Images ({localImages.length})</h3>
+            <h3 className="font-medium text-gray-900">{t('title', {count: localImages.length})}</h3>
 
             <div className="grid grid-cols-3 md:grid-cols-4 gap-2">
                 {localImages.map((image, index) => {
@@ -60,7 +62,7 @@ export function ImagesGrid() {
                                 <img
                                     key={url}
                                     src={url}
-                                    alt={`Image ${index + 1}`}
+                                    alt={t('alt', {n: index + 1})}
                                     className="w-full h-full object-cover"
                                     loading="lazy"
                                     decoding="async"
@@ -78,7 +80,7 @@ export function ImagesGrid() {
                                         className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors ${
                                             isSelected ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-100'
                                         }`}
-                                        title={isSelected ? 'Unselect' : 'Select'}
+                                        title={isSelected ? t('unselect') : t('select')}
                                     >
                                         <Check className="w-4 h-4" />
                                     </button>

@@ -873,5 +873,154 @@
       "enterPositive": "Saisissez un montant positif",
       "operationFailed": "L’opération a échoué"
     }
+  },
+  "AI": {
+    "meta": {
+      "title": "Créateur IA & Marché 3D | Dreamli",
+      "description": "Transformez des idées en modèles 3D et parcourez les modèles de la communauté. Créez des projets, prévisualisez et achetez des impressions 3D."
+    },
+    "Project": {
+      "loading": "Chargement…",
+      "error": "Échec du chargement des commits (statut {status}) : {details}"
+    },
+    "Commits": {
+      "title": "Chronologie des commits",
+      "empty": "Aucun commit pour le moment",
+      "today": "Aujourd’hui",
+      "yesterday": "Hier",
+      "modelReady": "Modèle 3D prêt"
+    },
+    "Messenger": {
+      "title": "Messages & Journaux",
+      "roles": { "user": "Vous", "assistant": "IA", "system": "Système" },
+      "errors": {
+        "needCommit": "Sélectionnez d’abord un commit — les messages se branchent à partir du commit sélectionné.",
+        "needCommitBanner": "Sélectionnez un commit pour que les nouveaux messages se branchent depuis cet instantané.",
+        "insufficientCreditsModal": "Votre solde est insuffisant. Ajoutez des crédits.",
+        "insufficientCredits": "⚠️ Crédits insuffisants. Ajoutez des crédits pour continuer.",
+        "failedStart": "⚠️ Échec du démarrage de la réponse IA.",
+        "stream": "Erreur de flux",
+        "contactFailed": "⚠️ Erreur lors de la connexion au service IA."
+      },
+      "empty": {
+        "noMessages": "Aucun message pour le moment",
+        "hint": "Commencez par décrire ce que vous souhaitez créer"
+      },
+      "composer": {
+        "placeholder": "Décrivez votre projet 3D ou posez une question…",
+        "needCommitTitle": "Sélectionnez d’abord un commit",
+        "send": "Envoyer",
+        "hint": "Entrée pour envoyer • Maj+Entrée pour une nouvelle ligne"
+      },
+      "actions": {
+        "actionType": "Action : {type}"
+      }
+    },
+    "Page": {
+      "projects": "Projets",
+      "newProjectPlaceholder": "Nom du nouveau projet",
+      "create": "Créer",
+      "creating": "Création…",
+      "loading": "Chargement…",
+      "noProjects": "Aucun projet pour le moment.",
+      "open": "Ouvrir",
+      "marketplaceTitle": "Marketplace : Modèles 3D",
+      "noModels": "Aucun modèle disponible pour le moment.",
+      "noPreview": "Pas d’aperçu",
+      "modelAlt": "Modèle 3D",
+      "userFallback": "Utilisateur",
+      "view": "Voir",
+      "buy": "Acheter",
+      "download": "Télécharger",
+      "prev": "Préc.",
+      "next": "Suiv.",
+      "page": "Page {page}",
+      "Create": {
+        "title": "Créer avec l’IA",
+        "promptPlaceholder": "Décrivez l’image à générer…",
+        "count": "Nombre",
+        "generate": "Générer",
+        "activeJobs": "Tâches actives",
+        "working": "En cours…"
+      },
+      "Upload": {
+        "title": "Ajouter des images",
+        "ariaUpload": "Téléverser des images",
+        "uploading": "Téléversement…",
+        "dropOrClick": "Déposez des images ici ou cliquez pour parcourir",
+        "typesHint": "JPG, PNG, WEBP jusqu’à 10 Mo",
+        "urlLabel": "Ajouter par URL",
+        "urlPlaceholder": "Collez l’URL de l’image (https://…)",
+        "add": "Ajouter"
+      },
+      "Models": {
+        "generateStream": "Générer un flux d’aperçu",
+        "noModels": "Aucun modèle pour le moment",
+        "clickToPreview": "Cliquer pour prévisualiser",
+        "thumbAlt": "Vignette du modèle",
+        "noThumbnail": "Pas de vignette",
+        "purchaseTitle": "Acheter",
+        "purchase": "Acheter",
+        "previewLabel": "Aperçu :",
+        "close": "Fermer",
+        "noPreviewable": "Aucun fichier 3D prévisualisable"
+      },
+      "ImagesGrid": {
+        "title": "Images ({count})",
+        "alt": "Image {n}",
+        "select": "Sélectionner",
+        "unselect": "Désélectionner",
+        "delete": "Supprimer"
+      },
+      "ImageGallery": {
+        "title": "Images ({count})",
+        "selectedLabel": "Sélectionné : {count}",
+        "empty": "Aucune image pour le moment. Téléversez ou déposez des fichiers.",
+        "select": "Sélectionner",
+        "selected": "Sélectionné",
+        "remove": "Supprimer",
+        "alt": "Image {name}"
+      },
+      "Build": {
+        "title": "Génération de modèle 3D",
+        "generateBtn": "Générer en 3D (Meshy)",
+        "generating": "Génération…"
+      }
+    },
+    "Purchase": {
+      "title": "Acheter un modèle 3D",
+      "noModel": "Aucun modèle spécifique sélectionné. Vous pouvez tout de même configurer la taille et la finition.",
+      "chooseSize": "Choisir la taille (cm)",
+      "sizeInfo": "Max 25 cm par dimension.",
+      "analyzing": "Analyse du modèle…",
+      "ratioLocked": "Proportions du modèle verrouillées",
+      "small": "Petit (max ~5cm)",
+      "medium": "Moyen (max ~10cm)",
+      "large": "Grand (max ~15cm)",
+      "max": "Max (25cm)",
+      "width": "Largeur",
+      "height": "Hauteur",
+      "depth": "Profondeur",
+      "modelBox": "Boîte englobante du modèle (mm) : {x} × {y} × {z}",
+      "estimatedWeight": "Poids estimé (selon taille) : {g} g",
+      "errorMax": "La taille maximale est de 25 cm dans chaque dimension.",
+      "errorPositive": "Toutes les dimensions doivent être supérieures à 0.",
+      "typeColor": "Type & Couleur",
+      "colorHelp": "Vous êtes perdu ? Cliquez ici !",
+      "selectColor": "Choisir une couleur",
+      "noColors": "Aucune couleur disponible pour ce type.",
+      "finishOptions": "Options de finition",
+      "fullSpectrum": "Couleur Full Spectrum (peinte à la main)",
+      "fullSpectrumDesc": "Finition multicolore peinte à la main. Le prix dépend du poids.",
+      "price": "Prix",
+      "basePerUnit": "Base (par unité)",
+      "type": "Type",
+      "quantity": "Quantité",
+      "total": "Total",
+      "adding": "Ajout au panier…",
+      "proceed": "Passer au paiement",
+      "failedAddToCart": "Échec de l’ajout au panier. Veuillez réessayer.",
+      "previewAlt": "Image d’aperçu"
+    }
   }
 }

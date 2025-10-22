@@ -7,6 +7,7 @@ import { useMeshyStream } from "@/app/(lang)/[lang]/ai/hooks/useMeshyStream";
 
 import LazyGlb from "@/components/GlbViewer";
 import { useParams, useRouter } from "next/navigation";
+import {useTranslations} from 'next-intl';
 
 function pickBestModelUrl(modelUrls?: Record<string, string | undefined>) {
     if (!modelUrls) return undefined;
@@ -17,6 +18,7 @@ export function ModelsPanel() {
     const dispatch = useDispatch();
     const gen = useSelector((s: RootState) => (s as any)?.generator) ?? { textPrompt: "", models: [] };
     const { streamExistingTask,resumeAll } = useMeshyStream();
+    const t = useTranslations('AI.Page.Models');
 
     const router = useRouter();
     const params = useParams();
@@ -70,13 +72,13 @@ export function ModelsPanel() {
                     onClick={startGeneration}
                     className="px-3 py-2 rounded-xl shadow text-sm border bg-black text-white"
                 >
-                    Generate & Stream
+                    {t('generateStream')}
                 </button>
             </div>
 
             {/* Models grid */}
             {models.length === 0 ? (
-                <div className="text-sm text-gray-500">No models yet.</div>
+                <div className="text-sm text-gray-500">{t('noModels')}</div>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {models.map((m: any) => (
@@ -86,7 +88,7 @@ export function ModelsPanel() {
                             className={`rounded-xl border p-3 space-y-2 cursor-pointer transition ${
                                 selectedId === m.id ? "ring-2 ring-black" : "hover:bg-gray-50"
                             }`}
-                            title="Click to preview below"
+                            title={t('clickToPreview')}
                         >
                             <div className="flex items-center justify-between">
                                 <div className="text-sm font-medium truncate">{m.prompt ?? m.kind}</div>
@@ -98,9 +100,9 @@ export function ModelsPanel() {
                             <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
                                 {m.thumbnailUrl ? (
                                     // eslint-disable-next-line @next/next/no-img-element
-                                    <img src={m.thumbnailUrl} alt="thumb" className="w-full h-full object-cover" />
+                                    <img src={m.thumbnailUrl} alt={t('thumbAlt')} className="w-full h-full object-cover" />
                                 ) : (
-                                    <div className="text-xs text-gray-500">No thumbnail</div>
+                                    <div className="text-xs text-gray-500">{t('noThumbnail')}</div>
                                 )}
                             </div>
 
@@ -145,9 +147,9 @@ export function ModelsPanel() {
                                             const path = `/${lang ?? ''}/ai/purchase?modelId=${encodeURIComponent(m.id)}`.replace('//', '/');
                                             router.push(path);
                                         }}
-                                        title="Purchase this model"
+                                        title={t('purchaseTitle')}
                                     >
-                                        Purchase
+                                        {t('purchase')}
                                     </button>
                                 ) : null}
                             </div>
@@ -161,13 +163,13 @@ export function ModelsPanel() {
                 <div className="mt-4 space-y-3">
                     <div className="flex items-center justify-between">
                         <div className="text-sm font-medium truncate">
-                            Preview: {selectedModel.prompt ?? selectedModel.kind}
+                            {t('previewLabel')} {selectedModel.prompt ?? selectedModel.kind}
                         </div>
                         <button
                             className="text-xs underline text-gray-600"
                             onClick={() => setSelectedId(null)}
                         >
-                            Close
+                            {t('close')}
                         </button>
                     </div>
 
@@ -177,7 +179,7 @@ export function ModelsPanel() {
                             modelUrl={selectedModelUrl} />
                     ) : (
                         <div className="text-sm text-gray-500">
-                            No previewable URL yet. (We look for <code>.glb</code> first, then <code>.fbx</code>, <code>.obj</code>, <code>.usdz</code>.)
+                            {t('noPreviewable')}
                         </div>
                     )}
                 </div>

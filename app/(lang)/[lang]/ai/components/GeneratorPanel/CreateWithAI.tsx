@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import useImageJobs from '@/app/(lang)/[lang]/ai/hooks/useImageJobs';
 import { Wand2 } from 'lucide-react';
+import {useTranslations} from 'next-intl';
 
 type ImgSize = '512x512' | '1024x1024' | '2048x2048';
 
@@ -12,6 +13,7 @@ export default function CreateWithAI() {
     const [prompt, setPrompt] = useState('');
     const [size, setSize] = useState<ImgSize>('1024x1024');
     const [n, setN] = useState<number>(1);
+    const t = useTranslations('AI.Page.Create');
 
     const onGenerate = async () => {
         await startJob({ prompt, n, size });
@@ -21,14 +23,14 @@ export default function CreateWithAI() {
         <div className="pt-2 border-t border-gray-100 space-y-3">
             <div className="flex items-center gap-2">
                 <Wand2 className="w-4 h-4 text-purple-600" />
-                <span className="text-sm font-medium text-gray-900">Create with AI</span>
+                <span className="text-sm font-medium text-gray-900">{t('title')}</span>
             </div>
 
             <div className="flex flex-col gap-2">
                 <input
                     value={prompt}
                     onChange={(e) => setPrompt(e.target.value)}
-                    placeholder="Describe what to create"
+                    placeholder={t('promptPlaceholder')}
                     className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm"
                 />
 
@@ -40,7 +42,7 @@ export default function CreateWithAI() {
                     </select>
 
                     <div className="flex items-center gap-2">
-                        <label className="text-xs text-gray-600">Count</label>
+                        <label className="text-xs text-gray-600">{t('count')}</label>
                         <input
                             type="number"
                             min={1}
@@ -57,19 +59,19 @@ export default function CreateWithAI() {
                         disabled={!prompt.trim()}
                         className="px-4 py-2 bg-purple-600 text-white font-medium rounded-xl disabled:opacity-50"
                     >
-                        Generate
+                        {t('generate')}
                     </button>
                 </div>
             </div>
 
             {activeJobIds.length > 0 && (
                 <div className="mt-2 space-y-1">
-                    <p className="text-xs font-medium text-gray-700">Active jobs</p>
+                    <p className="text-xs font-medium text-gray-700">{t('activeJobs')}</p>
                     <ul className="space-y-1">
                         {activeJobIds.map((id) => (
                             <li key={id} className="flex items-center justify-between rounded-lg border px-3 py-2">
                                 <p className="truncate text-xs text-gray-600">
-                                    <span className="font-mono text-[10px] text-gray-500">{id.slice(0, 8)}</span> – working…
+                                    <span className="font-mono text-[10px] text-gray-500">{id.slice(0, 8)}</span> – {t('working')}
                                 </p>
                             </li>
                         ))}

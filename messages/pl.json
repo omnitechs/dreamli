@@ -872,5 +872,154 @@
       "enterPositive": "Wprowadź dodatnią kwotę",
       "operationFailed": "Operacja nie powiodła się"
     }
+  },
+  "AI": {
+    "meta": {
+      "title": "Kreator AI i Rynek 3D | Dreamli",
+      "description": "Zamieniaj pomysły w modele 3D i przeglądaj projekty społeczności. Twórz projekty, oglądaj podglądy i kupuj wydruki 3D."
+    },
+    "Project": {
+      "loading": "Ładowanie…",
+      "error": "Nie udało się wczytać commitów (status {status}): {details}"
+    },
+    "Commits": {
+      "title": "Oś czasu commitów",
+      "empty": "Brak commitów",
+      "today": "Dzisiaj",
+      "yesterday": "Wczoraj",
+      "modelReady": "Model 3D gotowy"
+    },
+    "Messenger": {
+      "title": "Wiadomości i logi",
+      "roles": { "user": "Ty", "assistant": "AI", "system": "System" },
+      "errors": {
+        "needCommit": "Najpierw wybierz commit — wiadomości rozgałęziają się od wybranego commitu.",
+        "needCommitBanner": "Wybierz commit, aby nowe wiadomości rozgałęziały się od tego zrzutu.",
+        "insufficientCreditsModal": "Twoje saldo jest niewystarczające. Dodaj kredyty.",
+        "insufficientCredits": "⚠️ Niewystarczające kredyty. Dodaj kredyty, aby kontynuować.",
+        "failedStart": "⚠️ Nie udało się rozpocząć odpowiedzi AI.",
+        "stream": "Błąd strumienia",
+        "contactFailed": "⚠️ Błąd podczas kontaktu z usługą AI."
+      },
+      "empty": {
+        "noMessages": "Brak wiadomości",
+        "hint": "Zacznij od opisania, co chcesz stworzyć"
+      },
+      "composer": {
+        "placeholder": "Opisz swój projekt 3D lub zadaj pytanie...",
+        "needCommitTitle": "Najpierw wybierz commit",
+        "send": "Wyślij",
+        "hint": "Enter aby wysłać • Shift+Enter nowa linia"
+      },
+      "actions": {
+        "actionType": "Akcja: {type}"
+      }
+    },
+    "Page": {
+      "projects": "Projekty",
+      "newProjectPlaceholder": "Nazwa nowego projektu",
+      "create": "Utwórz",
+      "creating": "Tworzenie…",
+      "loading": "Ładowanie…",
+      "noProjects": "Brak projektów.",
+      "open": "Otwórz",
+      "marketplaceTitle": "Rynek: Modele 3D",
+      "noModels": "Brak dostępnych modeli.",
+      "noPreview": "Brak podglądu",
+      "modelAlt": "Model 3D",
+      "userFallback": "Użytkownik",
+      "view": "Podgląd",
+      "buy": "Kup",
+      "download": "Pobierz",
+      "prev": "Wstecz",
+      "next": "Dalej",
+      "page": "Strona {page}",
+      "Create": {
+        "title": "Twórz z AI",
+        "promptPlaceholder": "Opisz obraz do wygenerowania…",
+        "count": "Liczba",
+        "generate": "Generuj",
+        "activeJobs": "Aktywne zadania",
+        "working": "W toku…"
+      },
+      "Upload": {
+        "title": "Dodaj obrazy",
+        "ariaUpload": "Prześlij obrazy",
+        "uploading": "Przesyłanie…",
+        "dropOrClick": "Upuść obrazy tutaj lub kliknij, aby wybrać",
+        "typesHint": "JPG, PNG, WEBP do 10 MB",
+        "urlLabel": "Dodaj przez URL",
+        "urlPlaceholder": "Wklej adres URL obrazu (https://…)",
+        "add": "Dodaj"
+      },
+      "Models": {
+        "generateStream": "Generuj strumień podglądu",
+        "noModels": "Brak modeli",
+        "clickToPreview": "Kliknij, aby podejrzeć",
+        "thumbAlt": "Miniaturka modelu",
+        "noThumbnail": "Brak miniaturki",
+        "purchaseTitle": "Kup",
+        "purchase": "Kup",
+        "previewLabel": "Podgląd:",
+        "close": "Zamknij",
+        "noPreviewable": "Brak pliku 3D do podglądu"
+      },
+      "ImagesGrid": {
+        "title": "Obrazy ({count})",
+        "alt": "Obraz {n}",
+        "select": "Wybierz",
+        "unselect": "Odznacz",
+        "delete": "Usuń"
+      },
+      "ImageGallery": {
+        "title": "Obrazy ({count})",
+        "selectedLabel": "Zaznaczono: {count}",
+        "empty": "Brak obrazów. Prześlij lub upuść pliki.",
+        "select": "Wybierz",
+        "selected": "Zaznaczono",
+        "remove": "Usuń",
+        "alt": "Obraz {name}"
+      },
+      "Build": {
+        "title": "Generowanie modelu 3D",
+        "generateBtn": "Generuj 3D (Meshy)",
+        "generating": "Generowanie…"
+      }
+    },
+    "Purchase": {
+      "title": "Zakup model 3D",
+      "noModel": "Nie wybrano konkretnego modelu. Nadal możesz skonfigurować rozmiar i wykończenie.",
+      "chooseSize": "Wybierz rozmiar (cm)",
+      "sizeInfo": "Maks. 25 cm w każdym wymiarze.",
+      "analyzing": "Analiza modelu…",
+      "ratioLocked": "Proporcje modelu zablokowane",
+      "small": "Mały (max ~5cm)",
+      "medium": "Średni (max ~10cm)",
+      "large": "Duży (max ~15cm)",
+      "max": "Max (25cm)",
+      "width": "Szerokość",
+      "height": "Wysokość",
+      "depth": "Głębokość",
+      "modelBox": "Pudełko ograniczające model (mm): {x} × {y} × {z}",
+      "estimatedWeight": "Szacowana waga (na podstawie rozmiaru): {g} g",
+      "errorMax": "Maksymalny rozmiar to 25 cm w każdym wymiarze.",
+      "errorPositive": "Wszystkie wymiary muszą być większe niż 0.",
+      "typeColor": "Typ i kolor",
+      "colorHelp": "Zgubiłeś się? Kliknij tutaj!",
+      "selectColor": "Wybierz kolor",
+      "noColors": "Brak kolorów dla tego typu.",
+      "finishOptions": "Opcje wykończenia",
+      "fullSpectrum": "Full Spectrum (ręcznie malowane)",
+      "fullSpectrumDesc": "Ręcznie malowane, wielokolorowe wykończenie. Cena zależy od wagi.",
+      "price": "Cena",
+      "basePerUnit": "Podstawa (za sztukę)",
+      "type": "Typ",
+      "quantity": "Ilość",
+      "total": "Razem",
+      "adding": "Dodawanie do koszyka…",
+      "proceed": "Przejdź do kasy",
+      "failedAddToCart": "Nie udało się dodać do koszyka. Spróbuj ponownie.",
+      "previewAlt": "Obraz podglądu"
+    }
   }
 }

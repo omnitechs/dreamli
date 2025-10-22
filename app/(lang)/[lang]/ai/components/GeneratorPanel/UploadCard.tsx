@@ -7,11 +7,12 @@ import useImages from '@/app/(lang)/[lang]/ai/hooks/useImages';
 import { useDispatch } from 'react-redux';
 import { addImages } from '@/app/store/slices/generatorSlice';
 import CreateWithAI from "@/app/(lang)/[lang]/ai/components/GeneratorPanel/CreateWithAI";
-
+import {useTranslations} from 'next-intl';
 
 export function UploadCard() {
     const dispatch = useDispatch();
     const { handleFiles, fileInputRef } = useImages();
+    const t = useTranslations('AI.Page.Upload');
 
     const [imageUrl, setImageUrl] = useState('');
     const [uploading, setUploading] = useState(false);
@@ -91,7 +92,7 @@ export function UploadCard() {
         <div className="bg-white border border-gray-200 rounded-2xl p-4 space-y-4">
             <h3 className="font-medium text-gray-900 flex items-center gap-2">
                 <Plus className="w-4 h-4" />
-                Add Images
+                {t('title')}
             </h3>
 
             {/* File Upload */}
@@ -107,13 +108,13 @@ export function UploadCard() {
                 onDrop={handleDrop}
                 onClick={onBrowseClick}
                 role="button"
-                aria-label="Upload images"
+                aria-label={t('ariaUpload')}
             >
                 {uploading && (
                     <div className="absolute inset-0 flex items-center justify-center bg-white/75 rounded-xl">
                         <div className="flex items-center gap-2 text-sm text-gray-600">
                             <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
-                            Uploading...
+                            {t('uploading')}
                         </div>
                     </div>
                 )}
@@ -136,16 +137,16 @@ export function UploadCard() {
                     </div>
                     <div>
                         <p className="text-sm font-medium text-gray-900">
-                            Drop images here or click to browse
+                            {t('dropOrClick')}
                         </p>
-                        <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB each</p>
+                        <p className="text-xs text-gray-500">{t('typesHint')}</p>
                     </div>
                 </div>
             </div>
 
             {/* URL Input */}
             <form onSubmit={handleUrlSubmit} className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">Or add from URL</label>
+                <label className="block text-sm font-medium text-gray-700">{t('urlLabel')}</label>
                 <div className="flex gap-2">
                     <div className="relative flex-1">
                         <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -153,7 +154,7 @@ export function UploadCard() {
                             type="url"
                             value={imageUrl}
                             onChange={(e) => setImageUrl(e.target.value)}
-                            placeholder="https://example.com/image.jpg"
+                            placeholder={t('urlPlaceholder')}
                             disabled={uploading}
                             className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm disabled:bg-gray-50 disabled:cursor-not-allowed"
                         />
@@ -163,7 +164,7 @@ export function UploadCard() {
                         disabled={!imageUrl.trim() || uploading}
                         className="px-4 py-2 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
                     >
-                        Add
+                        {t('add')}
                     </button>
                 </div>
                 <CreateWithAI/>

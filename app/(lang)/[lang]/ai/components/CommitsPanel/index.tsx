@@ -2,10 +2,11 @@
 
 import * as React from 'react';
 import { useMemo } from 'react';
-import { GitBranch, Clock, Star } from 'lucide-react';
+import { GitBranch } from 'lucide-react';
 import useCommit from '@/app/(lang)/[lang]/ai/hooks/useCommit';
 import { CommitButtonWithContainer } from '@/app/(lang)/[lang]/ai/components/CommitsPanel/CommitButtonWithContainer';
 import type { Commit } from '@/app/store/slices/commitsSlice';
+import {useLocale, useTranslations} from 'next-intl';
 
 /**
  * Unified Commits Panel
@@ -14,6 +15,8 @@ import type { Commit } from '@/app/store/slices/commitsSlice';
  */
 export function CommitsPanel() {
     const { commits, headId } = useCommit();
+    const t = useTranslations('AI.Commits');
+    const locale = useLocale();
 
     // Memoize sorted + grouped commits
     const groupedCommits = useMemo(() => {
@@ -34,10 +37,10 @@ export function CommitsPanel() {
             yesterday.setDate(today.getDate() - 1);
 
             let label: string;
-            if (date.toDateString() === today.toDateString()) label = 'Today';
-            else if (date.toDateString() === yesterday.toDateString()) label = 'Yesterday';
+            if (date.toDateString() === today.toDateString()) label = t('today');
+            else if (date.toDateString() === yesterday.toDateString()) label = t('yesterday');
             else
-                label = date.toLocaleDateString('en-US', {
+                label = date.toLocaleDateString(locale, {
                     month: 'short',
                     day: 'numeric',
                 });
@@ -47,19 +50,19 @@ export function CommitsPanel() {
         });
 
         return groups;
-    }, [commits]);
+    }, [commits, locale, t]);
 
     if (!commits || Object.keys(commits).length === 0) {
         return (
             <section className="bg-white border rounded-2xl shadow p-6 flex flex-col items-center justify-center text-center text-gray-500 h-full min-h-0">
                 <GitBranch className="w-8 h-8 mb-3 text-gray-300" />
-                <p className="text-sm">No commits yet</p>
+                <p className="text-sm">{t('empty')}</p>
             </section>
         );
     }
 
-    const formatTime = (t: string) =>
-        new Date(t).toLocaleTimeString('en-US', {
+    const formatTime = (tStr: string) =>
+        new Date(tStr).toLocaleTimeString(locale, {
             hour: '2-digit',
             minute: '2-digit',
             hour12: false,
@@ -71,7 +74,7 @@ export function CommitsPanel() {
             <div className="border-b px-5 py-3 flex items-center justify-between bg-white sticky top-0 z-10">
                 <h2 className="text-lg font-semibold flex items-center gap-2 text-gray-900">
                     <GitBranch className="w-5 h-5" />
-                    Commit Timeline
+                    {t('title')}
                 </h2>
             </div>
 
@@ -104,7 +107,7 @@ export function CommitsPanel() {
                                                 <div className="mt-2 p-2 bg-gray-50 rounded-lg">
                                                     <div className="flex items-center gap-2 text-xs text-gray-600">
                                                         <div className="w-3 h-3 bg-gradient-to-br from-blue-500 to-purple-600 rounded" />
-                                                        3D Model Ready
+                                                        {t('modelReady')}
                                                     </div>
                                                 </div>
                                             )}

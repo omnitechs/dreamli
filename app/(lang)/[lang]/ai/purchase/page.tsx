@@ -7,6 +7,7 @@ import LazyGlb from "@/components/GlbViewer";
 import { analyzeModelUrl } from "@/lib/ai/model-metrics";
 import { TYPE_OPTIONS, COLOR_OPTIONS_BY_TYPE } from "@/lib/ai/color-data";
 import { useGetModelByIdQuery } from "@/app/(lang)/[lang]/ai/services/api";
+import { useTranslations } from "next-intl";
 
 function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
@@ -18,6 +19,7 @@ function pickBestModelUrl(modelUrls?: Record<string, string | undefined>) {
 }
 
 export default function PurchasePage() {
+  const t = useTranslations('AI.Purchase');
   const search = useSearchParams();
   const modelId = search.get("modelId") ?? undefined;
   const { models } = useModels();
@@ -112,10 +114,10 @@ export default function PurchasePage() {
 
   const sizeErrors = useMemo(() => {
     const errs: string[] = [];
-    if (widthCm > 25 || heightCm > 25 || depthCm > 25) errs.push("Max size is 25 cm in any dimension.");
-    if (widthCm <= 0 || heightCm <= 0 || depthCm <= 0) errs.push("All dimensions must be greater than 0.");
+    if (widthCm > 25 || heightCm > 25 || depthCm > 25) errs.push(t('errorMax'));
+    if (widthCm <= 0 || heightCm <= 0 || depthCm <= 0) errs.push(t('errorPositive'));
     return errs;
-  }, [widthCm, heightCm, depthCm]);
+  }, [widthCm, heightCm, depthCm, t]);
 
   // Estimate weight at the selected cm size by scaling base volume (returns null when not computable)
   const estimatedWeightG = useMemo(() => {
@@ -267,7 +269,7 @@ export default function PurchasePage() {
 
   return (
     <div className="max-w-5xl mx-auto p-4 space-y-6">
-      <h1 className="text-2xl font-semibold">Purchase 3D Model</h1>
+      <h1 className="text-2xl font-semibold">{t('title')}</h1>
 
       {effectiveModel ? (
         <div className="rounded-xl border p-3">
@@ -284,21 +286,21 @@ export default function PurchasePage() {
             </div>
           ) : effectiveModel?.thumbnailUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={effectiveModel?.thumbnailUrl} alt="thumb" className="w-full rounded-lg" />
+            <img src={effectiveModel?.thumbnailUrl} alt={t('previewAlt')} className="w-full rounded-lg" />
           ) : null}
         </div>
       ) : (
         <div className="rounded-xl border p-3 text-sm text-gray-600">
-          No specific model selected. You can still configure size and finish.
+          {t('noModel')}
         </div>
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Size selector */}
         <div className="rounded-xl border p-4 space-y-3">
-          <div className="font-medium">Choose Size (cm)</div>
+          <div className="font-medium">{t('chooseSize')}</div>
           <div className="text-xs text-gray-500">
-            Max 25 cm in each dimension. {loadingMetrics ? "Analyzing model…" : metrics ? `Model ratio locked` : null}
+            {t('sizeInfo')} {loadingMetrics ? t('analyzing') : metrics ? t('ratioLocked') : null}
           </div>
           <div className="flex flex-wrap gap-2 pt-1">
             <button
@@ -316,7 +318,7 @@ export default function PurchasePage() {
                 }
               }}
             >
-              Small (max ~5cm)
+              {t('small')}
             </button>
             <button
               type="button"
@@ -333,7 +335,7 @@ export default function PurchasePage() {
                 }
               }}
             >
-              Medium (max ~10cm)
+              {t('medium')}
             </button>
             <button
               type="button"
@@ -350,7 +352,7 @@ export default function PurchasePage() {
                 }
               }}
             >
-              Large (max ~15cm)
+              {t('large')}
             </button>
             <button
               type="button"
@@ -367,12 +369,12 @@ export default function PurchasePage() {
                 }
               }}
             >
-              Max (25cm)
+              {t('max')}
             </button>
           </div>
           <div className="grid grid-cols-3 gap-3">
             <label className="text-xs space-y-1">
-              <div>Width</div>
+              <div>{t('width')}</div>
               <input
                 type="number"
                 value={widthCm}
@@ -384,7 +386,7 @@ export default function PurchasePage() {
               />
             </label>
             <label className="text-xs space-y-1">
-              <div>Height</div>
+              <div>{t('height')}</div>
               <input
                 type="number"
                 value={heightCm}
@@ -396,7 +398,7 @@ export default function PurchasePage() {
               />
             </label>
             <label className="text-xs space-y-1">
-              <div>Depth</div>
+              <div>{t('depth')}</div>
               <input
                 type="number"
                 value={depthCm}
@@ -410,10 +412,10 @@ export default function PurchasePage() {
           </div>
           <div className="text-xs text-gray-600">
             {metrics ? (
-              <div>Model bounding box (mm): {metrics.sizeMm.x.toFixed(1)} × {metrics.sizeMm.y.toFixed(1)} × {metrics.sizeMm.z.toFixed(1)}</div>
+              <div>{t('modelBox', { x: metrics.sizeMm.x.toFixed(1), y: metrics.sizeMm.y.toFixed(1), z: metrics.sizeMm.z.toFixed(1) })}</div>
             ) : null}
             <div>
-              Estimated weight (from size): {estimatedWeightG != null && Number.isFinite(estimatedWeightG as number) ? `${(estimatedWeightG as number).toFixed(1)} g` : 'N/A'}
+              {estimatedWeightG != null && Number.isFinite(estimatedWeightG as number) ? t('estimatedWeight', { g: (estimatedWeightG as number).toFixed(1) }) : 'N/A'}
             </div>
           </div>
           {sizeErrors.length > 0 && (
@@ -427,9 +429,9 @@ export default function PurchasePage() {
 
         {/* Type & Color selector */}
         <div className="rounded-xl border p-4 space-y-3">
-          <div className="font-medium">Type & Color</div>
+          <div className="font-medium">{t('typeColor')}</div>
           <div className="text-xs text-gray-500">
-            <a href="/color-guide/">Are you confused? click here!</a>
+            <a href="/color-guide/">{t('colorHelp')}</a>
           </div>
           <div className="flex flex-wrap gap-3 text-sm">
             {TYPE_OPTIONS.map((opt) => (
@@ -451,7 +453,7 @@ export default function PurchasePage() {
             ))}
           </div>
           <div className="mt-3">
-            <div className="text-xs text-gray-500 mb-2">Select color</div>
+            <div className="text-xs text-gray-500 mb-2">{t('selectColor')}</div>
             <div className="grid grid-cols-3 gap-3">
               {(COLOR_OPTIONS_BY_TYPE[typeSlug] ?? []).map((c) => (
                 <button
@@ -467,16 +469,16 @@ export default function PurchasePage() {
                 </button>
               ))}
               {(COLOR_OPTIONS_BY_TYPE[typeSlug] ?? []).length === 0 && (
-                <div className="text-xs text-gray-500">No colors available for this type.</div>
+                <div className="text-xs text-gray-500">{t('noColors')}</div>
               )}
             </div>
           </div>
           <div className="mt-4 border-t pt-3">
-            <div className="font-medium text-sm">Finish Options</div>
+            <div className="font-medium text-sm">{t('finishOptions')}</div>
             <label className="mt-2 flex items-center justify-between text-sm">
               <div>
-                <div>Full Spectrum color (by human)</div>
-                <div className="text-xs text-gray-500">Hand-painted multi-color finish. Price depends on weight.</div>
+                <div>{t('fullSpectrum')}</div>
+                <div className="text-xs text-gray-500">{t('fullSpectrumDesc')}</div>
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-sm">+€{(estimatedWeightG != null ? ((estimatedWeightG as number) <= 150 ? 60 : (estimatedWeightG as number) <= 300 ? 90 : 120) : 60).toFixed(2)}</span>
@@ -488,26 +490,26 @@ export default function PurchasePage() {
 
         {/* Price summary */}
         <div className="rounded-xl border p-4 space-y-3 lg:sticky lg:top-4">
-          <div className="font-medium">Price</div>
+          <div className="font-medium">{t('price')}</div>
           <div className="text-sm flex items-center justify-between">
-            <span>Base (per unit)</span>
+            <span>{t('basePerUnit')}</span>
             <span>€{pricing.base.toFixed(2)}</span>
           </div>
           <div className="text-xs text-gray-500 text-right">
-            Estimated weight: {pricing.grams != null ? `${pricing.grams.toFixed(1)} g` : 'N/A'}
+            {pricing.grams != null ? t('estimatedWeight', { g: pricing.grams.toFixed(1) }) : 'N/A'}
           </div>
           <div className="text-sm flex items-center justify-between">
-            <span>Type: {pricing.typeLabel}{pricing.typePercent ? ` (+${pricing.typePercent}%)` : ''}</span>
+            <span>{t('type')}: {pricing.typeLabel}{pricing.typePercent ? ` (+${pricing.typePercent}%)` : ''}</span>
             <span>€{pricing.typeSurcharge.toFixed(2)}</span>
           </div>
           {pricing.fsEnabled ? (
             <div className="text-sm flex items-center justify-between">
-              <span>Full Spectrum (by human)</span>
+              <span>{t('fullSpectrum')}</span>
               <span>€{pricing.fsSurcharge.toFixed(2)}</span>
             </div>
           ) : null}
           <div className="text-sm flex items-center justify-between">
-            <span>Quantity</span>
+            <span>{t('quantity')}</span>
             <input
               type="number"
               min={1}
@@ -519,7 +521,7 @@ export default function PurchasePage() {
           </div>
           <div className="h-px bg-gray-200 my-2" />
           <div className="text-base font-semibold flex items-center justify-between">
-            <span>Total</span>
+            <span>{t('total')}</span>
             <span>€{pricing.total.toFixed(2)}</span>
           </div>
           {submitError && (
@@ -530,7 +532,7 @@ export default function PurchasePage() {
             disabled={sizeErrors.length > 0 || submitting}
             className="mt-2 w-full px-3 py-2 rounded-xl shadow text-sm border bg-black text-white disabled:opacity-50"
           >
-            {submitting ? 'Adding to cart…' : 'Proceed to Checkout'}
+            {submitting ? t('adding') : t('proceed')}
           </button>
         </div>
       </div>

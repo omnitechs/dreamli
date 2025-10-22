@@ -13,6 +13,7 @@ import useGenerator from '@/app/(lang)/[lang]/ai/hooks/useGenerator';
 import { useDispatch } from 'react-redux';
 import { addMessage as addMsgAction, editMessage as editMsgAction } from '@/app/store/slices/generatorSlice';
 
+import {useLocale, useTranslations} from 'next-intl';
 
 export function Messenger() {
     // Redux messages composer + store
@@ -22,6 +23,9 @@ export function Messenger() {
     const { gen } = useGenerator();
     const dispatch = useDispatch();
     const { getSelectedImageUrls } = useImages();
+
+    const t = useTranslations('AI.Messenger');
+    const locale = useLocale();
 
     // default role: user
     useState(() => setMsgRole('user' as const));
@@ -63,7 +67,7 @@ export function Messenger() {
 
     // helpers
     const formatTime = (timestamp: string) =>
-        new Date(timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+        new Date(timestamp).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit', hour12: false });
 
     const getRoleIcon = (role: string) =>
         role === 'user' ? <User className="w-4 h-4" /> :
@@ -77,6 +81,12 @@ export function Messenger() {
                 : role === 'system' ? 'text-purple-600 bg-purple-50'
                     : 'text-gray-600 bg-gray-50';
 
+    const getRoleLabel = (role: string) =>
+        role === 'user' ? t('roles.user')
+            : role === 'assistant' ? t('roles.assistant')
+                : role === 'system' ? t('roles.system')
+                    : role;
+
     const pickModelUrl = (m: any): string | undefined =>
         m?.modelUrls?.glb || m?.modelUrls?.fbx || m?.modelUrls?.obj || m?.modelUrls?.usdz;
 
@@ -87,7 +97,7 @@ export function Messenger() {
         if (!text || sending) return;
 
         if (!headId) {                   // keep your commit guard if desired
-            setErrorText('Select a commit first — messages branch from the selected commit.');
+            setErrorText(t('errors.needCommit'));
             return;
         }
 
@@ -137,15 +147,15 @@ export function Messenger() {
             if (res.status === 402) {
                 // insufficient credits → show modal and annotate message
                 const seg = (typeof window !== 'undefined' ? (window.location.pathname.split('/')[1] || 'en') : 'en');
-                try { sessionStorage.setItem('insufficient_credits_msg', 'Your balance is not enough. Please add credits.'); } catch {}
+                try { sessionStorage.setItem('insufficient_credits_msg', t('errors.insufficientCreditsModal')); } catch {}
                 try { window.dispatchEvent(new CustomEvent('open-credits-modal', { detail: { lang: seg } })); } catch {}
-                aiText = '⚠️ Insufficient credits. Please add credits to continue.';
+                aiText = t('errors.insufficientCredits');
                 dispatchLocal(editMsgAction({ id: aiId, content: aiText } as any));
                 return;
             }
 
             if (!res.ok || !res.body) {
-                aiText = '⚠️ Failed to start AI response.';
+                aiText = t('errors.failedStart');
                 dispatchLocal(editMsgAction({ id: aiId, content: aiText } as any));
                 return;
             }
@@ -198,7 +208,7 @@ export function Messenger() {
                                 console.error('Failed to create chat commit:', e);
                             }
                         } else if (evt.type === 'error' || evt.error) {
-                            append('\n\n⚠️ ' + (evt.error?.message || 'Stream error'));
+                            append('\n\n⚠️ ' + (evt.error?.message || t('errors.stream')));
                         }
                     } catch {
                         append(data);
@@ -217,7 +227,7 @@ export function Messenger() {
                 }
             }
         } catch (err) {
-            aiText = '⚠️ Error contacting AI service.';
+            aiText = t('errors.contactFailed');
             dispatchLocal(editMsgAction({ id: aiId, content: aiText } as any));
         } finally {
             setSending(false);
@@ -249,7 +259,7 @@ export function Messenger() {
         <div className="bg-white xl:border-r border-gray-200 xl:h-full min-h-0 flex flex-col">
             {/* Header */}
             <div className="sticky top-0 bg-white border-b border-gray-200 p-4 z-10">
-                <h2 className="text-lg font-semibold text-gray-900">Messages & Logs</h2>
+                <h2 className="text-lg font-semibold text-gray-900">{t('title')}</h2>
             </div>
             <ModelGallery/>
             {/*/!* Models (Redux) *!/*/}
@@ -339,7 +349,7 @@ export function Messenger() {
             {!headId && (
                 <div className="mx-4 mb-2 rounded-md bg-amber-50 border border-amber-200 text-amber-800 text-xs px-3 py-2 flex items-center gap-2">
                     <AlertTriangle className="w-4 h-4" />
-                    Select a commit to make new messages branch from that snapshot.
+                    {t('errors.needCommitBanner')}
                 </div>
             )}
 
@@ -355,7 +365,7 @@ export function Messenger() {
                         <div className="flex items-center gap-2 mb-2 text-xs text-gray-500">
                             <div className={`flex items-center gap-1 px-2 py-1 rounded-full ${getRoleColor(message.role)}`}>
                                 {getRoleIcon(message.role)}
-                                <span className="font-medium capitalize">{message.role}</span>
+                                <span className="font-medium capitalize">{getRoleLabel(message.role)}</span>
                             </div>
                             <span>•</span>
                             <span>{formatTime(message.createdAt)}</span>
@@ -383,7 +393,7 @@ export function Messenger() {
                                     ) : (
                                         <ChevronRight className="w-3 h-3" />
                                     )}
-                                    Action: {(message as any).action.type}
+                                    {t('actions.actionType', {type: String((message as any).action.type)})}
                                 </button>
 
                                 {expandedActions.has(message.id) && (
@@ -401,8 +411,8 @@ export function Messenger() {
                 {storeMessages.length === 0 && (
                     <div className="text-center py-12 text-gray-500">
                         <Bot className="w-8 h-8 mx-auto mb-3 text-gray-300" />
-                        <p className="text-sm">No messages yet</p>
-                        <p className="text-xs text-gray-400 mt-1">Start by describing what you'd like to create</p>
+                        <p className="text-sm">{t('empty.noMessages')}</p>
+                        <p className="text-xs text-gray-400 mt-1">{t('empty.hint')}</p>
                     </div>
                 )}
             </div>
@@ -416,7 +426,7 @@ export function Messenger() {
                 value={msgText}
                 onChange={handleTextareaChange}
                 onKeyDown={handleKeyDown}
-                placeholder="Describe your 3D project or ask a question..."
+                placeholder={t('composer.placeholder')}
                 className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 style={{ minHeight: '44px', maxHeight: '120px' }}
                 disabled={sending}
@@ -426,7 +436,7 @@ export function Messenger() {
                             type="submit"
                             disabled={!msgText.trim() || sending || !headId}
                             className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                            title={!headId ? 'Select a commit first' : 'Send'}
+                            title={!headId ? t('composer.needCommitTitle') : t('composer.send')}
                         >
                             {sending ? (
                                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -437,7 +447,7 @@ export function Messenger() {
                     </div>
 
                     <div className="flex items-center justify-between text-xs text-gray-500">
-                        <span>Enter to send • Shift+Enter for newline</span>
+                        <span>{t('composer.hint')}</span>
                         <span>{(msgText ?? '').length}/1000</span>
                     </div>
                 </form>

@@ -894,5 +894,154 @@
       "enterPositive": "Voer een positief bedrag in",
       "operationFailed": "Bewerking mislukt"
     }
+  },
+  "AI": {
+    "meta": {
+      "title": "AI Cadeaumaker & 3D-Marktplaats | Dreamli",
+      "description": "Zet ideeën om in 3D‑modellen en blader door communitymodellen. Maak projecten, bekijk previews en koop 3D‑prints."
+    },
+    "Project": {
+      "loading": "Laden…",
+      "error": "Laden van commits mislukt (status {status}): {details}"
+    },
+    "Commits": {
+      "title": "Commit-tijdlijn",
+      "empty": "Nog geen commits",
+      "today": "Vandaag",
+      "yesterday": "Gisteren",
+      "modelReady": "3D‑model klaar"
+    },
+    "Messenger": {
+      "title": "Berichten & Logs",
+      "roles": { "user": "Jij", "assistant": "AI", "system": "Systeem" },
+      "errors": {
+        "needCommit": "Selecteer eerst een commit — berichten vertakken vanaf de geselecteerde commit.",
+        "needCommitBanner": "Selecteer een commit zodat nieuwe berichten van die snapshot vertakken.",
+        "insufficientCreditsModal": "Je saldo is niet voldoende. Voeg credits toe.",
+        "insufficientCredits": "⚠️ Onvoldoende credits. Voeg credits toe om verder te gaan.",
+        "failedStart": "⚠️ Starten van AI-antwoord is mislukt.",
+        "stream": "Streamfout",
+        "contactFailed": "⚠️ Fout bij het contacteren van de AI-service."
+      },
+      "empty": {
+        "noMessages": "Nog geen berichten",
+        "hint": "Begin met beschrijven wat je wilt maken"
+      },
+      "composer": {
+        "placeholder": "Beschrijf je 3D‑project of stel een vraag...",
+        "needCommitTitle": "Selecteer eerst een commit",
+        "send": "Versturen",
+        "hint": "Enter om te verzenden • Shift+Enter voor nieuwe regel"
+      },
+      "actions": {
+        "actionType": "Actie: {type}"
+      }
+    },
+    "Page": {
+      "projects": "Projecten",
+      "newProjectPlaceholder": "Nieuwe projectnaam",
+      "create": "Maken",
+      "creating": "Bezig met maken…",
+      "loading": "Laden…",
+      "noProjects": "Nog geen projecten.",
+      "open": "Openen",
+      "marketplaceTitle": "Marktplaats: 3D-modellen",
+      "noModels": "Nog geen modellen beschikbaar.",
+      "noPreview": "Geen preview",
+      "modelAlt": "3D-model",
+      "userFallback": "Gebruiker",
+      "view": "Bekijken",
+      "buy": "Kopen",
+      "download": "Downloaden",
+      "prev": "Vorige",
+      "next": "Volgende",
+      "page": "Pagina {page}",
+      "Create": {
+        "title": "Maken met AI",
+        "promptPlaceholder": "Beschrijf het beeld dat je wilt genereren…",
+        "count": "Aantal",
+        "generate": "Genereren",
+        "activeJobs": "Actieve taken",
+        "working": "Bezig…"
+      },
+      "Upload": {
+        "title": "Afbeeldingen toevoegen",
+        "ariaUpload": "Afbeeldingen uploaden",
+        "uploading": "Uploaden…",
+        "dropOrClick": "Zet afbeeldingen hier neer of klik om te bladeren",
+        "typesHint": "JPG, PNG, WEBP tot 10MB",
+        "urlLabel": "Toevoegen via URL",
+        "urlPlaceholder": "Plak afbeelding-URL (https://…)",
+        "add": "Toevoegen"
+      },
+      "Models": {
+        "generateStream": "Voorbeeldstream genereren",
+        "noModels": "Nog geen modellen",
+        "clickToPreview": "Klik voor preview",
+        "thumbAlt": "Model miniatuur",
+        "noThumbnail": "Geen miniatuur",
+        "purchaseTitle": "Kopen",
+        "purchase": "Kopen",
+        "previewLabel": "Preview:",
+        "close": "Sluiten",
+        "noPreviewable": "Geen 3D-bestand om te tonen"
+      },
+      "ImagesGrid": {
+        "title": "Afbeeldingen ({count})",
+        "alt": "Afbeelding {n}",
+        "select": "Selecteren",
+        "unselect": "Deselecteren",
+        "delete": "Verwijderen"
+      },
+      "ImageGallery": {
+        "title": "Afbeeldingen ({count})",
+        "selectedLabel": "Geselecteerd: {count}",
+        "empty": "Nog geen afbeeldingen. Upload of sleep bestanden.",
+        "select": "Selecteren",
+        "selected": "Geselecteerd",
+        "remove": "Verwijderen",
+        "alt": "Afbeelding {name}"
+      },
+      "Build": {
+        "title": "3D-modelgeneratie",
+        "generateBtn": "Genereer 3D (Meshy)",
+        "generating": "Genereren…"
+      }
+    },
+    "Purchase": {
+      "title": "3D‑model kopen",
+      "noModel": "Geen specifiek model geselecteerd. Je kunt nog steeds maat en afwerking instellen.",
+      "chooseSize": "Kies afmeting (cm)",
+      "sizeInfo": "Max 25 cm in elke dimensie.",
+      "analyzing": "Model analyseren…",
+      "ratioLocked": "Modelverhouding vergrendeld",
+      "small": "Klein (max ~5cm)",
+      "medium": "Middel (max ~10cm)",
+      "large": "Groot (max ~15cm)",
+      "max": "Max (25cm)",
+      "width": "Breedte",
+      "height": "Hoogte",
+      "depth": "Diepte",
+      "modelBox": "Modelbegrenzingsdoos (mm): {x} × {y} × {z}",
+      "estimatedWeight": "Geschat gewicht (op basis van maat): {g} g",
+      "errorMax": "Maximale maat is 25 cm in elke dimensie.",
+      "errorPositive": "Alle afmetingen moeten groter dan 0 zijn.",
+      "typeColor": "Type & kleur",
+      "colorHelp": "In de war? Klik hier!",
+      "selectColor": "Kies kleur",
+      "noColors": "Geen kleuren beschikbaar voor dit type.",
+      "finishOptions": "Afwerkingsopties",
+      "fullSpectrum": "Full Spectrum kleur (handmatig)",
+      "fullSpectrumDesc": "Handgeschilderde multicolor afwerking. Prijs hangt van gewicht af.",
+      "price": "Prijs",
+      "basePerUnit": "Basis (per stuk)",
+      "type": "Type",
+      "quantity": "Aantal",
+      "total": "Totaal",
+      "adding": "Toevoegen aan winkelwagen…",
+      "proceed": "Doorgaan naar afrekenen",
+      "failedAddToCart": "Toevoegen aan winkelwagen mislukt. Probeer opnieuw.",
+      "previewAlt": "Voorbeeldafbeelding"
+    }
   }
 }

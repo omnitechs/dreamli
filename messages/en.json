@@ -900,5 +900,154 @@
       "enterPositive": "Enter a positive amount",
       "operationFailed": "Operation failed"
     }
+  },
+  "AI": {
+    "meta": {
+      "title": "AI Gift Creator & 3D Marketplace | Dreamli",
+      "description": "Turn ideas into 3D models and browse community models. Create projects, preview, and purchase 3D prints."
+    },
+    "Project": {
+      "loading": "Loading…",
+      "error": "Failed to load commits (status {status}): {details}"
+    },
+    "Commits": {
+      "title": "Commit Timeline",
+      "empty": "No commits yet",
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "modelReady": "3D Model Ready"
+    },
+    "Messenger": {
+      "title": "Messages & Logs",
+      "roles": { "user": "You", "assistant": "AI", "system": "System" },
+      "errors": {
+        "needCommit": "Select a commit first — messages branch from the selected commit.",
+        "needCommitBanner": "Select a commit to make new messages branch from that snapshot.",
+        "insufficientCreditsModal": "Your balance is not enough. Please add credits.",
+        "insufficientCredits": "⚠️ Insufficient credits. Please add credits to continue.",
+        "failedStart": "⚠️ Failed to start AI response.",
+        "stream": "Stream error",
+        "contactFailed": "⚠️ Error contacting AI service."
+      },
+      "empty": {
+        "noMessages": "No messages yet",
+        "hint": "Start by describing what you'd like to create"
+      },
+      "composer": {
+        "placeholder": "Describe your 3D project or ask a question...",
+        "needCommitTitle": "Select a commit first",
+        "send": "Send",
+        "hint": "Enter to send • Shift+Enter for newline"
+      },
+      "actions": {
+        "actionType": "Action: {type}"
+      }
+    },
+    "Page": {
+      "projects": "Projects",
+      "newProjectPlaceholder": "New project name",
+      "create": "Create",
+      "creating": "Creating…",
+      "loading": "Loading…",
+      "noProjects": "No projects yet.",
+      "open": "Open",
+      "marketplaceTitle": "Marketplace: 3D Models",
+      "noModels": "No models available yet.",
+      "noPreview": "No preview",
+      "modelAlt": "3D model",
+      "userFallback": "User",
+      "view": "View",
+      "buy": "Buy",
+      "download": "Download",
+      "prev": "Prev",
+      "next": "Next",
+      "page": "Page {page}",
+      "Create": {
+        "title": "Create with AI",
+        "promptPlaceholder": "Describe the image to generate…",
+        "count": "Count",
+        "generate": "Generate",
+        "activeJobs": "Active jobs",
+        "working": "Working…"
+      },
+      "Upload": {
+        "title": "Add images",
+        "ariaUpload": "Upload images",
+        "uploading": "Uploading…",
+        "dropOrClick": "Drop images here or click to browse",
+        "typesHint": "JPG, PNG, WEBP up to 10MB",
+        "urlLabel": "Add by URL",
+        "urlPlaceholder": "Paste image URL (https://…) ",
+        "add": "Add"
+      },
+      "Models": {
+        "generateStream": "Generate preview stream",
+        "noModels": "No models yet",
+        "clickToPreview": "Click to preview",
+        "thumbAlt": "Model thumbnail",
+        "noThumbnail": "No thumbnail",
+        "purchaseTitle": "Purchase",
+        "purchase": "Purchase",
+        "previewLabel": "Preview:",
+        "close": "Close",
+        "noPreviewable": "No previewable 3D file"
+      },
+      "ImagesGrid": {
+        "title": "Images ({count})",
+        "alt": "Image {n}",
+        "select": "Select",
+        "unselect": "Unselect",
+        "delete": "Delete"
+      },
+      "ImageGallery": {
+        "title": "Images ({count})",
+        "selectedLabel": "Selected: {count}",
+        "empty": "No images yet. Upload or drop files.",
+        "select": "Select",
+        "selected": "Selected",
+        "remove": "Remove",
+        "alt": "Image {name}"
+      },
+      "Build": {
+        "title": "3D Model Generation",
+        "generateBtn": "Generate 3D (Meshy)",
+        "generating": "Generating…"
+      }
+    },
+    "Purchase": {
+      "title": "Purchase 3D Model",
+      "noModel": "No specific model selected. You can still configure size and finish.",
+      "chooseSize": "Choose Size (cm)",
+      "sizeInfo": "Max 25 cm in each dimension.",
+      "analyzing": "Analyzing model…",
+      "ratioLocked": "Model ratio locked",
+      "small": "Small (max ~5cm)",
+      "medium": "Medium (max ~10cm)",
+      "large": "Large (max ~15cm)",
+      "max": "Max (25cm)",
+      "width": "Width",
+      "height": "Height",
+      "depth": "Depth",
+      "modelBox": "Model bounding box (mm): {x} × {y} × {z}",
+      "estimatedWeight": "Estimated weight (from size): {g} g",
+      "errorMax": "Max size is 25 cm in any dimension.",
+      "errorPositive": "All dimensions must be greater than 0.",
+      "typeColor": "Type & Color",
+      "colorHelp": "Are you confused? click here!",
+      "selectColor": "Select color",
+      "noColors": "No colors available for this type.",
+      "finishOptions": "Finish Options",
+      "fullSpectrum": "Full Spectrum color (by human)",
+      "fullSpectrumDesc": "Hand-painted multi-color finish. Price depends on weight.",
+      "price": "Price",
+      "basePerUnit": "Base (per unit)",
+      "type": "Type",
+      "quantity": "Quantity",
+      "total": "Total",
+      "adding": "Adding to cart…",
+      "proceed": "Proceed to Checkout",
+      "failedAddToCart": "Failed to add to cart. Please try again.",
+      "previewAlt": "Preview image"
+    }
   }
 }
