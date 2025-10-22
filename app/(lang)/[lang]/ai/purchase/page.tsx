@@ -160,15 +160,105 @@ export default function PurchasePage() {
     };
   }, [estimatedWeightG, typeSlug, qty, fullSpectrum]);
 
-  const onProceed = () => {
-    if (sizeErrors.length) return;
-    // Placeholder: integrate with checkout/cart later
-    const typeLine = `Type: ${pricing.typeLabel}${pricing.typePercent ? ` (+${pricing.typePercent}%)` : ''}`;
-    const colorLine = `Color: ${colorSlug ?? '—'}`;
-    const weightLine = `Estimated weight: ${pricing.grams != null ? `${pricing.grams.toFixed(1)} g` : 'N/A'}`;
-    const fsLine = `Finish: ${fullSpectrum ? `Full Spectrum (+€${pricing.fsSurcharge.toFixed(2)})` : 'Standard'}`;
-    alert(`Order summary:\nModel: ${model?.prompt ?? model?.kind ?? modelId ?? "(unknown)"}\nSize: ${widthCm}×${heightCm}×${depthCm} cm\n${weightLine}\n${typeLine}\n${colorLine}\n${fsLine}\nQuantity: ${pricing.qty}\nTotal: €${pricing.total.toFixed(2)}`);
+  const [submitting, setSubmitting] = useState<boolean>(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const localeCartUrls: Record<string, string> = {
+    en: 'https://shop.dreamli.nl/cart',
+    nl: 'https://shop.dreamli.nl/nl/winkelwagen/',
+    de: 'https://shop.dreamli.nl/de/warenkorb/',
+    fr: 'https://shop.dreamli.nl/fr/panier/',
+    pl: 'https://shop.dreamli.nl/pl/koszyk/'
   };
+
+    const onProceed = async () => {
+        if (sizeErrors.length || submitting) return;
+        setSubmitError(null);
+        setSubmitting(true);
+
+        try {
+            // ✅ New API endpoint for figurines
+            const apiUrl = 'https://shop.dreamli.nl/wp-json/custom/v1/add-figurine';
+            const productId = Number(process.env.NEXT_PUBLIC_WOO_AI_PRODUCT_ID || 50394);
+
+            // ✅ Find the best preview image
+            const previewImage =
+                model?.images?.[0]?.url ||
+                model?.thumbnailUrl ||
+                model?.imageUrls?.[0] ||
+                '';
+
+            // ✅ Build FormData for new API
+            const fd = new FormData();
+            fd.append('product_id', String(productId));
+            fd.append('quantity', String(pricing.qty));
+            fd.append('price', pricing.perUnit.toFixed(2));
+            fd.append('image_url', previewImage);
+
+            // All relevant figurine data stored as JSON
+            fd.append(
+                'figurine_data',
+                JSON.stringify({
+                    modelId: model?.id || modelId,
+                    modelUrl:
+                        model?.modelUrls?.glb ||
+                        model?.modelUrls?.fbx ||
+                        model?.modelUrls?.obj ||
+                        modelUrl ||
+                        '',
+                    prompt: model?.prompt || model?.kind || '',
+                    size: { widthCm, heightCm, depthCm },
+                    weightG: pricing.grams,
+                    typeSlug,
+                    colorSlug,
+                    fullSpectrum,
+                    pricing: {
+                        base: pricing.base,
+                        typePercent: pricing.typePercent,
+                        typeSurcharge: pricing.typeSurcharge,
+                        fsSurcharge: pricing.fsSurcharge,
+                        perUnit: pricing.perUnit,
+                        total: pricing.total,
+                    },
+                })
+            );
+
+            // ✅ Send to WooCommerce
+            const res = await fetch(apiUrl, {
+                method: 'POST',
+                body: fd,
+                credentials: 'include',
+            });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+            const data = await res.json().catch(() => ({}));
+
+            // ✅ Redirect logic (same as before)
+            const locale =
+                (typeof navigator !== 'undefined' && (navigator.language || '').slice(0, 2)) ||
+                'en';
+            const cartUrlPref = localeCartUrls[locale] || localeCartUrls.en;
+            const apiCartUrl: string | undefined =
+                data.cart_url || data.cartUrl || data.redirect || data.url;
+
+            let target = cartUrlPref;
+            try {
+                if (apiCartUrl) {
+                    const base = new URL(cartUrlPref);
+                    const apiU = new URL(apiCartUrl);
+                    apiU.searchParams.forEach((v, k) => base.searchParams.set(k, v));
+                    target = base.toString();
+                }
+            } catch {}
+
+            window.location.href = target;
+        } catch (e: any) {
+            console.error('Add to cart failed:', e);
+            setSubmitError('Failed to add to cart. Please try again.');
+        } finally {
+            setSubmitting(false);
+        }
+    };
 
   return (
     <div className="max-w-5xl mx-auto p-4 space-y-6">
@@ -427,12 +517,15 @@ export default function PurchasePage() {
             <span>Total</span>
             <span>€{pricing.total.toFixed(2)}</span>
           </div>
+          {submitError && (
+            <div className="text-xs text-red-600 mb-2">{submitError}</div>
+          )}
           <button
             onClick={onProceed}
-            disabled={sizeErrors.length > 0}
+            disabled={sizeErrors.length > 0 || submitting}
             className="mt-2 w-full px-3 py-2 rounded-xl shadow text-sm border bg-black text-white disabled:opacity-50"
           >
-            Proceed to Checkout
+            {submitting ? 'Adding to cart…' : 'Proceed to Checkout'}
           </button>
         </div>
       </div>
