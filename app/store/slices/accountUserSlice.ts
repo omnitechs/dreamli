@@ -24,8 +24,8 @@ const accountUserSlice = createSlice({
       if (state.me.id !== userId) return;
       const curr = Number(state.me.creditsBalance ?? '0');
       const next = (curr + delta);
-      // Keep two decimals formatting similar to DB scale
-      state.me.creditsBalance = next.toFixed(2);
+      // Store as integer DC string
+      state.me.creditsBalance = String(Math.round(next));
     },
   },
 });

@@ -1,5 +1,6 @@
 // app/api/stripe/checkout/route.ts
 import { auth } from "@/lib/auth";
+import { CREDIT_PACKAGES, computePackageDcTotal, getPackageById } from "@/lib/currency";
 
 export const runtime = 'nodejs';
 
@@ -16,22 +17,20 @@ export async function POST(req: Request) {
     );
   }
 
-  let amountCredits = 0;
+  // Expect a packageId from client
+  let packageId: string | undefined;
   try {
     const body = await req.json();
-    amountCredits = Math.max(1, Math.floor(Number(body?.amount || 0)));
+    packageId = body?.packageId as string | undefined;
   } catch {}
 
-  if (!Number.isFinite(amountCredits) || amountCredits <= 0) {
-    return new Response(JSON.stringify({ error: "INVALID_AMOUNT" }), { status: 400 });
-  }
-  if (amountCredits > 1_000_000) {
-    return new Response(JSON.stringify({ error: "AMOUNT_TOO_LARGE" }), { status: 400 });
+  const pkg = getPackageById(packageId || '');
+  if (!pkg) {
+    return new Response(JSON.stringify({ error: "INVALID_PACKAGE" }), { status: 400 });
   }
 
-  // Pricing: 1 credit = $0.01 USD (configure via env multiplier if needed)
-  const PRICE_PER_CREDIT_CENTS = Number(process.env.PRICE_PER_CREDIT_CENTS || 1);
-  const amountCents = amountCredits * PRICE_PER_CREDIT_CENTS;
+  const amountDigital = computePackageDcTotal(pkg);
+  const amountCents = Math.round(pkg.eurPrice * 100);
   if (!Number.isFinite(amountCents) || amountCents <= 0) {
     return new Response(JSON.stringify({ error: "INVALID_PRICING" }), { status: 400 });
   }
@@ -69,19 +68,20 @@ export async function POST(req: Request) {
     line_items: [
       {
         price_data: {
-          currency: 'usd',
+          currency: 'eur',
           product_data: {
-            name: 'Dreamli Credits',
-            description: `${amountCredits} credits`,
+            name: 'Digital Credits',
+            description: `${amountDigital} DC (includes ${pkg.bonusPercent}% bonus)`,
           },
-          unit_amount: amountCents, // in cents
+          unit_amount: amountCents, // in euro cents
         },
         quantity: 1,
       },
     ],
     metadata: {
       userId,
-      amountCredits: String(amountCredits),
+      packageId: pkg.id,
+      amountDigital: String(amountDigital),
     },
     success_url: successUrl,
     cancel_url: cancelUrl,

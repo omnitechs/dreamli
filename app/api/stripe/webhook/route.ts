@@ -32,15 +32,19 @@ export async function POST(req: Request) {
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object as any; // Stripe.Checkout.Session
       const userId = session?.metadata?.userId as string | undefined;
-      const amountCreditsStr = session?.metadata?.amountCredits as string | undefined;
+      const amountDigitalStr = session?.metadata?.amountDigital as string | undefined;
+      const amountCreditsStr = session?.metadata?.amountCredits as string | undefined; // backward compatibility
       const paymentIntentId = session?.payment_intent as string | undefined;
 
-      const amountCredits = amountCreditsStr ? Number(amountCreditsStr) : NaN;
-      if (userId && Number.isFinite(amountCredits) && amountCredits > 0) {
+      const dc = amountDigitalStr ? Number(amountDigitalStr) : NaN;
+      const legacy = amountCreditsStr ? Number(amountCreditsStr) : NaN;
+      const amountToCredit = Number.isFinite(dc) && dc > 0 ? dc : (Number.isFinite(legacy) && legacy > 0 ? legacy : NaN);
+
+      if (userId && Number.isFinite(amountToCredit) && amountToCredit > 0) {
         const idem = `stripe:${paymentIntentId || session.id}`;
         await addCredits({
           userId,
-          amount: amountCredits,
+          amount: amountToCredit,
           reason: 'stripe_checkout',
           idempotencyKey: idem,
           reference: paymentIntentId || session.id,

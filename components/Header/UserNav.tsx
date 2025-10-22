@@ -47,7 +47,7 @@ export default function UserNav({ base }: Props) {
         name: (user.name as string) ?? null,
         email: (user.email as string) ?? null,
         role: (user.role as string) ?? 'user',
-        creditsBalance: '0.00',
+        creditsBalance: '0',
         createdAt: new Date().toISOString(),
       } as const;
       (dispatch as AppDispatch)(hydrateMe(payload as any));
@@ -69,7 +69,7 @@ export default function UserNav({ base }: Props) {
         const js = await res.json();
         if (aborted) return;
         const num = Number(js?.balance ?? 0);
-        const next = Number.isFinite(num) ? num.toFixed(2) : '0.00';
+        const next = Number.isFinite(num) ? String(Math.round(num)) : '0';
         if (me && next !== me.creditsBalance) {
           (dispatch as AppDispatch)(hydrateMe({ ...me, creditsBalance: next } as any));
         }
@@ -112,8 +112,8 @@ export default function UserNav({ base }: Props) {
 
   const credit = (() => {
     const v = Number(me.creditsBalance ?? '0');
-    if (Number.isNaN(v)) return '0.00';
-    return v.toFixed(2);
+    if (Number.isNaN(v)) return '0';
+    return Math.round(v).toLocaleString();
   })();
 
   // Logged in: avatar button with hover card
@@ -132,7 +132,7 @@ export default function UserNav({ base }: Props) {
         {/* Name + credit (desktop) */}
         <div className="hidden sm:flex flex-col leading-tight mr-1">
           <span className="text-xs text-gray-600">{me.name || me.email}</span>
-          <span className="text-[11px] text-purple-700 font-medium">€ {credit}</span>
+          <span className="text-[11px] text-purple-700 font-medium">{credit} DC</span>
         </div>
       </Link>
 
@@ -145,7 +145,7 @@ export default function UserNav({ base }: Props) {
             </div>
             <div className="min-w-0">
               <div className="truncate text-sm font-medium text-gray-900">{me.name || me.email}</div>
-              <div className="text-xs text-gray-500">Balance: € {credit}</div>
+              <div className="text-xs text-gray-500">Balance: {credit} DC</div>
             </div>
           </div>
         </div>

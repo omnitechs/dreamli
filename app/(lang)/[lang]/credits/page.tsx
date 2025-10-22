@@ -6,6 +6,7 @@ import type {LanguageCode} from "@/config/i18n";
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '@/app/store';
 import { hydrateMe } from '@/app/store/slices/accountUserSlice';
+import { CREDIT_PACKAGES, computePackageDcTotal } from '@/lib/currency';
 
 export default function CreditsPage(props: { params: { lang: LanguageCode } }) {
   const { lang } = props.params;
@@ -13,7 +14,6 @@ export default function CreditsPage(props: { params: { lang: LanguageCode } }) {
   const me = useSelector((s: RootState) => s.accountUser.me);
   const [balance, setBalance] = useState<number | null>(null)
   const [loading, setLoading] = useState(false)
-  const [amount, setAmount] = useState(100)
   const [notice, setNotice] = useState<string | null>(null)
   const [noticeKind, setNoticeKind] = useState<'info' | 'success' | 'error' | 'warning'>('warning')
 
@@ -26,7 +26,7 @@ export default function CreditsPage(props: { params: { lang: LanguageCode } }) {
       setBalance(num)
       // push into global user state so header updates
       if (me) {
-        (dispatch as AppDispatch)(hydrateMe({ ...me, creditsBalance: num.toFixed(2) } as any))
+        (dispatch as AppDispatch)(hydrateMe({ ...me, creditsBalance: String(num) } as any))
       }
       try { window.dispatchEvent(new Event('credits-updated')); } catch {}
     } catch {
@@ -70,14 +70,13 @@ export default function CreditsPage(props: { params: { lang: LanguageCode } }) {
     } catch {}
   }, [])
 
-  async function topUp(a?: number) {
-    const add = a ?? amount
+  async function buyPackage(packageId: string) {
     setLoading(true)
     try {
       const res = await fetch('/api/stripe/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: add }),
+        body: JSON.stringify({ packageId }),
       })
       if (!res.ok) {
         const t = await res.text();
@@ -98,8 +97,8 @@ export default function CreditsPage(props: { params: { lang: LanguageCode } }) {
 
   return (
     <div className="max-w-xl mx-auto p-6 space-y-6">
-      <h1 className="text-2xl font-semibold">Buy credits</h1>
-      <p className="text-sm text-gray-600">Purchase credits securely via Stripe. Choose a preset or enter a custom amount.</p>
+      <h1 className="text-2xl font-semibold">Buy Digital Credits</h1>
+      <p className="text-sm text-gray-600">Purchase Digital Credits securely via Stripe. Choose a package below.</p>
 
       {notice && (
         <div
@@ -118,39 +117,27 @@ export default function CreditsPage(props: { params: { lang: LanguageCode } }) {
       )}
 
       <div className="rounded-xl border bg-white p-4 space-y-3">
-        <div className="text-sm text-gray-500">Current balance</div>
-        <div className="text-3xl font-semibold">{balance === null ? '—' : balance}</div>
+        <div className="text-sm text-gray-500">Current balance (DC)</div>
+        <div className="text-3xl font-semibold">{balance === null ? '—' : Math.round(balance)}</div>
       </div>
 
-      <div className="rounded-xl border bg-white p-4 space-y-3">
-        <div className="text-sm text-gray-700">Quick add</div>
-        <div className="flex flex-wrap gap-2">
-          {[100, 250, 500, 1000].map(v => (
-            <button
-              key={v}
-              onClick={() => topUp(v)}
-              disabled={loading}
-              className="px-3 py-2 rounded-xl border text-sm hover:bg-gray-50 disabled:opacity-50"
-            >
-              +{v}
-            </button>
-          ))}
-        </div>
-        <div className="flex items-center gap-2">
-          <input
-            type="number"
-            min={1}
-            value={amount}
-            onChange={(e) => setAmount(Math.max(1, Math.floor(Number(e.target.value || '0'))))}
-            className="flex-1 px-3 py-2 border rounded-lg"
-          />
-          <button
-            onClick={() => topUp()}
-            disabled={loading}
-            className="px-4 py-2 rounded-xl bg-black text-white text-sm disabled:opacity-50"
-          >
-            {loading ? 'Adding…' : 'Add credits'}
-          </button>
+      <div className="rounded-xl border bg-white p-4 space-y-4">
+        <div className="text-sm text-gray-700">Packages</div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {CREDIT_PACKAGES.map(pkg => {
+            const dc = computePackageDcTotal(pkg);
+            return (
+              <button
+                key={pkg.id}
+                onClick={() => buyPackage(pkg.id)}
+                disabled={loading}
+                className="p-4 rounded-xl border hover:bg-gray-50 text-left disabled:opacity-50"
+              >
+                <div className="text-lg font-semibold">€{pkg.eurPrice.toFixed(2)}</div>
+                <div className="text-sm text-gray-600">{dc.toLocaleString()} DC (+{pkg.bonusPercent}%)</div>
+              </button>
+            )
+          })}
         </div>
       </div>
 

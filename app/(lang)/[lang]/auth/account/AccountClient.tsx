@@ -74,11 +74,11 @@ export default function AccountClient({ me, lang }: { me: MeProp; lang: string }
         <div className="sm:col-span-2 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-sm text-gray-500">Current balance</div>
-              <div className="mt-1 text-3xl font-semibold tracking-tight text-purple-700">€ {credits.toFixed(2)}</div>
+              <div className="text-sm text-gray-500">Current balance (DC)</div>
+              <div className="mt-1 text-3xl font-semibold tracking-tight text-purple-700">{Math.round(credits).toLocaleString()} DC</div>
             </div>
             <a href={`/${lang}/credits`} className="inline-flex items-center gap-2 rounded-full bg-gradient-to-tr from-purple-600 to-fuchsia-500 px-4 py-2 text-sm font-medium text-white shadow-md hover:brightness-105 active:brightness-95">
-              Add credit
+              Add Digital Credits
             </a>
           </div>
         </div>

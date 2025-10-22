@@ -120,7 +120,7 @@ const adminUsersSlice = createSlice({
         const i = findIndexById(state.items, userId);
         if (i >= 0) {
           const curr = Number(state.items[i].creditsBalance || '0');
-          state.items[i].creditsBalance = (curr + amount).toFixed(2);
+          state.items[i].creditsBalance = String(Math.round(curr + amount));
         }
       })
       .addCase(addUserCredits.fulfilled, (state, action) => {
@@ -132,7 +132,7 @@ const adminUsersSlice = createSlice({
         const i = findIndexById(state.items, userId);
         if (i >= 0) {
           const curr = Number(state.items[i].creditsBalance || '0');
-          state.items[i].creditsBalance = (curr - amount).toFixed(2);
+          state.items[i].creditsBalance = String(Math.round(curr - amount));
         }
       })
       // Optimistic deduct credits
@@ -141,7 +141,7 @@ const adminUsersSlice = createSlice({
         const i = findIndexById(state.items, userId);
         if (i >= 0) {
           const curr = Number(state.items[i].creditsBalance || '0');
-          state.items[i].creditsBalance = (curr - amount).toFixed(2);
+          state.items[i].creditsBalance = String(Math.round(curr - amount));
         }
       })
       .addCase(deductUserCredits.fulfilled, (state) => {

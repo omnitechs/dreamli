@@ -26,7 +26,7 @@ export default function CreditsModal() {
         if (!msg) msg = sessionStorage.getItem("insufficient_credits_msg");
         if (msg) sessionStorage.removeItem("insufficient_credits_msg");
       } catch {}
-      setMessage(msg || "You are running out of credits. Please add more to continue.");
+      setMessage(msg || "You are running out of Digital Credits (DC). Please add more to continue.");
       setOpen(true);
     };
     window.addEventListener("open-credits-modal", onOpen as EventListener);
@@ -43,7 +43,7 @@ export default function CreditsModal() {
       <div className="absolute inset-0 bg-black/40" onClick={() => setOpen(false)} />
       {/* modal */}
       <div className="relative z-10 w-[90%] max-w-sm rounded-2xl bg-white shadow-xl border p-5">
-        <div className="text-base font-semibold mb-2">Low credits</div>
+        <div className="text-base font-semibold mb-2">Low Digital Credits</div>
         <div className="text-sm text-gray-600 mb-4">
           {message}
         </div>
@@ -60,7 +60,7 @@ export default function CreditsModal() {
               setOpen(false);
             }}
             className="px-3 py-2 rounded-xl text-sm text-white bg-purple-600 hover:bg-purple-700">
-            Buy credits
+            Buy Digital Credits
           </button>
         </div>
       </div>
