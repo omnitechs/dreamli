@@ -18,6 +18,7 @@ export default async function Header({ lang }: { lang: LanguageCode }) {
         { label: t('nav.shop'),        href: `https://shop.dreamli.nl/${lang}` },
         { label: t('nav.keychains'),   href: `${base}/keychains` },
         { label: t('nav.lithophanes'), href: `${base}/lithophanes` },
+        { label: t('nav.marketplace'), href: `${base}/marketplace` },
         { label: t('nav.contact'),     href: `${base}/contact` },
         { label: "AI",     href: `${base}/ai` }
     ] as const;
