@@ -8,6 +8,7 @@ import { analyzeModelUrl } from "@/lib/ai/model-metrics";
 import { TYPE_OPTIONS, COLOR_OPTIONS_BY_TYPE } from "@/lib/ai/color-data";
 import { useGetModelByIdQuery } from "@/app/(lang)/[lang]/ai/services/api";
 import { useTranslations } from "next-intl";
+import Link from 'next/link';
 
 function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
@@ -431,7 +432,7 @@ export default function PurchasePage() {
         <div className="rounded-xl border p-4 space-y-3">
           <div className="font-medium">{t('typeColor')}</div>
           <div className="text-xs text-gray-500">
-            <a href="/color-guide/">{t('colorHelp')}</a>
+            <Link href="/color-guide/">{t('colorHelp')}</Link>
           </div>
           <div className="flex flex-wrap gap-3 text-sm">
             {TYPE_OPTIONS.map((opt) => (

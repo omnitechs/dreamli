@@ -1,10 +1,7 @@
-// @flow
 import * as React from 'react';
 import useGenerator from "@/app/(lang)/[lang]/ai/hooks/useGenerator";
 
-type Props = {};
-
-export function RawGenerator(props: Props) {
+export function RawGenerator() {
     const {gen} = useGenerator()
     return (
 

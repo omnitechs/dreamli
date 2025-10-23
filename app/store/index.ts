@@ -21,9 +21,10 @@ const createNoopStorage = () => ({
     removeItem: async () => {},
 });
 
+import storageWeb from 'redux-persist/lib/storage';
 const storage =
     typeof window !== 'undefined'
-        ? require('redux-persist/lib/storage').default
+        ? storageWeb
         : createNoopStorage();
 
 const persistConfig = {

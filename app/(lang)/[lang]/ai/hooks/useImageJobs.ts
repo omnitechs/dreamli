@@ -4,7 +4,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addImages } from '@/app/store/slices/generatorSlice';
-import {data} from "autoprefixer";
 import useImages from "@/app/(lang)/[lang]/ai/hooks/useImages";
 
 
@@ -37,7 +36,6 @@ const isTerminal = (s?: JobStatus) => s === 'SUCCEEDED' || s === 'FAILED' || s =
 
 
 type Img = { id?: string; url?: string; src?: string; meta?: any };
-const getUrl = (img: Img) => img.url || img.src || '';
 
 export default function useImageJobs() {
     const dispatch = useDispatch();
@@ -180,8 +178,9 @@ export default function useImageJobs() {
 
     /* ---------------- start job ---------------- */
 
-    // @ts-ignore
-    const startJob = async ({ prompt, n = 1, size = '1024x1024' as ImgSize }) => {
+    const startJob = async (
+        { prompt, n = 1, size = '1024x1024' as ImgSize }: { prompt: string; n?: number; size?: ImgSize }
+    ) => {
 
         console.log('startjob')
 

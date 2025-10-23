@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import {
   useGetMarketplaceModelsQuery,
@@ -14,6 +14,7 @@ import {
   useGetModelLikesQuery,
 } from '@/app/(lang)/[lang]/ai/services/api';
 import { useDownloadModelMutation } from '@/app/(lang)/[lang]/ai/services/api';
+import LazyGlb from '@/components/GlbViewer';
 
 function slugify(s?: string) {
   const base = (s || '').toLowerCase();
@@ -130,7 +131,7 @@ function Card({ item, lang, canInteract, onLikeToggle }: { item: any; lang: stri
       setLikesCount(likesData.count);
       setLiked(!!likesData.userLiked);
     }
-  }, [likesData?.count, likesData?.userLiked]);
+  }, [likesData]);
 
   // 3D viewer modal state
   const [showViewer, setShowViewer] = useState(false);
@@ -141,7 +142,6 @@ function Card({ item, lang, canInteract, onLikeToggle }: { item: any; lang: stri
   const projectLink = `/${lang}/ai/projects/${slugify(item.projectName || item.owner?.name || 'project')}/${encodeURIComponent(item.projectId)}`;
 
   // Routing for auth redirects
-  const { usePathname, useRouter } = require('next/navigation');
   const pathname = usePathname();
   const router = useRouter();
 
@@ -407,7 +407,7 @@ function Card({ item, lang, canInteract, onLikeToggle }: { item: any; lang: stri
             </div>
             <div className="aspect-video bg-gray-50">
               {/* Lazy load GLB/FBX/OBJ via viewer */}
-              {React.createElement(require('@/components/GlbViewer').default, { modelUrl })}
+              <LazyGlb modelUrl={modelUrl} />
             </div>
           </div>
         </div>

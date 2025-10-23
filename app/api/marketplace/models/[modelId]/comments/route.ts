@@ -136,7 +136,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ modelId
   if (!dao?.create) {
     // Raw SQL fallback when DAO is unavailable
     try {
-      const commentId = require('nanoid').nanoid();
+      const commentId = nanoid();
       const rows = await prisma.$queryRaw<any[]>`INSERT INTO "ModelComment" ("id", "modelId", "userId", "content", "createdAt") VALUES (${commentId}, ${modelId}, ${userId}, ${content || ''}, NOW()) RETURNING "id", "content", "createdAt"`;
       const created = rows?.[0] || { id: commentId, content: content || '', createdAt: new Date() };
       const createdMedia: any[] = [];
@@ -162,7 +162,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ modelId
               : mime?.startsWith('video/')
               ? 'video'
               : 'file';
-            const mediaId = require('nanoid').nanoid();
+            const mediaId = nanoid();
             try {
               const mediaRows = await prisma.$queryRaw<any[]>`INSERT INTO "ModelCommentMedia" ("id", "commentId", "kind", "url", "mime", "createdAt") VALUES (${mediaId}, ${created.id}, ${kind}, ${url}, ${mime || null}, NOW()) RETURNING "id", "kind", "url", "mime", "createdAt"`;
               if (mediaRows?.[0]) createdMedia.push(mediaRows[0]);

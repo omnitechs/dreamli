@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import LazyGlb from '@/components/GlbViewer';
 import { useDownloadModelMutation } from '@/app/(lang)/[lang]/ai/services/api';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter, usePathname } from 'next/navigation';
 
 function pickBestModelUrl(modelUrls?: Record<string, string | undefined>) {
   if (!modelUrls) return undefined;
@@ -26,7 +26,6 @@ export default function ModelGridClient({ models }: { models: PublicModel[] }) {
   const [downloadModel] = useDownloadModelMutation();
   const params = useParams<{ lang: string }>();
   const lang = (params?.lang || 'en') as string;
-  const { useRouter, usePathname } = require('next/navigation');
   const router = useRouter();
   const pathname = usePathname();
 

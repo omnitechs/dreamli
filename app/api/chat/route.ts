@@ -56,7 +56,7 @@ export async function POST(req: Request) {
             idempotencyBase,
         });
         reservedAmount = resv.estimatedCost;
-    } catch (e) {
+    } catch {
         return new Response(JSON.stringify({ error: 'INSUFFICIENT_CREDITS' }), { status: 402 });
     }
 
@@ -66,7 +66,7 @@ export async function POST(req: Request) {
             id: "pmpt_68cec8de7af48190bb9b30a965b696bc0ae4cd64a9a94eae",
             version: "9",
         },
-        // @ts-ignore
+        // @ts-expect-error OpenAI SDK typings are stricter; our constructed messages array is compatible at runtime.
         input,
         reasoning: { summary: "auto" },
         tools: [

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useGetProjectsQuery, useCreateProjectMutation, useGetMarketplaceModelsQuery, useDownloadModelMutation } from '@/app/(lang)/[lang]/ai/services/api';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter, usePathname } from 'next/navigation';
 
 function slugify(s?: string) {
     const base = (s || '').toLowerCase();
@@ -30,7 +30,6 @@ export default function ProjectsPage() {
     const [page, setPage] = useState(1);
     const { data: marketData, isLoading: loadingMarket } = useGetMarketplaceModelsQuery({ page });
     const [downloadModel] = useDownloadModelMutation();
-    const { useRouter, usePathname } = require('next/navigation');
     const router = useRouter();
     const pathname = usePathname();
     const items = marketData?.items || [];

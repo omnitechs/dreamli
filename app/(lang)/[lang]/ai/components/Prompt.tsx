@@ -1,12 +1,7 @@
-// @flow
 import * as React from 'react';
 import usePrompt from "@/app/(lang)/[lang]/ai/hooks/usePrompt";
 
-type Props = {
-
-};
-
-export function Prompt(props: Props) {
+export function Prompt() {
     const {prompt,updatePrompt} = usePrompt()
     return (
         <div className="bg-white rounded-2xl shadow p-4 border">
