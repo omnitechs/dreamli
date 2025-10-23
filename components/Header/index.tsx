@@ -14,13 +14,15 @@ export default async function Header({ lang }: { lang: LanguageCode }) {
     const langMeta = (languages as readonly Language[]).find(l => l.code === lang);
     const base = (langMeta?.prefix ?? `/${lang}`) || ''; // respect '' for default lang
 
+    const shopHref = lang === 'en' ? 'https://shop.dreamli.nl' : `https://shop.dreamli.nl/${lang}`;
+
     const navItems = [
-        { label: t('nav.shop'),        href: `https://shop.dreamli.nl/${lang}` },
+        { label: t('nav.shop'),        href: shopHref },
         { label: t('nav.keychains'),   href: `${base}/keychains` },
         { label: t('nav.lithophanes'), href: `${base}/lithophanes` },
-        { label: t('nav.marketplace'), href: `${base}/marketplace` },
         { label: t('nav.contact'),     href: `${base}/contact` },
-        { label: "AI",     href: `${base}/ai` }
+        { label: "AI",                 href: `${base}/ai` },
+        { label: t('nav.marketplace'), href: `${base}/marketplace` }
     ] as const;
 
     return (
