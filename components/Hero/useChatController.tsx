@@ -59,7 +59,7 @@ export function useChatController(opts: Options) {
 
         const lastN = messages.slice(-maxMsgs);
         const userMsg = { from: 'user' as const, text: input.trim() };
-        const payload = { message: userMsg.text, history: lastN, locale };
+        const payload = { message: userMsg.text, history: lastN };
 
         // optimistic UI
         setMessages((m) => [...m, userMsg, { from: 'ai', text: '' }]);

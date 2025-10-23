@@ -1,6 +1,6 @@
 'use client';
 
-import { useChatController } from '@/components/Hero/useChatController';
+import { useHeroFreeChat } from '@/components/Hero/useHeroFreeChat';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import React from 'react';
@@ -202,7 +202,7 @@ function AIChatAssistant() {
     const locale = useLocale(); // optional, for per-locale storage separation
 
     const { messages, input, setInput, send, thinking, clearHistory } =
-        useChatController({
+        useHeroFreeChat({
             i18n: {
                 greeting: t("greeting"),
                 errorStreaming: t('errorStreaming')
