@@ -7,10 +7,7 @@ import {useDispatch, useSelector} from "react-redux";
 import type {RootState} from "@/app/store";
 import {useTranslations} from 'next-intl';
 
-type Props = {
-};
-
-export function ImageGallery(props: Props) {
+export function ImageGallery() {
     const t = useTranslations('AI.Page.ImageGallery');
     const gen = useSelector((s: RootState) => (s as any)?.generator) ?? {
         type: 'text', textPrompt: '', images: [], selected: [],

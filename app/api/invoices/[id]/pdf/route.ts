@@ -24,7 +24,11 @@ export async function GET(req: Request, ctx: { params: { id: string } }) {
   // Build a simple PDF invoice
   const doc = new PDFDocument({ size: 'A4', margin: 50 });
   const chunks: Uint8Array[] = [];
-  const stream = doc as unknown as NodeJS.ReadableStream & { on: Function };
+  type MinimalReadable = NodeJS.ReadableStream & {
+    on(event: 'data', listener: (chunk: Uint8Array) => void): unknown;
+    on(event: 'end', listener: () => void): unknown;
+  };
+  const stream = doc as unknown as MinimalReadable;
 
   return await new Promise<Response>((resolve) => {
     // Collect stream into buffer
