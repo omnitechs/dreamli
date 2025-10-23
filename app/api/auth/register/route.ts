@@ -6,6 +6,7 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { addCredits } from "@/lib/credits";
 import { SIGNUP_BONUS_DC, REFERRAL_BONUS_DC } from "@/lib/currency";
+import { splitName, subscribeToMailchimpAudience } from "@/lib/mailchimp";
 
 const schema = z.object({
     email: z.email(),
@@ -79,6 +80,19 @@ export async function POST(req: NextRequest) {
             } catch (e) {
                 console.error("Failed to award referral bonus", e);
             }
+        }
+
+        // Subscribe user to Mailchimp audience (no-op if not configured)
+        try {
+            const { firstName, lastName } = splitName(name ?? null);
+            await subscribeToMailchimpAudience({
+                email: normEmail,
+                firstName,
+                lastName,
+                tags: ["registered"],
+            });
+        } catch (e) {
+            console.error("Failed to subscribe user to Mailchimp", e);
         }
 
         const res = NextResponse.json({ ok: true, user, bonusApplied: true, bonusAmount: SIGNUP_BONUS_DC, referralApplied: Boolean(inviter?.id), referralBonusAmount: inviter?.id ? REFERRAL_BONUS_DC : 0 });

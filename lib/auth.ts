@@ -8,6 +8,7 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { addCredits } from "@/lib/credits";
 import { SIGNUP_BONUS_DC } from "@/lib/currency";
+import { subscribeToMailchimpAudience, splitName } from "@/lib/mailchimp";
 
 const credentialsSchema = z.object({
     email: z.email(),
@@ -85,6 +86,22 @@ export const {
                 });
             } catch (e) {
                 console.error("Failed to award signup bonus on createUser", e);
+            }
+
+            // Subscribe first-time users to Mailchimp audience (no-op if not configured)
+            try {
+                const email = user?.email ?? undefined;
+                if (email) {
+                    const { firstName, lastName } = splitName(user?.name ?? null);
+                    await subscribeToMailchimpAudience({
+                        email,
+                        firstName,
+                        lastName,
+                        tags: ["oauth"],
+                    });
+                }
+            } catch (e) {
+                console.error("Failed to subscribe user to Mailchimp on createUser", e);
             }
         },
     },

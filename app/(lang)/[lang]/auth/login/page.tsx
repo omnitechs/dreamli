@@ -8,12 +8,14 @@ export default async function LoginPage({
   params,
   searchParams,
 }: {
-  params: { lang: string };
+  // Next 15: params/searchParams are async
+  params: Promise<{ lang: string }>;
   // Next 15: searchParams must be awaited before accessing
   searchParams: Promise<{ redirect?: string | string[] }>;
 }) {
   const session = await auth();
-  const lang = params?.lang ?? "en";
+  const { lang: langParam } = await params;
+  const lang = langParam ?? "en";
   const t = await getTranslations("Auth.login");
 
   const sp = await searchParams;
