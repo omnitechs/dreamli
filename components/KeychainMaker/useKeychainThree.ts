@@ -3,9 +3,9 @@
 
 import { useEffect, useRef, useCallback } from 'react';
 import * as THREE from 'three';
-// @ts-ignore
+// @ts-expect-error three/examples modules are not typed in our build; runtime import is valid.
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-// @ts-ignore
+// @ts-expect-error STLLoader is provided by three/examples; no TS types bundled here.
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader';
 
 import {

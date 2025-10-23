@@ -76,7 +76,6 @@ export function useKeychainCompile(params: { scadPath: string; defines: Defines 
         }).finally(() => {
             firstRunRef.current = false;
         });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [scadPath, defines, nowTextHash, nowBaseHash, nowHoleHash, nowColorHash]);
 
     return { baseBuf, textBuf, holeBuf };

@@ -48,5 +48,7 @@ export function estimateMeshyCredits(kind: 'generation' | 'upscale') {
 
 // OpenAI image generation: flat €0.50 per call regardless of size or count
 export function estimateOpenAiImageCredits(_size: string, _count: number) {
+  // Mark parameters as intentionally unused to satisfy no-unused-vars
+  void _size; void _count;
   return eurToDc(0.5);
 }

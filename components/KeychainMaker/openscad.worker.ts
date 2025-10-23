@@ -1,7 +1,7 @@
 /// <reference lib="webworker" />
 
 // Types
-// @ts-ignore
+// @ts-expect-error Explicitly typed worker message payload; some toolchains flag next line in webworker context.
 type MsgIn = {
     scadPath: string;
     defines: Record<string, string | number | boolean>;
@@ -21,10 +21,9 @@ let fontsLoaded = false;
 const scadCache = new Map<string, string>();
 
 // Utilities
-// @ts-ignore
+// @ts-expect-error Dynamic import from public path with bundler hint; TS doesn't understand webpackIgnore on variable path.
 async function importFromPublic(path: string) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    // @ts-expect-error webpackIgnore is a bundler hint on dynamic import; safe at runtime.
     return await import(/* webpackIgnore: true */ path);
 }
 
@@ -121,25 +120,24 @@ ctx.onmessage = async (e: MessageEvent<MsgIn>) => {
         let stl: Uint8Array | null = null;
         try {
             stl = inst.FS.readFile(OUT);
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
+            // @ts-expect-error stl is a Uint8Array from Emscripten FS; byteLength is valid here.
             log("[fs] read", OUT, `(${stl.byteLength} bytes)`);
         } catch (re) {
             logErr("[fs] read failed:", String(re));
         }
 
         if (!stl || !stl.byteLength) {
-            ctx.postMessage({ ok: false, error: "No STL produced.", logs } as MsgOutErr);
+            ctx.postMessage({ ok: false, error: "No STL produced.", logs } as MsgOut);
             return;
         }
 
         // Transfer STL buffer
-        ctx.postMessage({ ok: true, stl, logs } as MsgOutOk, [stl.buffer]);
+        ctx.postMessage({ ok: true, stl, logs } as MsgOut, [stl.buffer]);
     } catch (err: any) {
         ctx.postMessage({
             ok: false,
             error: String(err?.message ?? err),
             logs: [],
-        } as MsgOutErr);
+        } as MsgOut);
     }
 };

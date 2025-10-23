@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
 
@@ -21,12 +20,6 @@ export default function ImageLightbox({
   showPlayButton = false,
   showBullets = true 
 }: ImageLightboxProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  const handleSlide = (currentIndex: number) => {
-    setCurrentIndex(currentIndex);
-  };
-
   return (
     <div className="image-lightbox-container">
       <ImageGallery
@@ -37,7 +30,6 @@ export default function ImageLightbox({
         showNav={true}
         showFullscreenButton={true}
         useBrowserFullscreen={true}
-        onSlide={handleSlide}
         lazyLoad={true}
         slideDuration={300}
         slideInterval={3000}

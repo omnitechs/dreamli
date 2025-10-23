@@ -37,7 +37,7 @@ export async function analyzeModelUrl(modelUrl: string): Promise<ModelMetrics> {
   // Collect all world-space geometries
   const geoms: THREE.BufferGeometry[] = [];
   scene.traverse((obj) => {
-    // @ts-ignore
+    // @ts-expect-error Three.js runtime type guard on traversed object; `isMesh` exists at runtime but not in TS typing here.
     if ((obj as THREE.Mesh).isMesh) {
       const mesh = obj as THREE.Mesh;
       const geom = mesh.geometry.clone();

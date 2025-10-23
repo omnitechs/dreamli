@@ -2,7 +2,6 @@ import { PrismaClient } from "@prisma/client";
 import { withAccelerate } from "@prisma/extension-accelerate";
 
 declare global {
-    // eslint-disable-next-line no-var
     var prisma: any | undefined;
 }
 

@@ -21,7 +21,7 @@ export function useKeychainState() {
     useEffect(() => {
         (async () => {
             try {
-                // @ts-ignore
+                // @ts-expect-error Dynamic import with webpackIgnore bundler hint; TS does not type this pattern.
                 const mod: any = await import(/* webpackIgnore: true */ '/openscad/openscad.fonts.js');
                 const arr: string[] = Array.isArray(mod?.AVAILABLE_FONTS) ? mod.AVAILABLE_FONTS : [];
                 const sane = arr.length ? arr : [

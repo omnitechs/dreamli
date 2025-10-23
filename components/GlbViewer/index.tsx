@@ -77,7 +77,7 @@ export default function LazyGlb({
         link.rel = 'preload';
         link.as = 'fetch';
         link.href = modelUrl;
-        // @ts-ignore
+        // @ts-expect-error Type 'model/gltf-binary' is a non-standard MIME for <link>; used as a preload hint for GLB.
         link.type = 'model/gltf-binary';
         link.crossOrigin = 'anonymous';
         document.head.appendChild(link);
