@@ -1022,5 +1022,19 @@
       "failedAddToCart": "Échec de l’ajout au panier. Veuillez réessayer.",
       "previewAlt": "Image d’aperçu"
     }
+  },
+  "Credits": {
+    "Page": {
+      "title": "Acheter des Crédits Digitaux",
+      "description": "Achetez des Crédits Digitaux en toute sécurité via Stripe. Choisissez un forfait ci-dessous.",
+      "notice": {
+        "success": "Paiement réussi ! Vos crédits apparaîtront sous peu.",
+        "cancel": "Paiement annulé. Aucun débit n'a été effectué.",
+        "failed": "Le paiement a échoué. Veuillez réessayer ou utiliser une autre carte."
+      },
+      "balanceLabel": "Solde actuel (DC)",
+      "packagesLabel": "Forfaits",
+      "backToAI": "Retour à l’IA"
+    }
   }
 }

@@ -1021,5 +1021,19 @@
       "failedAddToCart": "Nie udało się dodać do koszyka. Spróbuj ponownie.",
       "previewAlt": "Obraz podglądu"
     }
+  },
+  "Credits": {
+    "Page": {
+      "title": "Kup Kredyty Cyfrowe",
+      "description": "Kupuj Kredyty Cyfrowe bezpiecznie przez Stripe. Wybierz pakiet poniżej.",
+      "notice": {
+        "success": "Płatność zakończona sukcesem! Twoje kredyty wkrótce się pojawią.",
+        "cancel": "Płatność anulowana. Nie pobrano żadnych środków.",
+        "failed": "Płatność nie powiodła się. Spróbuj ponownie lub użyj innej karty."
+      },
+      "balanceLabel": "Aktualne saldo (DC)",
+      "packagesLabel": "Pakiety",
+      "backToAI": "Wróć do AI"
+    }
   }
 }

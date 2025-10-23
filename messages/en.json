@@ -1049,5 +1049,19 @@
       "failedAddToCart": "Failed to add to cart. Please try again.",
       "previewAlt": "Preview image"
     }
+  },
+  "Credits": {
+    "Page": {
+      "title": "Buy Digital Credits",
+      "description": "Purchase Digital Credits securely via Stripe. Choose a package below.",
+      "notice": {
+        "success": "Payment successful! Your credits will appear shortly.",
+        "cancel": "Payment canceled. No charges were made.",
+        "failed": "Payment failed. Please try again or use a different card."
+      },
+      "balanceLabel": "Current balance (DC)",
+      "packagesLabel": "Packages",
+      "backToAI": "Back to AI"
+    }
   }
 }

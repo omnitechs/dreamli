@@ -8,11 +8,13 @@ import type { AppDispatch, RootState } from '@/app/store';
 import { hydrateMe } from '@/app/store/slices/accountUserSlice';
 import { CREDIT_PACKAGES, computePackageDcTotal } from '@/lib/currency';
 import { useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 export default function CreditsPage() {
   const { lang } = useParams<{ lang: LanguageCode }>();
   const dispatch = useDispatch<AppDispatch>();
   const me = useSelector((s: RootState) => s.accountUser.me);
+  const t = useTranslations('Credits.Page');
   const [balance, setBalance] = useState<number | null>(null)
   const [loading, setLoading] = useState(false)
   const [notice, setNotice] = useState<string | null>(null)
@@ -43,16 +45,16 @@ export default function CreditsPage() {
       const status = url.searchParams.get('status')
       if (status) {
         if (status === 'success') {
-          setNotice('Payment successful! Your credits will appear shortly.')
+          setNotice(t('notice.success'))
           setNoticeKind('success')
           // refresh immediately and shortly after to catch webhook update
           refresh()
           try { setTimeout(() => { refresh().catch(() => {}) }, 1500) } catch {}
         } else if (status === 'cancel') {
-          setNotice('Payment canceled. No charges were made.')
+          setNotice(t('notice.cancel'))
           setNoticeKind('warning')
         } else if (status === 'failed') {
-          setNotice('Payment failed. Please try again or use a different card.')
+          setNotice(t('notice.failed'))
           setNoticeKind('error')
         }
         url.searchParams.delete('status')
@@ -98,8 +100,8 @@ export default function CreditsPage() {
 
   return (
     <div className="max-w-xl mx-auto p-6 space-y-6">
-      <h1 className="text-2xl font-semibold">Buy Digital Credits</h1>
-      <p className="text-sm text-gray-600">Purchase Digital Credits securely via Stripe. Choose a package below.</p>
+      <h1 className="text-2xl font-semibold">{t('title')}</h1>
+      <p className="text-sm text-gray-600">{t('description')}</p>
 
       {notice && (
         <div
@@ -118,12 +120,12 @@ export default function CreditsPage() {
       )}
 
       <div className="rounded-xl border bg-white p-4 space-y-3">
-        <div className="text-sm text-gray-500">Current balance (DC)</div>
+        <div className="text-sm text-gray-500">{t('balanceLabel')}</div>
         <div className="text-3xl font-semibold">{balance === null ? '—' : Math.round(balance)}</div>
       </div>
 
       <div className="rounded-xl border bg-white p-4 space-y-4">
-        <div className="text-sm text-gray-700">Packages</div>
+        <div className="text-sm text-gray-700">{t('packagesLabel')}</div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {CREDIT_PACKAGES.map(pkg => {
             const dc = computePackageDcTotal(pkg);
@@ -143,7 +145,7 @@ export default function CreditsPage() {
       </div>
 
       <div className="text-sm">
-        <Link href={`/${lang}/ai`} className="underline">Back to AI</Link>
+        <Link href={`/${lang}/ai`} className="underline">{t('backToAI')}</Link>
       </div>
     </div>
   )

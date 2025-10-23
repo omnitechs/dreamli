@@ -1043,5 +1043,19 @@
       "failedAddToCart": "Toevoegen aan winkelwagen mislukt. Probeer opnieuw.",
       "previewAlt": "Voorbeeldafbeelding"
     }
+  },
+  "Credits": {
+    "Page": {
+      "title": "Digitale Credits kopen",
+      "description": "Koop digitale credits veilig via Stripe. Kies hieronder een pakket.",
+      "notice": {
+        "success": "Betaling geslaagd! Je credits verschijnen binnenkort.",
+        "cancel": "Betaling geannuleerd. Er is niets in rekening gebracht.",
+        "failed": "Betaling mislukt. Probeer het opnieuw of gebruik een andere kaart."
+      },
+      "balanceLabel": "Huidig saldo (DC)",
+      "packagesLabel": "Pakketten",
+      "backToAI": "Terug naar AI"
+    }
   }
 }

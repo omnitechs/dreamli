@@ -1022,5 +1022,19 @@
       "failedAddToCart": "Zum Warenkorb hinzufügen fehlgeschlagen. Bitte versuche es erneut.",
       "previewAlt": "Vorschaubild"
     }
+  },
+  "Credits": {
+    "Page": {
+      "title": "Digitale Credits kaufen",
+      "description": "Kaufen Sie digitale Credits sicher über Stripe. Wählen Sie unten ein Paket.",
+      "notice": {
+        "success": "Zahlung erfolgreich! Ihre Credits erscheinen in Kürze.",
+        "cancel": "Zahlung abgebrochen. Es wurde keine Abbuchung vorgenommen.",
+        "failed": "Zahlung fehlgeschlagen. Bitte versuchen Sie es erneut oder verwenden Sie eine andere Karte."
+      },
+      "balanceLabel": "Aktuelles Guthaben (DC)",
+      "packagesLabel": "Pakete",
+      "backToAI": "Zurück zur KI"
+    }
   }
 }
