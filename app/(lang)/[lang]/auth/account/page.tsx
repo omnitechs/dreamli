@@ -132,18 +132,28 @@ export default async function AccountPage(props: { params: Promise<{ lang: Langu
 
   // Invoices list
   if (me) {
-    const rows = await prisma.invoice.findMany({
-      where: { userId: me.id },
-      select: { id: true, createdAt: true, amountEur: true, creditsGranted: true, receiptUrl: true },
-      orderBy: { createdAt: 'desc' },
-    });
-    invoices = (rows as any[]).map(r => ({
-      id: r.id,
-      createdAt: (r.createdAt instanceof Date ? r.createdAt.toISOString() : String(r.createdAt)),
-      amountEur: Number(String(r.amountEur || 0)),
-      creditsGranted: Number(String(r.creditsGranted || 0)),
-      receiptUrl: (r as any).receiptUrl ?? null,
-    }));
+    try {
+      const invDelegate = (prisma as any).invoice;
+      if (invDelegate && typeof invDelegate.findMany === 'function') {
+        const rows = await invDelegate.findMany({
+          where: { userId: me.id },
+          select: { id: true, createdAt: true, amountEur: true, creditsGranted: true, receiptUrl: true },
+          orderBy: { createdAt: 'desc' },
+        });
+        invoices = (rows as any[]).map(r => ({
+          id: r.id,
+          createdAt: (r.createdAt instanceof Date ? r.createdAt.toISOString() : String(r.createdAt)),
+          amountEur: Number(String(r.amountEur || 0)),
+          creditsGranted: Number(String(r.creditsGranted || 0)),
+          receiptUrl: (r as any).receiptUrl ?? null,
+        }));
+      } else {
+        invoices = [];
+      }
+    } catch (e) {
+      console.warn('Invoice model not available; skipping invoices section. Consider running Prisma migrations.', (e as any)?.message || e);
+      invoices = [];
+    }
   }
 
   return (
