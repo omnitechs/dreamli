@@ -20,8 +20,8 @@ function pickBestModelUrl(modelUrls?: Record<string, string | undefined>) {
   return modelUrls.glb || modelUrls.fbx || modelUrls.obj || modelUrls.usdz || undefined;
 }
 
-export default async function ProjectPublicPage({ params }: { params: { slug: string; projectId: string } }) {
-  const { projectId, slug } = params;
+export default async function ProjectPublicPage({ params }: { params: Promise<{ slug: string; projectId: string }> }) {
+  const { projectId, slug } = await params;
 
   const project = await prisma.project.findUnique({
     where: { id: projectId },

@@ -1,5 +1,6 @@
-export default function Head({ params }: { params: { slug: string; modelId: string } }) {
-  const title = decodeURIComponent((params?.slug || '3d-model').replace(/-/g, ' '));
+export default async function Head({ params }: { params: Promise<{ slug: string; modelId: string }> }) {
+  const { slug } = await params;
+  const title = decodeURIComponent((slug || '3d-model').replace(/-/g, ' '));
   return (
     <>
       <title>{`${title} – 3D Model`}</title>

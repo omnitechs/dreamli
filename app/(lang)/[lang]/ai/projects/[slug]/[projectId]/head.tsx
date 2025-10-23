@@ -4,8 +4,8 @@ function titleize(s?: string | null) {
   return (s || 'Project').toString();
 }
 
-export default async function Head({ params }: { params: { slug: string; projectId: string } }) {
-  const { projectId } = params;
+export default async function Head({ params }: { params: Promise<{ slug: string; projectId: string }> }) {
+  const { projectId } = await params;
   let projectName = 'Project';
   try {
     const project = await prisma.project.findUnique({ where: { id: projectId }, select: { name: true } });
