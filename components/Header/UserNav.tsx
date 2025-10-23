@@ -96,15 +96,12 @@ export default function UserNav({ base }: Props) {
   }, [me, dispatch]);
 
   if (!me) {
-    // Not logged in: show sign-in button
+    // Not logged in: show sign-in button styled like other nav links
     return (
       <Link
         href={loginHref + (pathname ? `?redirect=${encodeURIComponent(pathname)}` : '')}
-        className="inline-flex items-center gap-2 rounded-full bg-gradient-to-tr from-purple-600 to-fuchsia-500 text-white px-4 py-2 text-sm font-medium shadow-lg shadow-fuchsia-500/25 hover:shadow-fuchsia-500/40 hover:brightness-105 active:brightness-95 transition-all"
+        className="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-sm text-gray-700/90 hover:text-purple-700 hover:bg-purple-50 transition-all leading-none"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
-          <path d="M12 2a7 7 0 00-7 7v1a3 3 0 01-3 3h4v6a3 3 0 003 3h6a3 3 0 003-3v-6h4a3 3 0 01-3-3V9a7 7 0 00-7-7z"/>
-        </svg>
         <span>Sign in</span>
       </Link>
     );
@@ -129,15 +126,14 @@ export default function UserNav({ base }: Props) {
              title={me.name || me.email || 'Account'}>
           {initialsFromName(me.name || me.email || 'User')}
         </div>
-        {/* Name + credit (desktop) */}
+        {/* Name only (desktop) */}
         <div className="hidden sm:flex flex-col leading-tight mr-1">
           <span className="text-xs text-gray-600">{me.name || me.email}</span>
-          <span className="text-[11px] text-purple-700 font-medium">{credit} DC</span>
         </div>
       </Link>
 
       {/* Hover card */}
-      <div className="pointer-events-none opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto absolute right-0 mt-2 w-56 rounded-xl border border-gray-200 bg-white shadow-xl ring-1 ring-black/5 transition-opacity">
+      <div className="pointer-events-none opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto absolute right-0 top-full w-56 rounded-xl border border-gray-200 bg-white shadow-xl ring-1 ring-black/5 transition-opacity">
         <div className="p-3">
           <div className="flex items-center gap-3">
             <div className={`h-10 w-10 rounded-full bg-gradient-to-br ${avatarColor} flex items-center justify-center text-sm font-semibold text-gray-800`}>
@@ -153,6 +149,10 @@ export default function UserNav({ base }: Props) {
           <Link href={accountHref} className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4 text-gray-500"><path d="M12 12a5 5 0 100-10 5 5 0 000 10zm-9 9a9 9 0 1118 0H3z"/></svg>
             Account
+          </Link>
+          <Link href={`${base || ''}/credits`} className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4 text-gray-500"><path d="M12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9S3 7.03 3 12s4.03 9 9 9zm-.5-13h1a2.5 2.5 0 110 5h-1a.5.5 0 000 1h2a.5.5 0 010 1h-1v1a.5.5 0 01-1 0v-1h-1a2.5 2.5 0 110-5h1a.5.5 0 000-1h-2a.5.5 0 010-1h1v-1a.5.5 0 011 0v1z"/></svg>
+            Buy credits
           </Link>
           <button
             onClick={async () => {
