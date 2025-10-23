@@ -29,26 +29,39 @@ export default async function AccountPage(props: { params: Promise<{ lang: Langu
   const userId = (session!.user as any)?.id as string | undefined;
   const userEmail = session.user?.email as string | undefined;
 
-  let me = null as null | { id: string; name: string | null; email: string | null; createdAt: Date; role: any; creditsBalance: any; referralCode: string; referredById: string | null };
-  if (userId) {
-    me = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { id: true, name: true, email: true, createdAt: true, role: true, creditsBalance: true, referralCode: true, referredById: true },
-    });
-  } else if (userEmail) {
-    me = await prisma.user.findUnique({
-      where: { email: userEmail },
-      select: { id: true, name: true, email: true, createdAt: true, role: true, creditsBalance: true, referralCode: true, referredById: true },
-    });
+  let hasReferral = true;
+  let me = null as null | { id: string; name: string | null; email: string | null; createdAt: Date; role: any; creditsBalance: any; referralCode?: string; referredById: string | null };
+  const baseSelect = { id: true, name: true, email: true, createdAt: true, role: true, creditsBalance: true, referredById: true } as const;
+
+  async function loadMeWithReferralById(id?: string, email?: string) {
+    if (!id && !email) return null;
+    try {
+      if (id) {
+        return await prisma.user.findUnique({ where: { id }, select: { ...baseSelect, referralCode: true } as any }) as any;
+      } else {
+        return await prisma.user.findUnique({ where: { email: email! }, select: { ...baseSelect, referralCode: true } as any }) as any;
+      }
+    } catch (e: any) {
+      // PrismaClientValidationError when unknown field referralCode exists in select
+      hasReferral = false;
+      console.warn('Referral column not available; proceeding without referral fields. Consider running Prisma migrations.', e?.message || e);
+      if (id) {
+        return await prisma.user.findUnique({ where: { id }, select: baseSelect as any }) as any;
+      } else {
+        return await prisma.user.findUnique({ where: { email: email! }, select: baseSelect as any }) as any;
+      }
+    }
   }
 
+  me = await loadMeWithReferralById(userId, userEmail);
+
   // Server-side referral claim for users created via OAuth or other flows
-  if (me && !me.referredById) {
+  if (hasReferral && me && !me.referredById) {
     try {
       const cookieStore = await cookies();
       const refCookie = cookieStore.get('ref')?.value || cookieStore.get('referral')?.value || null;
       if (refCookie) {
-        const inviter = await prisma.user.findUnique({ where: { referralCode: refCookie }, select: { id: true } });
+        const inviter = await prisma.user.findUnique({ where: { referralCode: refCookie as any }, select: { id: true } as any });
         if (inviter && inviter.id !== me.id) {
           await prisma.user.update({ where: { id: me.id }, data: { referredById: inviter.id } });
           me.referredById = inviter.id;
@@ -150,7 +163,7 @@ export default async function AccountPage(props: { params: Promise<{ lang: Langu
         </div>
       </section>
 
-      {me && (
+      {hasReferral && me && me.referralCode && (
         <ReferralPanel
           lang={lang}
           referralCode={me.referralCode}
