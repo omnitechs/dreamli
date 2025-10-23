@@ -44,7 +44,8 @@ export default async function AccountPage(props: { params: Promise<{ lang: Langu
   // Server-side referral claim for users created via OAuth or other flows
   if (me && !me.referredById) {
     try {
-      const refCookie = cookies().get('ref')?.value || cookies().get('referral')?.value || null;
+      const cookieStore = await cookies();
+      const refCookie = cookieStore.get('ref')?.value || cookieStore.get('referral')?.value || null;
       if (refCookie) {
         const inviter = await prisma.user.findUnique({ where: { referralCode: refCookie }, select: { id: true } });
         if (inviter && inviter.id !== me.id) {
@@ -62,7 +63,7 @@ export default async function AccountPage(props: { params: Promise<{ lang: Langu
             console.error('Failed to award referral bonus on account page claim', e);
           }
           try {
-            cookies().set('ref', '', { path: '/', maxAge: 0 });
+            cookieStore.set('ref', '', { path: '/', maxAge: 0 });
           } catch {}
         }
       }

@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
         const passwordHash = await bcrypt.hash(password, 12);
 
         // Determine inviter via referral cookie if present
-        const jar = cookies();
+        const jar = await cookies();
         const referralCookie = jar.get('ref')?.value || jar.get('referral')?.value || null;
         let inviter: { id: string } | null = null;
         if (referralCookie) {

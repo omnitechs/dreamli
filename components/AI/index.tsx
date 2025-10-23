@@ -22,13 +22,17 @@ export default async function AI({lang}: { lang: LanguageCode }) {
                         <p className="text-xl text-[#2E2E2E]/80 max-w-4xl mx-auto leading-relaxed mb-8">
                             {t('subtitle')}
                         </p>
-                        <Link
-                            href="https://ai.dreamli.nl/"
-                            className="inline-flex items-center gap-3 bg-gradient-to-r from-[#8472DF] to-[#93C4FF] text-white px-8 py-4 rounded-full text-lg font-bold hover:from-[#8472DF]/90 hover:to-[#93C4FF]/90 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 whitespace-nowrap cursor-pointer"
-                        >
-                            <i className="ri-magic-line text-xl w-6 h-6 flex items-center justify-center"></i>
-                            {t('cta')}
-                        </Link>
+                        <div className="flex justify-center max-w-full">
+                            <Link
+                                href="https://ai.dreamli.nl/"
+                                className="inline-flex items-center gap-3 bg-gradient-to-r from-[#8472DF] to-[#93C4FF] text-white px-8 py-4 rounded-full text-lg font-bold hover:from-[#8472DF]/90 hover:to-[#93C4FF]/90 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 cursor-pointer max-w-full w-full sm:w-auto flex-wrap min-h-[48px]"
+                            >
+                                <span className="hidden sm:flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7" aria-hidden>
+                                    <i className="ri-magic-line text-xl" />
+                                </span>
+                                <span className="leading-snug min-w-0 break-words whitespace-normal text-center">{t('cta')}</span>
+                            </Link>
+                        </div>
                     </div>
 
                     {/* ---------- Content grid ---------- */}
