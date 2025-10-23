@@ -3,7 +3,8 @@ import type { MetadataRoute } from 'next';
 import { prisma } from '@/lib/prisma';
 
 // Regenerate the sitemap periodically to include new DB content
-export const revalidate = 60 * 60; // 1 hour
+// Note: Next.js requires this to be a literal number (not an expression) in route configs.
+export const revalidate = 3600; // 1 hour
 
 const SITE = 'https://dreamli.nl';
 const LANGS = ['en', 'nl', 'de', 'fr', 'pl'] as const;
