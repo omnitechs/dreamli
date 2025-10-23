@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
+import ModelGridClient from './ModelGridClient';
 
 function slugify(s?: string | null) {
   const base = (s || '').toString().toLowerCase();
@@ -140,46 +141,8 @@ export default async function ProjectPublicPage({ params }: { params: Promise<{ 
         {!models.length ? (
           <div className="text-sm text-gray-500">No models found for this project yet.</div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {models.map((m: any) => {
-              const bestUrl = pickBestModelUrl(m.modelUrls);
-              return (
-                <div key={m.id} className="border rounded-lg overflow-hidden">
-                  {m.thumbnailUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={m.thumbnailUrl} alt={m.prompt || '3D model'} className="w-full h-40 object-cover" />
-                  ) : (
-                    <div className="w-full h-40 bg-gray-100 flex items-center justify-center text-gray-400">No preview</div>
-                  )}
-                  <div className="p-3 space-y-2">
-                    <div className="text-sm line-clamp-2">{m.prompt || '3D Model'}</div>
-                    <div className="text-xs text-gray-500 flex items-center justify-between">
-                      <span>{(m.kind || '').toString()}</span>
-                      <span>{new Date(m.createdAt).toLocaleDateString()}</span>
-                    </div>
-                    <div className="flex gap-2 pt-1">
-                      <Link
-                        href={`/en/ai/purchase?modelId=${encodeURIComponent(m.id)}`}
-                        className="px-3 py-1.5 text-sm rounded-md border bg-black text-white"
-                      >
-                        Buy
-                      </Link>
-                      {bestUrl ? (
-                        <a
-                          href={bestUrl}
-                          className="px-3 py-1.5 text-sm rounded-md border hover:bg-gray-50"
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          Download
-                        </a>
-                      ) : null}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          // Client-side interactive grid that opens a 3D viewer on click
+          <ModelGridClient models={models as any} />
         )}
       </div>
 

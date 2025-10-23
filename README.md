@@ -20,6 +20,12 @@ You can start editing the page by modifying `app/GeneratorPlayground.tsx`. The p
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Authentication and Google Sign-in
+
+This project uses NextAuth (Auth.js) with Google as an OAuth provider. To configure Google Cloud Console correctly, follow the detailed guide:
+
+- docs/google-oauth-setup.md
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
