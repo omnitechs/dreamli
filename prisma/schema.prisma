@@ -8,7 +8,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
 model Project {
   id        String   @id @default(cuid())
   name      String
@@ -18,49 +17,48 @@ model Project {
 }
 
 model Commit {
-  id         String   @id @default(cuid())
-  projectId  String
-  parentId   String?
-  snapshot   Json
-  message    String?
-  createdAt  DateTime @default(now())
+  id        String   @id @default(cuid())
+  projectId String
+  parentId  String?
+  snapshot  Json
+  message   String?
+  createdAt DateTime @default(now())
 
-  project    Project  @relation(fields: [projectId], references: [id])
-  parent     Commit?  @relation("CommitParent", fields: [parentId], references: [id])
-  children   Commit[] @relation("CommitParent")
+  project  Project  @relation(fields: [projectId], references: [id])
+  parent   Commit?  @relation("CommitParent", fields: [parentId], references: [id])
+  children Commit[] @relation("CommitParent")
 }
 
 // prisma/schema.prisma
 model ImageJob {
-  id         String   @id @default(cuid())
-  prompt     String
-  size       String   // '512x512' | '1024x1024' | '2048x2048'
-  n          Int
-  status     String   // 'QUEUED' | 'RUNNING' | 'SUCCEEDED' | 'FAILED' | 'CANCELED'
-  error      String?  // reason if failed/canceled
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  refs      Json?    // <-- add this
+  id        String   @id @default(cuid())
+  prompt    String
+  size      String // '512x512' | '1024x1024' | '2048x2048'
+  n         Int
+  status    String // 'QUEUED' | 'RUNNING' | 'SUCCEEDED' | 'FAILED' | 'CANCELED'
+  error     String? // reason if failed/canceled
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  refs      Json? // <-- add this
   // basic accounting to let UI show progress quickly
-  emitted    Int      @default(0)
+  emitted   Int      @default(0)
 
-  chunks     ImageChunk[]
+  chunks ImageChunk[]
 }
 
 model ImageChunk {
-  id         String   @id @default(cuid())
-  jobId      String
-  index      Int      // 0..n-1 sequence of emitted images
+  id        String   @id @default(cuid())
+  jobId     String
+  index     Int // 0..n-1 sequence of emitted images
   // store a durable URL (after you upload); if upload fails, keep base64 for replay
-  url        String?
-  base64     String?  // short-lived fallback; clear later if you want
-  createdAt  DateTime @default(now())
+  url       String?
+  base64    String? // short-lived fallback; clear later if you want
+  createdAt DateTime @default(now())
 
-  job        ImageJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  job ImageJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
 
   @@unique([jobId, index])
 }
-
 
 enum Role {
   user
@@ -68,49 +66,54 @@ enum Role {
 }
 
 model User {
-  id            String   @id @default(cuid())
+  id            String    @id @default(cuid())
   name          String?
-  email         String?  @unique
+  email         String?   @unique
   emailVerified DateTime?
   image         String?
 
   // Credentials support
-  passwordHash  String?  // null for OAuth-only users
-  role          Role     @default(user)
+  passwordHash String? // null for OAuth-only users
+  role         Role    @default(user)
 
   // Auth.js relations
-  accounts      Account[]
-  sessions      Session[]
-  creditLedger  CreditLedger[]
-  invoices      Invoice[]
+  accounts     Account[]
+  sessions     Session[]
+  creditLedger CreditLedger[]
+  invoices     Invoice[]
+
+  // Marketplace engagement back-relations
+  modelLikes     ModelLike[]
+  modelComments  ModelComment[]
+  modelPrints    ModelPrint[]
 
   creditsBalance Decimal @default(0) @db.Decimal(20, 2)
 
   // Referral system
-  referralCode   String   @unique @default(cuid())
-  referredById   String?
-  referredBy     User?    @relation("UserReferrals", fields: [referredById], references: [id])
-  referrals      User[]   @relation("UserReferrals")
+  referralCode String  @unique @default(cuid())
+  referredById String?
+  referredBy   User?   @relation("UserReferrals", fields: [referredById], references: [id])
+  referrals    User[]  @relation("UserReferrals")
 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([referredById])
 }
 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?
-  access_token       String?
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?
-  session_state      String?
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -135,17 +138,17 @@ model VerificationToken {
 }
 
 model CreditLedger {
-  id              String   @id @default(cuid())
-  userId          String
+  id             String   @id @default(cuid())
+  userId         String
   // positive = credit, negative = debit
-  delta           Decimal  @db.Decimal(20, 2)
-  reason          String
+  delta          Decimal  @db.Decimal(20, 2)
+  reason         String
   // allow dedupe/retry safety
-  idempotencyKey  String?  @unique
+  idempotencyKey String?  @unique
   // optional external reference (order id, etc.)
-  reference       String?
-  balanceAfter    Decimal  @db.Decimal(20, 2)
-  createdAt       DateTime @default(now())
+  reference      String?
+  balanceAfter   Decimal  @db.Decimal(20, 2)
+  createdAt      DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -153,16 +156,82 @@ model CreditLedger {
 }
 
 model Invoice {
-  id                     String   @id @default(cuid())
-  userId                 String
-  user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  amountEur              Decimal  @db.Decimal(10, 2)
-  creditsGranted         Decimal  @db.Decimal(20, 2)
-  stripeSessionId        String?
-  stripePaymentIntentId  String?  @unique
-  stripeChargeId         String?
-  receiptUrl             String?
-  createdAt              DateTime @default(now())
+  id                    String   @id @default(cuid())
+  userId                String
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amountEur             Decimal  @db.Decimal(10, 2)
+  creditsGranted        Decimal  @db.Decimal(20, 2)
+  stripeSessionId       String?
+  stripePaymentIntentId String?  @unique
+  stripeChargeId        String?
+  receiptUrl            String?
+  createdAt             DateTime @default(now())
 
   @@index([userId, createdAt])
+}
+
+model ModelLike {
+  id        String   @id @default(cuid())
+  modelId   String
+  userId    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([modelId, userId])
+  @@index([modelId, createdAt])
+}
+
+model ModelComment {
+  id        String   @id @default(cuid())
+  modelId   String
+  userId    String
+  content   String
+  createdAt DateTime @default(now())
+
+  user  User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  media ModelCommentMedia[]
+
+  @@index([modelId, createdAt])
+}
+
+
+model ModelPrint {
+  id        String   @id @default(cuid())
+  modelId   String
+  userId    String
+  text      String?
+  createdAt DateTime @default(now())
+
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  media ModelPrintMedia[]
+
+  @@index([modelId, createdAt])
+}
+
+model ModelPrintMedia {
+  id        String   @id @default(cuid())
+  printId   String
+  kind      String   // 'image' | 'video' | 'file'
+  url       String
+  mime      String?
+  createdAt DateTime @default(now())
+
+  print ModelPrint @relation(fields: [printId], references: [id], onDelete: Cascade)
+
+  @@index([printId])
+}
+
+
+model ModelCommentMedia {
+  id        String   @id @default(cuid())
+  commentId String
+  kind      String   // 'image' | 'video' | 'file'
+  url       String
+  mime      String?
+  createdAt DateTime @default(now())
+
+  comment ModelComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@index([commentId])
 }

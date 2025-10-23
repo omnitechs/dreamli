@@ -4,7 +4,7 @@ import React, { useMemo, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import LazyGlb from '@/components/GlbViewer';
-import { useGetModelByIdQuery, useGetPublicCommitByIdQuery } from '@/app/(lang)/[lang]/ai/services/api';
+import { useGetModelByIdQuery, useGetPublicCommitByIdQuery, useDownloadModelMutation } from '@/app/(lang)/[lang]/ai/services/api';
 
 function pickBestModelUrl(modelUrls?: Record<string, string | undefined>) {
   if (!modelUrls) return undefined;
@@ -28,6 +28,7 @@ export default function ModelDetailsPage() {
   const modelId = params?.modelId as string;
 
   const { data: model, isFetching: loadingModel, isError: modelErr } = useGetModelByIdQuery({ modelId }, { skip: !modelId });
+  const [downloadModel] = useDownloadModelMutation();
   const commitId = model?.commitId as string | undefined;
   const { data: commit, isFetching: loadingCommit } = useGetPublicCommitByIdQuery({ commitId: commitId as string }, { skip: !commitId });
 
@@ -77,8 +78,41 @@ export default function ModelDetailsPage() {
           {model?.id ? (
             <Link href={`/en/ai/purchase?modelId=${encodeURIComponent(model.id)}`} className="px-3 py-2 rounded-xl shadow text-sm border bg-black text-white">Buy</Link>
           ) : null}
-          {modelUrl ? (
-            <a href={modelUrl} target="_blank" rel="noreferrer" className="px-3 py-2 rounded-xl shadow text-sm border hover:bg-gray-50">Download</a>
+          {model?.id ? (
+            <button onClick={async () => {
+              try {
+                const resp = await fetch(`/api/marketplace/models/${encodeURIComponent(model?.id || '')}/entitlement`, { cache: 'no-store' });
+                if (resp.status === 401) {
+                  router.push(`/en/auth/login?redirect=${encodeURIComponent(`/en/ai/models/${computedSlug}/${encodeURIComponent(modelId)}`)}`);
+                  return;
+                }
+                const ej = await resp.json().catch(() => ({ owned: false }));
+                const owned = !!ej?.owned;
+                if (!owned) {
+                  const ok = window.confirm('This is gonna cost you 750 DC, do you want to download?');
+                  if (!ok) return;
+                }
+                const res = await downloadModel({ modelId: model.id as any }).unwrap();
+                const url = (res as any)?.url;
+                if (url) window.open(url, '_blank');
+              } catch (e: any) {
+                const status = e?.status || e?.originalStatus;
+                if (status === 401) {
+                  router.push(`/en/auth/login?redirect=${encodeURIComponent(`/en/ai/models/${computedSlug}/${encodeURIComponent(modelId)}`)}`);
+                  return;
+                }
+                if (status === 402) {
+                  const go = window.confirm('Insufficient credits. Buy credits now?');
+                  if (go) router.push('/en/credits');
+                  return;
+                }
+                if (status === 404) {
+                  window.alert('OBJ file is not available for this model yet.');
+                  return;
+                }
+                window.alert('Download failed. Please try again later.');
+              }
+            }} className="px-3 py-2 rounded-xl shadow text-sm border hover:bg-gray-50">Download</button>
           ) : null}
         </div>
       </div>
@@ -152,8 +186,41 @@ export default function ModelDetailsPage() {
                       <div className="text-sm line-clamp-2">{mm.prompt || '3D Model'}</div>
                       <div className="flex gap-2">
                         <Link href={`/en/ai/models/${mslug}/${encodeURIComponent(mm.id)}`} className="px-3 py-1.5 text-sm rounded-md border hover:bg-gray-50">View</Link>
-                        {url ? (
-                          <a href={url} target="_blank" rel="noreferrer" className="px-3 py-1.5 text-sm rounded-md border hover:bg-gray-50">Download</a>
+                        {mm?.id ? (
+                          <button onClick={async () => {
+                            try {
+                              const resp = await fetch(`/api/marketplace/models/${encodeURIComponent(mm.id)}/entitlement`, { cache: 'no-store' });
+                              if (resp.status === 401) {
+                                router.push(`/en/auth/login?redirect=${encodeURIComponent(window.location.pathname)}`);
+                                return;
+                              }
+                              const ej = await resp.json().catch(() => ({ owned: false }));
+                              const owned = !!ej?.owned;
+                              if (!owned) {
+                                const ok = window.confirm('This is gonna cost you 750 DC, do you want to download?');
+                                if (!ok) return;
+                              }
+                              const res = await downloadModel({ modelId: mm.id as any }).unwrap();
+                              const url2 = (res as any)?.url;
+                              if (url2) window.open(url2, '_blank');
+                            } catch (e: any) {
+                              const status = e?.status || e?.originalStatus;
+                              if (status === 401) {
+                                router.push(`/en/auth/login?redirect=${encodeURIComponent(window.location.pathname)}`);
+                                return;
+                              }
+                              if (status === 402) {
+                                const go = window.confirm('Insufficient credits. Buy credits now?');
+                                if (go) router.push('/en/credits');
+                                return;
+                              }
+                              if (status === 404) {
+                                window.alert('OBJ file is not available for this model yet.');
+                                return;
+                              }
+                              window.alert('Download failed. Please try again later.');
+                            }
+                          }} className="px-3 py-1.5 text-sm rounded-md border hover:bg-gray-50">Download</button>
                         ) : null}
                       </div>
                     </div>

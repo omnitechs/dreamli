@@ -33,11 +33,15 @@ type PresignRes = { uploadUrl?: string; publicUrl?: string; key?: string; url?: 
 export const api = createApi({
     reducerPath: 'api',
     baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
-    tagTypes: ['Commits', 'Projects', 'Marketplace'],
+    tagTypes: ['Commits', 'Projects', 'Marketplace', 'Prints', 'Entitlements'],
     endpoints: (builder) => ({
         // --- uploads ---
-        presignUpload: builder.mutation<PresignRes, PresignReq>({
-            query: (body) => ({ url: 'uploads/presign', method: 'POST', body }),
+        presignUpload: builder.mutation<PresignRes, { file: File }>({
+            query: ({ file }) => {
+                const fd = new FormData();
+                fd.append('file', file);
+                return { url: 'uploads/presign', method: 'POST', body: fd };
+            },
         }),
 
         // --- projects ---
@@ -149,13 +153,56 @@ export const api = createApi({
         }),
 
         // --- marketplace ---
-        getMarketplaceModels: builder.query<{ items: any[]; page: number; pageSize: number; total: number; hasMore: boolean }, { page?: number } | void>({
+        getMarketplaceModels: builder.query<{ items: any[]; page: number; pageSize: number; total: number; hasMore: boolean }, { page?: number; sort?: 'recent' | 'likes' | 'comments' } | void>({
             query: (arg) => {
                 const page = (arg as any)?.page || 1;
-                return { url: `marketplace/models?page=${encodeURIComponent(page)}` };
+                const sort = (arg as any)?.sort || 'recent';
+                return { url: `marketplace/models?page=${encodeURIComponent(page)}&sort=${encodeURIComponent(sort)}` };
             },
             providesTags: ['Marketplace'],
         }),
+        // gated download
+        downloadModel: builder.mutation<{ url: string }, { modelId: string }>({
+            query: ({ modelId }) => ({ url: `marketplace/models/${encodeURIComponent(modelId)}/download`, method: 'POST' }),
+        }),
+        // entitlement
+        getModelEntitlement: builder.query<{ owned: boolean }, { modelId: string }>({
+            query: ({ modelId }) => ({ url: `marketplace/models/${encodeURIComponent(modelId)}/entitlement` }),
+            providesTags: ['Entitlements'],
+        }),
+        // likes
+        likeModel: builder.mutation<{ count: number; userLiked: boolean }, { modelId: string }>({
+            query: ({ modelId }) => ({ url: `marketplace/models/${encodeURIComponent(modelId)}/likes`, method: 'POST' }),
+            invalidatesTags: ['Marketplace'],
+        }),
+        unlikeModel: builder.mutation<{ count: number; userLiked: boolean }, { modelId: string }>({
+            query: ({ modelId }) => ({ url: `marketplace/models/${encodeURIComponent(modelId)}/likes`, method: 'DELETE' }),
+            invalidatesTags: ['Marketplace'],
+        }),
+        getModelLikes: builder.query<{ count: number; userLiked: boolean }, { modelId: string }>({
+            query: ({ modelId }) => ({ url: `marketplace/models/${encodeURIComponent(modelId)}/likes` }),
+            providesTags: ['Marketplace'],
+        }),
+        // comments
+        getModelComments: builder.query<{ items: any[]; page: number; pageSize: number; total: number; hasMore: boolean }, { modelId: string; page?: number; limit?: number }>({
+            query: ({ modelId, page = 1, limit = 10 }) => ({ url: `marketplace/models/${encodeURIComponent(modelId)}/comments?page=${page}&limit=${limit}` }),
+            providesTags: ['Marketplace'],
+        }),
+        addModelComment: builder.mutation<any, { modelId: string; content?: string; media?: Array<{ url: string; kind?: string; mime?: string }> }>({
+            query: ({ modelId, content, media }) => ({ url: `marketplace/models/${encodeURIComponent(modelId)}/comments`, method: 'POST', body: { content, media } }),
+            invalidatesTags: ['Marketplace'],
+        }),
+
+        // prints
+        getModelPrints: builder.query<{ items: any[]; page: number; pageSize: number; total: number; hasMore: boolean }, { modelId: string; page?: number; limit?: number }>({
+            query: ({ modelId, page = 1, limit = 10 }) => ({ url: `marketplace/models/${encodeURIComponent(modelId)}/prints?page=${page}&limit=${limit}` }),
+            providesTags: ['Prints'],
+        }),
+        addModelPrint: builder.mutation<any, { modelId: string; text?: string; media: Array<{ url: string; kind?: string; mime?: string }> }>({
+            query: ({ modelId, text, media }) => ({ url: `marketplace/models/${encodeURIComponent(modelId)}/prints`, method: 'POST', body: { text, media } }),
+            invalidatesTags: ['Prints', 'Marketplace'],
+        }),
+
         getModelById: builder.query<any, { modelId: string }>({
             query: ({ modelId }) => ({ url: `models/${modelId}` }),
         }),
@@ -172,6 +219,15 @@ export const {
     useGetCommitsQuery,
     useCreateCommitMutation,
     useGetMarketplaceModelsQuery,
+    useDownloadModelMutation,
+    useLikeModelMutation,
+    useUnlikeModelMutation,
+    useGetModelLikesQuery,
+    useGetModelCommentsQuery,
+    useAddModelCommentMutation,
+    useGetModelPrintsQuery,
+    useAddModelPrintMutation,
     useGetModelByIdQuery,
     useGetPublicCommitByIdQuery,
+    useGetModelEntitlementQuery, 
 } = api;

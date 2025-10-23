@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useGetProjectsQuery, useCreateProjectMutation, useGetMarketplaceModelsQuery } from '@/app/(lang)/[lang]/ai/services/api';
+import { useGetProjectsQuery, useCreateProjectMutation, useGetMarketplaceModelsQuery, useDownloadModelMutation } from '@/app/(lang)/[lang]/ai/services/api';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
@@ -29,6 +29,10 @@ export default function ProjectsPage() {
     // Marketplace pagination
     const [page, setPage] = useState(1);
     const { data: marketData, isLoading: loadingMarket } = useGetMarketplaceModelsQuery({ page });
+    const [downloadModel] = useDownloadModelMutation();
+    const { useRouter, usePathname } = require('next/navigation');
+    const router = useRouter();
+    const pathname = usePathname();
     const items = marketData?.items || [];
 
     const onCreate = async () => {
@@ -119,14 +123,47 @@ export default function ProjectsPage() {
                                                 >
                                                     {t('buy')}
                                                 </Link>
-                                                <a
-                                                    href={m.modelUrls?.glb || m.modelUrls?.fbx || m.modelUrls?.obj || '#'}
+                                                <button
+                                                    onClick={async () => {
+                                                        try {
+                                                            const resp = await fetch(`/api/marketplace/models/${encodeURIComponent(m.id)}/entitlement`, { cache: 'no-store' });
+                                                            if (resp.status === 401) {
+                                                                const redirect = encodeURIComponent(pathname || `/${lang}/ai`);
+                                                                router.push(`/${lang}/auth/login?redirect=${redirect}`);
+                                                                return;
+                                                            }
+                                                            const ej = await resp.json().catch(() => ({ owned: false }));
+                                                            const owned = !!ej?.owned;
+                                                            if (!owned) {
+                                                                const ok = window.confirm('This is gonna cost you 750 DC, do you want to download?');
+                                                                if (!ok) return;
+                                                            }
+                                                            const res = await downloadModel({ modelId: m.id }).unwrap();
+                                                            const url = (res as any)?.url;
+                                                            if (url) window.open(url, '_blank');
+                                                        } catch (e: any) {
+                                                            const status = e?.status || e?.originalStatus;
+                                                            if (status === 401) {
+                                                                const redirect = encodeURIComponent(pathname || `/${lang}/ai`);
+                                                                router.push(`/${lang}/auth/login?redirect=${redirect}`);
+                                                                return;
+                                                            }
+                                                            if (status === 402) {
+                                                                const go = window.confirm(t('insufficientCredits') || 'Insufficient credits. Buy credits now?');
+                                                                if (go) router.push(`/${lang}/credits`);
+                                                                return;
+                                                            }
+                                                            if (status === 404) {
+                                                                window.alert('OBJ file is not available for this model yet.');
+                                                                return;
+                                                            }
+                                                            window.alert('Download failed. Please try again later.');
+                                                        }
+                                                    }}
                                                     className="px-3 py-1.5 text-sm rounded-md border hover:bg-gray-50"
-                                                    target="_blank"
-                                                    rel="noreferrer"
                                                 >
                                                     {t('download')}
-                                                </a>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>

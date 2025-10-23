@@ -1,7 +1,9 @@
+import React from 'react';
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import ModelGridClient from './ModelGridClient';
+import ProjectCommentsClient from './ProjectCommentsClient';
 
 function slugify(s?: string | null) {
   const base = (s || '').toString().toLowerCase();
@@ -181,6 +183,14 @@ export default async function ProjectPublicPage({ params }: { params: Promise<{ 
           </div>
         )}
       </div>
+
+      {/* Community Comments */}
+      {models.length ? (
+        <div className="space-y-2" id="comments">
+          <div className="font-medium">Community comments</div>
+          <ProjectCommentsClient models={models as any} />
+        </div>
+      ) : null}
     </div>
   );
 }

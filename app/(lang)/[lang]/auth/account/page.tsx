@@ -14,6 +14,7 @@ import { cookies } from "next/headers";
 import { addCredits } from "@/lib/credits";
 import { REFERRAL_BONUS_DC } from "@/lib/currency";
 import { getTranslations } from "next-intl/server";
+import Link from "next/link";
 
 export default async function AccountPage(props: { params: Promise<{ lang: LanguageCode }> }) {
   const session = await auth();
@@ -135,6 +136,18 @@ export default async function AccountPage(props: { params: Promise<{ lang: Langu
       <section className="space-y-4">
         <h1 className="text-3xl font-semibold tracking-tight">{t('title')}</h1>
         <AccountClient me={clientMe} lang={lang} />
+      </section>
+
+      <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+        <h2 className="mb-3 text-xl font-semibold">Marketplace</h2>
+        <div className="flex flex-wrap gap-3">
+          <Link href={`/${lang}/auth/account/models`} className="px-3 py-2 rounded-xl shadow text-sm border hover:bg-gray-50">
+            Purchased models
+          </Link>
+          <Link href={`/${lang}/auth/account/sales`} className="px-3 py-2 rounded-xl shadow text-sm border hover:bg-gray-50">
+            Sold models
+          </Link>
+        </div>
       </section>
 
       {me && (
