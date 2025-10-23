@@ -30,19 +30,19 @@ export default async function AccountPage(props: { params: Promise<{ lang: Langu
   const userEmail = session.user?.email as string | undefined;
 
   let hasReferral = true;
-  let me = null as null | { id: string; name: string | null; email: string | null; createdAt: Date; role: any; creditsBalance: any; referralCode?: string; referredById: string | null };
-  const baseSelect = { id: true, name: true, email: true, createdAt: true, role: true, creditsBalance: true, referredById: true } as const;
+  let me = null as null | { id: string; name: string | null; email: string | null; createdAt: Date; role: any; creditsBalance: any; referralCode?: string; referredById?: string | null };
+  const baseSelect = { id: true, name: true, email: true, createdAt: true, role: true, creditsBalance: true } as const;
 
   async function loadMeWithReferralById(id?: string, email?: string) {
     if (!id && !email) return null;
     try {
       if (id) {
-        return await prisma.user.findUnique({ where: { id }, select: { ...baseSelect, referralCode: true } as any }) as any;
+        return await prisma.user.findUnique({ where: { id }, select: { ...baseSelect, referralCode: true, referredById: true } as any }) as any;
       } else {
-        return await prisma.user.findUnique({ where: { email: email! }, select: { ...baseSelect, referralCode: true } as any }) as any;
+        return await prisma.user.findUnique({ where: { email: email! }, select: { ...baseSelect, referralCode: true, referredById: true } as any }) as any;
       }
     } catch (e: any) {
-      // PrismaClientValidationError when unknown field referralCode exists in select
+      // PrismaClientValidationError when unknown field referralCode/referredById exists in select
       hasReferral = false;
       console.warn('Referral column not available; proceeding without referral fields. Consider running Prisma migrations.', e?.message || e);
       if (id) {
@@ -99,7 +99,7 @@ export default async function AccountPage(props: { params: Promise<{ lang: Langu
   let referredUsers: { id: string; name: string | null; email: string | null; createdAt: string; earned: number }[] = [];
   let totalReferralEarned = 0;
   let invoices: { id: string; createdAt: string; amountEur: number; creditsGranted: number; receiptUrl: string | null }[] = [];
-  if (me) {
+  if (me && hasReferral) {
     const rawReferred = await prisma.user.findMany({
       where: { referredById: me.id },
       select: { id: true, name: true, email: true, createdAt: true },
@@ -128,8 +128,10 @@ export default async function AccountPage(props: { params: Promise<{ lang: Langu
       createdAt: (u.createdAt instanceof Date ? u.createdAt.toISOString() : String(u.createdAt)),
       earned: perInvitee.get(u.id) || 0,
     }));
+  }
 
-    // Invoices list
+  // Invoices list
+  if (me) {
     const rows = await prisma.invoice.findMany({
       where: { userId: me.id },
       select: { id: true, createdAt: true, amountEur: true, creditsGranted: true, receiptUrl: true },
