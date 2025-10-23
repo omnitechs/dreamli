@@ -14,6 +14,7 @@ import Providers from '@/app/providers'
 import { ReduxProvider } from '@/app/store/provider'
 import { SessionProvider } from 'next-auth/react'
 import CreditsModal from '@/components/CreditsModal'
+import BackButton from '@/components/BackButton'
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
@@ -137,6 +138,7 @@ export default async function LangLayout({
                     <CreditsModal />
                     {children}
                     <Footer lang={lang} />
+                    <BackButton />
                 </ReduxProvider>
             </SessionProvider>
         </NextIntlClientProvider>
