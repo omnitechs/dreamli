@@ -22,6 +22,7 @@ export const {
 } = NextAuth({
     adapter: PrismaAdapter(prisma),
     session: { strategy: "jwt" }, // ✅ use JWT sessions
+    allowDangerousEmailAccountLinking: true,
     providers: [
         Google({
             clientId: process.env.GOOGLE_CLIENT_ID!,
