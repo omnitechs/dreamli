@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
   const raw = await req.text();
   const sig = req.headers.get("x-wc-webhook-signature");
   const secret = process.env.WOOCOMMERCE_WEBHOOK_SECRET;
-    console.log("WOOCOMMERCE_WEBHOOK_SECRET", secret);
+    console.log("WOOCOMMERCE_WEBHOOK_SECRET", secret, sig, raw);
   if (!verifyWooSignature(raw, sig, secret)) {
     return NextResponse.json({ ok: false, error: "invalid_signature" }, { status: 401 });
   }
