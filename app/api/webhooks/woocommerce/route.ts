@@ -60,7 +60,19 @@ export async function POST(req: NextRequest) {
   const raw = await req.text();
   const sig = req.headers.get("x-wc-webhook-signature");
   const secret = process.env.WOOCOMMERCE_WEBHOOK_SECRET;
-    console.log("WOOCOMMERCE_WEBHOOK_SECRET", secret, sig, raw);
+  const topic = (req.headers.get("x-wc-webhook-topic") || "").toLowerCase(); // e.g., order.updated, order.paid, ping
+  console.log("WOOCOMMERCE_WEBHOOK_SECRET", secret, sig, raw);
+
+  // Allow WooCommerce "ping" test requests even if signature is missing/stripped by proxies
+  if (topic.includes("ping") || raw.startsWith("webhook_id=")) {
+    try {
+      const params = new URLSearchParams(raw);
+      return NextResponse.json({ ok: true, pong: true, webhook_id: params.get("webhook_id") || null });
+    } catch {
+      return NextResponse.json({ ok: true, pong: true });
+    }
+  }
+
   if (!verifyWooSignature(raw, sig, secret)) {
     return NextResponse.json({ ok: false, error: "invalid_signature" }, { status: 401 });
   }
@@ -72,7 +84,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "invalid_json" }, { status: 400 });
   }
 
-  const topic = req.headers.get("x-wc-webhook-topic") || ""; // e.g., order.updated, order.paid
 
   // We only process paid/completed orders
   const status: string = (body?.status || "").toLowerCase();
