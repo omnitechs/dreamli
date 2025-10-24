@@ -39,19 +39,43 @@ async function findOwnerIdByModelId(modelId: string): Promise<string | null> {
 
 function extractModelIdFromLineItemMeta(meta: any[] | undefined): string | null {
   if (!Array.isArray(meta)) return null;
-  // Try explicit key first
+
+  const norm = (s: any) => (s == null ? "" : String(s).toLowerCase());
+
+  // 1) Direct keys that might hold the model id string
+  const directKeys = [
+    "dreamli_model_id",
+    "_dreamli_model_id",
+  ];
   for (const m of meta) {
-    const k = (m?.key || m?.name || "").toString();
-    if (k === "dreamli_model_id" && m?.value) return String(m.value);
+    const k = norm(m?.key || m?.name);
+    if (directKeys.includes(k) && m?.value) return String(m.value);
   }
-  // Try figurine_data JSON
-  const fig = meta.find((m) => (m?.key || m?.name) === "figurine_data" && m?.value);
-  if (fig) {
+
+  // 2) JSON blobs that may include modelId
+  const jsonKeys = [
+    "figurine_data",
+    "_figurine_data",
+    "_figurine_json", // WordPress key observed in production
+  ];
+  for (const m of meta) {
+    const k = norm(m?.key || m?.name);
+    if (!jsonKeys.includes(k) || !m?.value) continue;
     try {
-      const val = typeof fig.value === "string" ? JSON.parse(fig.value) : fig.value;
-      if (val && typeof val === "object" && val.modelId) return String(val.modelId);
+      const val = typeof m.value === "string" ? JSON.parse(m.value) : m.value;
+      if (val && typeof val === "object" && (val as any).modelId) return String((val as any).modelId);
     } catch {}
   }
+
+  // 3) Fallback: parse any meta JSON and look for modelId
+  for (const m of meta) {
+    if (!m?.value || typeof m.value !== "string") continue;
+    try {
+      const val = JSON.parse(m.value);
+      if (val && typeof val === "object" && (val as any).modelId) return String((val as any).modelId);
+    } catch {}
+  }
+
   return null;
 }
 
@@ -61,7 +85,6 @@ export async function POST(req: NextRequest) {
   const sig = req.headers.get("x-wc-webhook-signature");
   const secret = process.env.WOOCOMMERCE_WEBHOOK_SECRET;
   const topic = (req.headers.get("x-wc-webhook-topic") || "").toLowerCase(); // e.g., order.updated, order.paid, ping
-  console.log("WOOCOMMERCE_WEBHOOK_SECRET", secret, sig, raw);
 
   // Allow WooCommerce "ping" test requests even if signature is missing/stripped by proxies
   if (topic.includes("ping") || raw.startsWith("webhook_id=")) {
