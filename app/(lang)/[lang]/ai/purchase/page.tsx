@@ -203,11 +203,17 @@ export default function PurchasePage() {
             fd.append('price', pricing.perUnit.toFixed(2));
             fd.append('image_url', previewImage);
 
+            // Add flat metadata to ensure it's captured as line item meta in WooCommerce
+            const mdlId = (effectiveModel?.id || modelId) as string | undefined;
+            if (mdlId) {
+                fd.append('dreamli_model_id', mdlId);
+            }
+
             // All relevant figurine data stored as JSON
             fd.append(
                 'figurine_data',
                 JSON.stringify({
-                    modelId: (effectiveModel?.id || modelId),
+                    modelId: mdlId,
                     modelUrl:
                         effectiveModel?.modelUrls?.glb ||
                         effectiveModel?.modelUrls?.fbx ||
