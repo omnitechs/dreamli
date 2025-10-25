@@ -22,7 +22,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ modelId:
       const totalRows = await prisma.$queryRaw<{ count: number }[]>`SELECT COUNT(*)::int AS count FROM "ModelComment" WHERE "modelId" = ${modelId}`;
       const total = totalRows?.[0]?.count ?? 0;
       const rows: any[] = await prisma.$queryRaw<any[]>`
-        SELECT c."id", c."content", c."createdAt", c."userId", u."name" as userName, u."image" as userImage
+        SELECT c."id", c."content", c."createdAt", c."userId", u."name" as "userName", u."image" as "userImage", u."username" as "userUsername"
         FROM "ModelComment" c
         LEFT JOIN "User" u ON u."id" = c."userId"
         WHERE c."modelId" = ${modelId}
@@ -59,7 +59,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ modelId:
         id: r.id,
         content: r.content,
         createdAt: r.createdAt,
-        user: { id: r.userId, name: r.userName || 'User', image: r.userImage || null },
+        user: { id: r.userId, name: r.userName || 'User', image: r.userImage || null, username: r.userUsername || null },
         media: byCommentId.get(r.id) || [],
       }));
 
@@ -82,7 +82,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ modelId:
         content: true,
         createdAt: true,
         userId: true,
-        user: { select: { id: true, name: true, image: true } },
+        user: { select: { id: true, name: true, image: true, username: true as any } as any },
       },
     }),
   ]);
@@ -103,7 +103,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ modelId:
     id: r.id,
     content: r.content,
     createdAt: r.createdAt,
-    user: r.user ? { id: r.user.id, name: r.user.name || 'User', image: r.user.image || null } : null,
+    user: r.user ? { id: r.user.id, name: r.user.name || 'User', image: r.user.image || null, username: (r.user as any).username || null } : null,
     media: byCommentId.get(r.id) || [],
   }));
 

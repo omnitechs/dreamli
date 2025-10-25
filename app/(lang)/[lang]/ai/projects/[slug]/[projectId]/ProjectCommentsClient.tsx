@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useRef, useState, useEffect } from "react";
+import Link from "next/link";
 import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { MessageCircle, Send, Paperclip, X, FileText, Pencil, Trash2, Check, X as XIcon } from "lucide-react";
@@ -256,18 +257,24 @@ export default function ProjectCommentsClient({ models }: { models: ModelLite[] 
         ) : (
           data.items.map((comment: any) => (
             <div key={comment.id} className="flex gap-4">
-              {comment.user?.image ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={comment.user.image} alt={comment.user?.name || 'User'} className="w-12 h-12 rounded-full object-cover flex-shrink-0" />
-              ) : (
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-lg font-semibold flex-shrink-0">
-                  {(comment.user?.name || 'U').charAt(0)}
-                </div>
-              )}
+              <Link href={`/${lang}/profile/${encodeURIComponent((comment.user as any)?.username || (comment.user as any)?.id || '')}`} className="flex-shrink-0" prefetch={false}>
+                {comment.user?.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={comment.user.image} alt={comment.user?.name || 'User'} className="w-12 h-12 rounded-full object-cover" />
+                ) : (
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-lg font-semibold">
+                    {(comment.user?.name || 'U').charAt(0)}
+                  </div>
+                )}
+              </Link>
               <div className="flex-1">
                 <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
                   <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-semibold text-gray-900 truncate">{comment.user?.name || 'User'}</h4>
+                    <h4 className="font-semibold text-gray-900 truncate">
+                      <Link href={`/${lang}/profile/${encodeURIComponent((comment.user as any)?.username || (comment.user as any)?.id || '')}`} className="hover:underline" prefetch={false}>
+                        {comment.user?.name || 'User'}
+                      </Link>
+                    </h4>
                     <div className="flex items-center gap-3">
                       <span className="text-xs text-gray-500">{new Date(comment.createdAt).toLocaleString()}</span>
                       {userId && ((comment.userId || (comment.user && comment.user.id)) === userId) ? (
