@@ -344,11 +344,18 @@ function Card({ item, lang, canInteract, onLikeToggle }: { item: any; lang: stri
           {item.projectName || item.prompt || '3D Model'}
         </h3>
 
-        <div className="flex items-center gap-2 mb-3">
-          <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-medium">
-            {(item.owner?.name || 'U').charAt(0)}
-          </div>
-          <span className="text-sm text-gray-600">{item.owner?.name || 'User'}</span>
+        <div className="flex items-center gap-2 mb-3" onClick={(e) => { e.stopPropagation(); }}>
+          <Link href={`/${lang}/profile/${encodeURIComponent(item.owner?.username || item.owner?.id || '')}`} className="flex items-center gap-2">
+            {item.owner?.image ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={item.owner.image} alt={item.owner?.name || 'User'} className="w-6 h-6 rounded-full object-cover border" />
+            ) : (
+              <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-medium">
+                {(item.owner?.name || 'U').charAt(0)}
+              </div>
+            )}
+            <span className="text-sm text-gray-600 hover:underline">{item.owner?.name || 'User'}</span>
+          </Link>
         </div>
 
         {/* Engagement */}

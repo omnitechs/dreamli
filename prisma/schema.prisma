@@ -13,6 +13,10 @@ model Project {
   name      String
   ownerId   String
   createdAt DateTime @default(now())
+  // Track aggregate public views for this project
+  viewsCount Int      @default(0)
+  // Visibility control for public profiles/marketplace
+  isPublic  Boolean  @default(true)
   commits   Commit[]
 }
 
@@ -71,6 +75,10 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  // Public handle for profile URL
+  username      String?   @unique
+  // Public bio/description
+  bio           String?
 
   // Credentials support
   passwordHash String? // null for OAuth-only users

@@ -40,8 +40,13 @@ export default async function ProjectPublicPage({ params }: { params: Promise<{ 
     redirect(`/en/ai/projects/${desired}/${encodeURIComponent(projectId)}`);
   }
 
+  // Increment project views (defensive if column not migrated yet)
+  try {
+    await (prisma as any).project.update({ where: { id: projectId }, data: { viewsCount: { increment: 1 } } });
+  } catch {}
+
   const owner = project.ownerId
-    ? await prisma.user.findUnique({ where: { id: project.ownerId }, select: { id: true, name: true, image: true } })
+    ? await prisma.user.findUnique({ where: { id: project.ownerId }, select: { id: true, name: true, image: true, username: true as any } } as any)
     : null;
 
   const commits = await prisma.commit.findMany({

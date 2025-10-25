@@ -37,15 +37,15 @@ export async function GET(req: Request) {
   const projectIds = Array.from(new Set(commits.map(c => c.projectId)));
   const projects = await prisma.project.findMany({
     where: { id: { in: projectIds } },
-    select: { id: true, ownerId: true, name: true },
-  });
+    select: { id: true, ownerId: true, name: true, isPublic: true as any },
+  } as any);
   const projectById = new Map(projects.map(p => [p.id, p]));
 
   const ownerIds = Array.from(new Set(projects.map(p => p.ownerId)));
   const users = await prisma.user.findMany({
     where: { id: { in: ownerIds } },
-    select: { id: true, name: true, image: true },
-  });
+    select: { id: true, name: true, image: true, username: true as any },
+  } as any);
   const userById = new Map(users.map(u => [u.id, u]));
 
   type AnyModel = any;
@@ -66,6 +66,11 @@ export async function GET(req: Request) {
       const proj = projectById.get(c.projectId);
       const owner = proj ? userById.get(proj.ownerId) : undefined;
 
+      // Respect project visibility: skip non-public projects if the flag exists
+      if (proj && typeof (proj as any).isPublic === 'boolean' && (proj as any).isPublic === false) {
+        continue;
+      }
+
       itemsMap.set(id, {
         id: m.id,
         taskId: m.taskId,
@@ -79,7 +84,7 @@ export async function GET(req: Request) {
         projectId: c.projectId,
         projectName: proj?.name || null,
         commitId: c.id,
-        owner: owner ? { id: owner.id, name: owner.name || 'User', image: owner.image || null } : null,
+        owner: owner ? { id: owner.id, name: owner.name || 'User', image: owner.image || null, username: (owner as any)?.username || null } : null,
         // Engagement placeholders, to be filled below
         likesCount: 0,
         commentsCount: 0,

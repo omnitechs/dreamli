@@ -90,7 +90,7 @@ export default function AccountClient({ me, lang }: { me: MeProp; lang: string }
         <div className="rounded-2xl border border-gray-200 bg-gradient-to-br from-purple-50 to-fuchsia-50 p-5 shadow-sm">
           <div className="text-sm text-gray-600">{t('quick.title')}</div>
           <div className="mt-3 flex flex-col gap-2">
-            <a href={`/${lang}/settings`} className="text-sm text-purple-700 hover:underline">{t('quick.manageProfile')}</a>
+            <a href={`/${lang}/profile`} className="text-sm text-purple-700 hover:underline">{t('quick.manageProfile')}</a>
             <a href={`/${lang}/orders`} className="text-sm text-purple-700 hover:underline">{t('quick.orderHistory')}</a>
           </div>
         </div>
