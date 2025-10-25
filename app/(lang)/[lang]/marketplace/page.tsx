@@ -4,6 +4,7 @@ import React, { useState, useRef } from 'react';
 import Link from 'next/link';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import { Heart, MessageCircle, Clock } from 'lucide-react';
 import {
   useGetMarketplaceModelsQuery,
   useLikeModelMutation,
@@ -43,66 +44,108 @@ export default function MarketplacePage() {
   const [unlikeModel] = useUnlikeModelMutation();
 
   return (
-    <div className="max-w-6xl mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Marketplace</h1>
-        <div className="flex items-center gap-2 text-sm">
-          <label>Sort by:</label>
-          <select
-            className="border rounded-md px-2 py-1"
-            value={sort}
-            onChange={(e) => {
-              setPage(1);
-              setSort(e.target.value as any);
-            }}
-          >
-            <option value="recent">Recent</option>
-            <option value="likes">Most liked</option>
-            <option value="comments">Most commented</option>
-          </select>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-3">3D Model Marketplace</h1>
+          <p className="text-lg text-gray-600">Discover amazing 3D models created by our community</p>
         </div>
-      </div>
 
-      <div className="bg-white border rounded-xl p-4">
-        {isLoading ? (
-          <div>Loading…</div>
-        ) : !items.length ? (
-          <div className="text-sm text-gray-500">No models yet.</div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {items.map((m: any) => (
-              <Card
-                key={m.id}
-                lang={lang}
-                item={m}
-                canInteract={isAuthed}
-                onLikeToggle={async (id: string, liked: boolean) => {
-                  try {
-                    if (liked) await unlikeModel({ modelId: id }).unwrap();
-                    else await likeModel({ modelId: id }).unwrap();
-                  } catch {}
-                }}
-              />
-            ))}
+        <div className="mb-8 flex items-center gap-3">
+          <span className="text-sm font-medium text-gray-700">Sort by:</span>
+          <div className="flex gap-2">
+            <button
+              onClick={() => {
+                setPage(1);
+                setSort('likes');
+              }}
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap flex items-center gap-2 ${
+                sort === 'likes'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                  : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+              }`}
+            >
+              <div className="w-4 h-4 flex items-center justify-center">
+                <Heart className="w-4 h-4" />
+              </div>
+              Most Liked
+            </button>
+            <button
+              onClick={() => {
+                setPage(1);
+                setSort('comments');
+              }}
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap flex items-center gap-2 ${
+                sort === 'comments'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                  : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+              }`}
+            >
+              <div className="w-4 h-4 flex items-center justify-center">
+                <MessageCircle className="w-4 h-4" />
+              </div>
+              Most Discussed
+            </button>
+            <button
+              onClick={() => {
+                setPage(1);
+                setSort('recent');
+              }}
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap flex items-center gap-2 ${
+                sort === 'recent'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                  : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+              }`}
+            >
+              <div className="w-4 h-4 flex items-center justify-center">
+                <Clock className="w-4 h-4" />
+              </div>
+              Most Recent
+            </button>
           </div>
-        )}
+        </div>
 
-        <div className="flex items-center justify-between mt-4">
-          <button
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
-            disabled={!data || page <= 1}
-            className="px-3 py-1.5 text-sm rounded-md border hover:bg-gray-50 disabled:opacity-50"
-          >
-            Prev
-          </button>
-          <div className="text-sm text-gray-500">Page {page}</div>
-          <button
-            onClick={() => setPage((p) => (data?.hasMore ? p + 1 : p))}
-            disabled={!data?.hasMore}
-            className="px-3 py-1.5 text-sm rounded-md border hover:bg-gray-50 disabled:opacity-50"
-          >
-            Next
-          </button>
+        <div className="bg-white rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+          {isLoading ? (
+            <div>Loading…</div>
+          ) : !items.length ? (
+            <div className="text-sm text-gray-500">No models yet.</div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {items.map((m: any) => (
+                <Card
+                  key={m.id}
+                  lang={lang}
+                  item={m}
+                  canInteract={isAuthed}
+                  onLikeToggle={async (id: string, liked: boolean) => {
+                    try {
+                      if (liked) await unlikeModel({ modelId: id }).unwrap();
+                      else await likeModel({ modelId: id }).unwrap();
+                    } catch {}
+                  }}
+                />
+              ))}
+            </div>
+          )}
+
+          <div className="flex items-center justify-between mt-6">
+            <button
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={!data || page <= 1}
+              className="px-4 py-2 text-sm rounded-xl border border-gray-200 bg-white hover:bg-gray-50 disabled:opacity-50"
+            >
+              Prev
+            </button>
+            <div className="text-sm text-gray-500">Page {page}</div>
+            <button
+              onClick={() => setPage((p) => (data?.hasMore ? p + 1 : p))}
+              disabled={!data?.hasMore}
+              className="px-4 py-2 text-sm rounded-xl border border-gray-200 bg-white hover:bg-gray-50 disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -277,64 +320,63 @@ function Card({ item, lang, canInteract, onLikeToggle }: { item: any; lang: stri
   }
 
   return (
-    <div className="border rounded-lg overflow-hidden">
+    <div className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 cursor-pointer" onClick={() => router.push(projectLink)} role="button">
       {/* Thumb opens 3D viewer modal */}
       <button
         type="button"
-        onClick={() => modelUrl && setShowViewer(true)}
-        className="w-full h-40 block relative group"
+        onClick={(e) => { e.stopPropagation(); if (modelUrl) setShowViewer(true); }}
+        className="w-full aspect-square relative overflow-hidden bg-gray-50"
         title={modelUrl ? 'Preview 3D' : 'No preview available'}
       >
         {item.thumbnailUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={item.thumbnailUrl} alt={item.prompt || 'model'} className="w-full h-40 object-cover" />
+          <img src={item.thumbnailUrl} alt={item.prompt || 'model'} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
         ) : (
-          <div className="w-full h-40 bg-gray-100 flex items-center justify-center text-gray-400">No preview</div>
+          <div className="w-full h-full flex items-center justify-center text-gray-400">No preview</div>
         )}
         {modelUrl ? (
           <span className="absolute bottom-2 right-2 text-xs px-2 py-1 rounded-md bg-black/70 text-white opacity-90">Preview</span>
         ) : null}
       </button>
 
-      <div className="p-3 space-y-2">
-        <div className="text-sm line-clamp-2">{item.prompt || '3D Model'}</div>
-        <div className="text-xs text-gray-500 flex items-center justify-between">
-          <span>{item.owner?.name || 'User'}</span>
-          <span>{new Date(item.createdAt).toLocaleDateString()}</span>
-        </div>
-        <div className="flex gap-2 pt-1">
-          <Link href={projectLink} className="px-3 py-1.5 text-sm rounded-md border hover:bg-gray-50">View</Link>
-          <Link href={`/${lang}/ai/purchase?modelId=${encodeURIComponent(item.id)}`} className="px-3 py-1.5 text-sm rounded-md border bg-black text-white">Buy</Link>
-          {item?.modelUrls ? (
-            <button type="button" onClick={handleDownload} className="px-3 py-1.5 text-sm rounded-md border hover:bg-gray-50">Download</button>
-          ) : null}
+      <div className="p-4">
+        <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+          {item.projectName || item.prompt || '3D Model'}
+        </h3>
+
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-medium">
+            {(item.owner?.name || 'U').charAt(0)}
+          </div>
+          <span className="text-sm text-gray-600">{item.owner?.name || 'User'}</span>
         </div>
 
         {/* Engagement */}
-        <div className="flex items-center gap-2 pt-2 text-sm">
+        <div className="flex items-center justify-between pt-3 border-t border-gray-100">
           <button
             type="button"
-            onClick={handleLikeClick}
-            className={`px-2 py-1 rounded-md border ${liked ? 'bg-black text-white' : 'hover:bg-gray-50'}`}
+            onClick={(e) => { e.stopPropagation(); handleLikeClick(); }}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all whitespace-nowrap ${
+              liked ? 'bg-red-50 text-red-600' : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+            }`}
             title={canInteract ? 'Like' : 'Sign in to like'}
           >
-            ❤ {likesCount}
+            <div className="w-4 h-4 flex items-center justify-center">
+              <Heart className={`w-4 h-4 ${liked ? 'fill-current' : ''}`} />
+            </div>
+            <span className="text-sm font-medium">{likesCount}</span>
           </button>
           <Link
             href={`${projectLink}?modelId=${encodeURIComponent(item.id)}#comments`}
-            className="px-2 py-1 rounded-md border hover:bg-gray-50"
+            onClick={(e) => { e.stopPropagation(); }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-50 text-gray-600 hover:bg-gray-100 transition-all whitespace-nowrap"
             title="Comments"
           >
-            💬 {commentsCount}
+            <div className="w-4 h-4 flex items-center justify-center">
+              <MessageCircle className="w-4 h-4" />
+            </div>
+            <span className="text-sm font-medium">{commentsCount}</span>
           </Link>
-          <button
-            type="button"
-            onClick={() => setOpenPrints((v) => !v)}
-            className="px-2 py-1 rounded-md border hover:bg-gray-50"
-            title="User prints"
-          >
-            🖨️ {openPrints && printsData ? printsData.total : ''}
-          </button>
         </div>
 
 

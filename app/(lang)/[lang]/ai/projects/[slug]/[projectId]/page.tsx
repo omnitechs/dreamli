@@ -1,9 +1,11 @@
 import React from 'react';
 import { prisma } from '@/lib/prisma';
-import Link from 'next/link';
+import Image from 'next/image';
 import { notFound, redirect } from 'next/navigation';
-import ModelGridClient from './ModelGridClient';
 import ProjectCommentsClient from './ProjectCommentsClient';
+import ProjectHeaderActionsClient from './ProjectHeaderActionsClient';
+import ProjectModelSectionClient from './ProjectModelSectionClient';
+import ReferenceImagesClient from './ReferenceImagesClient';
 
 function slugify(s?: string | null) {
   const base = (s || '').toString().toLowerCase();
@@ -121,76 +123,70 @@ export default async function ProjectPublicPage({ params }: { params: Promise<{ 
   const messages = Array.from(msgMap.values()).sort((a, b) => a.createdAtMs - b.createdAtMs);
 
   return (
-    <div className="max-w-6xl mx-auto p-4 space-y-6">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-semibold">{project.name}</h1>
-          <div className="text-xs text-gray-500 mt-1">
-            {new Date(project.createdAt).toLocaleString()}
-            {owner ? (
-              <>
-                <span> • by </span>
-                <span>{owner.name || 'User'}</span>
-              </>
-            ) : null}
-          </div>
-        </div>
-        <div className="text-sm text-gray-500">{models.length} model{models.length === 1 ? '' : 's'}</div>
-      </div>
-
-      {/* Models grid */}
-      <div className="bg-white border rounded-xl p-4">
-        {!models.length ? (
-          <div className="text-sm text-gray-500">No models found for this project yet.</div>
-        ) : (
-          // Client-side interactive grid that opens a 3D viewer on click
-          <ModelGridClient models={models as any} />
-        )}
-      </div>
-
-      {/* Images section */}
-      <div className="space-y-2">
-        <div className="font-medium">Images</div>
-        {!images.length ? (
-          <div className="text-sm text-gray-500">No images in this project.</div>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            {images.map((im) => (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img key={im.id} src={im.url} alt={im.id} className="w-full h-28 object-cover rounded-md border" />
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Conversation section */}
-      <div className="space-y-2">
-        <div className="font-medium">Conversation</div>
-        {!messages.length ? (
-          <div className="text-sm text-gray-500">No messages recorded for this project.</div>
-        ) : (
-          <div className="space-y-2">
-            {messages.map((m) => (
-              <div key={m.id} className="border rounded-lg p-2 bg-white">
-                <div className="text-[10px] uppercase tracking-wide text-gray-500 flex items-center gap-2">
-                  <span>{m.role}</span>
-                  <span>•</span>
-                  <span>{new Date(m.createdAtMs).toLocaleString()}</span>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              {owner?.image ? (
+                <Image src={owner.image} alt={owner.name || 'User'} width={48} height={48} className="w-12 h-12 rounded-full object-cover" />
+              ) : (
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-lg font-semibold">
+                  {(owner?.name || 'U').charAt(0)}
                 </div>
-                <div className="text-sm whitespace-pre-wrap">{m.content}</div>
+              )}
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">{project.name}</h1>
+                <p className="text-sm text-gray-600">{owner ? <>by {owner.name || 'User'}</> : null}</p>
               </div>
-            ))}
+            </div>
+            <ProjectHeaderActionsClient modelId={(models as any)?.[0]?.id || null} />
           </div>
-        )}
+        </div>
       </div>
 
-      {/* Community Comments */}
-      {models.length ? (
-        <div className="space-y-2" id="comments">
-          <div className="font-medium">Community comments</div>
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-6 py-8 space-y-12">
+        {/* 3D Model Section */}
+        <ProjectModelSectionClient models={models as any} />
+
+        {/* Images Section */}
+        <ReferenceImagesClient images={images as any} />
+
+        {/* Creation Process Section */}
+        <section className="bg-white rounded-2xl p-8 shadow-sm border border-gray-200">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Creation Process</h2>
+          {!messages.length ? (
+            <div className="text-sm text-gray-500">No messages recorded for this project.</div>
+          ) : (
+            <div className="space-y-4">
+              {messages.map((m) => (
+                <div key={m.id} className={`flex gap-4 ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
+                  <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${m.role === 'user' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'}`}>
+                    {m.role === 'user' ? (
+                      <i className="ri-user-line text-lg"></i>
+                    ) : (
+                      <i className="ri-robot-line text-lg"></i>
+                    )}
+                  </div>
+                  <div className={`flex-1 ${m.role === 'user' ? 'text-right' : ''}`}>
+                    <div className={`inline-block px-4 py-3 rounded-2xl ${m.role === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-900'}`}>
+                      <p className="text-sm whitespace-pre-wrap">{m.content}</p>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1 px-1">{new Date(m.createdAtMs).toLocaleString()}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
+        {/* Comments Section */}
+        {models.length ? (
           <ProjectCommentsClient models={models as any} />
-        </div>
-      ) : null}
+        ) : null}
+      </div>
     </div>
   );
 }

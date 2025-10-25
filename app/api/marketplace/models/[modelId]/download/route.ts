@@ -6,12 +6,16 @@ import { Prisma } from '@prisma/client';
 
 export const dynamic = 'force-dynamic';
 
-function pickObjUrl(modelUrls?: Record<string, string | undefined>) {
+type Format = 'obj' | 'glb' | 'fbx' | 'usdz';
+
+function pickUrl(modelUrls?: Record<string, string | undefined>, format?: Format) {
   if (!modelUrls) return undefined;
-  return modelUrls.obj || undefined;
+  if (format && modelUrls[format]) return modelUrls[format];
+  // default preference order if no specific format requested or requested not available
+  return modelUrls.obj || modelUrls.glb || modelUrls.fbx || modelUrls.usdz || undefined;
 }
 
-export async function POST(_req: Request, { params }: { params: Promise<{ modelId: string }> }) {
+export async function POST(req: Request, { params }: { params: Promise<{ modelId: string }> }) {
   const { modelId } = await params;
   const session = await auth();
   const userId = (session?.user as any)?.id as string | undefined;
@@ -22,6 +26,11 @@ export async function POST(_req: Request, { params }: { params: Promise<{ modelI
   let cost = 750;
   try { cost = Math.max(1, Math.floor(Number(rawCost))); } catch { cost = 750; }
 
+  // Parse optional download format from query string
+  const urlObj = new URL(req.url);
+  const fmtStr = (urlObj.searchParams.get('format') || '').toLowerCase();
+  const fmt: Format | undefined = (fmtStr === 'obj' || fmtStr === 'glb' || fmtStr === 'fbx' || fmtStr === 'usdz') ? (fmtStr as Format) : undefined;
+
   // Load recent commits and find the model by id, then its project + owner
   const commits = await prisma.commit.findMany({
     orderBy: { createdAt: 'desc' },
@@ -29,7 +38,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ modelI
     select: { id: true, projectId: true, createdAt: true, snapshot: true },
   });
 
-  let objUrl: string | undefined;
+  let fileUrl: string | undefined;
   let ownerId: string | null = null;
   let projectId: string | null = null;
 
@@ -44,9 +53,9 @@ export async function POST(_req: Request, { params }: { params: Promise<{ modelI
       const id = String(m.id || '');
       if (id !== modelId) continue;
       const status = (m.status || '').toString().toUpperCase();
-      const url = pickObjUrl(m.modelUrls);
-      if (status !== 'SUCCEEDED' || !url) continue; // require OBJ
-      objUrl = url;
+      const url = pickUrl(m.modelUrls, fmt);
+      if (status !== 'SUCCEEDED' || !url) continue; // require requested or best-available format
+      fileUrl = url;
       projectId = c.projectId;
       // load ownerId
       if (projectId) {
@@ -62,17 +71,17 @@ export async function POST(_req: Request, { params }: { params: Promise<{ modelI
       }
       break;
     }
-    if (objUrl) break;
+    if (fileUrl) break;
   }
 
-  if (!objUrl) {
-    // Either model not found or OBJ not available
-    return NextResponse.json({ error: 'OBJ not available for this model' }, { status: 404 });
+  if (!fileUrl) {
+    // Either model not found or requested file format not available
+    return NextResponse.json({ error: 'Requested file is not available for this model' }, { status: 404 });
   }
 
   // If downloader is the owner, allow free download
   if (ownerId && ownerId === userId) {
-    return NextResponse.json({ url: objUrl });
+    return NextResponse.json({ url: fileUrl });
   }
 
   // If user has already paid for this model in the past, allow free re-download
@@ -82,7 +91,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ modelI
       select: { id: true },
     });
     if (prior) {
-      return NextResponse.json({ url: objUrl });
+      return NextResponse.json({ url: fileUrl });
     }
   } catch (e) {
     // non-fatal; fall through to charge path
@@ -133,6 +142,6 @@ export async function POST(_req: Request, { params }: { params: Promise<{ modelI
     return NextResponse.json({ error: 'Could not process download' }, { status: 500 });
   }
 
-  // Return the OBJ URL for client to download
-  return NextResponse.json({ url: objUrl });
+  // Return the file URL for client to download
+  return NextResponse.json({ url: fileUrl });
 }

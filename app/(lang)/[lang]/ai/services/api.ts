@@ -162,8 +162,8 @@ export const api = createApi({
             providesTags: ['Marketplace'],
         }),
         // gated download
-        downloadModel: builder.mutation<{ url: string }, { modelId: string }>({
-            query: ({ modelId }) => ({ url: `marketplace/models/${encodeURIComponent(modelId)}/download`, method: 'POST' }),
+        downloadModel: builder.mutation<{ url: string }, { modelId: string; format?: 'obj' | 'glb' | 'fbx' | 'usdz' }>({
+            query: ({ modelId, format }) => ({ url: `marketplace/models/${encodeURIComponent(modelId)}/download${format ? `?format=${encodeURIComponent(format)}` : ''}`, method: 'POST' }),
         }),
         // entitlement
         getModelEntitlement: builder.query<{ owned: boolean }, { modelId: string }>({
@@ -190,6 +190,14 @@ export const api = createApi({
         }),
         addModelComment: builder.mutation<any, { modelId: string; content?: string; media?: Array<{ url: string; kind?: string; mime?: string }> }>({
             query: ({ modelId, content, media }) => ({ url: `marketplace/models/${encodeURIComponent(modelId)}/comments`, method: 'POST', body: { content, media } }),
+            invalidatesTags: ['Marketplace'],
+        }),
+        updateModelComment: builder.mutation<any, { modelId: string; commentId: string; content?: string } >({
+            query: ({ modelId, commentId, content }) => ({ url: `marketplace/models/${encodeURIComponent(modelId)}/comments/${encodeURIComponent(commentId)}`, method: 'PATCH', body: { content } }),
+            invalidatesTags: ['Marketplace'],
+        }),
+        deleteModelComment: builder.mutation<{ ok: boolean }, { modelId: string; commentId: string } >({
+            query: ({ modelId, commentId }) => ({ url: `marketplace/models/${encodeURIComponent(modelId)}/comments/${encodeURIComponent(commentId)}`, method: 'DELETE' }),
             invalidatesTags: ['Marketplace'],
         }),
 
@@ -225,6 +233,8 @@ export const {
     useGetModelLikesQuery,
     useGetModelCommentsQuery,
     useAddModelCommentMutation,
+    useUpdateModelCommentMutation,
+    useDeleteModelCommentMutation,
     useGetModelPrintsQuery,
     useAddModelPrintMutation,
     useGetModelByIdQuery,

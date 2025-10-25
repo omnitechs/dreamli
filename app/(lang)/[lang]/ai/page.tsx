@@ -5,6 +5,7 @@ import { useGetProjectsQuery, useCreateProjectMutation, useGetMarketplaceModelsQ
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useParams, useRouter, usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 function slugify(s?: string) {
     const base = (s || '').toLowerCase();
@@ -21,6 +22,9 @@ export default function ProjectsPage() {
     const t = useTranslations('AI.Page');
     const params = useParams<{ lang: string }>();
     const lang = (params?.lang || 'en') as string;
+
+    const { data: session } = useSession();
+    const isAuthed = !!(session as any)?.user?.id;
 
     const { data: projects, isLoading } = useGetProjectsQuery();
     const [createProject, { isLoading: creating }] = useCreateProjectMutation();
@@ -44,20 +48,34 @@ export default function ProjectsPage() {
         <div className="max-w-5xl mx-auto p-6 space-y-8">
             <h1 className="text-2xl font-semibold">{t('projects')}</h1>
 
-            <div className="bg-white border rounded-xl p-4 flex gap-2">
-                <input
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder={t('newProjectPlaceholder')}
-                    className="flex-1 border rounded-lg p-2"
-                />
-                <button
-                    onClick={onCreate}
-                    disabled={creating}
-                    className="px-3 py-2 rounded-xl shadow text-sm border bg-black text-white disabled:opacity-50"
-                >
-                    {creating ? t('creating') : t('create')}
-                </button>
+            <div className="bg-white border rounded-xl p-4">
+                {isAuthed ? (
+                    <div className="flex gap-2">
+                        <input
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder={t('newProjectPlaceholder')}
+                            className="flex-1 border rounded-lg p-2"
+                        />
+                        <button
+                            onClick={onCreate}
+                            disabled={creating}
+                            className="px-3 py-2 rounded-xl shadow text-sm border bg-black text-white disabled:opacity-50"
+                        >
+                            {creating ? t('creating') : t('create')}
+                        </button>
+                    </div>
+                ) : (
+                    <div className="text-sm text-gray-700 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                        <span>You need to be logged in to create a project.</span>
+                        <Link
+                            href={`/${lang}/auth/login?redirect=${encodeURIComponent(pathname || `/${lang}/ai`)}`}
+                            className="px-3 py-2 rounded-xl shadow text-sm border bg-black text-white"
+                        >
+                            Log in
+                        </Link>
+                    </div>
+                )}
             </div>
 
             <div className="bg-white border rounded-xl p-4">

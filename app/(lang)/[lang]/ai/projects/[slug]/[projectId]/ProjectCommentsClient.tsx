@@ -3,10 +3,13 @@
 import React, { useMemo, useRef, useState, useEffect } from "react";
 import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { MessageCircle, Send, Paperclip, X, FileText, Pencil, Trash2, Check, X as XIcon } from "lucide-react";
 import {
   useGetModelCommentsQuery,
   useAddModelCommentMutation,
   usePresignUploadMutation,
+  useUpdateModelCommentMutation,
+  useDeleteModelCommentMutation,
 } from "@/app/(lang)/[lang]/ai/services/api";
 
 type ModelLite = {
@@ -18,6 +21,7 @@ type ModelLite = {
 export default function ProjectCommentsClient({ models }: { models: ModelLite[] }) {
   const { data: session } = useSession();
   const isAuthed = !!(session as any)?.user?.id;
+  const userId = (session as any)?.user?.id as string | undefined;
   const params = useParams<{ lang: string }>();
   const lang = (params?.lang || "en") as string;
 
@@ -53,7 +57,90 @@ export default function ProjectCommentsClient({ models }: { models: ModelLite[] 
   const [presignUpload] = usePresignUploadMutation();
 
   const [text, setText] = useState("");
-  const fileRef = useRef<HTMLInputElement>(null);
+  const [attachments, setAttachments] = useState<Array<{ file: File; url: string; name: string; type: 'image' | 'file' }>>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Edit/Delete state
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingText, setEditingText] = useState<string>("");
+
+  const [updateComment, { isLoading: updating }] = useUpdateModelCommentMutation();
+  const [deleteComment, { isLoading: deleting }] = useDeleteModelCommentMutation();
+
+  // Flatten all image media from current comments for modal navigation
+  const images = useMemo(() => {
+    const list: Array<{ url: string; id: string; name?: string }> = [];
+    const items: any[] = Array.isArray((data as any)?.items) ? (data as any).items : [];
+    for (const c of items) {
+      const media = Array.isArray(c?.media) ? c.media : [];
+      for (const m of media) {
+        if (m && m.kind === 'image' && m.url) {
+          list.push({ url: String(m.url), id: String(m.id || m.url), name: m.name });
+        }
+      }
+    }
+    return list;
+  }, [data]);
+  const urlToIndex = useMemo(() => {
+    const map = new Map<string, number>();
+    images.forEach((im, idx) => map.set(im.url, idx));
+    return map;
+  }, [images]);
+
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
+  const current = openIdx != null ? images[openIdx] : null;
+
+  function onDownload(url: string) {
+    try {
+      const a = document.createElement('a');
+      a.href = url;
+      const name = url.split('?')[0].split('#')[0].split('/').pop() || 'file';
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch {
+      window.open(url, '_blank');
+    }
+  }
+
+  useEffect(() => {
+    if (openIdx == null) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        setOpenIdx(null);
+      } else if (e.key === 'ArrowLeft') {
+        setOpenIdx((idx) => {
+          if (idx == null || images.length === 0) return idx;
+          return (idx - 1 + images.length) % images.length;
+        });
+      } else if (e.key === 'ArrowRight') {
+        setOpenIdx((idx) => {
+          if (idx == null || images.length === 0) return idx;
+          return (idx + 1) % images.length;
+        });
+      }
+    }
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [openIdx, images.length]);
+
+  function handleAddAttachment(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+    if (!files) return;
+    const list: Array<{ file: File; url: string; name: string; type: 'image' | 'file' }> = [];
+    for (const f of Array.from(files)) {
+      const url = URL.createObjectURL(f);
+      const type: 'image' | 'file' = f.type.startsWith('image/') ? 'image' : 'file';
+      list.push({ file: f, url, name: f.name, type });
+    }
+    setAttachments((prev) => [...prev, ...list]);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  }
+
+  function handleRemoveAttachment(index: number) {
+    setAttachments((prev) => prev.filter((_, i) => i !== index));
+  }
 
   async function onSend() {
     if (!activeId) return;
@@ -64,17 +151,16 @@ export default function ProjectCommentsClient({ models }: { models: ModelLite[] 
     }
 
     const content = text.trim();
-    const files = fileRef.current?.files;
     const uploads: Array<{ url: string; mime?: string }> = [];
 
     try {
-      if (files && files.length) {
-        const max = Math.min(files.length, 10);
+      if (attachments.length) {
+        const max = Math.min(attachments.length, 10);
         for (let i = 0; i < max; i++) {
-          const f = files[i];
-          const type = f.type || "application/octet-stream";
-          const presigned = await presignUpload({ file: f }).unwrap();
-          const finalUrl = (presigned as any).url || (presigned as any).publicUrl || (presigned as any).key || "";
+          const a = attachments[i];
+          const type = a.file.type || 'application/octet-stream';
+          const presigned = await presignUpload({ file: a.file }).unwrap();
+          const finalUrl = (presigned as any).url || (presigned as any).publicUrl || (presigned as any).key || '';
           if (!finalUrl) continue;
           uploads.push({ url: finalUrl, mime: type });
         }
@@ -84,7 +170,7 @@ export default function ProjectCommentsClient({ models }: { models: ModelLite[] 
 
       await addComment({ modelId: activeId, content: content || undefined, media: uploads }).unwrap();
       setText("");
-      if (fileRef.current) fileRef.current.value = "";
+      setAttachments([]);
       await refetch();
     } catch (e) {
       // no-op; keep input for retry
@@ -92,90 +178,234 @@ export default function ProjectCommentsClient({ models }: { models: ModelLite[] 
   }
 
   return (
-    <div className="bg-white border rounded-xl overflow-hidden">
-      <div className="px-4 py-3 border-b flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div className="text-base font-medium">Comments</div>
-        <div className="flex items-center gap-2">
-          <label className="text-sm text-gray-600">Model</label>
-          <select
-            value={activeId}
-            onChange={(e) => setActiveId(e.target.value)}
-            className="border rounded-md px-2 py-1 text-sm min-w-[220px]"
-          >
-            {sortedModels.map((m) => (
-              <option key={m.id} value={m.id}>
-                {(m.prompt && m.prompt.length > 60 ? m.prompt.slice(0, 57) + "…" : (m.prompt || "Model"))}
-              </option>
-            ))}
-          </select>
-        </div>
+    <section className="bg-white rounded-2xl p-8 shadow-sm border border-gray-200" id="comments">
+      <div className="flex items-center gap-3 mb-6">
+        <MessageCircle className="w-6 h-6 text-gray-700" />
+        <h2 className="text-2xl font-bold text-gray-900">Comments ({data?.total ?? 0})</h2>
       </div>
 
-      <div className="p-4 space-y-3">
+      {/* Comment Composer */}
+      <div className="mb-8 bg-gray-50 rounded-xl p-6 border border-gray-200">
+        <textarea
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder={isAuthed ? 'Share your thoughts...' : 'Sign in to comment'}
+          maxLength={500}
+          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+          rows={3}
+          disabled={!isAuthed || posting}
+        />
+        <div className="flex items-center justify-between mt-3">
+          <div className="flex items-center gap-3">
+            <label className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer whitespace-nowrap">
+              <Paperclip className="w-4 h-4 text-gray-600" />
+              <span className="text-sm text-gray-700">Attach</span>
+              <input
+                type="file"
+                multiple
+                onChange={handleAddAttachment}
+                className="hidden"
+                accept="image/*,.pdf,.doc,.docx"
+                ref={fileInputRef}
+                disabled={!isAuthed || posting}
+              />
+            </label>
+            <span className="text-xs text-gray-500">{text.length}/500</span>
+          </div>
+          <button
+            onClick={onSend}
+            disabled={!isAuthed || posting || (!text.trim() && attachments.length === 0)}
+            className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors whitespace-nowrap cursor-pointer"
+          >
+            <Send className="w-4 h-4" />
+            <span>Post</span>
+          </button>
+        </div>
+
+        {/* Attachments Preview */}
+        {attachments.length > 0 && (
+          <div className="flex flex-wrap gap-3 mt-4">
+            {attachments.map((a, index) => (
+              <div key={index} className="relative group bg-white rounded-lg p-2 border border-gray-200">
+                {a.type === 'image' ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={a.url} alt={a.name} className="w-20 h-20 object-cover rounded" />
+                ) : (
+                  <div className="w-20 h-20 flex items-center justify-center bg-gray-100 rounded">
+                    <FileText className="w-8 h-8 text-gray-600" />
+                  </div>
+                )}
+                <button
+                  onClick={() => handleRemoveAttachment(index)}
+                  className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Comments List */}
+      <div className="space-y-6">
         {isFetching ? (
           <div className="text-sm text-gray-500">Loading comments…</div>
         ) : !data?.items?.length ? (
           <div className="text-sm text-gray-500">No comments yet. Be the first to share your thoughts.</div>
         ) : (
-          <div className="space-y-3 max-h-[28rem] overflow-auto pr-1">
-            {data.items.map((c: any) => (
-              <div key={c.id} className="border rounded-lg p-3">
-                <div className="flex items-center gap-2 text-[11px] text-gray-500 mb-1">
-                  {c.user?.image ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={c.user.image} alt="avatar" className="h-5 w-5 rounded-full border object-cover" />
-                  ) : (
-                    <div className="h-5 w-5 rounded-full border bg-gray-100" />
-                  )}
-                  <div className="truncate">{c.user?.name || "User"}</div>
-                  <div>•</div>
-                  <div>{new Date(c.createdAt).toLocaleString()}</div>
+          data.items.map((comment: any) => (
+            <div key={comment.id} className="flex gap-4">
+              {comment.user?.image ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={comment.user.image} alt={comment.user?.name || 'User'} className="w-12 h-12 rounded-full object-cover flex-shrink-0" />
+              ) : (
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-lg font-semibold flex-shrink-0">
+                  {(comment.user?.name || 'U').charAt(0)}
                 </div>
-                {c.content ? <div className="text-sm whitespace-pre-wrap">{c.content}</div> : null}
-                {Array.isArray(c.media) && c.media.length ? (
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {c.media.map((m: any) => (
-                      m.kind === 'image' ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img key={m.id} src={m.url} alt={m.id} className="h-24 w-auto rounded border object-cover" />
-                      ) : m.kind === 'video' ? (
-                        <video key={m.id} src={m.url} className="h-24 rounded border" controls />
-                      ) : (
-                        <a key={m.id} href={m.url} target="_blank" rel="noreferrer" className="px-2 py-1 text-xs rounded border hover:bg-gray-50">Download file</a>
-                      )
-                    ))}
+              )}
+              <div className="flex-1">
+                <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-semibold text-gray-900 truncate">{comment.user?.name || 'User'}</h4>
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs text-gray-500">{new Date(comment.createdAt).toLocaleString()}</span>
+                      {userId && ((comment.userId || (comment.user && comment.user.id)) === userId) ? (
+                        editingId === comment.id ? (
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={async () => {
+                                try {
+                                  await updateComment({ modelId: activeId, commentId: comment.id, content: editingText }).unwrap();
+                                  setEditingId(null);
+                                  setEditingText("");
+                                  await refetch();
+                                } catch {}
+                              }}
+                              disabled={updating}
+                              className="p-1 rounded-md border bg-green-600 text-white hover:bg-green-700 disabled:opacity-50"
+                              title="Save"
+                            >
+                              <Check className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => { setEditingId(null); setEditingText(""); }}
+                              className="p-1 rounded-md border hover:bg-gray-100"
+                              title="Cancel"
+                            >
+                              <XIcon className="w-4 h-4" />
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => { setEditingId(comment.id); setEditingText(comment.content || ""); }}
+                              className="p-1 rounded-md border hover:bg-gray-100"
+                              title="Edit"
+                            >
+                              <Pencil className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={async () => {
+                                if (!confirm("Delete this comment?")) return;
+                                try { await deleteComment({ modelId: activeId, commentId: comment.id }).unwrap(); await refetch(); } catch {}
+                              }}
+                              disabled={deleting}
+                              className="p-1 rounded-md border hover:bg-red-50 text-red-600 disabled:opacity-50"
+                              title="Delete"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        )
+                      ) : null}
+                    </div>
                   </div>
-                ) : null}
-              </div>
-            ))}
-          </div>
-        )}
+                  {editingId === comment.id ? (
+                    <textarea
+                      value={editingText}
+                      onChange={(e) => setEditingText(e.target.value)}
+                      maxLength={500}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                      rows={3}
+                    />
+                  ) : comment.content ? (
+                    <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-wrap">{comment.content}</p>
+                  ) : null}
 
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-1">
-          <input
-            className="flex-1 border rounded-md px-3 py-2 text-sm"
-            placeholder={isAuthed ? "Write a comment…" : "Sign in to comment"}
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            disabled={!isAuthed || posting}
-          />
-          <input
-            type="file"
-            ref={fileRef}
-            multiple
-            accept="image/*,video/*,.stl,.obj,.3mf,.gcode,.glb,.fbx,.usdz"
-            className="flex-1 border rounded-md px-3 py-2 text-sm"
-            disabled={!isAuthed || posting}
-          />
-          <button
-            onClick={onSend}
-            disabled={!isAuthed || posting || (!text.trim() && !(fileRef.current && fileRef.current.files && fileRef.current.files.length))}
-            className="px-3 py-2 text-sm rounded-md border bg-black text-white disabled:opacity-50"
-          >
-            {posting ? "Sending…" : "Send"}
-          </button>
-        </div>
+                  {Array.isArray(comment.media) && comment.media.length > 0 && (
+                    <div className="flex flex-wrap gap-3 mt-4">
+                      {comment.media.map((m: any) => (
+                        <div key={m.id} className="rounded-lg overflow-hidden border border-gray-200">
+                          {m.kind === 'image' ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={m.url}
+                              alt={m.id}
+                              className="w-48 h-32 object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                              onClick={() => {
+                                const idx = urlToIndex.get(String(m.url));
+                                if (typeof idx === 'number') setOpenIdx(idx);
+                              }}
+                            />
+                          ) : m.kind === 'video' ? (
+                            <video src={m.url} className="w-48 h-32 object-cover" controls />
+                          ) : (
+                            <a
+                              href={m.url}
+                              download={(m.name || 'attachment') as string}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="w-48 h-32 bg-gray-100 flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-gray-200 transition-colors block"
+                              title={m.name || 'Download attachment'}
+                            >
+                              <FileText className="w-8 h-8 text-gray-600 mx-auto" />
+                              <span className="text-xs text-gray-600 px-2 text-center truncate w-full">{m.name || 'Attachment'}</span>
+                            </a>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))
+        )}
       </div>
-    </div>
+      {/* Image Modal for comment attachments */}
+      {current ? (
+        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" onClick={() => setOpenIdx(null)}>
+          <div className="bg-white rounded-2xl w-full max-w-5xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-4 py-3 border-b">
+              <div className="text-sm font-medium truncate">{current.name || current.id}</div>
+              <div className="flex items-center gap-2">
+                <button className="px-3 py-1.5 text-sm rounded-md border bg-white hover:bg-gray-50" onClick={() => window.open(current.url, '_blank')}>Open in new tab</button>
+                <button className="px-3 py-1.5 text-sm rounded-md border bg-blue-600 text-white hover:bg-blue-700" onClick={() => onDownload(current.url)}>Download</button>
+                <button className="px-3 py-1.5 text-sm rounded-md border" onClick={() => setOpenIdx(null)}>Close</button>
+              </div>
+            </div>
+            <div className="relative max-h-[80vh] bg-gray-50">
+              <button
+                className="absolute left-2 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white/80 hover:bg-white border shadow"
+                onClick={() => setOpenIdx((idx) => (idx == null || images.length === 0 ? idx : (idx - 1 + images.length) % images.length))}
+                aria-label="Previous image"
+              >
+                ‹
+              </button>
+              <button
+                className="absolute right-2 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white/80 hover:bg-white border shadow"
+                onClick={() => setOpenIdx((idx) => (idx == null || images.length === 0 ? idx : (idx + 1) % images.length))}
+                aria-label="Next image"
+              >
+                ›
+              </button>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={current.url} alt={current.id} className="w-full h-auto object-contain max-h-[80vh]" />
+            </div>
+          </div>
+        </div>
+      ) : null}
+    </section>
   );
 }
