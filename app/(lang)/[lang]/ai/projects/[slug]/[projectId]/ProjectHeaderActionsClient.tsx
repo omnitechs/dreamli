@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import { Heart, Share2, Download, ChevronDown } from "lucide-react";
+import { Heart, Share2, Download, ChevronDown, Printer } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -131,6 +131,13 @@ export default function ProjectHeaderActionsClient({ modelId }: { modelId?: stri
     return fmts;
   }, [modelData]);
 
+  async function onPrint() {
+    if (!effectiveModelId) return;
+    if (!(await ensureAuth())) return;
+    const path = `/${lang}/ai/purchase?modelId=${encodeURIComponent(effectiveModelId)}`;
+    router.push(path);
+  }
+
   return (
     <div className="flex items-center gap-3">
       <button
@@ -151,6 +158,17 @@ export default function ProjectHeaderActionsClient({ modelId }: { modelId?: stri
       >
         <Share2 className="w-5 h-5" />
         <span>Share</span>
+      </button>
+      <button
+        onClick={onPrint}
+        disabled={!effectiveModelId}
+        className={`flex items-center gap-2 px-4 py-2 rounded-xl bg-white text-gray-700 border-2 border-gray-200 hover:border-green-200 transition-colors whitespace-nowrap cursor-pointer ${
+          !effectiveModelId ? "opacity-50 cursor-not-allowed" : ""
+        }`}
+        title="Print (Purchase)"
+      >
+        <Printer className="w-5 h-5" />
+        <span>Print</span>
       </button>
       <div className="relative">
         <button

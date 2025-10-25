@@ -1,11 +1,9 @@
 import React from 'react';
 import { prisma } from '@/lib/prisma';
-import Image from 'next/image';
 import { notFound, redirect } from 'next/navigation';
 import ProjectCommentsClient from './ProjectCommentsClient';
-import ProjectHeaderActionsClient from './ProjectHeaderActionsClient';
-import ProjectModelSectionClient from './ProjectModelSectionClient';
 import ReferenceImagesClient from './ReferenceImagesClient';
+import ProjectHeaderAndModelClient from './ProjectHeaderAndModelClient';
 
 function slugify(s?: string | null) {
   const base = (s || '').toString().toLowerCase();
@@ -40,9 +38,10 @@ export default async function ProjectPublicPage({ params }: { params: Promise<{ 
     redirect(`/en/ai/projects/${desired}/${encodeURIComponent(projectId)}`);
   }
 
-  // Increment project views (defensive if column not migrated yet)
+  // Increment project views (defensive; do not crash if column/client mismatches)
   try {
-    await (prisma as any).project.update({ where: { id: projectId }, data: { viewsCount: { increment: 1 } } });
+    const { safeIncrementProjectViews } = await import('@/lib/views');
+    await safeIncrementProjectViews(projectId);
   } catch {}
 
   const owner = project.ownerId
@@ -129,32 +128,11 @@ export default async function ProjectPublicPage({ params }: { params: Promise<{ 
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              {owner?.image ? (
-                <Image src={owner.image} alt={owner.name || 'User'} width={48} height={48} className="w-12 h-12 rounded-full object-cover" />
-              ) : (
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-lg font-semibold">
-                  {(owner?.name || 'U').charAt(0)}
-                </div>
-              )}
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">{project.name}</h1>
-                <p className="text-sm text-gray-600">{owner ? <>by {owner.name || 'User'}</> : null}</p>
-              </div>
-            </div>
-            <ProjectHeaderActionsClient modelId={(models as any)?.[0]?.id || null} />
-          </div>
-        </div>
-      </div>
+      {/* Header + 3D Model section (shared selected model state) */}
+      <ProjectHeaderAndModelClient projectName={project.name} owner={owner as any} models={models as any} />
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-8 space-y-12">
-        {/* 3D Model Section */}
-        <ProjectModelSectionClient models={models as any} />
 
         {/* Images Section */}
         <ReferenceImagesClient images={images as any} />

@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import ProfileHeader from '@/model/profile/ProfileHeader';
 import UserProjects from '@/model/profile/UserProjects';
+import { getPublicProjectsByOwner, getProjectViewsMap } from '@/lib/views';
 
 export const dynamic = 'force-dynamic';
 
@@ -42,21 +43,14 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
   if (!user) return notFound();
 
   // Projects owned by this user (only public projects)
-  let baseProjects: any[] = [];
-  try {
-    baseProjects = await prisma.project.findMany({ where: { ownerId: user.id, isPublic: true as any }, select: { id: true, name: true, createdAt: true, isPublic: true as any } } as any);
-  } catch {
-    baseProjects = await prisma.project.findMany({ where: { ownerId: user.id }, select: { id: true, name: true, createdAt: true } });
-    // Best-effort: assume public if column missing
-    baseProjects = baseProjects.map((p: any) => ({ ...p, isPublic: true }));
-  }
+  const baseProjects: any[] = await getPublicProjectsByOwner(user.id);
   const projectIds = baseProjects.map(p => p.id);
 
   // Totals (views + likes) across public projects
   let totalViews = 0;
   try {
-    const agg: any = await (prisma as any).project.aggregate({ _sum: { viewsCount: true }, where: { ownerId: user.id, isPublic: true } });
-    totalViews = Number(agg?._sum?.viewsCount || 0);
+    const viewsMap = await getProjectViewsMap(projectIds);
+    for (const id of projectIds) totalViews += viewsMap.get(id) || 0;
   } catch {
     totalViews = 0;
   }
@@ -68,10 +62,10 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
     projInfoById.set(p.id, { id: p.id, name: p.name ?? 'Project', createdAt: p.createdAt, views: 0, thumbnail: null, modelIds: new Set<string>(), isPublic: true });
   }
   try {
-    const viewRows: any[] = await (prisma as any).project.findMany({ where: { id: { in: projectIds } }, select: { id: true, viewsCount: true } });
-    for (const r of viewRows || []) {
-      const pi = projInfoById.get(r.id);
-      if (pi) pi.views = Number((r as any).viewsCount || 0);
+    const viewsMap = await getProjectViewsMap(projectIds);
+    for (const id of projectIds) {
+      const pi = projInfoById.get(id);
+      if (pi) pi.views = viewsMap.get(id) || 0;
     }
   } catch {}
 

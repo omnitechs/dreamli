@@ -16,7 +16,7 @@ import { fromSnapshot } from '@/app/(lang)/[lang]/ai/libs/snapshots';
 import type { UUID } from '@/app/(lang)/[lang]/ai/types';
 import type { RootState } from '../../../../store';
 
-export type Project = { id: UUID; name: string; createdAt: string };
+export type Project = { id: UUID; name: string; description?: string | null; createdAt: string };
 
 export type Commit = {
     id: UUID;
@@ -49,7 +49,7 @@ export const api = createApi({
             query: () => ({ url: 'projects' }),
             providesTags: ['Projects'],
         }),
-        createProject: builder.mutation<Project, { name: string }>({
+        createProject: builder.mutation<Project, { name: string; description?: string | null }>({
             query: (body) => ({ url: 'projects', method: 'POST', body }),
             invalidatesTags: ['Projects'],
         }),

@@ -37,7 +37,7 @@ export async function GET(req: Request) {
   const projectIds = Array.from(new Set(commits.map(c => c.projectId)));
   const projects = await prisma.project.findMany({
     where: { id: { in: projectIds } },
-    select: { id: true, ownerId: true, name: true, isPublic: true as any },
+    select: { id: true, ownerId: true, name: true },
   } as any);
   const projectById = new Map(projects.map(p => [p.id, p]));
 

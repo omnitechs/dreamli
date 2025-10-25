@@ -16,14 +16,16 @@ function pickBestUrl(urls?: ModelForViewer["modelUrls"]) {
   return urls.glb || urls.fbx || urls.obj || urls.usdz || urls.stl || undefined;
 }
 
-export default function ProjectModelSectionClient({ models }: { models: ModelForViewer[] }) {
+export default function ProjectModelSectionClient({ models, activeId: controlledId, onActiveChange }: { models: ModelForViewer[]; activeId?: string; onActiveChange?: (id: string) => void; }) {
   const sorted = useMemo(() => {
     return [...models].sort(
       (a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
     );
   }, [models]);
 
-  const [activeId, setActiveId] = useState<string>(sorted[0]?.id || "");
+  const [uncontrolledId, setUncontrolledId] = useState<string>(sorted[0]?.id || "");
+  const activeId = controlledId ?? uncontrolledId;
+  const setActiveId = onActiveChange ?? setUncontrolledId;
   const active = useMemo(() => sorted.find((m) => m.id === activeId) || sorted[0], [sorted, activeId]);
   const activeUrl = pickBestUrl(active?.modelUrls);
 
