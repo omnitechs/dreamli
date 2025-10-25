@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import ProfileHeader from '@/model/profile/ProfileHeader';
 import UserProjects from '@/model/profile/UserProjects';
 import { getPublicProjectsByOwner, getProjectViewsMap } from '@/lib/views';
+import { auth } from '@/lib/auth';
+import { loadProjectCardsForOwner } from '@/lib/projectCards';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,6 +30,9 @@ function pickBestModelUrl(modelUrls?: Record<string, string | undefined>) {
 
 export default async function PublicProfilePage({ params }: { params: Promise<{ lang: string; username: string }> }) {
   const { lang, username } = await params;
+
+  const session = await auth();
+  const viewerId = (session?.user as any)?.id as string | undefined;
 
   // Load by username (preferred) or fallback to ID
   let user: any = null;
@@ -132,23 +137,31 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
   const bio: string = (user as any).bio || '';
   const joinDate: string = (user as any).createdAt instanceof Date ? (user as any).createdAt.toISOString() : String((user as any).createdAt);
 
-  const projectCards = Array.from(projInfoById.values()).map(p => {
-    let likes = 0, comments = 0;
-    for (const mid of p.modelIds) {
-      likes += likeCountByModel.get(mid) || 0;
-      comments += commentCountByModel.get(mid) || 0;
+  // Choose a representative model per project
+  const representativeByProject = new Map<string, string | undefined>();
+  for (const p of Array.from(projInfoById.values())) {
+    const first = Array.from(p.modelIds)[0];
+    representativeByProject.set(p.id, first);
+  }
+
+  // Compute whether the viewer liked the representative model
+  const repIds = Array.from(new Set(Array.from(representativeByProject.values()).filter(Boolean))) as string[];
+  const likedSet = new Set<string>();
+  if (viewerId && repIds.length) {
+    try {
+      const rows = await (prisma as any).modelLike.findMany({ where: { userId: viewerId, modelId: { in: repIds } }, select: { modelId: true } });
+      for (const r of rows as any[]) likedSet.add(String((r as any).modelId));
+    } catch {
+      try {
+        const rows = await prisma.$queryRaw<{ modelId: string }[]>`SELECT "modelId" FROM "ModelLike" WHERE "userId" = ${viewerId} AND "modelId" = ANY(${repIds}::text[])`;
+        for (const r of rows || []) likedSet.add(String(r.modelId));
+      } catch {}
     }
-    return {
-      id: p.id,
-      name: p.name,
-      thumbnail: p.thumbnail || '/placeholder.png',
-      likes,
-      views: p.views,
-      comments,
-      createdAt: p.createdAt instanceof Date ? p.createdAt.toISOString() : String(p.createdAt),
-      isPublic: true,
-    };
-  });
+  }
+
+  const { projects: projectCards, totals } = await loadProjectCardsForOwner(user.id, viewerId, true);
+  totalViews = totals.totalViews;
+  totalLikes = totals.totalLikes;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">

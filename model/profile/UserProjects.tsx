@@ -2,6 +2,11 @@
 'use client';
 
 import Link from 'next/link';
+import ProjectCard from '@/components/ProjectCard';
+import { useLikeModelMutation, useUnlikeModelMutation } from '@/app/(lang)/[lang]/ai/services/api';
+import { makeToggleLikeHandler } from '@/components/projectCardActions';
+import { usePathname, useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 interface Project {
   id: string; // projectId
@@ -12,6 +17,8 @@ interface Project {
   comments: number;
   createdAt: string;
   isPublic: boolean;
+  representativeModelId?: string; // any SUCCEEDED model within the project
+  userLiked?: boolean; // whether current viewer liked representative model
 }
 
 interface UserProjectsProps {
@@ -32,6 +39,13 @@ function slugify(s?: string) {
 }
 
 export default function UserProjects({ projects, isOwnProfile, baseLang }: UserProjectsProps) {
+  const { data: session } = useSession();
+  const isAuthed = !!(session as any)?.user?.id;
+  const pathname = usePathname();
+  const router = useRouter();
+  const [likeModel] = useLikeModelMutation();
+  const [unlikeModel] = useUnlikeModelMutation();
+
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
       <div className="flex items-center justify-between mb-6">
@@ -50,58 +64,33 @@ export default function UserProjects({ projects, isOwnProfile, baseLang }: UserP
 
       {projects.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project) => (
-            <Link
-              key={project.id}
-              href={`/${baseLang || 'en'}/ai/projects/${encodeURIComponent(slugify(project.name))}/${encodeURIComponent(project.id)}`}
-              className="group block"
-            >
-              <div className="bg-gray-50 rounded-lg overflow-hidden border border-gray-100 hover:shadow-md transition-all duration-200">
-                <div className="aspect-video relative overflow-hidden">
-                  {/* Using img to avoid remote domain restrictions; UI remains identical */}
-                  <img
-                    src={project.thumbnail}
-                    alt={project.name}
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-                  />
-                  {!project.isPublic && isOwnProfile && (
-                    <div className="absolute top-2 right-2 px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
-                      Private
-                    </div>
-                  )}
-                </div>
-                
-                <div className="p-4">
-                  <h3 className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">
-                    {project.name}
-                  </h3>
-                  
-                  <div className="flex items-center gap-4 mt-3 text-sm text-gray-600">
-                    <div className="flex items-center gap-1">
-                      <i className="ri-heart-line text-red-500"></i>
-                      <span>{project.likes}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <i className="ri-eye-line"></i>
-                      <span>{project.views}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <i className="ri-chat-3-line"></i>
-                      <span>{project.comments}</span>
-                    </div>
-                  </div>
-                  
-                  <div className="text-xs text-gray-500 mt-2">
-                    {new Date(project.createdAt).toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                      year: 'numeric'
-                    })}
-                  </div>
-                </div>
-              </div>
-            </Link>
-          ))}
+          {projects.map((project) => {
+            const href = `/${baseLang || 'en'}/ai/projects/${encodeURIComponent(slugify(project.name))}/${encodeURIComponent(project.id)}`;
+            const canInteract = !!project.representativeModelId;
+            return (
+              <ProjectCard
+                key={project.id}
+                href={href}
+                title={project.name}
+                imageUrl={project.thumbnail}
+                likesCount={project.likes}
+                commentsCount={project.comments}
+                viewsCount={project.views}
+                likedByMe={canInteract ? !!project.userLiked : false}
+                onToggleLike={canInteract ? makeToggleLikeHandler({
+                  lang: baseLang || 'en',
+                  pathname,
+                  router,
+                  isAuthed,
+                  likeModel: (args: { modelId: string }) => likeModel(args),
+                  unlikeModel: (args: { modelId: string }) => unlikeModel(args),
+                  redirectFallbackPath: '/profile',
+                })(project.representativeModelId!) : undefined}
+                badgeText={!project.isPublic && isOwnProfile ? 'Private' : undefined}
+                metaText={new Date(project.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+              />
+            );
+          })}
         </div>
       ) : (
         <div className="text-center py-12">

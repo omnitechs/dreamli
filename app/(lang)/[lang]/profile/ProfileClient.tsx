@@ -45,6 +45,8 @@ export type ProfileProject = {
   comments: number;
   createdAt: string;
   isPublic: boolean;
+  representativeModelId?: string;
+  userLiked?: boolean;
 };
 
 export default function ProfileClient({ initialUser, initialCredits, initialTransactions, initialProjects, baseLang }: { initialUser: ProfileUserView; initialCredits: ProfileCredits; initialTransactions: ProfileTransaction[]; initialProjects: ProfileProject[]; baseLang: string }) {

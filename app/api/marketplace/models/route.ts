@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/lib/auth';
+import { getProjectViewsMap } from '@/lib/views';
 
 export const dynamic = 'force-dynamic';
 
@@ -35,10 +36,27 @@ export async function GET(req: Request) {
 
   // We also need project owner info
   const projectIds = Array.from(new Set(commits.map(c => c.projectId)));
-  const projects = await prisma.project.findMany({
-    where: { id: { in: projectIds } },
-    select: { id: true, ownerId: true, name: true },
-  } as any);
+  let projects: any[] = [];
+  try {
+    projects = await prisma.project.findMany({
+      where: { id: { in: projectIds } },
+      select: { id: true, ownerId: true, name: true, isPublic: true as any, viewsCount: true as any },
+    } as any);
+  } catch {
+    // Fallback when schema doesn't yet have isPublic/viewsCount columns
+    const rows = await prisma.project.findMany({
+      where: { id: { in: projectIds } },
+      select: { id: true, ownerId: true, name: true },
+    });
+    // Attempt to fetch views using raw SQL helper to avoid Prisma Client schema mismatch
+    let viewsMap: Map<string, number> = new Map();
+    try {
+      viewsMap = await getProjectViewsMap(projectIds);
+    } catch {
+      viewsMap = new Map();
+    }
+    projects = rows.map((p: any) => ({ ...p, isPublic: true, viewsCount: viewsMap.get(p.id) || 0 }));
+  }
   const projectById = new Map(projects.map(p => [p.id, p]));
 
   const ownerIds = Array.from(new Set(projects.map(p => p.ownerId)));
@@ -89,6 +107,8 @@ export async function GET(req: Request) {
         likesCount: 0,
         commentsCount: 0,
         userLiked: false,
+        // Views come from the parent project if available
+        viewsCount: Number((proj as any)?.viewsCount || 0),
         // Minimal placeholder pricing until a dedicated pricing model/table exists
         priceEur: 10,
       });

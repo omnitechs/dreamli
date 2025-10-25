@@ -1,12 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { useGetProjectsQuery, useCreateProjectMutation, useGetMarketplaceModelsQuery, useDownloadModelMutation } from '@/app/(lang)/[lang]/ai/services/api';
+import { useGetProjectsQuery, useCreateProjectMutation, useGetMarketplaceModelsQuery, useDownloadModelMutation, useLikeModelMutation, useUnlikeModelMutation } from '@/app/(lang)/[lang]/ai/services/api';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useParams, useRouter, usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { Plus, MessageSquare, Upload, Cpu } from 'lucide-react';
+import ProjectCard from '@/components/ProjectCard';
+import { makeToggleLikeHandler } from '@/components/projectCardActions';
 
 function slugify(s?: string) {
     const base = (s || '').toLowerCase();
@@ -39,6 +41,8 @@ export default function ProjectsPage() {
     const router = useRouter();
     const pathname = usePathname();
     const items = marketData?.items || [];
+    const [likeModel] = useLikeModelMutation();
+    const [unlikeModel] = useUnlikeModelMutation();
 
     const onCreate = async () => {
         if (!name.trim()) return;
@@ -198,57 +202,26 @@ export default function ProjectsPage() {
                         <>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                                 {items.map((m: any) => (
-                                    <div key={m.id} className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-                                        <Link href={`/${lang}/ai/projects/${slugify(m.projectName || m.owner?.name || 'project')}/${encodeURIComponent(m.projectId)}`} className="block">
-                                            <div className="aspect-[3/2] bg-gray-100 overflow-hidden">
-                                                {m.thumbnailUrl ? (
-                                                    // eslint-disable-next-line @next/next/no-img-element
-                                                    <img src={m.thumbnailUrl} alt={m.prompt || t('modelAlt')} className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-300" />
-                                                ) : (
-                                                    <div className="w-full h-full flex items-center justify-center text-gray-400">{t('noPreview')}</div>
-                                                )}
-                                            </div>
-                                        </Link>
-                                        <div className="p-4">
-                                            <Link href={`/${lang}/ai/projects/${slugify(m.projectName || m.owner?.name || 'project')}/${encodeURIComponent(m.projectId)}`} className="block mb-3">
-                                                <div className="font-semibold text-gray-900 line-clamp-1 hover:text-blue-600 transition-colors">{m.prompt || '3D Model'}</div>
-                                            </Link>
-                                            <div className="flex items-center gap-2 mb-3">
-                                                {m.owner?.image ? (
-                                                    // eslint-disable-next-line @next/next/no-img-element
-                                                    <img src={m.owner.image} alt={m.owner?.name || t('userFallback')} className="w-6 h-6 rounded-full object-cover" />
-                                                ) : (
-                                                    <div className="w-6 h-6 rounded-full bg-gray-200" />
-                                                )}
-                                                <span className="text-sm text-gray-600">{m.owner?.name || t('userFallback')}</span>
-                                            </div>
-                                            <div className="flex items-center justify-between">
-                                                <div className="flex items-center gap-4 text-gray-500">
-                                                    <div className="flex items-center gap-1 text-sm">
-                                                        <svg
-                                                            className={`w-4 h-4 ${m.userLiked ? 'text-red-500 fill-current' : ''}`}
-                                                            fill="none"
-                                                            stroke="currentColor"
-                                                            viewBox="0 0 24 24"
-                                                        >
-                                                            <path
-                                                                strokeLinecap="round"
-                                                                strokeLinejoin="round"
-                                                                strokeWidth={2}
-                                                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                                                            />
-                                                        </svg>
-                                                        <span>{m.likesCount || 0}</span>
-                                                    </div>
-                                                    <div className="flex items-center gap-1 text-sm">
-                                                        <MessageSquare className="w-4 h-4" />
-                                                        <span>{m.commentsCount || 0}</span>
-                                                    </div>
-                                                </div>
-                                                <span className="text-xs text-gray-400">{new Date(m.createdAt).toLocaleDateString()}</span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <ProjectCard
+                                      key={m.id}
+                                      href={`/${lang}/ai/projects/${slugify(m.projectName || m.owner?.name || 'project')}/${encodeURIComponent(m.projectId)}`}
+                                      title={m.prompt || '3D Model'}
+                                      imageUrl={m.thumbnailUrl}
+                                      likesCount={m.likesCount || 0}
+                                      commentsCount={m.commentsCount || 0}
+                                      viewsCount={m.viewsCount || 0}
+                                      likedByMe={!!m.userLiked}
+                                      metaText={new Date(m.createdAt).toLocaleDateString()}
+                                      onToggleLike={makeToggleLikeHandler({
+                                        lang,
+                                        pathname,
+                                        router,
+                                        isAuthed,
+                                        likeModel: (args: { modelId: string }) => likeModel(args),
+                                        unlikeModel: (args: { modelId: string }) => unlikeModel(args),
+                                        redirectFallbackPath: '/ai',
+                                      })(m.id)}
+                                    />
                                 ))}
                             </div>
                             <div className="flex items-center justify-between mt-4">

@@ -16,6 +16,8 @@ import {
 } from '@/app/(lang)/[lang]/ai/services/api';
 import { useDownloadModelMutation } from '@/app/(lang)/[lang]/ai/services/api';
 import LazyGlb from '@/components/GlbViewer';
+import ProjectCard from '@/components/ProjectCard';
+import { makeToggleLikeHandler } from '@/components/projectCardActions';
 
 function slugify(s?: string) {
   const base = (s || '').toLowerCase();
@@ -113,17 +115,11 @@ export default function MarketplacePage() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {items.map((m: any) => (
-                <Card
+                <MarketplaceItemCard
                   key={m.id}
                   lang={lang}
                   item={m}
                   canInteract={isAuthed}
-                  onLikeToggle={async (id: string, liked: boolean) => {
-                    try {
-                      if (liked) await unlikeModel({ modelId: id }).unwrap();
-                      else await likeModel({ modelId: id }).unwrap();
-                    } catch {}
-                  }}
                 />
               ))}
             </div>
@@ -149,6 +145,38 @@ export default function MarketplacePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+function MarketplaceItemCard({ item, lang, canInteract }: { item: any; lang: string; canInteract: boolean; }) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const [likeModel] = useLikeModelMutation();
+  const [unlikeModel] = useUnlikeModelMutation();
+
+  const href = `/${lang}/ai/projects/${slugify(item.projectName || item.owner?.name || 'project')}/${encodeURIComponent(item.projectId)}`;
+
+  const onToggleLike = makeToggleLikeHandler({
+    lang,
+    pathname,
+    router,
+    isAuthed: canInteract,
+    likeModel: (args: { modelId: string }) => likeModel(args),
+    unlikeModel: (args: { modelId: string }) => unlikeModel(args),
+    redirectFallbackPath: '/marketplace',
+  })(item.id);
+
+  return (
+    <ProjectCard
+      href={href}
+      title={item.projectName || item.prompt || '3D Model'}
+      imageUrl={item.thumbnailUrl}
+      likesCount={item.likesCount || 0}
+      commentsCount={item.commentsCount || 0}
+      viewsCount={item.viewsCount || 0}
+      likedByMe={!!item.userLiked}
+      onToggleLike={onToggleLike}
+    />
   );
 }
 

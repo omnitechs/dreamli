@@ -2,6 +2,8 @@ import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import ProfileClient from './ProfileClient';
+import { projectColumnExists, getProjectViewsMap } from '@/lib/views';
+import { loadProjectCardsForOwner } from '@/lib/projectCards';
 
 export const dynamic = 'force-dynamic';
 
@@ -47,26 +49,35 @@ export default async function MyProfilePage(props: { params: Promise<{ lang: str
   }
   if (!user) redirect(`/${lang}/auth/login?redirect=/${lang}/profile`);
 
-  // Projects owned by the user
+  // Projects owned by the user — avoid selecting non-existent columns by checking existence first
   let baseProjects: any[] = [];
-  try {
-    baseProjects = await prisma.project.findMany({ where: { ownerId: user.id }, select: { id: true, name: true, createdAt: true, isPublic: true as any } } as any);
-  } catch {
-    baseProjects = await prisma.project.findMany({ where: { ownerId: user.id }, select: { id: true, name: true, createdAt: true } });
-    baseProjects = baseProjects.map((p: any) => ({ ...p, isPublic: true }));
+  const hasIsPublic = await projectColumnExists('isPublic');
+  if (hasIsPublic) {
+    try {
+      // Use raw SQL to avoid Prisma Client DMMF validation issues when the client lacks the column
+      baseProjects = await prisma.$queryRaw<{ id: string; name: string; createdAt: any; isPublic: boolean }[]>`
+        SELECT id, name, "createdAt", "isPublic" FROM "Project" WHERE "ownerId" = ${user.id}
+      `;
+    } catch {
+      // Fallback to minimal select and default isPublic to true
+      const rows = await prisma.project.findMany({ where: { ownerId: user.id }, select: { id: true, name: true, createdAt: true } });
+      baseProjects = rows.map((p: any) => ({ ...p, isPublic: true }));
+    }
+  } else {
+    const rows = await prisma.project.findMany({ where: { ownerId: user.id }, select: { id: true, name: true, createdAt: true } });
+    baseProjects = rows.map((p: any) => ({ ...p, isPublic: true }));
   }
   const projectIds = baseProjects.map(p => p.id);
 
   // Total projects
   const totalProjects = projectIds.length;
 
-  // Total views (sum of Project.viewsCount)
+  // Total views: sum views across user's projects using safe helper (no schema assumptions)
   let totalViews = 0;
   try {
-    const agg: any = await (prisma as any).project.aggregate({ _sum: { viewsCount: true }, where: { ownerId: user.id } });
-    totalViews = Number(agg?._sum?.viewsCount || 0);
+    const viewsMap = await getProjectViewsMap(projectIds);
+    for (const id of projectIds) totalViews += viewsMap.get(id) || 0;
   } catch {
-    // migration might be pending
     totalViews = 0;
   }
 
@@ -156,10 +167,10 @@ export default async function MyProfilePage(props: { params: Promise<{ lang: str
 
   // Views per project (defensive when column may not exist)
   try {
-    const viewRows: any[] = await (prisma as any).project.findMany({ where: { id: { in: projectIds } }, select: { id: true, viewsCount: true } });
-    for (const r of viewRows || []) {
-      const pi = projInfoById.get(r.id);
-      if (pi) pi.views = Number((r as any).viewsCount || 0);
+    const viewsMap = await getProjectViewsMap(projectIds);
+    for (const id of projectIds) {
+      const pi = projInfoById.get(id);
+      if (pi) pi.views = viewsMap.get(id) || 0;
     }
   } catch {}
 
@@ -207,25 +218,33 @@ export default async function MyProfilePage(props: { params: Promise<{ lang: str
       }
     }
 
-    // Build UI list
-    const initialProjects = Array.from(projInfoById.values()).map(p => {
-      let likes = 0, comments = 0;
-      for (const mid of p.modelIds) {
-        likes += likeCountByModel.get(mid) || 0;
-        comments += commentCountByModel.get(mid) || 0;
-      }
-      return {
-        id: p.id,
-        name: p.name,
-        thumbnail: p.thumbnail || '/placeholder.png',
-        likes,
-        views: p.views,
-        comments,
-        createdAt: p.createdAt instanceof Date ? p.createdAt.toISOString() : String(p.createdAt),
-        isPublic: p.isPublic,
-      };
-    });
+    // Determine a representative model per project for like/unlike interactions
+    const representativeByProject = new Map<string, string | undefined>();
+    for (const p of Array.from(projInfoById.values())) {
+      const first = Array.from(p.modelIds)[0];
+      representativeByProject.set(p.id, first);
+    }
 
+    // Compute whether the current viewer liked the representative model
+    const repIds = Array.from(new Set(Array.from(representativeByProject.values()).filter(Boolean))) as string[];
+    const likedSet = new Set<string>();
+    if (repIds.length) {
+      try {
+        const rows = await (prisma as any).modelLike.findMany({ where: { userId: user.id, modelId: { in: repIds } }, select: { modelId: true } });
+        for (const r of rows as any[]) likedSet.add(String((r as any).modelId));
+      } catch {
+        try {
+          const rows = await prisma.$queryRaw<{ modelId: string }[]>`SELECT "modelId" FROM "ModelLike" WHERE "userId" = ${user.id} AND "modelId" = ANY(${repIds}::text[])`;
+          for (const r of rows || []) likedSet.add(String(r.modelId));
+        } catch {}
+      }
+    }
+
+    // Build UI list using centralized loader
+    const loaded = await loadProjectCardsForOwner(user.id, user.id, false);
+    const initialProjects = loaded.projects as any;
+    // Override aggregated totals with centralized computation to keep consistency
+    const { totalProjects: totalProjectsLoaded, totalLikes: totalLikesLoaded, totalViews: totalViewsLoaded } = loaded.totals;
     const initialUser = {
       id: String(user.id),
       username,
@@ -233,9 +252,9 @@ export default async function MyProfilePage(props: { params: Promise<{ lang: str
       bio,
       avatar,
       joinDate,
-      totalProjects,
-      totalLikes,
-      totalViews,
+      totalProjects: totalProjectsLoaded,
+      totalLikes: totalLikesLoaded,
+      totalViews: totalViewsLoaded,
     };
 
     return <ProfileClient initialUser={initialUser} initialCredits={initialCredits as any} initialTransactions={initialTransactions as any} initialProjects={initialProjects as any} baseLang={lang} />;
