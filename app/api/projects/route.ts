@@ -11,9 +11,36 @@ export async function GET() {
         where: { ownerId: userId },
         orderBy: { createdAt: 'desc' },
     });
-    // Ensure description field exists in response to fit UI (schema may not have it yet)
-    const withDescription = projects.map((p: any) => ({ ...p, description: p.description ?? null }));
-    return NextResponse.json(withDescription);
+
+    // Enhance each project with lightweight counters from the latest commit snapshot
+    const enriched: any[] = [];
+    for (const p of projects) {
+        let imagesCount = 0, messagesCount = 0, modelsCount = 0;
+        try {
+            const latest = await prisma.commit.findFirst({
+                where: { projectId: p.id },
+                orderBy: { createdAt: 'desc' },
+                select: { snapshot: true },
+            });
+            const snap: any = latest?.snapshot ?? {};
+            const imgs: any[] = Array.isArray(snap?.images) ? snap.images : [];
+            const msgs: any[] = Array.isArray(snap?.messages) ? snap.messages : [];
+            const models: any[] = Array.isArray(snap?.models) ? snap.models : [];
+            imagesCount = imgs.length;
+            messagesCount = msgs.length;
+            modelsCount = models.filter((m: any) => String(m?.status || '').toUpperCase() === 'SUCCEEDED').length;
+        } catch {}
+        enriched.push({
+            ...p,
+            // Ensure description field exists in response to fit UI (schema may not have it yet)
+            description: (p as any).description ?? null,
+            imagesCount,
+            messagesCount,
+            modelsCount,
+        });
+    }
+
+    return NextResponse.json(enriched);
 }
 
 export async function POST(req: Request) {

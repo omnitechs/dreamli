@@ -119,7 +119,21 @@ export async function POST(req: Request, { params }: { params: Promise<{ modelId
       const newBal = user.creditsBalance.minus(dec);
       if (newBal.lt(0)) throw new Error('insufficient credits');
       await tx.creditLedger.create({
-        data: { userId, delta: dec.negated(), reason: 'download_charge', reference, balanceAfter: newBal },
+        data: {
+          userId,
+          delta: dec.negated(),
+          reason: 'download_charge',
+          reference,
+          balanceAfter: newBal,
+          details: {
+            kind: 'model_download',
+            modelId,
+            projectId,
+            format: fmt || null,
+            url: fileUrl,
+            viewPath: `/en/ai/models/model/${modelId}`,
+          } as any,
+        },
       });
       await tx.user.update({ where: { id: userId }, data: { creditsBalance: newBal } });
 
@@ -130,7 +144,22 @@ export async function POST(req: Request, { params }: { params: Promise<{ modelId
         if (owner) {
           const ownerNew = owner.creditsBalance.plus(half);
           await tx.creditLedger.create({
-            data: { userId: ownerId, delta: half, reason: 'download_revenue_share', reference, balanceAfter: ownerNew },
+            data: {
+              userId: ownerId,
+              delta: half,
+              reason: 'download_revenue_share',
+              reference,
+              balanceAfter: ownerNew,
+              details: {
+                kind: 'model_download_revenue',
+                modelId,
+                projectId,
+                buyerId: userId,
+                format: fmt || null,
+                url: fileUrl,
+                viewPath: projectId ? `/en/ai/projects/project/${projectId}` : null,
+              } as any,
+            },
           });
           await tx.user.update({ where: { id: ownerId }, data: { creditsBalance: ownerNew } });
         }

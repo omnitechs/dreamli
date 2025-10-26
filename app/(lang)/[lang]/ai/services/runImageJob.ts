@@ -14,7 +14,7 @@ const VERBOSE = process.env.AI_VERBOSE_LOG === '1';
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
 
 const BASE64_RE = /^[A-Za-z0-9+/=\r\n]+$/;
-const MIN_B64_LEN = process.env.NODE_ENV === 'development' ? 80 : 1000;
+const MIN_B64_LEN = 80;
 
 function collectBase64Candidates(node: any, out: string[], depth = 0) {
     if (!node || depth > 7) return;
@@ -220,7 +220,7 @@ export async function runImageJob(jobId: string) {
         const baseContent: any[] = [
             ...refs
                 .filter((u: unknown) => typeof u === 'string' && /^https?:\/\//i.test(u))
-                .map((url: string) => ({ type: 'input_image', image_url:  url  })),
+                .map((url: string) => ({ type: 'input_image', image_url: { url } })), 
             { type: 'input_text', text: instruction },
         ];
 
@@ -268,7 +268,7 @@ export async function runImageJob(jobId: string) {
             await queue;
             // refund on error if we had reserved
             if (reserveMeta) {
-                addCredits({ userId: reserveMeta.userId, amount: reserveMeta.estimated, reason: `openai:image:${size}:cancel`, idempotencyKey: `img-cancel:${reserveMeta.idHash}`, reference: reserveMeta.idHash }).catch(() => {});
+                addCredits({ userId: reserveMeta.userId, amount: reserveMeta.estimated, reason: `openai:image:${size}:cancel`, idempotencyKey: `img-cancel:${reserveMeta.idHash}`, reference: reserveMeta.idHash, details: { kind: 'image_refund_cancel', reserveId: reserveMeta.idHash, size, prompt, n, jobId } as any }).catch(() => {});
             }
             await prisma.imageJob.update({
                 where: { id: jobId },
@@ -284,7 +284,7 @@ export async function runImageJob(jobId: string) {
             const ok = emitted > 0;
             if (!ok && reserveMeta) {
                 // No images produced → refund
-                addCredits({ userId: reserveMeta.userId, amount: reserveMeta.estimated, reason: `openai:image:${size}:no_output_refund`, idempotencyKey: `img-refund:${reserveMeta.idHash}`, reference: reserveMeta.idHash }).catch(() => {});
+                addCredits({ userId: reserveMeta.userId, amount: reserveMeta.estimated, reason: `openai:image:${size}:no_output_refund`, idempotencyKey: `img-refund:${reserveMeta.idHash}`, reference: reserveMeta.idHash, details: { kind: 'image_refund_no_output', reserveId: reserveMeta.idHash, size, n, prompt, jobId } as any }).catch(() => {});
             }
             await prisma.imageJob.update({
                 where: { id: jobId },

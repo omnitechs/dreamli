@@ -155,6 +155,8 @@ model CreditLedger {
   idempotencyKey String?  @unique
   // optional external reference (order id, etc.)
   reference      String?
+  // optional structured context for UI (links, previews, etc.)
+  details        Json?
   balanceAfter   Decimal  @db.Decimal(20, 2)
   createdAt      DateTime @default(now())
 

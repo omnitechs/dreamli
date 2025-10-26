@@ -88,14 +88,18 @@ export default async function ProjectPublicPage({ params }: { params: Promise<{ 
   );
 
   // Collect all images across commits (dedupe by URL)
-  const isHttp = (u: unknown) => typeof u === 'string' && /^https?:\/\//i.test(u as string);
+  const isRenderableUrl = (u: unknown) => {
+    if (typeof u !== 'string' || !u) return false;
+    // Allow http/https and data URLs; discard others (blob: would not work server-side)
+    return /^https?:\/\//i.test(u) || /^data:image\//i.test(u);
+  };
   const imageMap = new Map<string, { id: string; url: string; commitId: string; createdAtMs: number }>();
   for (const c of commits) {
     const snap: any = c.snapshot ?? {};
     const imgs: any[] = Array.isArray(snap?.images) ? snap.images : [];
     for (const im of imgs) {
       const url = String(im?.url || '');
-      if (!url || !isHttp(url)) continue;
+      if (!url || !isRenderableUrl(url)) continue;
       if (imageMap.has(url)) continue;
       const id = String(im?.id || im?.key || url);
       const createdAtMs = new Date((c as any).createdAt).getTime();

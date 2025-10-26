@@ -159,15 +159,15 @@ export default function ProjectsPage() {
                                         <div className="flex items-center gap-4 mb-4 text-sm text-gray-500">
                                             <div className="flex items-center gap-1">
                                                 <MessageSquare className="w-4 h-4" />
-                                                <span>0</span>
+                                                <span>{(p as any).messagesCount ?? 0}</span>
                                             </div>
                                             <div className="flex items-center gap-1">
                                                 <Upload className="w-4 h-4" />
-                                                <span>0</span>
+                                                <span>{(p as any).imagesCount ?? 0}</span>
                                             </div>
                                             <div className="flex items-center gap-1">
                                                 <Cpu className="w-4 h-4" />
-                                                <span>0</span>
+                                                <span>{(p as any).modelsCount ?? 0}</span>
                                             </div>
                                         </div>
                                         <div className="flex items-center justify-between text-xs text-gray-400">

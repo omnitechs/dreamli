@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
     const idHash = Array.from(new Uint8Array(idHashBuf)).map(b => b.toString(16).padStart(2, '0')).join('');
     const reserveKey = `img-reserve:${idHash}`;
     try {
-        await deductCredits({ userId, amount: estimated, reason: `openai:image:${size}:reserve`, idempotencyKey: reserveKey, reference: idHash });
+        await deductCredits({ userId, amount: estimated, reason: `openai:image:${size}:reserve`, idempotencyKey: reserveKey, reference: idHash, details: { kind: 'image_reserve', prompt, size, n, refs: httpRefs, reserveId: idHash } as any });
     } catch (e) {
         return new Response(JSON.stringify({ error: 'INSUFFICIENT_CREDITS' }), { status: 402 });
     }
@@ -45,6 +45,14 @@ export async function POST(req: NextRequest) {
         data: { prompt, size, n, status: 'QUEUED', refs: { urls: httpRefs, reserve: { idHash, estimated, size, n, userId } } as any },
         select: { id: true, n: true },
     });
+
+    // Link the ledger reserve entry with this job for history previews
+    try {
+        await prisma.creditLedger.update({
+            where: { idempotencyKey: reserveKey },
+            data: { details: { kind: 'image_reserve', prompt, size, n, refs: httpRefs, reserveId: idHash, jobId: job.id } as any },
+        });
+    } catch {}
 
     const placeholderIds = Array.from({ length: job.n }, (_, i) => `${job.id}__ph__${i}`);
 

@@ -97,7 +97,7 @@ export async function POST(req: NextRequest) {
         const idHash = Array.from(new Uint8Array(idHashBuf)).map(b => b.toString(16).padStart(2, '0')).join('');
         const reserveKey = `img-reserve:${idHash}`;
         try {
-            await deductCredits({ userId, amount: estimated, reason: `openai:image:${size}:reserve`, idempotencyKey: reserveKey, reference: idHash });
+            await deductCredits({ userId, amount: estimated, reason: `openai:image:${size}:reserve`, idempotencyKey: reserveKey, reference: idHash, details: { kind: 'image_reserve', prompt, size, n, refs: httpRefs, reserveId: idHash } as any });
         } catch (e) {
             return new Response(JSON.stringify({ error: 'INSUFFICIENT_CREDITS' }), { status: 402 });
         }
@@ -154,7 +154,7 @@ export async function POST(req: NextRequest) {
                 const onAbort = () => {
                     warn(t(), 'Client aborted.');
                     // refund on abort
-                    addCredits({ userId, amount: estimated, reason: `openai:image:${size}:cancel`, idempotencyKey: `img-cancel:${idHash}`, reference: idHash }).catch(() => {});
+                    addCredits({ userId, amount: estimated, reason: `openai:image:${size}:cancel`, idempotencyKey: `img-cancel:${idHash}`, reference: idHash, details: { kind: 'image_refund_cancel', reserveId: idHash, size, n, prompt, refs: httpRefs } as any }).catch(() => {});
                     safeClose();
                 };
 
@@ -266,7 +266,7 @@ export async function POST(req: NextRequest) {
                         safeSend({ type: 'debug_summary', emitted, eventCount });
                         if (emitted === 0) {
                             // No images produced → refund
-                            addCredits({ userId, amount: estimated, reason: `openai:image:${size}:no_output_refund`, idempotencyKey: `img-refund:${idHash}`, reference: idHash }).catch(() => {});
+                            addCredits({ userId, amount: estimated, reason: `openai:image:${size}:no_output_refund`, idempotencyKey: `img-refund:${idHash}`, reference: idHash, details: { kind: 'image_refund_no_output', reserveId: idHash, size, n, prompt, refs: httpRefs } as any }).catch(() => {});
                             safeSend({ type: 'no_image' });
                         }
                         safeSend({ type: 'done' });

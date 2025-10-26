@@ -12,6 +12,8 @@ interface Transaction {
   status: 'completed' | 'pending' | 'failed';
   projectId?: string;
   projectName?: string;
+  linkHref?: string;
+  thumbnailUrl?: string;
 }
 
 interface TransactionHistoryProps {
@@ -63,12 +65,33 @@ export default function TransactionHistory({ transactions, viewAllHref }: Transa
         {transactions.map((transaction) => (
           <div key={transaction.id} className="flex items-center justify-between p-4 border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors">
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 flex items-center justify-center">
-                <i className={`${getTransactionIcon(transaction.type)} text-xl`}></i>
-              </div>
+              {transaction.thumbnailUrl ? (
+                <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 border border-gray-200 flex items-center justify-center">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  {transaction.linkHref ? (
+                    <a href={transaction.linkHref} target="_blank" rel="noopener noreferrer">
+                      <img src={transaction.thumbnailUrl} alt="preview" className="w-12 h-12 object-cover" />
+                    </a>
+                  ) : (
+                    <img src={transaction.thumbnailUrl} alt="preview" className="w-full h-full object-cover" />
+                  )}
+                </div>
+              ) : (
+                <div className="w-10 h-10 flex items-center justify-center">
+                  <i className={`${getTransactionIcon(transaction.type)} text-xl`}></i>
+                </div>
+              )}
               
               <div>
-                <div className="font-medium text-gray-900">{transaction.description}</div>
+                <div className="font-medium text-gray-900">
+                  {transaction.linkHref ? (
+                    <Link href={transaction.linkHref} target={transaction.linkHref.startsWith('http') ? '_blank' : undefined} className="text-blue-600 hover:underline">
+                      {transaction.description}
+                    </Link>
+                  ) : (
+                    transaction.description
+                  )}
+                </div>
                 {transaction.projectName && (
                   <div className="text-sm text-gray-600">Project: {transaction.projectName}</div>
                 )}

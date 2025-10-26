@@ -12,8 +12,9 @@ export async function addCredits(opts: {
     reason: string;
     idempotencyKey?: string;                  // pass for retry safety
     reference?: string;
+    details?: Prisma.InputJsonValue;
 }) {
-    const { userId, reason, reference, idempotencyKey } = opts;
+    const { userId, reason, reference, idempotencyKey, details } = opts;
     const delta = D(opts.amount);
     if (delta.lte(0)) throw new Error("amount must be > 0");
 
@@ -43,6 +44,7 @@ export async function addCredits(opts: {
                 reason,
                 reference,
                 idempotencyKey,
+                details,
                 balanceAfter: newBalance,
             },
         });
@@ -64,9 +66,10 @@ export async function deductCredits(opts: {
     reason: string;
     idempotencyKey?: string;
     reference?: string;
+    details?: Prisma.InputJsonValue;
     allowNegative?: boolean; // default false
 }) {
-    const { userId, reason, reference, idempotencyKey, allowNegative } = opts;
+    const { userId, reason, reference, idempotencyKey, details, allowNegative } = opts;
     const delta = D(opts.amount);
     if (delta.lte(0)) throw new Error("amount must be > 0");
 
@@ -96,6 +99,7 @@ export async function deductCredits(opts: {
                 reason,
                 reference,
                 idempotencyKey,
+                details,
                 balanceAfter: newBalance,
             },
         });
