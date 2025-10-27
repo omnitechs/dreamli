@@ -25,7 +25,7 @@ export function Messenger() {
     const { gen } = useGenerator();
     const dispatch = useDispatch();
     const { getSelectedImageUrls } = useImages();
-    const { startJob, activeJobIds } = useImageJobs();
+    const { startJob } = useImageJobs();
 
     const t = useTranslations('AI.Messenger');
     const locale = useLocale();
@@ -542,21 +542,6 @@ export function Messenger() {
                 </div>
             )}
 
-            {/* Active jobs strip */}
-            {Array.isArray(activeJobIds) && activeJobIds.length > 0 && (
-                <div className="mx-4 mb-2 flex flex-wrap gap-2 items-center">
-                    <div className="text-xs text-gray-600">Active jobs:</div>
-                    {activeJobIds.slice(0, 6).map((jid: string) => (
-                        <div key={jid} className="flex items-center gap-2 text-xs px-2 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
-                            <span className="inline-block w-3 h-3 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin" />
-                            <span className="font-mono">{jid.slice(0, 6)}</span>
-                        </div>
-                    ))}
-                    {activeJobIds.length > 6 && (
-                        <div className="text-xs text-indigo-700">+{activeJobIds.length - 6} more</div>
-                    )}
-                </div>
-            )}
 
             {/* Messages List */}
             <div

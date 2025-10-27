@@ -1,23 +1,23 @@
 // app/(lang)/[lang]/projects/[projectId]/components/ModePromptCard.tsx
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { AlignLeft, Image } from 'lucide-react';
 import useMode from '@/app/(lang)/[lang]/ai/hooks/useMode';
 import usePrompt from '@/app/(lang)/[lang]/ai/hooks/usePrompt';
-import useGenerator from "@/app/(lang)/[lang]/ai/hooks/useGenerator";
-
-
+import useImages from '@/app/(lang)/[lang]/ai/hooks/useImages';
+import useImageJobs from '@/app/(lang)/[lang]/ai/hooks/useImageJobs';
 
 /** Redux version: race-safe UI, no server actions. */
 export function ModePromptCard() {
     const { modeType, toggleMode } = useMode();
     const { prompt, updatePrompt } = usePrompt();
+    const { images } = useImages();
+    const { activeJobIds } = useImageJobs();
 
     // mimic the old "committing…" pill without server calls
     const [saving, setSaving] = useState<null | 'mode' | 'prompt'>(null);
-
 
     const setMode = async (target: 'text' | 'image') => {
         if (target === modeType) return;
@@ -31,9 +31,20 @@ export function ModePromptCard() {
         }
     };
 
-
     const isTextMode = modeType === 'text';
     const isImageMode = modeType === 'image';
+
+    // Derive active placeholders (per-image) so each generating image is shown distinctly
+    const activePlaceholders = useMemo(() => {
+        const term = new Set(['DONE', 'FAILED', 'CANCELED']);
+        return (images || [])
+            .filter((img: any) => img?.meta?.placeholder)
+            .filter((img: any) => {
+                const s = String(img?.meta?.status || '').toUpperCase();
+                return !term.has(s);
+            })
+            .sort((a: any, b: any) => (a?.meta?.index ?? 0) - (b?.meta?.index ?? 0));
+    }, [images]);
 
     return (
         <div className="bg-white border border-gray-200 rounded-2xl p-4 space-y-4">
@@ -70,18 +81,45 @@ export function ModePromptCard() {
                 </button>
             </div>
 
+            {/* Active image generation jobs (per-image entries) */}
+            {Array.isArray(activePlaceholders) && activePlaceholders.length > 0 && (
+                <div className="rounded-xl border border-indigo-200 bg-indigo-50/60 px-3 py-2">
+                    <div className="flex items-center justify-between mb-1">
+                        <p className="text-xs font-medium text-indigo-800">Active image jobs</p>
+                        {Array.isArray(activeJobIds) && activeJobIds.length > 0 && (
+                            <span className="text-[11px] text-indigo-700">{activeJobIds.length} job{activeJobIds.length>1?'s':''}</span>
+                        )}
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                        {activePlaceholders.map((img: any) => {
+                            const jid = String(img?.meta?.jobId || '');
+                            const idx = Number(img?.meta?.index ?? 0);
+                            const status = String(img?.meta?.status || 'Generating');
+                            return (
+                                <div key={img.id} className="flex items-center gap-2 text-xs px-2 py-1 rounded-full bg-white text-indigo-700 border border-indigo-200">
+                                    <span className="inline-block w-3 h-3 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin" />
+                                    <span className="font-mono">{String(img.id).slice(0, 6)}</span>
+                                    {jid && <span className="text-[10px] text-indigo-500">({jid.slice(0,6)} · #{idx+1})</span>}
+                                    <span className="text-[10px] text-indigo-700">{status}</span>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
+
             {isTextMode && (
                 <div className="space-y-2">
                     <label className="block text-sm font-medium text-gray-700">Text Prompt</label>
                     <div className="relative">
-            <textarea
-                value={prompt ?? ''}
-                onChange={(event)=>updatePrompt(event.target.value)}
-                placeholder="Describe what you want to create in 3D..."
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                rows={3}
-                disabled={saving === 'prompt'}
-            />
+                        <textarea
+                            value={prompt ?? ''}
+                            onChange={(event)=>updatePrompt(event.target.value)}
+                            placeholder="Describe what you want to create in 3D..."
+                            className="w-full px-4 py-3 border border-gray-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                            rows={3}
+                            disabled={saving === 'prompt'}
+                        />
                         {saving === 'prompt' && (
                             <span className="absolute bottom-2 right-2 text-[11px] text-gray-500">committing…</span>
                         )}
