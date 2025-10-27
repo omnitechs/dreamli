@@ -118,7 +118,34 @@ modelCommitListener.startListening({
                 // Ensure commit exists, then move HEAD
                 dispatch(addCommit(data));
 
-                // 3) Mark ALL terminal models as linked to this commit so they never auto-commit again
+                // 3) Update local generator models with localized assets from the saved commit snapshot
+                try {
+                    const locModels: any[] = Array.isArray((data as any)?.snapshot?.models)
+                        ? (data as any).snapshot.models
+                        : [];
+                    for (const lm of locModels) {
+                        if (!lm || typeof lm !== 'object') continue;
+                        const id = String(lm.id || '');
+                        if (!id) continue;
+                        // Upsert localized URLs into the live generator state so the viewer/downloads use our blob links
+                        dispatch(
+                            upsertModel({
+                                id,
+                                modelUrls: lm.modelUrls || {},
+                                textureUrls: Array.isArray(lm.textureUrls) ? lm.textureUrls : undefined,
+                                thumbnailUrl: lm.thumbnailUrl,
+                                localThumbnailUrl: lm.localThumbnailUrl,
+                                previewVideoUrl: lm.previewVideoUrl,
+                                sourceCommitId: newCommitId,
+                                streaming: false,
+                            } as any)
+                        );
+                    }
+                } catch (e) {
+                    console.warn('Failed to sync localized model URLs to generator state', e);
+                }
+
+                // 4) Mark ALL terminal models as linked to this commit so they never auto-commit again
                 const terminalModels = (gen.models ?? []).filter((mm) => isTerminal(mm.status));
                 for (const mm of terminalModels) {
                     if (!(mm as any).sourceCommitId) {
