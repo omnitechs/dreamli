@@ -7,6 +7,8 @@ function sseEncode(obj: unknown) {
 }
 
 export async function GET(req: NextRequest) {
+    const reqId = Math.random().toString(36).slice(2, 10);
+    const log = (...args: any[]) => console.log(`[MESHY/STREAM ${reqId}]`, ...args);
     const { searchParams } = new URL(req.url);
     const id = searchParams.get('id');
     const kind = searchParams.get('kind') || 'text';

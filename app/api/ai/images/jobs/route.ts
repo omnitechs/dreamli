@@ -12,6 +12,12 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
+    const reqId = Math.random().toString(36).slice(2, 10);
+    const startedAt = Date.now();
+    const t = () => `${(Date.now() - startedAt).toString().padStart(4, ' ')}ms`;
+    const log = (...args: any[]) => console.log(`[IMG/JOBS ${reqId}]`, ...args);
+    const warn = (...args: any[]) => console.warn(`[IMG/JOBS ${reqId}]`, ...args);
+    const err = (...args: any[]) => console.error(`[IMG/JOBS ${reqId}]`, ...args);
     const session = await auth();
     const userId = (session?.user as any)?.id as string | undefined;
     if (!userId) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
@@ -23,6 +29,8 @@ export async function POST(req: NextRequest) {
     const n = Number.isFinite(nRaw) && nRaw > 0 ? Math.min(10, Math.floor(nRaw)) : 1;
     const refsInput = Array.isArray(body?.refs) ? body.refs : [];
     const httpRefs = refsInput.filter((u: any) => typeof u === 'string' && /^https?:\/\//i.test(u));
+
+    log('REQ', { promptLen: prompt.length, size, n, refsCount: httpRefs.length });
 
     if (!prompt && httpRefs.length === 0) {
         return new Response(JSON.stringify({ error: 'Provide a prompt or at least one HTTP(S) ref' }), { status: 400 });
@@ -45,6 +53,7 @@ export async function POST(req: NextRequest) {
         data: { prompt, size, n, status: 'QUEUED', refs: { urls: httpRefs, reserve: { idHash, estimated, size, n, userId } } as any },
         select: { id: true, n: true },
     });
+    log('JOB_CREATED', { jobId: job.id, n: job.n });
 
     // Link the ledger reserve entry with this job for history previews
     try {
@@ -52,9 +61,13 @@ export async function POST(req: NextRequest) {
             where: { idempotencyKey: reserveKey },
             data: { details: { kind: 'image_reserve', prompt, size, n, refs: httpRefs, reserveId: idHash, jobId: job.id } as any },
         });
-    } catch {}
+        log('LEDGER_LINKED', { reserveKey, jobId: job.id });
+    } catch (e:any) {
+        warn('LEDGER_LINK_FAIL', String(e?.message || e));
+    }
 
     const placeholderIds = Array.from({ length: job.n }, (_, i) => `${job.id}__ph__${i}`);
+    log('PLACEHOLDERS', { jobId: job.id, count: placeholderIds.length });
 
     return new Response(JSON.stringify({ jobId: job.id, placeholderIds }), {
         headers: { 'Content-Type': 'application/json' },

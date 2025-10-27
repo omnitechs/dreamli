@@ -40,7 +40,7 @@ export function ImagesGrid() {
     if (localImages.length === 0) return null;
 
     return (
-        <div className="bg-white border border-gray-200 rounded-2xl p-4 space-y-4">
+        <div className="bg-white border border-gray-200 rounded-2xl p-4 space-y-4" data-ai-images-grid="1" id="ai-images-grid">
             <h3 className="font-medium text-gray-900">{t('title', {count: localImages.length})}</h3>
 
             <div className="grid grid-cols-3 md:grid-cols-4 gap-2">

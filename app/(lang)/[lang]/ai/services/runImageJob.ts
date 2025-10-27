@@ -3,13 +3,14 @@ import { JobBus } from './jobBus';
 import OpenAI from 'openai';
 import { addCredits } from '@/lib/credits';
 
+const VERBOSE = process.env.AI_VERBOSE_LOG === '1';
+
 export const runtime = 'nodejs';
 
 type ImgSize = '512x512' | '1024x1024' | '2048x2048';
 
 const DRY = process.env.AI_DRY_RUN === '1';
 const USE_MOCK = false   // ← toggle with env
-const VERBOSE = process.env.AI_VERBOSE_LOG === '1';
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
 
@@ -102,6 +103,8 @@ async function runViaMock(jobId: string, { prompt, refs, size, n }:
     });
 
     let emitted = 0;
+        let eventCount = 0;
+        const typeCounts: Record<string, number> = {};
 
     for await (const ev of iterateSSE(resp)) {
         // explicit shapes
@@ -151,6 +154,9 @@ async function runViaMock(jobId: string, { prompt, refs, size, n }:
 /* --------------------------- MAIN RUNNER --------------------------- */
 
 export async function runImageJob(jobId: string) {
+    const log = (...args: any[]) => console.log(`[IMG/RUN ${jobId}]`, ...args);
+    const warn = (...args: any[]) => console.warn(`[IMG/RUN ${jobId}]`, ...args);
+    const err = (...args: any[]) => console.error(`[IMG/RUN ${jobId}]`, ...args);
     // it's okay if status was flipped by the events route claim; but keep this for non-claimed paths
     await prisma.imageJob.updateMany({ where: { id: jobId, status: 'QUEUED' }, data: { status: 'RUNNING' } });
     JobBus.publish(jobId, { type: 'status', status: 'RUNNING' });
@@ -220,7 +226,7 @@ export async function runImageJob(jobId: string) {
         const baseContent: any[] = [
             ...refs
                 .filter((u: unknown) => typeof u === 'string' && /^https?:\/\//i.test(u))
-                .map((url: string) => ({ type: 'input_image', image_url: { url } })), 
+                .map((url: string) => ({ type: 'input_image', image_url: url })), 
             { type: 'input_text', text: instruction },
         ];
 

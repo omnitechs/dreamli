@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 export const runtime = "nodejs";
 
 export async function GET(req: NextRequest) {
+    const reqId = Math.random().toString(36).slice(2, 10);
+    const log = (...args: any[]) => console.log(`[MESHY/TASK ${reqId}]`, ...args);
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
     const kind = searchParams.get("kind");

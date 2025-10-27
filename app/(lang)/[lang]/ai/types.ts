@@ -29,6 +29,8 @@ export interface GeneratorModel3D {
     modelUrls: ModelFormatUrls;
     textureUrls?: Array<Record<string,string>>;
     thumbnailUrl?: string;
+    /** Optional locally rehosted thumbnail (preferred for display and for passing to AI) */
+    localThumbnailUrl?: string;
     previewVideoUrl?: string;
     createdAt: string;
     sourceCommitId?: string;

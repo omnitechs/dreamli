@@ -7,11 +7,15 @@ export const runtime = 'nodejs';         // required for using Node APIs
 export const dynamic = 'force-dynamic';  // this route must not be cached
 
 export async function POST(req: Request) {
+    const reqId = Math.random().toString(36).slice(2, 10);
+    const log = (...args: any[]) => console.log(`[UPLOAD ${reqId}]`, ...args);
     const form = await req.formData();
     const file = form.get('file') as File | null;
     if (!file) {
         return NextResponse.json({ error: 'No file' }, { status: 400 });
     }
+
+    log('FILE', { name: (file as any)?.name, type: file.type, size: (file as any)?.size });
 
     // build a safe, unique key (keeps the original extension)
     const id = crypto.randomUUID();
@@ -26,6 +30,8 @@ export async function POST(req: Request) {
         contentType: file.type || 'application/octet-stream',
         token: process.env.BLOB_READ_WRITE_TOKEN, // uncomment if needed locally
     });
+
+    log('UPLOADED', { key: blob.pathname, url: blob.url });
 
     // blob.url is a permanent, CDN-backed HTTPS URL
     // blob.pathname is the storage key (e.g., "uploads/123-uuid-file.png")

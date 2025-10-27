@@ -9,13 +9,15 @@ import useModels from '@/app/(lang)/[lang]/ai/hooks/useModels';
 import useCommit from "@/app/(lang)/[lang]/ai/hooks/useCommit";
 import ModelGallery from "../GeneratorPanel/ModelGallery"
 import useImages from '@/app/(lang)/[lang]/ai/hooks/useImages';
+import useImageJobs from '@/app/(lang)/[lang]/ai/hooks/useImageJobs';
 import useGenerator from '@/app/(lang)/[lang]/ai/hooks/useGenerator';
 import { useDispatch } from 'react-redux';
-import { addMessage as addMsgAction, editMessage as editMsgAction } from '@/app/store/slices/generatorSlice';
+import { addMessage as addMsgAction, editMessage as editMsgAction, updateText as updateGenText } from '@/app/store/slices/generatorSlice';
 
 import {useLocale, useTranslations} from 'next-intl';
 
 export function Messenger() {
+    const uiLog = (...args: any[]) => { try { console.log('[AI/UI]', ...args); } catch {} };
     // Redux messages composer + store
     const { messages: storeMessages, msgText, setMsgText, addMsg, setMsgRole } = useMessage();
     const { models } = useModels(); // live models from Redux (streaming)
@@ -23,6 +25,7 @@ export function Messenger() {
     const { gen } = useGenerator();
     const dispatch = useDispatch();
     const { getSelectedImageUrls } = useImages();
+    const { startJob, activeJobIds } = useImageJobs();
 
     const t = useTranslations('AI.Messenger');
     const locale = useLocale();
@@ -32,11 +35,16 @@ export function Messenger() {
 
     // local UI state
     const [sending, setSending] = useState(false);
+    const [actBusy, setActBusy] = useState(false);
     const [errorText, setErrorText] = useState<string | null>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     // expand/collapse for action payloads (placeholder to match old UI)
     const [expandedActions, setExpandedActions] = useState<Set<string>>(new Set());
+    // Suggested actions (AI-driven)
+    const [suggest, setSuggest] = useState<{ prompt: string } | null>(null);
+    type ProposedAction = { title: string; kind?: string; prompt?: string; refs?: string[]; confirm?: string; meta?: any };
+    const [proposed, setProposed] = useState<ProposedAction[] | null>(null);
 
     // scroll stabilization (same as before)
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -113,7 +121,9 @@ export function Messenger() {
         try { imageUrls = getSelectedImageUrls() || []; } catch { imageUrls = []; }
 
         const modelImageUrls: string[] = Array.isArray(models)
-            ? models.map((m: any) => m?.thumbnailUrl).filter((u: any) => typeof u === 'string' && /^https?:\/\//i.test(u))
+            ? models
+                .map((m: any) => m?.localThumbnailUrl || m?.thumbnailUrl)
+                .filter((u: any) => typeof u === 'string' && (/^https?:\/\//i.test(u) || /^data:/i.test(u)))
             : [];
 
         // Store for other parts of the app that rely on sessionStorage keys
@@ -127,6 +137,8 @@ export function Messenger() {
             text: String(m.content ?? ''),
         }));
 
+        uiLog('SEND', { textLen: text.length, historyLen: history.length, selectedRefs: imageUrls.length, modelThumbs: (Array.isArray(models) ? models.length : 0) });
+
         // 3) Create an assistant placeholder and stream into it
         const aiId = crypto.randomUUID();
         const createdAt = new Date().toISOString();
@@ -137,6 +149,8 @@ export function Messenger() {
         if (textareaRef.current) textareaRef.current.style.height = 'auto';
 
         let aiText = '';
+        // Clear any prior AI-proposed or heuristic actions on new send
+        try { setProposed(null); setSuggest(null); } catch {}
         try {
             const res = await fetch('/api/ai/chat', {
                 method: 'POST',
@@ -145,6 +159,7 @@ export function Messenger() {
             });
 
             if (res.status === 402) {
+                uiLog('CHAT 402 insufficient credits');
                 // insufficient credits → show modal and annotate message
                 const seg = (typeof window !== 'undefined' ? (window.location.pathname.split('/')[1] || 'en') : 'en');
                 try { sessionStorage.setItem('insufficient_credits_msg', t('errors.insufficientCreditsModal')); } catch {}
@@ -155,6 +170,7 @@ export function Messenger() {
             }
 
             if (!res.ok || !res.body) {
+                uiLog('CHAT_START_FAIL', { status: res.status, hasBody: !!res.body });
                 aiText = t('errors.failedStart');
                 dispatchLocal(editMsgAction({ id: aiId, content: aiText } as any));
                 return;
@@ -166,12 +182,51 @@ export function Messenger() {
             const reader = res.body.getReader();
             const decoder = new TextDecoder();
             let buffer = '';
+            let evCount = 0;
             let didCommit = false;
+            let toolStarted = false; // tracks if any image generation was started via tool
+            let debugShown = false;   // ensure we only append server debug once
+            let actionsOffered = false; // whether any actions were proposed in this turn
+            const toolBuf: Record<string, { name?: string; args: string; done?: boolean }> = {};
 
             const append = (chunk: string) => {
                 if (!chunk) return;
                 aiText += chunk;
                 dispatchLocal(editMsgAction({ id: aiId, content: aiText } as any));
+            };
+
+            // simple intent detector for fallback when no tool call is made
+            const isGenIntent = (s: string) => {
+                const m = (s || '').toLowerCase();
+                const strong = [
+                    'make them', 'make it', 'make images', 'make them for me',
+                    'generate images', 'generating images', 'create images', 'produce images', 'render images',
+                    'start generating', 'start generating images', 'start images', 'turnaround', 'turnarounds',
+                    'guide sheet', 'model sheet', 'orthographic', 'angles', 'views', 'variants', 'variations',
+                ];
+                const soft = ['make ', 'generate', 'create', 'render', 'produce', 'start', 'begin'];
+                return strong.some(k => m.includes(k)) || soft.some(k => m.includes(k));
+            };
+
+            // detect when the assistant offers to generate/produce images (e.g., "Would you like me to create that?")
+            const isAssistantOffer = (s: string) => {
+                const m = (s || '').toLowerCase();
+                const offerPhrases = [
+                    'would you like me to',
+                    'do you want me to',
+                    'shall i',
+                    'should i',
+                    "i can generate",
+                    "i can create",
+                    "i can make",
+                    "let me generate",
+                    "let me create",
+                    "let me make",
+                ];
+                const verbs = ['generate', 'create', 'make', 'produce', 'render', 'turnaround', 'guide sheet', 'model sheet', 'views', 'angles'];
+                const hasOffer = offerPhrases.some(p => m.includes(p));
+                const hasVerb = verbs.some(v => m.includes(v));
+                return hasOffer && hasVerb;
             };
 
             while (true) {
@@ -186,17 +241,132 @@ export function Messenger() {
                     const data = line.replace(/^data:\s*/, '');
                     if (data === '[DONE]') break;
                     try {
+                        evCount++;
                         const evt = JSON.parse(data);
+                        // Debug: log each SSE event type with a small preview for diagnostics
+                        try {
+                            const evType = String((evt as any)?.type || '');
+                            const preview = JSON.stringify(evt).slice(0, 240);
+                            uiLog('SSE_EVT', { idx: evCount, type: evType, preview });
+                        } catch {}
+                        // Initial server debug frame → append a compact status line once
+                        if (!debugShown && evt?.type === 'debug' && evt?.embed) {
+                            try {
+                                const toolChoice = typeof evt.tool_choice === 'string' ? evt.tool_choice : (evt.tool_choice?.name ? `function ${evt.tool_choice.name}` : 'auto');
+                                const pr = evt.embed?.pageRefs || evt.embed?.embed || {};
+                                const mt = evt.embed?.modelThumbs || {};
+                                const pageInfo = pr?.provided != null ? `${pr.provided}/${pr.embedded}${typeof pr.failed==='number' ? ` failed ${pr.failed}` : ''}` : '';
+                                const thumbInfo = mt?.provided != null ? `${mt.provided}/${mt.embedded}${typeof mt.failed==='number' ? ` failed ${mt.failed}` : ''}` : '';
+                                const line = `\n[ℹ️ Context: model=${evt.model || 'gpt-5'} · tool=${toolChoice}${pageInfo?` · refs ${pageInfo}`:''}${thumbInfo?` · thumbs ${thumbInfo}`:''}]`;
+                                append(line);
+                                uiLog('DEBUG_CTX', { toolChoice, page: pr, thumbs: mt });
+                                debugShown = true;
+                            } catch {}
+                        }
+
+                        // Text deltas
                         if (evt.type === 'response.output_text.delta' && typeof evt.delta === 'string') {
                             append(evt.delta);
-                        } else if (evt.type?.endsWith('.delta') && Array.isArray(evt.output)) {
+                            continue;
+                        }
+                        // Some events carry output array with deltas
+                        if (evt.type?.endsWith('.delta') && Array.isArray(evt.output)) {
                             for (const part of evt.output) {
                                 if (typeof part?.delta === 'string') append(part.delta);
                                 else if (typeof part?.text === 'string') append(part.text);
                             }
-                        } else if (evt.type === 'response.output_text' && typeof evt.text === 'string') {
+                        }
+                        // Non-delta finalized text blocks
+                        if (evt.type === 'response.output_text' && typeof evt.text === 'string') {
                             append(evt.text);
-                        } else if (evt.type === 'response.completed') {
+                        }
+
+                        // Tool/function calling support (supports both 'tool_call.*' and 'response.tool_call.*')
+                        const tType = String(evt.type || '');
+                        if (tType.includes('tool_call')) {
+                            // Try to locate call id, name and argument deltas
+                            const callId = String(evt.call_id || evt.id || evt.tool_call_id || evt.callId || 'default');
+                            const buf = (toolBuf[callId] ||= { args: '' });
+
+                            // name may appear on created or delta
+                            const name = evt.name || evt.tool_name || evt.function_name || evt?.call?.name || evt?.tool?.name;
+                            if (typeof name === 'string' && !buf.name) {
+                                buf.name = name;
+                                uiLog('TOOL_NAME', { callId, name: buf.name });
+                            }
+
+                            // arguments may stream as 'arguments_delta' or in nested structures
+                            const argDelta = evt.arguments_delta || evt.args_delta || evt.delta?.arguments || evt.arguments;
+                            if (typeof argDelta === 'string') {
+                                buf.args += argDelta;
+                                uiLog('TOOL_ARGS_DELTA', { callId, name: buf.name, added: argDelta.length, total: buf.args.length });
+                            }
+
+                            if (tType.endsWith('created') && buf.name) {
+                                uiLog('TOOL_CREATED', { name: buf.name, callId });
+                                append(`\n\n[🔧 ${buf.name} requested…]`);
+                            }
+
+                            // On completion, try to parse args and trigger a client-side action
+                            if (tType.endsWith('completed')) {
+                                buf.done = true;
+                                let argsParsed: any = {};
+                                try { argsParsed = buf.args ? JSON.parse(buf.args) : {}; } catch {
+                                    // best-effort parse; leave empty on failure
+                                }
+                                const toolName = buf.name || 'unknown_tool';
+                                // Dispatch to built-in handler(s)
+                                if (toolName === 'generate_images') {
+                                    const promptArg = typeof argsParsed.prompt === 'string'
+                                        ? argsParsed.prompt
+                                        : (Array.isArray(argsParsed.prompts) && argsParsed.prompts.length ? String(argsParsed.prompts[0]) : text);
+
+                                    const refsList: string[] = [];
+                                    if (Array.isArray(argsParsed.refs)) refsList.push(...argsParsed.refs);
+                                    if (Array.isArray(argsParsed.image_urls)) refsList.push(...argsParsed.image_urls);
+                                    if (typeof argsParsed.image_url === 'string') refsList.push(argsParsed.image_url);
+                                    const refs = refsList.filter((u) => typeof u === 'string' && /^https?:\/\//i.test(u));
+
+                                    try {
+                                        uiLog('TOOL_COMPLETED', { name: toolName, promptLen: (String(promptArg||'').length), refsLen: refs.length });
+                                        const usedPrompt = (promptArg || 'Generate an image').trim();
+                                        // Instead of auto-starting, show an actionable button the user can click
+                                        setProposed([
+                                            { title: 'Generate images', kind: 'generate_images', prompt: usedPrompt, ...(refs.length ? { refs } : {}) }
+                                        ]);
+                                        actionsOffered = true;
+                                        try { setSuggest(null); } catch {}
+                                    } catch (e) {
+                                        uiLog('TOOL_PARSE_FAIL', { name: toolName, error: String((e as any)?.message || e) });
+                                    }
+                                } else if (toolName === 'propose_actions') {
+                                    const arr = Array.isArray(argsParsed?.actions) ? argsParsed.actions : [];
+                                    const norm = arr
+                                        .filter((a: any) => a && typeof a === 'object')
+                                        .map((a: any) => ({
+                                            title: String(a.title || '').slice(0, 80),
+                                            kind: typeof a.kind === 'string' ? a.kind : undefined,
+                                            prompt: typeof a.prompt === 'string' ? a.prompt : undefined,
+                                            refs: Array.isArray(a.refs) ? a.refs.filter((u: any) => typeof u === 'string') : undefined,
+                                            confirm: typeof a.confirm === 'string' ? a.confirm : undefined,
+                                            meta: typeof a.meta === 'object' && a.meta ? a.meta : undefined,
+                                        }))
+                                        .filter((a: any) => a.title);
+                                    try {
+                                        uiLog('TOOL_COMPLETED', { name: toolName, actions: norm.length });
+                                        setProposed(norm);
+                                        append(`\n\n[✨ Actions available]`);
+                                    } catch (e) {
+                                        uiLog('ACTIONS_SET_FAIL', { error: String((e as any)?.message || e) });
+                                    }
+                                } else {
+                                    // Unknown tool → log and continue
+                                    try { console.log('AI tool call:', toolName, argsParsed); } catch {}
+                                }
+                            }
+                        }
+
+                        if (evt.type === 'response.completed') {
                             // AI has finished responding → create a commit so chat survives refresh
                             try {
                                 const pid = (gen as any)?.__meta?.projectId
@@ -207,6 +377,21 @@ export function Messenger() {
                             } catch (e) {
                                 console.error('Failed to create chat commit:', e);
                             }
+                            // If the assistant didn't propose any actions, synthesize helpful defaults (no auto-start)
+                            try {
+                                if (!actionsOffered) {
+                                    const lastUserMsg = [...storeMessages].reverse().find((m:any)=>m.role==='user')?.content || text || '';
+                                    const fallbackPrompt = String(lastUserMsg || '').trim() || 'Generate image';
+                                    let refsList: string[] = [];
+                                    try { refsList = getSelectedImageUrls() || []; } catch { refsList = []; }
+                                    setProposed([
+                                        { title: 'Generate images', kind: 'generate_images', prompt: fallbackPrompt, ...(refsList.length ? { refs: refsList } : {}) },
+                                        { title: 'Generate angles', kind: 'generate_angles', prompt: fallbackPrompt, meta: { angles: ['front view','side view','back view','3/4 view'] }, ...(refsList.length ? { refs: refsList } : {}) },
+                                    ]);
+                                    actionsOffered = true;
+                                    uiLog('FALLBACK_ACTIONS', { promptLen: fallbackPrompt.length, refs: refsList.length });
+                                }
+                            } catch {}
                         } else if (evt.type === 'error' || evt.error) {
                             append('\n\n⚠️ ' + (evt.error?.message || t('errors.stream')));
                         }
@@ -215,6 +400,7 @@ export function Messenger() {
                     }
                 }
             }
+            uiLog('SSE_SUMMARY', { evCount, didCommit });
             // Fallback: if completion was reached without receiving response.completed, commit once.
             if (!didCommit) {
                 try {
@@ -260,6 +446,9 @@ export function Messenger() {
             {/* Header */}
             <div className="sticky top-0 bg-white border-b border-gray-200 p-4 z-10">
                 <h2 className="text-lg font-semibold text-gray-900">{t('title')}</h2>
+                {sending && (
+                    <div className="mt-2 h-1 w-full overflow-hidden rounded bg-gradient-to-r from-blue-200 via-blue-400 to-blue-200 animate-pulse" />
+                )}
             </div>
             <ModelGallery/>
             {/*/!* Models (Redux) *!/*/}
@@ -353,6 +542,22 @@ export function Messenger() {
                 </div>
             )}
 
+            {/* Active jobs strip */}
+            {Array.isArray(activeJobIds) && activeJobIds.length > 0 && (
+                <div className="mx-4 mb-2 flex flex-wrap gap-2 items-center">
+                    <div className="text-xs text-gray-600">Active jobs:</div>
+                    {activeJobIds.slice(0, 6).map((jid: string) => (
+                        <div key={jid} className="flex items-center gap-2 text-xs px-2 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
+                            <span className="inline-block w-3 h-3 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin" />
+                            <span className="font-mono">{jid.slice(0, 6)}</span>
+                        </div>
+                    ))}
+                    {activeJobIds.length > 6 && (
+                        <div className="text-xs text-indigo-700">+{activeJobIds.length - 6} more</div>
+                    )}
+                </div>
+            )}
+
             {/* Messages List */}
             <div
                 ref={scrollRef}
@@ -372,6 +577,60 @@ export function Messenger() {
                         </div>
 
                         <div className="bg-gray-50 rounded-xl p-3 mb-2">
+                            {/* AI-proposed Actions: shown under the latest assistant message */}
+                            {message.role === 'assistant' && message.id === storeMessages[storeMessages.length - 1]?.id && proposed && !sending && !actBusy && proposed.length > 0 && (
+                                <div className="mb-2 flex flex-wrap gap-2">
+                                    {proposed.slice(0, 5).map((a, idx) => (
+                                        <button
+                                            key={`${a.title}:${idx}`}
+                                            className="text-xs px-2 py-1 rounded bg-gray-900 text-white hover:bg-black disabled:opacity-50"
+                                            disabled={actBusy}
+                                            title={a.confirm || a.title}
+                                            onClick={async () => {
+                                                try {
+                                                    setActBusy(true);
+                                                    const lastUserMsg = [...storeMessages].reverse().find((m:any)=>m.role==='user')?.content || '';
+                                                    const p = (a.prompt && a.prompt.trim()) || String(lastUserMsg || '').trim() || 'Generate image';
+                                                    const kind = (a.kind || '').toLowerCase();
+                                                    if (kind === 'generate_images') {
+                                                        uiLog('ACTION_ACT', { kind: a.kind, promptLen: p.length, refs: Array.isArray(a.refs) ? a.refs.length : 0 });
+                                                        // Sync the prompt into Generator UI
+                                                        try { (dispatch as any)(updateGenText(p)); } catch {}
+                                                        await startJob({ prompt: p, ...(Array.isArray(a.refs) && a.refs.length ? { refs: a.refs } : {}) });
+                                                    } else if (kind === 'generate_angles') {
+                                                        // Run separate jobs per angle (front/side/back/3-4 by default)
+                                                        const angles: string[] = Array.isArray(a.meta?.angles) && a.meta.angles.length
+                                                            ? a.meta.angles
+                                                            : ['front view', 'side view', 'back view', '3/4 view'];
+                                                        for (const ang of angles) {
+                                                            const angPrompt = `${p} — ${ang}`;
+                                                            try { (dispatch as any)(updateGenText(angPrompt)); } catch {}
+                                                            await startJob({ prompt: angPrompt, ...(Array.isArray(a.refs) && a.refs.length ? { refs: a.refs } : {}) });
+                                                        }
+                                                    } else {
+                                                        uiLog('ACTION_UNKNOWN', { kind: a.kind || 'none' });
+                                                    }
+                                                } catch (e) {
+                                                    uiLog('ACTION_FAIL', { error: String((e as any)?.message || e) });
+                                                } finally {
+                                                    setActBusy(false);
+                                                    setProposed(null);
+                                                }
+                                            }}
+                                        >
+                                            {a.title}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                            {/* Typing indicator for streaming assistant reply */}
+                            {message.role === 'assistant' && message.id === storeMessages[storeMessages.length - 1]?.id && sending && (
+                                <div className="mb-2 flex items-center gap-1 text-gray-400">
+                                    <span className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                                    <span className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                                    <span className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                                </div>
+                            )}
                             <p className="text-sm text-gray-900 whitespace-pre-wrap leading-relaxed">
                                 {message.content}
                             </p>

@@ -20,6 +20,25 @@ const enc = new TextEncoder();
 const send = (c: ReadableStreamDefaultController<Uint8Array>, payload: unknown) =>
     c.enqueue(enc.encode(`data:${JSON.stringify(payload)}\n\n`));
 
+// Server-side embed: convert external HTTP(S) image URLs into data URLs to avoid remote download issues
+async function fetchAsDataUrl(url: string): Promise<string | null> {
+    try {
+        if (!isHttpUrl(url)) return null;
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 8000);
+        const res = await fetch(url, { signal: controller.signal, headers: { Accept: 'image/*,*/*;q=0.8' } } as RequestInit);
+        clearTimeout(timer);
+        if (!res.ok) return null;
+        const ct = res.headers.get('content-type') || 'application/octet-stream';
+        const mime = ct.split(';')[0] || 'application/octet-stream';
+        const buf = Buffer.from(await res.arrayBuffer());
+        const b64 = buf.toString('base64');
+        return `data:${mime};base64,${b64}`;
+    } catch {
+        return null;
+    }
+}
+
 const isHttpUrl = (u: unknown): u is string =>
     typeof u === 'string' && /^https?:\/\//i.test(u);
 
@@ -128,8 +147,14 @@ export async function POST(req: NextRequest) {
             (prompt || 'Create an image inspired by the references.') +
             ` (Generate at ${size}; PNG output.)`;
 
+        // Embed HTTP refs as data URLs to avoid remote downloads by OpenAI
+        const embeddedRefs: string[] = [];
+        for (const url of httpRefs) {
+            const dataUrl = await fetchAsDataUrl(url);
+            if (dataUrl) embeddedRefs.push(dataUrl);
+        }
         const baseContent: any[] = [
-            ...httpRefs.map((url) => ({ type: 'input_image', image_url: { url } })),
+            ...embeddedRefs.map((dataUrl) => ({ type: 'input_image', image_url: dataUrl })), 
             { type: 'input_text', text: instruction },
         ];
 

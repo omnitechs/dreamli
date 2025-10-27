@@ -96,6 +96,28 @@ export function useMeshyStream() {
                                 textureUrls: data.texture_urls,
                                 streaming: false,
                             }));
+                            // Best-effort: rehost thumbnail to our blob storage and attach localThumbnailUrl
+                            try {
+                                const thumbUrl = data.thumbnail_url as string | undefined;
+                                if (thumbUrl && typeof window !== 'undefined') {
+                                    const resp = await fetch(thumbUrl, { cache: 'no-store' });
+                                    if (resp.ok) {
+                                        const blob = await resp.blob();
+                                        const file = new File([blob], `meshy-${base.id}.png`, { type: blob.type || 'image/png' });
+                                        const fd = new FormData();
+                                        fd.append('file', file);
+                                        const up = await fetch('/api/uploads/presign', { method: 'POST', body: fd });
+                                        if (up.ok) {
+                                            const { url } = await up.json();
+                                            if (typeof url === 'string' && url) {
+                                                dispatch(upsertModel({ id: base.id, localThumbnailUrl: url } as any));
+                                            }
+                                        }
+                                    }
+                                }
+                            } catch {
+                                // ignore rehost failures
+                            }
                             clearAll();
                             return;
                         }

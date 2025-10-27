@@ -1,9 +1,12 @@
 // app/(lang)/[lang]/ai/hooks/useImageJobs.ts
 'use client';
 
+/* Client image jobs logging helper */
+const uiLog = (...args: any[]) => { try { console.log('[IMG/JOB]', ...args); } catch {} };
+
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addImages } from '@/app/store/slices/generatorSlice';
+import { addImages, setMode, updateText } from '@/app/store/slices/generatorSlice';
 import useImages from "@/app/(lang)/[lang]/ai/hooks/useImages";
 
 
@@ -43,18 +46,31 @@ export default function useImageJobs() {
     const [activeJobIds, setActive] = useState<string[]>([]);
     const sources = useRef<Map<string, EventSource>>(new Map());
     const jobStatus = useRef<Map<string, JobStatus>>(new Map());
+    // Track placeholders per job and latest URLs to safely update meta without losing URLs
+    const jobToIds = useRef<Map<string, Set<string>>>(new Map());
+    const idToUrl = useRef<Map<string, string>>(new Map());
+    const idToIndex = useRef<Map<string, number>>(new Map());
 
     /* ---------------- helpers ---------------- */
 
     const ensurePlaceholder = useCallback((jobId: string, index: number) => {
         const id = `${jobId}__ph__${index}`;
+        uiLog('PH', { jobId, index, id });
+        // Track mapping for status updates
+        const setForJob = jobToIds.current.get(jobId) || new Set<string>();
+        setForJob.add(id);
+        jobToIds.current.set(jobId, setForJob);
+        idToIndex.current.set(id, index);
+        idToUrl.current.set(id, TRANSPARENT_1PX_SVG);
         // Always dispatch a placeholder (idempotent: addImages replaces existing with same id)
+        const current = jobStatus.current.get(jobId);
+        const st = current === 'RUNNING' ? 'Generating' : current === 'SUCCEEDED' ? 'Done' : current === 'FAILED' ? 'Failed' : current === 'CANCELED' ? 'Canceled' : 'Queued';
         dispatch(
             addImages([
                 toImage({
                     id,
                     url: TRANSPARENT_1PX_SVG,
-                    meta: { placeholder: true, jobId, index },
+                    meta: { placeholder: true, jobId, index, status: st },
                 }),
             ]),
         );
@@ -64,47 +80,52 @@ export default function useImageJobs() {
     // Immediate swap to data: URL (UI updates), then upload in background (no await in handler)
     const swapToBase64ThenUpload = useCallback((phId: string, base64: string) => {
         const dataUrl = `data:image/png;base64,${base64}`;
+        idToUrl.current.set(phId, dataUrl);
         // 1) Instant UI update
         dispatch(
             addImages([
                 toImage({
                     id: phId,
                     url: dataUrl,
-                    meta: { swappedAt: Date.now(), fromStream: true },
+                    meta: { swappedAt: Date.now(), fromStream: true, status: 'Generating' },
                 }),
             ]),
         );
 
-        console.log("uploading image has been done");
-
         // 2) Background upload (do NOT await in the onmessage handler)
         (async () => {
             try {
+                uiLog('UPLOAD_START', { id: phId });
                 const file = dataUrlToFile(dataUrl, `ai-${phId}.png`);
                 const { url, key } = await uploadFileToPublic(file);
+                uiLog('UPLOAD_OK', { id: phId, key });
+                idToUrl.current.set(phId, url);
                 dispatch(
                     addImages([
                         toImage({
                             id: phId,
                             url,
                             key,
-                            meta: { uploadedAt: Date.now(), fromStream: true },
+                            meta: { uploadedAt: Date.now(), fromStream: true, status: 'Done' },
                         }),
                     ]),
                 );
-            } catch {
+            } catch (e:any) {
+                uiLog('UPLOAD_FAIL', { id: phId, error: String(e?.message || e) });
                 // keep data URL on failure
             }
         })();
     }, [dispatch]);
 
     const setFinalUrl = useCallback((phId: string, url: string) => {
-        dispatch(addImages([toImage({ id: phId, url, meta: { fromStream: true } })]));
+        idToUrl.current.set(phId, url);
+        dispatch(addImages([toImage({ id: phId, url, meta: { fromStream: true, status: 'Done' } })]));
     }, [dispatch]);
 
     /* ---------------- finalize / cleanup ---------------- */
 
     const finalizeJob = useCallback((jobId: string) => {
+        uiLog('FINALIZE', { jobId });
         const es = sources.current.get(jobId);
         if (es) {
             try { es.close(); } catch {}
@@ -120,6 +141,7 @@ export default function useImageJobs() {
     const attach = useCallback((jobId: string) => {
         if (sources.current.has(jobId)) return;
         const es = new EventSource(`/api/ai/images/jobs/${jobId}/events`);
+        uiLog('ATTACH', { jobId });
         sources.current.set(jobId, es);
         setActive(prev => (prev.includes(jobId) ? prev : [jobId, ...prev]));
 
@@ -142,6 +164,13 @@ export default function useImageJobs() {
                     case 'status': {
                         const s = String(payload.status || '').toUpperCase() as JobStatus;
                         if (s) jobStatus.current.set(jobId, s);
+                        // Update status label on all known placeholders for this job
+                        const ids = jobToIds.current.get(jobId);
+                        const label = s === 'RUNNING' ? 'Generating' : s === 'SUCCEEDED' ? 'Done' : s === 'FAILED' ? 'Failed' : s === 'CANCELED' ? 'Canceled' : 'Queued';
+                        if (ids && ids.size) {
+                            const updates = Array.from(ids).map((id) => toImage({ id, url: idToUrl.current.get(id) || TRANSPARENT_1PX_SVG, meta: { fromStream: true, status: label } }));
+                            if (updates.length) dispatch(addImages(updates));
+                        }
                         // DON'T finalize on SUCCEEDED; wait for 'done' so replayed images render after refresh.
                         if (s === 'FAILED' || s === 'CANCELED') finalizeJob(jobId);
                         return;
@@ -179,33 +208,45 @@ export default function useImageJobs() {
     /* ---------------- start job ---------------- */
 
     const startJob = async (
-        { prompt, n = 1, size = '1024x1024' as ImgSize }: { prompt: string; n?: number; size?: ImgSize }
+        { prompt, n = 1, size = '1024x1024' as ImgSize, refs }: { prompt: string; n?: number; size?: ImgSize; refs?: string[] }
     ) => {
-
-        console.log('startjob')
-
-        const refs = getSelectedImageUrls()
+        // Ensure the right panel shows the image grid
+        try { (dispatch as any)(setMode('image')); } catch {}
+        const refsToUse = Array.isArray(refs) && refs.length ? refs : getSelectedImageUrls();
+        uiLog('START', { promptLen: prompt.length, n, size, refsCount: Array.isArray(refsToUse) ? refsToUse.length : 0 });
+        // Sync prompt into Generator UI so it matches manual flow
+        try { (dispatch as any)(updateText(prompt)); } catch {}
         const res = await fetch('/api/ai/images/jobs', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt, n, size, refs }),
+            body: JSON.stringify({ prompt, n, size, refs: refsToUse }),
         });
         if (res.status === 402) {
+            uiLog('START 402 insufficient credits');
             try { sessionStorage.setItem('insufficient_credits_msg', 'Your balance is not enough. Please add credits.'); } catch {}
             const seg = (typeof window !== 'undefined' ? (window.location.pathname.split('/')[1] || 'en') : 'en');
             try { window.dispatchEvent(new CustomEvent('open-credits-modal', { detail: { lang: seg } })); } catch {}
             return null;
         }
-        if (!res.ok) throw new Error('Failed to start job');
+        if (!res.ok) { uiLog('START_FAIL', { status: res.status }); throw new Error('Failed to start job'); }
         // reservation completed → notify header to refresh
         try { window.dispatchEvent(new Event('credits-updated')); } catch {}
         const { jobId, placeholderIds } = await res.json();
+        uiLog('START_OK', { jobId, placeholders: Array.isArray(placeholderIds) ? placeholderIds.length : 0 });
 
         // Create placeholders deterministically; if server provided IDs, use them
         if (Array.isArray(placeholderIds) && placeholderIds.length) {
+            const current = jobStatus.current.get(jobId) || 'QUEUED';
+            const st = current === 'RUNNING' ? 'Generating' : current === 'SUCCEEDED' ? 'Done' : current === 'FAILED' ? 'Failed' : current === 'CANCELED' ? 'Canceled' : 'Queued';
             for (let i = 0; i < placeholderIds.length; i++) {
                 const id = placeholderIds[i];
-                dispatch(addImages([toImage({ id, url: TRANSPARENT_1PX_SVG, meta: { placeholder: true, jobId, index: i } })]));
+                // track mappings so later status updates apply to these too
+                const setForJob = jobToIds.current.get(jobId) || new Set<string>();
+                setForJob.add(id);
+                jobToIds.current.set(jobId, setForJob);
+                idToIndex.current.set(id, i);
+                idToUrl.current.set(id, TRANSPARENT_1PX_SVG);
+                dispatch(addImages([toImage({ id, url: TRANSPARENT_1PX_SVG, meta: { placeholder: true, jobId, index: i, status: st } })]));
             }
         } else {
             for (let i = 0; i < n; i++) ensurePlaceholder(jobId, i);
@@ -214,6 +255,7 @@ export default function useImageJobs() {
         try { localStorage.setItem(`ai.job:${jobId}`, '1'); } catch {}
         jobStatus.current.set(jobId, 'RUNNING');
         attach(jobId);
+        try { window.dispatchEvent(new CustomEvent('ai-images-job-started', { detail: { jobId } })); } catch {}
         return jobId;
     };
 
