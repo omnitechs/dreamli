@@ -1007,7 +1007,9 @@
         "select": "Select",
         "selected": "Selected",
         "remove": "Remove",
-        "alt": "Image {name}"
+        "alt": "Image {name}",
+        "askAI": "Ask AI",
+        "quickAskPrompt": "I'd like your opinion about my current images and what to do next. Please propose actions."
       },
       "Build": {
         "title": "3D Model Generation",

@@ -980,7 +980,9 @@
         "select": "Sélectionner",
         "selected": "Sélectionné",
         "remove": "Supprimer",
-        "alt": "Image {name}"
+        "alt": "Image {name}",
+        "askAI": "Demander à l’IA",
+        "quickAskPrompt": "J’aimerais votre avis sur mes images actuelles et quoi faire ensuite. Merci de proposer des actions."
       },
       "Build": {
         "title": "Génération de modèle 3D",

@@ -980,7 +980,9 @@
         "select": "Auswählen",
         "selected": "Ausgewählt",
         "remove": "Entfernen",
-        "alt": "Bild {name}"
+        "alt": "Bild {name}",
+        "askAI": "KI fragen",
+        "quickAskPrompt": "Ich hätte gern deine Meinung zu meinen aktuellen Bildern und zu den nächsten Schritten. Bitte schlage Aktionen vor."
       },
       "Build": {
         "title": "3D-Modellgenerierung",

@@ -13,6 +13,7 @@ const getId = (img: Img) => img.id || getUrl(img); // fallback to URL if no id y
 export function ImagesGrid() {
     const { images, selectedSet, setSelectedHandler, removeImageById } = useImages();
     const t = useTranslations('AI.Page.ImagesGrid');
+    const tg = useTranslations('AI.Page.ImageGallery');
 
     const storeImages: Img[] = Array.isArray(images) && images.length ? images : (images ?? []);
     const [localImages, setLocalImages] = useState<Img[]>(storeImages);
@@ -41,7 +42,17 @@ export function ImagesGrid() {
 
     return (
         <div className="bg-white border border-gray-200 rounded-2xl p-4 space-y-4" data-ai-images-grid="1" id="ai-images-grid">
-            <h3 className="font-medium text-gray-900">{t('title', {count: localImages.length})}</h3>
+            <div className="flex items-center justify-between">
+                <h3 className="font-medium text-gray-900">{t('title', {count: localImages.length})}</h3>
+                <button
+                    type="button"
+                    onClick={() => { try { const prompt = tg('quickAskPrompt'); window.dispatchEvent(new CustomEvent('ai-messenger-quick-ask', { detail: { prompt } } as any)); } catch {} }}
+                    className="px-4 py-2 bg-purple-600 text-white font-medium rounded-xl disabled:opacity-50"
+                    title={tg('askAI')}
+                >
+                    {tg('askAI')}
+                </button>
+            </div>
 
             <div className="grid grid-cols-3 md:grid-cols-4 gap-2">
                 {localImages.map((image, index) => {

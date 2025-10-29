@@ -1001,7 +1001,9 @@
         "select": "Selecteren",
         "selected": "Geselecteerd",
         "remove": "Verwijderen",
-        "alt": "Afbeelding {name}"
+        "alt": "Afbeelding {name}",
+        "askAI": "AI vragen",
+        "quickAskPrompt": "Ik hoor graag je mening over mijn huidige afbeeldingen en wat ik hierna moet doen. Stel alsjeblieft acties voor."
       },
       "Build": {
         "title": "3D-modelgeneratie",

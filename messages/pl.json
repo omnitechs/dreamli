@@ -979,7 +979,9 @@
         "select": "Wybierz",
         "selected": "Zaznaczono",
         "remove": "Usuń",
-        "alt": "Obraz {name}"
+        "alt": "Obraz {name}",
+        "askAI": "Zapytaj AI",
+        "quickAskPrompt": "Chciałbym poznać Twoją opinię na temat moich obecnych obrazów i co zrobić dalej. Proszę, zaproponuj działania."
       },
       "Build": {
         "title": "Generowanie modelu 3D",

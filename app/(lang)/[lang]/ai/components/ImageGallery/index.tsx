@@ -20,7 +20,22 @@ export function ImageGallery() {
         <section>
             <div className="flex items-center justify-between mb-3">
                 <h2 className="font-medium">{t('title', {count: gen.images.length})}</h2>
-                <div className="text-sm text-gray-600">{t('selectedLabel', {count: selectedCount})}</div>
+                <div className="flex items-center gap-2">
+                    <div className="text-sm text-gray-600">{t('selectedLabel', {count: selectedCount})}</div>
+                    <button
+                        type="button"
+                        onClick={() => {
+                            try {
+                                const prompt = t('quickAskPrompt');
+                                window.dispatchEvent(new CustomEvent('ai-messenger-quick-ask', { detail: { prompt } } as any));
+                            } catch {}
+                        }}
+                        className="px-4 py-2 bg-purple-600 text-white font-medium rounded-xl disabled:opacity-50"
+                        title={t('askAI')}
+                    >
+                        {t('askAI')}
+                    </button>
+                </div>
             </div>
             {gen.images.length === 0 ? (
                 <div className="text-sm text-gray-500">{t('empty')}</div>
