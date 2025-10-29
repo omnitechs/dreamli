@@ -616,7 +616,7 @@ export async function POST(req: Request) {
                     const toolCalls: Array<{ name: string; args: any }> = [];
                     let evCount = 0;
 
-                    let finalUsage = { input_tokens: 0, output_tokens: 0 };
+                    const finalUsage = { input_tokens: 0, output_tokens: 0 };
 
                     for await (const evt of stream) {
                         evCount++;

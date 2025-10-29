@@ -103,7 +103,7 @@ async function runViaMock(jobId: string, { prompt, refs, size, n }:
     });
 
     let emitted = 0;
-        let eventCount = 0;
+        const eventCount = 0;
         const typeCounts: Record<string, number> = {};
 
     for await (const ev of iterateSSE(resp)) {

@@ -24,7 +24,7 @@ export default async function CreditsLedgerPage({ params }: { params: Promise<{ 
     .map((r: any) => (r?.details as any)?.jobId)
     .filter((x: any) => typeof x === 'string');
 
-  let firstImageByJob: Record<string, string> = {};
+  const firstImageByJob: Record<string, string> = {};
   if (jobIds.length) {
     const chunks = await prisma.imageChunk.findMany({
       where: { jobId: { in: Array.from(new Set(jobIds)) } },
