@@ -8,12 +8,6 @@ import {
     failModel,
 } from "@/app/store/slices/generatorSlice";
 import {GeneratorModel3D} from "@/app/(lang)/[lang]/ai/types";
-import usePrompt from "@/app/(lang)/[lang]/ai/hooks/usePrompt";
-import React, {useRef, useState, useTransition} from "react";
-import useMode from "@/app/(lang)/[lang]/ai/hooks/useMode";
-import useModels from "@/app/(lang)/[lang]/ai/hooks/useModels";
-import useImages from "@/app/(lang)/[lang]/ai/hooks/useImages";
-import useCommit from "@/app/(lang)/[lang]/ai/hooks/useCommit";
 
 type Terminal = "SUCCEEDED" | "FAILED" | "CANCELED";
 const TERMINAL: Record<string, true> = {SUCCEEDED: true, FAILED: true, CANCELED: true};
@@ -32,16 +26,6 @@ export function useMeshyStream() {
     const dispatch = useDispatch();
     const {prompt} = usePrompt();
 
-    const [isPending, startTransition] = useTransition();
-    const [status, setStatus] = useState('');
-    const [progress, setProgress] = useState(0);
-    const [modelUrl, setModelUrl] = useState<string>();
-    const [error, setError] = useState<string | null>(null);
-    const {images, getSelectedImageUrls} = useImages()
-    const {headId, onCommit} = useCommit()
-    const esRef = useRef<EventSource | null>(null);
-
-    // const {models} = useModels()
 
 
     function openStream(base: GeneratorModel3D) {

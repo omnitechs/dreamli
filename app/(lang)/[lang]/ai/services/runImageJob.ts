@@ -3,7 +3,6 @@ import { JobBus } from './jobBus';
 import OpenAI from 'openai';
 import { addCredits } from '@/lib/credits';
 
-const VERBOSE = process.env.AI_VERBOSE_LOG === '1';
 
 export const runtime = 'nodejs';
 

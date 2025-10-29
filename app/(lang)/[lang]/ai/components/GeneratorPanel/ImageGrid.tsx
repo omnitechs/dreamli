@@ -1,7 +1,7 @@
 // app/(lang)/[lang]/projects/[projectId]/components/ImagesGrid.tsx
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Check, Trash2 } from 'lucide-react';
 import useImages from "@/app/(lang)/[lang]/ai/hooks/useImages";
 import {useTranslations} from 'next-intl';
@@ -15,7 +15,9 @@ export function ImagesGrid() {
     const t = useTranslations('AI.Page.ImagesGrid');
     const tg = useTranslations('AI.Page.ImageGallery');
 
-    const storeImages: Img[] = Array.isArray(images) && images.length ? images : (images ?? []);
+    const storeImages: Img[] = useMemo(() => (
+        Array.isArray(images) && images.length ? images : (images ?? [])
+    ), [images]);
     const [localImages, setLocalImages] = useState<Img[]>(storeImages);
 
     useEffect(() => {

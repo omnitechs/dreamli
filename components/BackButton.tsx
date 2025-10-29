@@ -37,7 +37,7 @@ export default function BackButton() {
     try {
       const len = window.history.length || 0;
       setCanGoBack(len > 1);
-    } catch (_) {
+    } catch {
       setCanGoBack(false);
     }
 

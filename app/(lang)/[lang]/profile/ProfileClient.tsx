@@ -52,9 +52,9 @@ export type ProfileProject = {
 export default function ProfileClient({ initialUser, initialCredits, initialTransactions, initialProjects, baseLang }: { initialUser: ProfileUserView; initialCredits: ProfileCredits; initialTransactions: ProfileTransaction[]; initialProjects: ProfileProject[]; baseLang: string }) {
   const [user, setUser] = useState<ProfileUserView>(initialUser);
   const [open, setOpen] = useState(false);
-  const [credits, setCredits] = useState<ProfileCredits>(initialCredits);
-  const [transactions, setTransactions] = useState<ProfileTransaction[]>(initialTransactions);
-  const [projects, setProjects] = useState<ProfileProject[]>(initialProjects);
+  const [credits] = useState<ProfileCredits>(initialCredits);
+  const [transactions] = useState<ProfileTransaction[]>(initialTransactions);
+  const [projects] = useState<ProfileProject[]>(initialProjects);
 
   async function handleSave(data: { username: string; bio: string; avatar: string }) {
     try {
