@@ -474,6 +474,44 @@
       }
     }
   },
+  "About": {
+    "metaTitle": "O Dreamli",
+    "metaDescription": "Sklep internetowy z prezentami z siedzibą w Groningen. Nasz cel: aby wybór znaczącego prezentu był łatwy, osobisty i przyjemny.",
+    "hero": { "title": "O Dreamli", "subtitle": "Sklep z prezentami z Groningen, Holandia. Nasz cel jest prosty: wybór prezentu ma być łatwy, osobisty i przyjemny." },
+    "mission": { "title": "Nasza Misja", "body": "Łączymy dwa światy, aby zaoferować pełne doświadczenie prezentowe. Rękodzieło z naszej pracowni lub starannie wybrane produkty — pomożemy znaleźć prezent, który naprawdę pasuje." },
+    "basedIn": { "title": "Siedziba w Groningen", "body": "Nasza pracownia znajduje się w sercu Holandii, gdzie z troską i precyzją tworzymy unikalne wydruki 3D.", "imageAlt": "Pracownia Dreamli w Groningen" },
+    "create": { "titleA": "Co", "titleB": "Tworzymy", "subtitle": "W naszej pracowni w Groningen projektujemy i produkujemy szeroką gamę przedmiotów drukowanych w 3D" },
+    "createCards": [
+      { "title": "Lampy i światła nastrojowe", "text": "Piękne, podświetlane elementy tworzące idealny klimat" },
+      { "title": "Wazony i doniczki", "text": "Eleganckie pojemniki na kwiaty i rośliny" },
+      { "title": "Dekoracje do domu", "text": "Unikalne ozdoby personalizujące przestrzeń" },
+      { "title": "Prezenty personalizowane", "text": "Produkty na zamówienie, dopasowane do Twoich potrzeb" },
+      { "title": "Akcesoria do wnętrz", "text": "Małe detale robiące dużą różnicę" }
+    ],
+    "eco": { "title": "Przyjazna środowisku produkcja", "body": "Wszystkie wydruki powstają z ekologicznego PLA+, świeżo po złożeniu zamówienia, a następnie są ręcznie wykończane. Nic nie leży na magazynie — każdy element powstaje specjalnie dla Ciebie." },
+    "source": { "titleA": "Co", "titleB": "Sprowadzamy", "subtitle": "Aby Dreamli było kompletnym miejscem na prezenty, oferujemy też starannie wybrane produkty od sprawdzonych europejskich hurtowników.", "imageAlt": "Wyselekcjonowana kolekcja produktów" },
+    "sourceCards": [
+      { "title": "Zabawki i kreatywna zabawa", "text": "Zabawki pobudzające wyobraźnię i kreatywność" },
+      { "title": "Sztuka i rękodzieło", "text": "Wszystko do kreatywnych projektów" },
+      { "title": "Puzzle i łamigłówki", "text": "Wyzwanie i zabawa dla każdego wieku" },
+      { "title": "Dekoracje ogrodowe", "text": "Piękne elementy do przestrzeni na zewnątrz" },
+      { "title": "Papiernicze i lifestyle", "text": "Jakościowe przedmioty do pracy i nauki" }
+    ],
+    "sourcingPartners": { "title": "Nasi partnerzy zakupowi", "body": "Produkty pochodzą od zweryfikowanych europejskich hurtowników, m.in. ArtBizniz i podobnych licencjonowanych dystrybutorów. Nie rebrandujemy i nie rościmy sobie wyłączności — selekcjonujemy to, co pasuje do kreatywnego, radosnego, prezentowego ducha Dreamli." },
+    "why": { "titleA": "Dlaczego dostawa trwa", "titleB": "5–10 dni", "subtitle": "Działamy bez magazynu — dla lepszej jakości i zrównoważenia" },
+    "whyCards": [
+      { "title": "Na zamówienie", "text": "Wszystkie wydruki 3D powstają konkretnie dla Twojego zamówienia." },
+      { "title": "Świeżo od partnerów", "text": "Sprowadzane produkty trafiają prosto od naszych dystrybutorów." },
+      { "title": "Kontrola jakości", "text": "Każde zamówienie jest dokładnie sprawdzane przed wysyłką." }
+    ],
+    "ensures": { "title": "Ten model zapewnia:", "bullets": ["Mniej odpadów", "Świeża produkcja", "Lepsza kontrola jakości", "Czyste pakowanie", "Bardziej spójne wyniki"], "notePrefix": "Dla klientów:", "note": "Dostawa zwykle zajmuje 5–10 dni, zależnie od produkcji i kuriera." },
+    "business": { "titleA": "Nasza", "titleB": "Tożsamość firmy" },
+    "legal": { "title": "Informacje prawne", "subtitle": "Przejrzyste praktyki biznesowe", "fields": [ { "label": "Nazwa handlowa:", "value": "Dreamli" }, { "label": "Zarejestrowana spółka:", "value": "OmniTechs V.O.F." }, { "label": "RSIN:", "value": "866537211" }, { "label": "Lokalizacja:", "value": "Groningen, Holandia" } ], "disclaimer": "Sprzedaż, płatności, realizacja i obsługa klienta dla Dreamli są prowadzone przez OmniTechs V.O.F. pod marką Dreamli — w pełnej przejrzystości i zaufaniu." },
+    "shipping": { "title": "Wysyłka i zwroty", "bullets": [ "Wysyłka w UE i USA z PostNL, DHL i UPS.", "Każde zamówienie zawiera link śledzenia.", "30 dni na zwrot wszystkich produktów, także personalizowanych (nienaruszonych i dobrze zapakowanych)." ] },
+    "contactInfo": { "title": "Informacje kontaktowe", "companyLine": "OmniTechs V.O.F. — Groningen, Holandia" },
+    "promise": { "titleA": "Nasza", "titleB": "Obietnica", "subtitle": "Nasza misja: pomóc Ci znaleźć osobisty prezent — wykonany ręcznie w naszej pracowni lub starannie wybrany od zaufanych europejskich partnerów.", "cards": [ { "title": "Przejrzyste zasady", "text": "Uczciwe praktyki biznesowe i jasne informacje" }, { "title": "Niezawodna wysyłka", "text": "Dostawa do UE i USA z numerem śledzenia" }, { "title": "Wysoka jakość", "text": "Zweryfikowane produkty i świeża produkcja" }, { "title": "Prawdziwe wsparcie", "text": "Responsywna obsługa klienta" } ] },
+    "cta": { "title": "Gotowy na idealny prezent?", "body": "Pomożemy wybrać prezent, zrealizować zamówienie na miarę i odpowiemy na pytania.", "shop": "Odwiedź sklep", "contact": "Skontaktuj się" }
+  },
   "CouponPopup": {
     "badge": "OFERTA OGRANICZONA CZASOWO",
     "headline": "Zgarnij 50% zniżki na pierwszy prezent",

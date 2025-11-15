@@ -475,6 +475,44 @@
       }
     }
   },
+  "About": {
+    "metaTitle": "À propos de Dreamli",
+    "metaDescription": "Boutique en ligne dédiée aux cadeaux basée à Groningue, Pays-Bas. Notre mission : rendre le choix d’un cadeau significatif simple, personnel et agréable.",
+    "hero": { "title": "À propos de Dreamli", "subtitle": "Une boutique cadeaux basée à Groningue, aux Pays-Bas. Notre objectif est simple : choisir un cadeau qui compte doit être facile, personnel et plaisant." },
+    "mission": { "title": "Notre Mission", "body": "Nous réunissons deux univers pour une expérience cadeau complète. Fait main dans notre atelier ou soigneusement sélectionné auprès de fournisseurs de confiance — nous vous aidons à trouver un cadeau qui a du sens." },
+    "basedIn": { "title": "Basé à Groningue", "body": "Notre atelier est au cœur des Pays-Bas, où nous concevons et produisons des objets 3D uniques avec soin et précision.", "imageAlt": "Atelier Dreamli à Groningue" },
+    "create": { "titleA": "Ce que nous", "titleB": "Créons", "subtitle": "Dans notre atelier de Groningue, nous concevons et produisons une large gamme d’objets imprimés en 3D" },
+    "createCards": [
+      { "title": "Lampes & lumières d’ambiance", "text": "De belles pièces lumineuses pour créer l’ambiance parfaite" },
+      { "title": "Vases & cache-pots", "text": "Des contenants élégants pour vos fleurs et plantes" },
+      { "title": "Décoration intérieure", "text": "Des objets uniques pour personnaliser votre espace" },
+      { "title": "Cadeaux personnalisés", "text": "Des pièces sur mesure adaptées à vos besoins" },
+      { "title": "Accessoires d’intérieur", "text": "De petits détails qui font une grande différence chez vous" }
+    ],
+    "eco": { "title": "Production écoresponsable", "body": "Toutes les impressions sont réalisées en PLA+ écologique, fraîchement produites après chaque commande et finies à la main. Rien n’est stocké — chaque pièce est faite spécialement pour vous." },
+    "source": { "titleA": "Ce que nous", "titleB": "Sourçons", "subtitle": "Pour faire de Dreamli une destination cadeau complète, nous proposons aussi des produits soigneusement sélectionnés auprès de grossistes européens vérifiés.", "imageAlt": "Sélection de produits" },
+    "sourceCards": [
+      { "title": "Jouets & jeux créatifs", "text": "Des jouets qui stimulent l’imagination et la créativité" },
+      { "title": "Arts & loisirs créatifs", "text": "Tout le nécessaire pour des projets créatifs" },
+      { "title": "Puzzles & casse-têtes", "text": "Stimulants et ludiques pour tous les âges" },
+      { "title": "Décor extérieur & jardin", "text": "De belles pièces pour vos espaces extérieurs" },
+      { "title": "Papeterie & lifestyle", "text": "Des articles de qualité pour le travail et le quotidien" }
+    ],
+    "sourcingPartners": { "title": "Nos partenaires d’approvisionnement", "body": "Ces produits proviennent de grossistes européens vérifiés, dont ArtBizniz et d’autres distributeurs licenciés. Nous ne rebrandons pas et ne revendiquons aucune exclusivité — nous sélectionnons ce qui correspond à l’esprit créatif, joyeux et orienté cadeaux de Dreamli." },
+    "why": { "titleA": "Pourquoi la livraison prend", "titleB": "5–10 jours", "subtitle": "Dreamli fonctionne sans stock pour plus de qualité et de durabilité" },
+    "whyCards": [
+      { "title": "Fabriqué à la commande", "text": "Chaque objet imprimé en 3D est créé spécialement pour votre commande." },
+      { "title": "Frais de nos partenaires", "text": "Les articles sourcés arrivent directement de nos distributeurs." },
+      { "title": "Contrôle qualité", "text": "Chaque commande est contrôlée avant expédition." }
+    ],
+    "ensures": { "title": "Ce modèle garantit :", "bullets": ["Moins de déchets", "Production fraîche", "Meilleur contrôle qualité", "Emballage propre", "Résultats plus constants"], "notePrefix": "Pour les clients :", "note": "La livraison prend généralement 5–10 jours selon la production et le transporteur." },
+    "business": { "titleA": "Notre", "titleB": "Identité d’entreprise" },
+    "legal": { "title": "Informations légales", "subtitle": "Pratiques commerciales transparentes", "fields": [ { "label": "Nom commercial :", "value": "Dreamli" }, { "label": "Société enregistrée :", "value": "OmniTechs V.O.F." }, { "label": "RSIN :", "value": "866537211" }, { "label": "Localisation :", "value": "Groningue, Pays-Bas" } ], "disclaimer": "Les ventes, paiements, exécution et support client de Dreamli sont assurés par OmniTechs V.O.F. sous la marque Dreamli — gage de transparence et de confiance." },
+    "shipping": { "title": "Expédition & retours", "bullets": [ "Expédition UE et USA via PostNL, DHL et UPS.", "Chaque commande inclut un lien de suivi.", "Retours sous 30 jours sur tous les articles, y compris personnalisés (intacts et bien emballés)." ] },
+    "contactInfo": { "title": "Informations de contact", "companyLine": "OmniTechs V.O.F. — Groningue, Pays-Bas" },
+    "promise": { "titleA": "Notre", "titleB": "Promesse", "subtitle": "Notre mission : vous aider à trouver un cadeau personnel — fait main dans notre atelier ou soigneusement sélectionné auprès de partenaires européens de confiance.", "cards": [ { "title": "Pratiques transparentes", "text": "Des pratiques honnêtes avec une information claire" }, { "title": "Expédition fiable", "text": "Livraison UE & USA avec suivi" }, { "title": "Haute qualité", "text": "Produits vérifiés et production fraîche" }, { "title": "Support réel", "text": "Service client réactif" } ] },
+    "cta": { "title": "Prêt à trouver le cadeau parfait ?", "body": "Besoin d’aide pour choisir, de demandes sur mesure ou de questions ? Nous sommes là pour vous.", "shop": "Visiter la boutique", "contact": "Nous contacter" }
+  },
   "CouponPopup": {
     "badge": "OFFRE LIMITÉE",
     "headline": "–50 % sur votre premier cadeau",

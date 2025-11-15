@@ -473,6 +473,94 @@
       }
     }
   },
+  "About": {
+    "metaTitle": "Over Dreamli",
+    "metaDescription": "Een cadeaugerichte online winkel uit Groningen. Ons doel: het kiezen van een betekenisvol cadeau makkelijk, persoonlijk en leuk maken.",
+    "hero": {
+      "title": "Over Dreamli",
+      "subtitle": "Een cadeaugerichte online winkel uit Groningen, Nederland. Ons doel is simpel: een betekenisvol cadeau kiezen moet eenvoudig, persoonlijk en leuk zijn."
+    },
+    "mission": {
+      "title": "Onze Missie",
+      "body": "Wij brengen twee werelden samen voor een complete cadeau-ervaring. Handgemaakt in onze studio of zorgvuldig geselecteerd bij betrouwbare leveranciers — wij helpen je een persoonlijk cadeau te vinden."
+    },
+    "basedIn": {
+      "title": "Gevestigd in Groningen",
+      "body": "Onze studio ligt in het hart van Nederland, waar we unieke 3D-geprinte items ontwerpen en produceren met aandacht voor detail.",
+      "imageAlt": "Dreamli-werkplaats in Groningen"
+    },
+    "create": { "titleA": "Wat Wij", "titleB": "Maken", "subtitle": "In onze Groningse studio ontwerpen en produceren we een breed scala aan 3D-geprinte items" },
+    "createCards": [
+      { "title": "Lampen & Sfeerverlichting", "text": "Prachtige lichtobjecten die de juiste sfeer creëren" },
+      { "title": "Vazen & Plantenpotten", "text": "Elegante houders voor je favoriete bloemen en planten" },
+      { "title": "Woondecoratie", "text": "Unieke decoratieve items om je ruimte te personaliseren" },
+      { "title": "Gepersonaliseerde Cadeaus", "text": "Op maat gemaakte items afgestemd op jouw wensen" },
+      { "title": "Interieuraccessoires", "text": "Kleine details met groot effect in huis" }
+    ],
+    "eco": { "title": "Milieuvriendelijke Productie", "body": "Alle prints worden gemaakt met milieuvriendelijke PLA+, vers na elke bestelling en met de hand afgewerkt. Niets ligt op voorraad — elk stuk wordt speciaal voor jou gemaakt." },
+    "source": { "titleA": "Wat Wij", "titleB": "Inkomen", "subtitle": "Om Dreamli een complete cadeaubestemming te maken, bieden we ook zorgvuldig geselecteerde producten van Europese groothandels.", "imageAlt": "Geselecteerde productcollectie" },
+    "sourceCards": [
+      { "title": "Speelgoed & Creatief Spel", "text": "Inspirerend speelgoed dat verbeelding prikkelt" },
+      { "title": "Knutselen & Hobby", "text": "Alles voor creatieve projecten en artistieke expressie" },
+      { "title": "Puzzels & Breinspelletjes", "text": "Uitdagend en leuk voor alle leeftijden" },
+      { "title": "Buiten- & Tuindecoratie", "text": "Mooie items voor je buitenruimte" },
+      { "title": "Papierwaren & Lifestyle", "text": "Kwaliteitsproducten voor werk, studie en dagelijks gebruik" }
+    ],
+    "sourcingPartners": {
+      "title": "Onze Inkooppartners",
+      "body": "Deze artikelen worden ingekocht bij geverifieerde Europese groothandels, waaronder partners zoals ArtBizniz en vergelijkbare licentiehouders. We rebranden niet en claimen geen exclusiviteit — we cureren simpelweg wat past bij de creatieve, vrolijke en cadeaugerichte geest van Dreamli."
+    },
+    "why": { "titleA": "Waarom Levertijd", "titleB": "5–10 Dagen", "subtitle": "Dreamli werkt zonder voorraad voor betere kwaliteit en duurzaamheid" },
+    "whyCards": [
+      { "title": "Op Bestelling Gemaakt", "text": "Alle 3D-prints worden speciaal voor jouw bestelling gemaakt — vers en van hoge kwaliteit." },
+      { "title": "Vers van Partners", "text": "Ingekochte items komen vers van onze distributeurs voor de beste conditie." },
+      { "title": "Kwaliteitscontrole", "text": "Elke bestelling wordt grondig gecontroleerd voor verzending." }
+    ],
+    "ensures": {
+      "title": "Dit Model Zorgt Voor:",
+      "bullets": ["Minder afval", "Verse productie", "Betere kwaliteitscontrole", "Schone verpakking", "Consistentere resultaten"],
+      "notePrefix": "Voor klanten:",
+      "note": "De levering duurt meestal 5–10 dagen, afhankelijk van productie en bezorgdienst."
+    },
+    "business": { "titleA": "Onze", "titleB": "Bedrijfsidentiteit" },
+    "legal": {
+      "title": "Juridische Informatie",
+      "subtitle": "Transparante bedrijfsvoering",
+      "fields": [
+        { "label": "Handelsnaam:", "value": "Dreamli" },
+        { "label": "Ingeschreven bij:", "value": "OmniTechs V.O.F." },
+        { "label": "RSIN:", "value": "866537211" },
+        { "label": "Locatie:", "value": "Groningen, Nederland" }
+      ],
+      "disclaimer": "Alle verkoop, betalingen, fulfillment en klantenservice voor Dreamli worden uitgevoerd door OmniTechs V.O.F. onder het Dreamli-merk — voor volledige transparantie en vertrouwen."
+    },
+    "shipping": {
+      "title": "Verzending & Retour",
+      "bullets": [
+        "We verzenden binnen de EU en de VS met PostNL, DHL en UPS.",
+        "Elke bestelling bevat een track & trace-link.",
+        "30 dagen retour op alle items, ook maatwerk (onbeschadigd en goed verpakt)."
+      ]
+    },
+    "contactInfo": { "title": "Contactinformatie", "companyLine": "OmniTechs V.O.F. — Groningen, Nederland" },
+    "promise": {
+      "titleA": "Onze",
+      "titleB": "Belofte",
+      "subtitle": "Onze missie: je helpen een persoonlijk cadeau te vinden — handgemaakt in onze studio of zorgvuldig geselecteerd bij betrouwbare Europese leveranciers.",
+      "cards": [
+        { "title": "Transparante werkwijze", "text": "Eerlijke bedrijfsvoering met duidelijke informatie" },
+        { "title": "Betrouwbare verzending", "text": "EU & VS-verzending met tracking" },
+        { "title": "Hoge kwaliteit", "text": "Geverifieerde producten en verse productie" },
+        { "title": "Echte support", "text": "Responsieve klantenservice" }
+      ]
+    },
+    "cta": {
+      "title": "Klaar om het perfecte cadeau te vinden?",
+      "body": "Zoek je hulp bij kiezen, heb je maatwerkverzoeken of vragen over je bestelling? We helpen je graag.",
+      "shop": "Bezoek onze winkel",
+      "contact": "Neem contact op"
+    }
+  },
   "CouponPopup": {
     "badge": "TIJDELIJK AANBOD",
     "headline": "Krijg 50% korting op je eerste cadeau",

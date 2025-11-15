@@ -479,6 +479,94 @@
       }
     }
   },
+  "About": {
+    "metaTitle": "About Dreamli",
+    "metaDescription": "A gift-focused online shop based in Groningen, the Netherlands. Our goal is simple: to make choosing a meaningful gift easy, personal, and enjoyable.",
+    "hero": {
+      "title": "About Dreamli",
+      "subtitle": "A gift-focused online shop based in Groningen, the Netherlands. Our goal is simple: to make choosing a meaningful gift easy, personal, and enjoyable."
+    },
+    "mission": {
+      "title": "Our Mission",
+      "body": "We bring together two worlds to offer a complete gifting experience. Whether you're looking for something handmade in our workshop or carefully curated from trusted suppliers, we help you find a gift that feels personal."
+    },
+    "basedIn": {
+      "title": "Based in Groningen",
+      "body": "Our workshop is located in the heart of the Netherlands, where we design and produce unique 3D-printed items with care and attention to detail.",
+      "imageAlt": "Dreamli workshop in Groningen"
+    },
+    "create": { "titleA": "What We", "titleB": "Create", "subtitle": "In our Groningen workshop, we design and produce a wide range of 3D-printed items" },
+    "createCards": [
+      { "title": "Lamps & Mood Lights", "text": "Beautiful illuminated pieces that create the perfect ambiance" },
+      { "title": "Vases & Planters", "text": "Elegant containers for your favorite plants and flowers" },
+      { "title": "Home Décor Pieces", "text": "Unique decorative items to personalize your space" },
+      { "title": "Personalized Gifts", "text": "Custom-made items tailored to your specific needs" },
+      { "title": "Interior Accessories", "text": "Small details that make a big difference in your home" }
+    ],
+    "eco": { "title": "Eco-Friendly Production", "body": "All prints are made using eco-friendly PLA+, produced fresh after each order, and hand-finished for clean results. Nothing sits in storage — every piece is made specifically for your order." },
+    "source": { "titleA": "What We", "titleB": "Source", "subtitle": "To make Dreamli a full gift destination, we also offer carefully curated products from verified European wholesalers", "imageAlt": "Curated product collection" },
+    "sourceCards": [
+      { "title": "Toys & Creative Play Items", "text": "Inspiring toys that spark imagination and creativity" },
+      { "title": "Arts & Crafts", "text": "Everything needed for creative projects and artistic expression" },
+      { "title": "Puzzles & Brain Games", "text": "Challenging and fun activities for all ages" },
+      { "title": "Outdoor & Garden Décor", "text": "Beautiful pieces to enhance your outdoor spaces" },
+      { "title": "Stationery & Lifestyle Products", "text": "Quality items for work, study, and everyday life" }
+    ],
+    "sourcingPartners": {
+      "title": "Our Sourcing Partners",
+      "body": "These items are sourced from verified European wholesalers, including partners such as ArtBizniz and similar licensed distributors. We do not rebrand these items or claim exclusivity. We simply curate products that fit the creative, joyful, and gifting-focused spirit of Dreamli."
+    },
+    "why": { "titleA": "Why Delivery Takes", "titleB": "5–10 Days", "subtitle": "Dreamli operates on a no-stock model for better quality and sustainability" },
+    "whyCards": [
+      { "title": "Made to Order", "text": "All 3D-printed items are created specifically for your order, ensuring freshness and quality." },
+      { "title": "Fresh from Partners", "text": "All sourced items are picked fresh from our partner distributors for optimal condition." },
+      { "title": "Quality Checked", "text": "Each order is thoroughly quality-checked before shipping to ensure perfection." }
+    ],
+    "ensures": {
+      "title": "This Model Ensures:",
+      "bullets": ["Lower waste", "Fresh production", "Better quality control", "Clean packaging", "More consistent results"],
+      "notePrefix": "For customers:",
+      "note": "This means delivery typically takes 5–10 days, depending on production and courier speed."
+    },
+    "business": { "titleA": "Our", "titleB": "Business Identity" },
+    "legal": {
+      "title": "Legal Information",
+      "subtitle": "Transparent business practices",
+      "fields": [
+        { "label": "Trade Name:", "value": "Dreamli" },
+        { "label": "Registered Company:", "value": "OmniTechs V.O.F." },
+        { "label": "RSIN:", "value": "866537211" },
+        { "label": "Location:", "value": "Groningen, The Netherlands" }
+      ],
+      "disclaimer": "All sales, payments, fulfillment, and customer support for Dreamli are handled by OmniTechs V.O.F. under the Dreamli brand. This ensures full transparency, legal clarity, and trust for both customers and partners."
+    },
+    "shipping": {
+      "title": "Shipping & Returns",
+      "bullets": [
+        "We ship across the European Union and the United States using PostNL, DHL, and UPS.",
+        "Every order includes a track & trace link.",
+        "We offer 30-day returns on all items, including customized 3D prints (as long as they're undamaged and properly packed)."
+      ]
+    },
+    "contactInfo": { "title": "Contact Information", "companyLine": "OmniTechs V.O.F. — Groningen, Netherlands" },
+    "promise": {
+      "titleA": "Our",
+      "titleB": "Promise",
+      "subtitle": "Our mission is to help you find a gift that feels personal — whether it's handmade in our workshop or carefully curated from trusted European suppliers.",
+      "cards": [
+        { "title": "Transparent Practices", "text": "Honest business practices with clear information" },
+        { "title": "Reliable Shipping", "text": "EU & USA shipping with tracking" },
+        { "title": "High Quality", "text": "Verified products and fresh production" },
+        { "title": "Real Support", "text": "Responsive customer service" }
+      ]
+    },
+    "cta": {
+      "title": "Ready to find the perfect gift?",
+      "body": "Whether you need help choosing a gift, have custom requests, or have questions about your order, we're here to help.",
+      "shop": "Visit Our Shop",
+      "contact": "Contact Us"
+    }
+  },
   "CouponPopup": {
     "badge": "LIMITED TIME",
     "headline": "Get 50% Off Your First Gift",
