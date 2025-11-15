@@ -9,7 +9,7 @@ export const revalidate = 3600; // 1 hour
 const SITE = 'https://dreamli.nl';
 const LANGS = ['en', 'nl', 'de', 'fr', 'pl'] as const;
 const DEFAULT_LANG = 'nl';
-const STATIC_PATHS = ['', '/ai', '/keychains', '/lithophanes', '/contact', '/privacy', '/terms'] as const;
+const STATIC_PATHS = ['', '/ai', '/keychains', '/lithophanes', '/about', '/contact', '/shipping', '/privacy', '/terms'] as const;
 
 function urlFor(lang: string, path: string): string {
   // Ensure path starts with '/', but avoid double slash issues
