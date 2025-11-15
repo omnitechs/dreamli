@@ -144,17 +144,19 @@
     },
     "company": {
       "heading": "Informations sur l’entreprise",
-      "name": "Omni Techs",
+      "name": "Dreamli – exploité par OmniTechs V.O.F.",
       "address": {
         "line1": "Resedastraat 39",
-        "line2": "9713TN, Groningue",
+        "line2": "9713TN Groningue",
         "country": "Pays-Bas"
       },
       "kvk": "KvK : {kvk}",
-      "phone": "{phone}"
+      "vat": "TVA / BTW : {vat}",
+      "phone": "Téléphone : {phone}",
+      "note": "Dreamli est un nom commercial (marque) d’OmniTechs V.O.F."
     },
     "collab": {
-      "heading": "Espace de collaboration",
+      "heading": "Support & Mentions légales",
       "partner": "Devenir partenaire",
       "aboutFounder": "À propos du fondateur"
     },

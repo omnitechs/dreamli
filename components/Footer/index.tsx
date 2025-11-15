@@ -82,14 +82,12 @@ export default async function Footer({ lang }: { lang: LanguageCode }) {
                         <div className="space-y-3 text-gray-600">
                             <div className="flex items-center space-x-2">
                                 <i className="ri-building-2-line text-purple-600" />
-                                <a
-                                    href="https://omnitechs.nl"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-sm font-medium hover:text-purple-600 transition-colors cursor-pointer"
-                                >
-                                    {t('company.name')}
-                                </a>
+                                <p className="text-sm font-medium">
+                                    <a href="https://www.omnitechs.nl" target="_blank" rel="noopener noreferrer" className="hover:underline">
+                                        {t('company.name')}
+                                    </a>
+
+                                </p>
                             </div>
 
                             <div className="flex items-start space-x-2">
@@ -107,32 +105,49 @@ export default async function Footer({ lang }: { lang: LanguageCode }) {
                             </div>
 
                             <div className="flex items-center space-x-2">
+                                <i className="ri-bill-line text-purple-600" />
+                                <p className="text-sm">{t('company.vat', {vat: 'NL866537211B01'})}</p>
+                            </div>
+
+                            <div className="flex items-center space-x-2">
                                 <i className="ri-phone-line text-purple-600" />
                                 <a href="tel:+31645559587" className="text-sm hover:text-purple-600 transition-colors">
                                     {t('company.phone', {phone: '+31 6 4555 9587'})}
                                 </a>
                             </div>
+
+                            <p className="text-xs text-gray-500 pt-2">{t('company.note')}</p>
                         </div>
                     </div>
 
-                    {/* Collaboration Hub */}
+                    {/* Support & Legal */}
                     <div>
                         <h4 className="text-lg font-semibold mb-4 text-purple-800">{t('collab.heading')}</h4>
                         <ul className="space-y-2">
                             <li>
-                                <Link href={`${base}/collaboration`} className="text-gray-600 hover:text-purple-600 transition-colors">
-                                    {t('collab.partner')}
+                                <Link href={`${base}/about`} className="text-gray-600 hover:text-purple-600 transition-colors">
+                                    {t('legal.about')}
                                 </Link>
                             </li>
                             <li>
-                                <a
-                                    href="https://omnitechs.nl/about-founder"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-gray-600 hover:text-purple-600 transition-colors"
-                                >
-                                    {t('collab.aboutFounder')}
-                                </a>
+                                <Link href={`${base}/contact`} className="text-gray-600 hover:text-purple-600 transition-colors">
+                                    {t('legal.contact')}
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href={`${base}/shipping`} className="text-gray-600 hover:text-purple-600 transition-colors">
+                                    {t('legal.shipping')}
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href={`${base}/terms`} className="text-gray-600 hover:text-purple-600 transition-colors">
+                                    {t('legal.terms')}
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href={`${base}/privacy`} className="text-gray-600 hover:text-purple-600 transition-colors">
+                                    {t('legal.privacy')}
+                                </Link>
                             </li>
                         </ul>
                     </div>
@@ -155,23 +170,23 @@ export default async function Footer({ lang }: { lang: LanguageCode }) {
                         <p className="text-gray-600 text-sm">
                             {t('legal.copyright', {year})}
                         </p>
-                        <div className="flex flex-wrap gap-x-6 gap-y-3 items-center justify-center md:justify-end text-sm text-gray-600">
-                            <Link href={`${origin}/${lang}/about`} className="hover:text-purple-600 transition-colors cursor-pointer">
-                                {t('legal.about')}
-                            </Link>
-                            <Link href={`${origin}/${lang}/contact`} className="hover:text-purple-600 transition-colors cursor-pointer">
-                                {t('legal.contact')}
-                            </Link>
-                            <Link href={`${origin}/${lang}/shipping`} className="hover:text-purple-600 transition-colors cursor-pointer">
-                                {t('legal.shipping')}
-                            </Link>
-                            <Link href={`${origin}/${lang}/terms`} className="hover:text-purple-600 transition-colors cursor-pointer">
-                                {t('legal.terms')}
-                            </Link>
-                            <Link href={`${origin}/${lang}/privacy`} className="hover:text-purple-600 transition-colors cursor-pointer">
-                                {t('legal.privacy')}
-                            </Link>
-                        </div>
+                        {/*<div className="flex flex-wrap gap-x-6 gap-y-3 items-center justify-center md:justify-end text-sm text-gray-600">*/}
+                        {/*    <Link href={`${origin}/${lang}/about`} className="hover:text-purple-600 transition-colors cursor-pointer">*/}
+                        {/*        {t('legal.about')}*/}
+                        {/*    </Link>*/}
+                        {/*    <Link href={`${origin}/${lang}/contact`} className="hover:text-purple-600 transition-colors cursor-pointer">*/}
+                        {/*        {t('legal.contact')}*/}
+                        {/*    </Link>*/}
+                        {/*    <Link href={`${origin}/${lang}/shipping`} className="hover:text-purple-600 transition-colors cursor-pointer">*/}
+                        {/*        {t('legal.shipping')}*/}
+                        {/*    </Link>*/}
+                        {/*    <Link href={`${origin}/${lang}/terms`} className="hover:text-purple-600 transition-colors cursor-pointer">*/}
+                        {/*        {t('legal.terms')}*/}
+                        {/*    </Link>*/}
+                        {/*    <Link href={`${origin}/${lang}/privacy`} className="hover:text-purple-600 transition-colors cursor-pointer">*/}
+                        {/*        {t('legal.privacy')}*/}
+                        {/*    </Link>*/}
+                        {/*</div>*/}
                     </div>
                 </div>
             </div>

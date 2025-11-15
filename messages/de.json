@@ -144,17 +144,19 @@
     },
     "company": {
       "heading": "Unternehmensinfo",
-      "name": "Omni Techs",
+      "name": "Dreamli – betrieben von OmniTechs V.O.F.",
       "address": {
         "line1": "Resedastraat 39",
-        "line2": "9713TN, Groningen",
+        "line2": "9713TN Groningen",
         "country": "Niederlande"
       },
       "kvk": "KvK: {kvk}",
-      "phone": "{phone}"
+      "vat": "USt-IdNr. / BTW: {vat}",
+      "phone": "Telefon: {phone}",
+      "note": "Dreamli ist ein Handelsname (Marke) von OmniTechs V.O.F."
     },
     "collab": {
-      "heading": "Kooperation",
+      "heading": "Support & Rechtliches",
       "partner": "Partner werden",
       "aboutFounder": "Über den Gründer"
     },
