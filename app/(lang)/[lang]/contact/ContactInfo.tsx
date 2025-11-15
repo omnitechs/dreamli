@@ -81,7 +81,7 @@ export default async function ContactInfo({lang}: { lang: LanguageCode }) {
                             Netherlands
                         </p>
                         <p className="text-sm text-gray-600 mt-3">
-                            {t('cards.address.kvk')}: 93814429
+                            {t('cards.address.kvk')}: 93814429 — {t('cards.address.vat')}: NL866537211B01
                         </p>
                     </div>
                 </div>

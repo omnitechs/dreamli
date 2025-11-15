@@ -99,8 +99,8 @@ export default async function TermsPage(props: { params: Promise<{ lang: Languag
                                 </div>
                                 <p className="text-gray-700 leading-relaxed">{t('delivery.body')}</p>
                                 <ul className="text-gray-700 leading-relaxed list-disc pl-6">
-                                    <li>{t('delivery.points.onTime')}</li>
-                                    <li>{t('delivery.points.delayed')}</li>
+                                    {t('delivery.points.onTime') && (<li>{t('delivery.points.onTime')}</li>)}
+                                    {t('delivery.points.delayed') && (<li>{t('delivery.points.delayed')}</li>)}
                                 </ul>
                             </section>
 
@@ -112,7 +112,28 @@ export default async function TermsPage(props: { params: Promise<{ lang: Languag
                                     </div>
                                     <h2 className="text-2xl font-semibold text-gray-900">{t('returns.title')}</h2>
                                 </div>
-                                <p className="text-gray-700 leading-relaxed">{t('returns.body')}</p>
+                                {(() => {
+                                    const rightTitle = t('returns.rightTitle', { default: '' });
+                                    const perk = t('returns.perkNote', { default: '' });
+                                    if (rightTitle) {
+                                        return (
+                                            <div className="space-y-4">
+                                                <div>
+                                                    <h3 className="text-xl font-semibold text-gray-900">{rightTitle}</h3>
+                                                    <p className="text-gray-700 leading-relaxed">{t('returns.rightBody')}</p>
+                                                </div>
+                                                <div>
+                                                    <h3 className="text-xl font-semibold text-gray-900">{t('returns.personalTitle')}</h3>
+                                                    <p className="text-gray-700 leading-relaxed">{t('returns.personalBody')}</p>
+                                                </div>
+                                                {perk && (
+                                                    <p className="text-purple-800 bg-purple-50 border border-purple-200 rounded-lg p-4">{perk}</p>
+                                                )}
+                                            </div>
+                                        );
+                                    }
+                                    return <p className="text-gray-700 leading-relaxed">{t('returns.body')}</p>;
+                                })()}
                             </section>
 
                             {/* Cashback & Site Credit Policy */}

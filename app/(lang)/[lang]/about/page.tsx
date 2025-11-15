@@ -97,10 +97,12 @@ const copy: Record<LanguageCode, {
       title: 'Legal Information',
       subtitle: 'Transparent business practices',
       fields: [
-        { label: 'Trade Name:', value: 'Dreamli' },
-        { label: 'Registered Company:', value: 'OmniTechs V.O.F.' },
-        { label: 'RSIN:', value: '866537211' },
-        { label: 'Location:', value: 'Groningen, The Netherlands' }
+        { label: 'Business Name:', value: 'Dreamli (trade name of OmniTechs V.O.F.)' },
+        { label: 'KvK:', value: '93814429' },
+        { label: 'BTW (VAT) ID:', value: 'NL866537211B01' },
+        { label: 'Address:', value: 'Resedastraat 39, 9713 TN Groningen, Netherlands' },
+        { label: 'Email:', value: 'info@dreamli.nl' },
+        { label: 'Phone:', value: '+31 6 4555 9587' }
       ],
       disclaimer: 'All sales, payments, fulfillment, and customer support for Dreamli are handled by OmniTechs V.O.F. under the Dreamli brand. This ensures full transparency, legal clarity, and trust for both customers and partners.'
     },
@@ -109,7 +111,7 @@ const copy: Record<LanguageCode, {
       bullets: [
         'We ship across the European Union and the United States using PostNL, DHL, and UPS.',
         'Every order includes a track & trace link.',
-        "We offer 30-day returns on all items, including customized 3D prints (as long as they're undamaged and properly packed)."
+        "Store benefit: 30-day returns on eligible items as described on the Shipping & Returns page. This does not limit your statutory rights (14-day withdrawal for standard items; personalized/custom items are excluded by law)."
       ]
     },
     contactInfo: {
@@ -204,19 +206,21 @@ const copy: Record<LanguageCode, {
       title: 'Juridische Informatie',
       subtitle: 'Transparante bedrijfsvoering',
       fields: [
-        { label: 'Handelsnaam:', value: 'Dreamli' },
-        { label: 'Ingeschreven bij:', value: 'OmniTechs V.O.F.' },
-        { label: 'RSIN:', value: '866537211' },
-        { label: 'Locatie:', value: 'Groningen, Nederland' }
+        { label: 'Bedrijfsnaam:', value: 'Dreamli (handelsnaam van OmniTechs V.O.F.)' },
+        { label: 'KvK:', value: '93814429' },
+        { label: 'BTW (VAT) ID:', value: 'NL866537211B01' },
+        { label: 'Adres:', value: 'Resedastraat 39, 9713 TN Groningen, Nederland' },
+        { label: 'E-mail:', value: 'info@dreamli.nl' },
+        { label: 'Telefoon:', value: '+31 6 4555 9587' }
       ],
-      disclaimer: 'Alle verkoop, betalingen, fulfillment en klantenservice voor Dreamli worden uitgevoerd door OmniTechs V.O.F. onder het Dreamli-merk — voor volledige transparantie en vertrouwen.'
+      disclaimer: 'Alle verkopen, betalingen, fulfilment en klantenservice voor Dreamli worden verzorgd door OmniTechs V.O.F. onder het merk Dreamli. Dit zorgt voor volledige transparantie, juridische duidelijkheid en vertrouwen.'
     },
     shipping: {
       title: 'Verzending & Retour',
       bullets: [
         'We verzenden binnen de EU en de VS met PostNL, DHL en UPS.',
         'Elke bestelling bevat een track & trace-link.',
-        '30 dagen retour op alle items, ook maatwerk (onbeschadigd en goed verpakt).'
+        'Winkelvoordeel: 30 dagen retourneren op in aanmerking komende items zoals beschreven op de pagina Verzending & Retouren. Dit beperkt uw wettelijke rechten niet (14 dagen herroeping voor standaardartikelen; gepersonaliseerde/maatwerkartikelen zijn wettelijk uitgesloten).'
       ]
     },
     contactInfo: {
@@ -311,10 +315,12 @@ const copy: Record<LanguageCode, {
       title: 'Rechtliche Informationen',
       subtitle: 'Transparente Geschäftspraktiken',
       fields: [
-        { label: 'Handelsname:', value: 'Dreamli' },
-        { label: 'Eingetragenes Unternehmen:', value: 'OmniTechs V.O.F.' },
-        { label: 'RSIN:', value: '866537211' },
-        { label: 'Standort:', value: 'Groningen, Niederlande' }
+        { label: 'Geschäftsname:', value: 'Dreamli (Handelsname von OmniTechs V.O.F.)' },
+        { label: 'KvK:', value: '93814429' },
+        { label: 'USt-IdNr. (VAT):', value: 'NL866537211B01' },
+        { label: 'Adresse:', value: 'Resedastraat 39, 9713 TN Groningen, Niederlande' },
+        { label: 'E‑Mail:', value: 'info@dreamli.nl' },
+        { label: 'Telefon:', value: '+31 6 4555 9587' }
       ],
       disclaimer: 'Alle Verkäufe, Zahlungen, die Abwicklung und der Support für Dreamli werden von OmniTechs V.O.F. unter der Marke Dreamli durchgeführt — für volle Transparenz und Vertrauen.'
     },
@@ -323,7 +329,7 @@ const copy: Record<LanguageCode, {
       bullets: [
         'Versand in der EU und den USA mit PostNL, DHL und UPS.',
         'Jede Bestellung enthält eine Sendungsverfolgung.',
-        '30 Tage Rückgabe auf alle Artikel, auch Maßanfertigungen (unbeschädigt und gut verpackt).'
+        'Shop‑Vorteil: 30‑Tage Rückgabe für berechtigte Artikel wie auf der Seite „Versand & Rückgabe“ beschrieben. Dies beschränkt nicht Ihre gesetzlichen Rechte (14‑tägiges Widerrufsrecht für Standardartikel; personalisierte/maßgeschneiderte Artikel sind gesetzlich ausgeschlossen).'
       ]
     },
     contactInfo: {
@@ -418,10 +424,12 @@ const copy: Record<LanguageCode, {
       title: 'Informations légales',
       subtitle: 'Pratiques commerciales transparentes',
       fields: [
-        { label: 'Nom commercial :', value: 'Dreamli' },
-        { label: 'Société enregistrée :', value: 'OmniTechs V.O.F.' },
-        { label: 'RSIN :', value: '866537211' },
-        { label: 'Localisation :', value: 'Groningue, Pays-Bas' }
+        { label: 'Dénomination :', value: 'Dreamli (nom commercial d’OmniTechs V.O.F.)' },
+        { label: 'KvK :', value: '93814429' },
+        { label: 'TVA (VAT) :', value: 'NL866537211B01' },
+        { label: 'Adresse :', value: 'Resedastraat 39, 9713 TN Groningen, Pays‑Bas' },
+        { label: 'E‑mail :', value: 'info@dreamli.nl' },
+        { label: 'Téléphone :', value: '+31 6 4555 9587' }
       ],
       disclaimer: 'Les ventes, paiements, exécution et support client de Dreamli sont assurés par OmniTechs V.O.F. sous la marque Dreamli — gage de transparence et de confiance.'
     },
@@ -430,7 +438,7 @@ const copy: Record<LanguageCode, {
       bullets: [
         'Expédition UE et USA via PostNL, DHL et UPS.',
         'Chaque commande inclut un lien de suivi.',
-        'Retours sous 30 jours sur tous les articles, y compris personnalisés (intacts et bien emballés).'
+        "Avantage boutique : retours sous 30 jours sur les articles éligibles tels que décrit sur la page Expédition & Retours. Cela ne limite pas vos droits statutaires (rétractation de 14 jours pour les articles standards ; les articles personnalisés/sur mesure sont exclus par la loi)."
       ]
     },
     contactInfo: {
@@ -525,10 +533,12 @@ const copy: Record<LanguageCode, {
       title: 'Informacje prawne',
       subtitle: 'Przejrzyste praktyki biznesowe',
       fields: [
-        { label: 'Nazwa handlowa:', value: 'Dreamli' },
-        { label: 'Zarejestrowana spółka:', value: 'OmniTechs V.O.F.' },
-        { label: 'RSIN:', value: '866537211' },
-        { label: 'Lokalizacja:', value: 'Groningen, Holandia' }
+        { label: 'Nazwa firmy:', value: 'Dreamli (nazwa handlowa OmniTechs V.O.F.)' },
+        { label: 'KvK:', value: '93814429' },
+        { label: 'VAT (BTW) ID:', value: 'NL866537211B01' },
+        { label: 'Adres:', value: 'Resedastraat 39, 9713 TN Groningen, Holandia' },
+        { label: 'E‑mail:', value: 'info@dreamli.nl' },
+        { label: 'Telefon:', value: '+31 6 4555 9587' }
       ],
       disclaimer: 'Sprzedaż, płatności, realizacja i obsługa klienta dla Dreamli są prowadzone przez OmniTechs V.O.F. pod marką Dreamli — w pełnej przejrzystości i zaufaniu.'
     },
@@ -537,7 +547,7 @@ const copy: Record<LanguageCode, {
       bullets: [
         'Wysyłka w UE i USA z PostNL, DHL i UPS.',
         'Każde zamówienie zawiera link śledzenia.',
-        '30 dni na zwrot wszystkich produktów, także personalizowanych (nienaruszonych i dobrze zapakowanych).'
+        'Korzyść sklepu: 30 dni na zwrot dla kwalifikujących się produktów, zgodnie z opisem na stronie Wysyłka & Zwroty. Nie ogranicza to Twoich praw ustawowych (14 dni odstąpienia dla produktów standardowych; produkty spersonalizowane/na zamówienie są wyłączone z mocy prawa).'
       ]
     },
     contactInfo: {

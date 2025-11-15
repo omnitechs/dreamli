@@ -142,20 +142,20 @@
       "whatsapp": "WhatsApp"
     },
     "company": {
-      "heading": "Unternehmensinfo",
+      "heading": "Bedrijfsinformatie",
       "name": "Omni Techs",
       "address": {
         "line1": "Resedastraat 39",
         "line2": "9713TN, Groningen",
-        "country": "Niederlande"
+        "country": "Nederland"
       },
       "kvk": "KvK: {kvk}",
       "phone": "{phone}"
     },
     "collab": {
-      "heading": "Kooperation",
-      "partner": "Partner werden",
-      "aboutFounder": "Über den Gründer"
+      "heading": "Samenwerking",
+      "partner": "Partner worden",
+      "aboutFounder": "Over de oprichter"
     },
     "newsletter": {
       "heading": "Nieuwsbrief",
@@ -172,9 +172,12 @@
       }
     },
     "legal": {
-      "copyright": "{year} Dreamli. Alle Rechte vorbehalten.",
-      "privacy": "Datenschutz",
-      "terms": "Nutzungsbedingungen",
+      "copyright": "{year} Dreamli. Alle rechten voorbehouden.",
+      "privacy": "Privacybeleid",
+      "terms": "Algemene Voorwaarden",
+      "shipping": "Verzending & Retouren",
+      "about": "Over",
+      "contact": "Contact",
       "cookies": "Cookies"
     },
     "trustpilot": {
@@ -417,7 +420,8 @@
         "address": {
           "title": "Adres",
           "subtitle": "Bezoek ons in Groningen",
-          "kvk": "KvK"
+          "kvk": "KvK",
+          "vat": "BTW (VAT) ID"
         }
       },
       "hours": {
@@ -430,13 +434,13 @@
       }
     },
     "map": {
-      "title": "Finden Sie uns",
-      "subtitle": "Im Herzen von Groningen, Niederlande",
-      "iframeTitle": "Dreamli Standort - Resedastraat 39, 9713 TN Groningen",
-      "access": "Leicht mit öffentlichen Verkehrsmitteln oder dem Auto erreichbar. Kostenlose Parkplätze in der Nähe.",
-      "bus": "Bushaltestelle: 2 Minuten zu Fuß",
-      "parking": "Kostenloses Parken verfügbar",
-      "bike": "Fahrradfreundlicher Standort"
+      "title": "Vind ons",
+      "subtitle": "Gevestigd in het hart van Groningen, Nederland",
+      "iframeTitle": "Locatie Dreamli - Resedastraat 39, 9713 TN Groningen",
+      "access": "Goed bereikbaar met ov of auto. Gratis parkeren in de buurt.",
+      "bus": "Bushalte: 2 minuten lopen",
+      "parking": "Gratis parkeren beschikbaar",
+      "bike": "Fietsvriendelijke locatie"
     },
     "form": {
       "title": "Stuur ons een bericht",
@@ -466,6 +470,7 @@
         "success": "Bedankt voor je bericht! We nemen snel contact met je op.",
         "error": "Er is iets misgegaan. Probeer het opnieuw."
       },
+      "responseNote": "We reageren binnen 1–2 werkdagen.",
       "badges": {
         "fast": { "title": "Snelle reactie", "subtitle": "Binnen 24 uur" },
         "secure": { "title": "Veilig", "subtitle": "Je gegevens zijn veilig" },
@@ -599,7 +604,7 @@
     },
     "company": {
       "title": "Bedrijfsinformatie",
-      "body": "Dreamli maakt deel uit van OmniTechs V.O.F. (KvK 93814429, Resedastraat 39, 9713TN Groningen, Nederland, info@dreamli.nl). Deze voorwaarden zijn van toepassing op alle bestellingen die via Dreamli.nl worden geplaatst."
+      "body": "Dreamli is een handelsnaam van OmniTechs V.O.F. (KvK 93814429 — BTW (VAT) ID: NL866537211B01, Resedastraat 39, 9713 TN Groningen, Nederland, info@dreamli.nl). Deze voorwaarden zijn van toepassing op alle bestellingen die via Dreamli.nl worden geplaatst."
     },
     "products": {
       "title": "Producten",
@@ -610,16 +615,20 @@
       "body": "Een overeenkomst komt tot stand wanneer u een bestelling plaatst en wij deze bevestigen. Betaling is vereist bij het afrekenen via iDEAL, Stripe of kaart. Prijzen zijn in EUR en inclusief btw, tenzij anders vermeld. We kunnen een bestelling weigeren of annuleren (bijv. ongeschikte bestanden, productiebeperkingen, duidelijke prijsfouten); als betaling is afgeschreven, storten wij terug."
     },
     "delivery": {
-      "title": "Levering & Vertraging Voordelen",
-      "body": "Leveringstijd is 3–10 werkdagen vanaf orderbevestiging. We verzenden doorgaans met PostNL of DHL. We zijn niet verantwoordelijk voor vertragingen veroorzaakt door de vervoerder.",
+      "title": "Levering & Vertraging voordeel",
+      "body": "Als de levering meer dan 10 werkdagen na orderbevestiging duurt, voegen we winkeltegoed toe aan uw account (tot €100). De geschiktheid wordt vastgesteld op basis van het verzend‑scanmoment en de bezorg‑timestamp van de vervoerder; als tracking niet eenduidig is, accepteren we redelijke klantbewijzen. Dit voordeel beperkt uw wettelijke rechten niet.",
       "points": {
-        "onTime": "Opgeleverd binnen 3–10 werkdagen: u verdient 10 % korting op uw volgende bestelling. Deze wordt toegevoegd aan uw account als coupon/tegoed en is geldig bij uw volgende aankoop (één per gebruiker per bestelling).",
-        "delayed": "Exceeding 10 werkdagen: uw volgende bestelling is gratis tot € 100. Tegoed wordt aan uw account toegevoegd (één per gebruiker per vertraagde bestelling). De geschiktheid wordt uitsluitend door Dreamli bepaald; verklaringen van de vervoerder zijn niet relevant."
+        "onTime": "",
+        "delayed": ""
       }
     },
     "returns": {
-      "title": "Retouren",
-      "body": "Volgens EU-wetgeving geldt doorgaans een 14-daagse herroepingsrecht; dit geldt echter **niet** voor gepersonaliseerde goederen (Artikel 6:230p BW). Aangezien onze producten op bestelling worden gemaakt, kunnen ze alleen worden geretourneerd wanneer ze beschadigd, defect of wezenlijk anders zijn dan het overeengekomen ontwerp. Meld dit alstublieft zo snel mogelijk met foto’s; als gevalideerd, zullen wij repareren, vervangen of terugbetalen. Verzendkosten voor gevalideerde defecten worden door ons gedekt."
+      "title": "Retouren & Herroeping",
+      "rightTitle": "Herroepingsrecht (14 dagen)",
+      "rightBody": "Voor standaard, niet‑gepersonaliseerde artikelen kunt u binnen 14 dagen na levering herroepen zonder opgave van reden. Indien vooraf vermeld, zijn retourkosten bij een ‘van gedachten veranderd’‑retour voor rekening van de klant.",
+      "personalTitle": "Gepersonaliseerde/Maatwerkartikelen",
+      "personalBody": "Het 14‑dagen herroepingsrecht geldt niet voor goederen die volgens specificaties van de consument zijn gemaakt of duidelijk gepersonaliseerd (Art. 6:230p BW / Richtlijn 2011/83/EU). Voor zulke items accepteren we retouren als het product defect is, beschadigd aankomt of materieel afwijkt van het afgesproken ontwerp. Mail binnen 14 dagen na levering met foto’s naar info@dreamli.nl. Na validatie repareren, vervangen of restitueren we. Bij gevalideerde gebreken vergoeden wij de retourzending.",
+      "perkNote": "Ons winkelvoordeel van 30 dagen retour geldt voor in aanmerking komende items zoals beschreven op de pagina Verzending & Retouren en beperkt uw wettelijke rechten niet."
     },
     "cashback": {
       "title": "Cashback & Site-tegoedbeleid",
@@ -655,7 +664,7 @@
     },
     "law": {
       "title": "Recht & Geschillen",
-      "body": "Deze voorwaarden worden beheerst door Nederlands recht. Geschillen worden behandeld door de bevoegde rechtbanken in Nederland."
+      "body": "Deze voorwaarden worden beheerst door Nederlands recht. Geschillen worden behandeld door de bevoegde rechtbanken in Nederland. Voor onopgeloste consumentengeschillen kunt u gebruikmaken van toepasselijke ADR-regelingen in Nederland. (Opmerking: het EU ODR-platform is in juli 2025 beëindigd.)"
     },
     "changes": {
       "title": "Wijzigingen",
@@ -698,7 +707,7 @@
             "Persoonlijke gegevens (naam, e-mailadres, telefoonnummer)",
             "Verzend- en factuuradres",
             "Betalingsgegevens",
-            "Tekeningen en kunstwerken van kinderen",
+            "Geüploade afbeeldingen en ontwerpbestanden",
             "Communicatie met klantenservice"
           ]
         },
@@ -842,7 +851,17 @@
         "complaint": {
           "icon": "ri-alert-line",
           "title": "Klacht",
-          "body": "Dien een klacht in bij de Autoriteit Persoonsgegevens"
+          "body": "Dien een klacht in bij de toezichthouder voor gegevensbescherming. In Nederland kunt u contact opnemen met de Autoriteit Persoonsgegevens."
+        },
+        "restriction": {
+          "icon": "ri-pause-circle-line",
+          "title": "Beperking",
+          "body": "Je kunt ons in bepaalde situaties vragen het gebruik van je gegevens tijdelijk te beperken (bijvoorbeeld terwijl we de juistheid van je informatie controleren of een bezwaar behandelen)."
+        },
+        "object": {
+          "icon": "ri-hand-stop-line",
+          "title": "Bezwaar",
+          "body": "Je kunt bezwaar maken tegen ons gebruik van je gegevens wanneer wij ons beroepen op gerechtvaardigde belangen (bijvoorbeeld beveiliging of bedrijfsvoering). Bij bezwaar stoppen wij de verwerking, tenzij er dwingende gerechtvaardigde gronden zijn om door te gaan."
         }
       }
     },
@@ -866,8 +885,9 @@
           "Prestatie-optimalisatiegegevens"
         ]
       },
-      "note": "Je kunt je cookievoorkeuren op elk moment wijzigen via onze cookiebanner of door contact met ons op te nemen."
+      "note": "Je kunt je cookievoorkeuren op elk moment wijzigen via onze cookiebanner of door contact met ons op te nemen. Je kunt cookies ook altijd beheren of verwijderen via de instellingen van je browser."
     },
+    "transfers": { "title": "Internationale gegevensdoorgiften", "body": "Je persoonsgegevens worden hoofdzakelijk verwerkt in Nederland en binnen de EU/EER. Sommige dienstverleners (bijv. analytics- en hostingpartijen) kunnen gegevens buiten de EU/EER verwerken. In zulke gevallen werken we alleen met partners die passende waarborgen onder de AVG bieden, zoals de EU‑standaardcontractbepalingen of gelijkwaardige beschermingsmaatregelen. We zorgen ervoor dat je gegevens beschermd blijven volgens EU‑normen, ook wanneer ze worden verwerkt in landen met een ander beschermingsniveau." },
     "security": {
       "title": "Beveiligingsmaatregelen",
       "how": {
@@ -887,6 +907,7 @@
         "title": "Verwerkingsverantwoordelijke",
         "company": "OmniTechs V.O.F. (Dreamli)",
         "kvk": "KvK: 93814429",
+        "vat": "BTW‑nummer: NL866537211B01",
         "addr1": "Resedastraat 39",
         "addr2": "9713TN Groningen, Nederland"
       },
@@ -1155,7 +1176,7 @@
       "description": "Alles wat je moet weten over levering, vervoerders, kosten, tracking en retouren bij Dreamli."
     },
     "hero": { "title": "Verzendbeleid", "subtitle": "Alles wat je moet weten over levering", "updated": "Laatst bijgewerkt: november 2025" },
-    "store": { "badge": "Winkelinformatie", "detailHtml": "<strong>Dreamli</strong> (handelsnaam van OmniTechs V.O.F., Groningen, Nederland)" },
+    "store": { "badge": "Winkelinformatie", "detailHtml": "<strong>Dreamli</strong> — handelsnaam van OmniTechs V.O.F. | KvK: 93814429 | BTW (VAT) ID: NL866537211B01 | Resedastraat 39, 9713 TN Groningen, Nederland | info@dreamli.nl | +31 6 4555 9587" },
     "s1": { "title": "Waar we verzenden", "euTitle": "Europese Unie", "euText": "Alle landen binnen de EU", "usTitle": "Verenigde Staten", "usText": "Alle staten in de VS", "noCountryBold": "Staat jouw land er niet bij?", "noCountryRest": "Neem contact met ons op via en we kijken of we een zending op maat kunnen regelen." },
     "s2": { "title": "Hoe onze productie en verzending werkt", "onDemand": "On-demand cadeauwinkel", "intro": "Dreamli werkt zonder voorraad. We houden geen grote inventaris aan. In plaats daarvan:", "p3d": "3D-geprinte producten worden op bestelling gemaakt in onze werkplaats in Groningen, Nederland", "sourced": "Ingekochte producten (speelgoed, knutselspullen, puzzels, decor) worden op aanvraag klaargemaakt door geverifieerde Europese distributeurs", "prodTitle": "Productietijd", "prod1": "Meestal 3–5 werkdagen voor 3D-geprinte items", "prod2": "Ingekochte items worden binnen 1–3 werkdagen voorbereid en verpakt", "shipTitle": "Verzendtijd", "ship1": "Gewoonlijk 2–7 werkdagen afhankelijk van bestemming en vervoerder", "ship2": "Elke zending bevat een track & trace-link", "overall": "Totale levertijd: meestal 5–10 werkdagen vanaf orderbevestiging (productie + verzending)" },
     "s3": { "title": "Verzendregio’s en methoden", "euTitle": "Europese Unie", "eu1": "Standaardlevering met PostNL, DHL of vergelijkbaar", "eu2": "Tracking inbegrepen", "eu3": "Geschat 2–7 werkdagen", "usTitle": "Verenigde Staten", "us1": "Standaard internationale levering", "us2": "Tracking inbegrepen", "us3": "Geschat 5–10 werkdagen" },
@@ -1168,6 +1189,7 @@
     "s10": { "title": "Douane & invoerrechten", "p": "Zendingen buiten de EU kunnen onderhevig zijn aan douanekosten of invoerrechten. Deze kosten, indien van toepassing, zijn voor de klant en niet inbegrepen in onze productprijzen of verzendkosten." },
     "s11": { "title": "Gedeelde zendingen", "intro": "Om je cadeaus in de beste staat en zo snel mogelijk te leveren, kunnen we je bestelling zo verzenden:", "one": "Eén gecombineerde zending", "oneSub": "Alle items in één pakket", "many": "Meerdere pakketten", "manySub": "Aparte pakketten voor verschillende soorten items", "exTitle": "Voorbeeld van een gedeelde zending:", "ex1": "3D‑geprinte lampen in één doos", "ex2": "Speelgoed of andere ingekochte items in een andere", "note": "Je ontvangt trackinginformatie voor elk pakket als ze afzonderlijk worden verzonden." },
     "s12": { "title": "Vragen & ondersteuning", "intro": "Heb je vragen over levertijden, vervoerders of speciale bezorgwensen (bijv. een verjaardag of cadeaumoment)? Neem dan vóór of na je bestelling contact met ons op:", "email": "Mail ons", "website": "Bezoek website", "happyTitle": "We helpen je graag!", "happySub": "We helpen je je bestelling zo te plannen dat je cadeau op tijd aankomt." },
+    "returns": { "title": "Retouren & Terugbetalingen", "standard": "Standaardartikelen: 14 dagen herroeping vanaf levering zonder opgaaf van reden. Indien vooraf vermeld, zijn retourkosten voor een ‘van gedachten veranderd’-retour voor rekening van de klant.", "personalized": "Gepersonaliseerde/Maatwerkartikelen: Geen 14 dagen herroeping (Art. 6:230p BW / Richtlijn 2011/83/EU). Retouren worden geaccepteerd als het product defect is, bij aankomst beschadigd, of materieel afwijkt van het afgesproken ontwerp.", "how": "Een retour starten: Mail binnen 14 dagen na levering naar info@dreamli.nl met foto’s en je ordernummer. Na validatie repareren, vervangen of restitueren we. Bij gevalideerde gebreken vergoeden wij de retourzending.", "address": "Retouradres: Resedastraat 39, 9713 TN Groningen, Nederland (voeg je ordernummer toe).", "refund": "Terugbetaling: Na ontvangst en inspectie storten we terug op de oorspronkelijke betaalmethode.", "perk": "Winkelvoordeel: 30 dagen retourneren op in aanmerking komende items zoals beschreven op de pagina Verzending & Retouren. Dit beperkt uw wettelijke rechten niet (14 dagen herroeping voor standaardartikelen; gepersonaliseerde/maatwerkartikelen zijn wettelijk uitgesloten)." },
     "cta": { "title": "Klaar om het perfecte cadeau te bestellen?", "body": "Bekijk onze collectie 3D‑geprinte items en zorgvuldig geselecteerde cadeaus", "shop": "Bezoek shop", "contact": "Contact" }
   }
 }

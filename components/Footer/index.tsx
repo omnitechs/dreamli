@@ -155,12 +155,21 @@ export default async function Footer({ lang }: { lang: LanguageCode }) {
                         <p className="text-gray-600 text-sm">
                             {t('legal.copyright', {year})}
                         </p>
-                        <div className="flex space-x-6 text-sm text-gray-600">
-                            <Link href={`${origin}/${lang}/privacy`} className="hover:text-purple-600 transition-colors cursor-pointer">
-                                {t('legal.privacy')}
+                        <div className="flex flex-wrap gap-x-6 gap-y-3 items-center justify-center md:justify-end text-sm text-gray-600">
+                            <Link href={`${origin}/${lang}/about`} className="hover:text-purple-600 transition-colors cursor-pointer">
+                                {t('legal.about')}
+                            </Link>
+                            <Link href={`${origin}/${lang}/contact`} className="hover:text-purple-600 transition-colors cursor-pointer">
+                                {t('legal.contact')}
+                            </Link>
+                            <Link href={`${origin}/${lang}/shipping`} className="hover:text-purple-600 transition-colors cursor-pointer">
+                                {t('legal.shipping')}
                             </Link>
                             <Link href={`${origin}/${lang}/terms`} className="hover:text-purple-600 transition-colors cursor-pointer">
                                 {t('legal.terms')}
+                            </Link>
+                            <Link href={`${origin}/${lang}/privacy`} className="hover:text-purple-600 transition-colors cursor-pointer">
+                                {t('legal.privacy')}
                             </Link>
                         </div>
                     </div>

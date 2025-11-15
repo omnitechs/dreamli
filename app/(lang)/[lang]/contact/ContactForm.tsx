@@ -149,6 +149,8 @@ export default function ContactForm() {
                         )}
                     </form>
 
+                    <p className="mt-4 text-sm text-gray-600 text-center">{t('responseNote')}</p>
+
                     <div className="mt-8 pt-8 border-t border-gray-200">
                         <div className="grid md:grid-cols-3 gap-6 text-center">
                             <div className="flex items-center justify-center space-x-3">

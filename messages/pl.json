@@ -176,6 +176,9 @@
       "copyright": "{year} Dreamli. Wszelkie prawa zastrzeżone.",
       "privacy": "Polityka prywatności",
       "terms": "Regulamin",
+      "shipping": "Wysyłka & Zwroty",
+      "about": "O nas",
+      "contact": "Kontakt",
       "cookies": "Pliki cookie"
     },
     "trustpilot": {
@@ -418,7 +421,8 @@
         "address": {
           "title": "Adres",
           "subtitle": "Odwiedź nas w Groningen",
-          "kvk": "KvK"
+          "kvk": "KvK",
+          "vat": "VAT (BTW) ID"
         }
       },
       "hours": {
@@ -467,6 +471,7 @@
         "success": "Dziękujemy za wiadomość! Skontaktujemy się wkrótce.",
         "error": "Coś poszło nie tak. Spróbuj ponownie."
       },
+      "responseNote": "Odpowiadamy w ciągu 1–2 dni roboczych.",
       "badges": {
         "fast": { "title": "Szybka odpowiedź", "subtitle": "W ciągu 24 godzin" },
         "secure": { "title": "Bezpiecznie", "subtitle": "Twoje dane są bezpieczne" },
@@ -550,7 +555,7 @@
     },
     "company": {
       "title": "Informacje o firmie",
-      "body": "Dreamli jest częścią OmniTechs V.O.F. (KvK 93814429, Resedastraat 39, 9713TN Groningen, Holandia, info@dreamli.nl). Niniejszy regulamin ma zastosowanie do wszystkich zamówień składanych za pośrednictwem Dreamli.nl."
+      "body": "Dreamli jest nazwą handlową OmniTechs V.O.F. (KvK 93814429 — VAT (BTW) ID: NL866537211B01, Resedastraat 39, 9713 TN Groningen, Holandia, info@dreamli.nl). Niniejszy regulamin ma zastosowanie do wszystkich zamówień składanych za pośrednictwem Dreamli.nl."
     },
     "products": {
       "title": "Produkty",
@@ -561,16 +566,20 @@
       "body": "Umowa zawierana jest w momencie złożenia zamówienia i jego potwierdzenia przez nas. Płatność wymagana jest przy kasie poprzez iDEAL, Stripe lub kartę. Ceny podane są w EUR i zawierają VAT, chyba że zaznaczono inaczej. Możemy odmówić lub anulować zamówienie (np. pliki niewłaściwe, ograniczenia produkcyjne, oczywiste błędy cenowe); jeśli płatność została pobrana, zwrócimy ją."
     },
     "delivery": {
-      "title": "Dostawa i Korzyści z Opóźnienia",
-      "body": "Czas dostawy wynosi 3–10 dni roboczych od potwierdzenia zamówienia. Zazwyczaj wysyłamy przy użyciu PostNL lub DHL. Nie ponosimy odpowiedzialności za opóźnienia spowodowane przez przewoźnika.",
+      "title": "Dostawa & Korzyści za opóźnienie",
+      "body": "Jeśli dostawa przekroczy 10 dni roboczych od potwierdzenia zamówienia, dodamy do Twojego konta kredyt sklepowy (do 100 €). Uprawnienie weryfikujemy na podstawie czasu skanu nadania i znacznika dostawy przewoźnika; jeśli tracking jest niejednoznaczny, akceptujemy rozsądne dowody przedstawione przez klienta. Ta korzyść nie ogranicza Twoich praw ustawowych.",
       "points": {
-        "onTime": "Dostarczone w ciągu 3–10 dni roboczych: otrzymujesz 10 % zniżki na kolejne zamówienie. Zostanie dodane do Twojego konta jako kupon/kredyt i będzie ważne przy następnym zakupie (jeden na użytkownika i zamówienie).",
-        "delayed": "Jeśli dostawa przekroczy 10 dni roboczych: Twoje następne zamówienie jest bezpłatne do kwoty 100 €. Kredyt zostaje dodany do Twojego konta (raz na użytkownika i opóźnione zamówienie). Prawo do przyznania tego zależy wyłącznie od Dreamli; oświadczenia przewoźnika nie są brane pod uwagę."
+        "onTime": "",
+        "delayed": ""
       }
     },
     "returns": {
-      "title": "Zwroty",
-      "body": "Zgodnie z prawem UE przysługuje zazwyczaj 14-dniowe prawo odstąpienia; jednak nie dotyczy ono dóbr personalizowanych (Artykuł 6:230p BW). Ponieważ nasze produkty są wykonywane na zamówienie, mogą być zwrócone tylko wtedy, gdy są uszkodzone, wadliwe lub znacznie różnią się od uzgodnionego projektu. Prosimy o niezwłoczne zgłoszenie wraz ze zdjęciami; jeśli wada zostanie potwierdzona, naprawimy, wymienimy lub zwrócimy koszt. Koszty wysyłki przy uznanych wadach pokrywamy my."
+      "title": "Zwroty & Odstąpienie",
+      "rightTitle": "Prawo odstąpienia (14 dni)",
+      "rightBody": "W przypadku standardowych, niespersonalizowanych produktów możesz odstąpić od umowy w ciągu 14 dni od dostawy bez podawania przyczyny. Jeśli zostało to z góry ujawnione, koszty odesłania przy zwrocie z powodu zmiany decyzji ponosi klient.",
+      "personalTitle": "Produkty spersonalizowane/na zamówienie",
+      "personalBody": "Prawo do odstąpienia w ciągu 14 dni nie ma zastosowania do towarów wykonanych według specyfikacji konsumenta lub wyraźnie spersonalizowanych (Art. 6:230p BW / Dyrektywa 2011/83/UE). Dla takich produktów przyjmujemy zwroty, jeśli produkt jest wadliwy, uszkodzony przy dostawie lub istotnie różni się od uzgodnionego projektu. Wyślij e‑mail na adres info@dreamli.nl w ciągu 14 dni od dostawy wraz ze zdjęciami. Po weryfikacji naprawimy, wymienimy lub zwrócimy pieniądze. W przypadku potwierdzonych wad pokrywamy koszty odesłania.",
+      "perkNote": "Nasz 30‑dniowy sklepowy okres zwrotu dotyczy kwalifikujących się produktów, zgodnie z opisem na stronie Wysyłka & Zwroty, i nie ogranicza Twoich praw ustawowych."
     },
     "cashback": {
       "title": "Zasady Cashback & Kredytu na Stronie",
@@ -606,7 +615,7 @@
     },
     "law": {
       "title": "Prawo & Spory",
-      "body": "Niniejsze warunki podlegają prawu holenderskiemu. Spory będą rozpatrywane przez właściwe sądy w Holandii."
+      "body": "Niniejsze warunki podlegają prawu holenderskiemu. Spory będą rozpatrywane przez właściwe sądy w Holandii. W przypadku nierozwiązanych sporów konsumenckich możesz skorzystać z odpowiednich mechanizmów ADR w Holandii. (Uwaga: platforma ODR UE została zakończona w lipcu 2025 r.)"
     },
     "changes": {
       "title": "Zmiany",
@@ -621,6 +630,7 @@
     }
   },
   "privacy": {
+    "transfers": { "title": "Międzynarodowe przekazywanie danych", "body": "Twoje dane osobowe są przetwarzane głównie w Holandii oraz w UE/EOG. Niektórzy nasi dostawcy usług (np. analityka i hosting) mogą przetwarzać dane poza UE/EOG. W takich przypadkach korzystamy wyłącznie z partnerów zapewniających odpowiednie zabezpieczenia zgodnie z RODO, takie jak standardowe klauzule umowne UE lub równoważne środki ochrony. Dbamy o to, aby Twoje dane pozostawały chronione zgodnie ze standardami UE, nawet gdy są przetwarzane w krajach o innym poziomie ochrony danych." },
     "meta": {
       "title": "Polityka prywatności | Dreamli Ochrona danych i pliki cookie",
       "description": "Jak Dreamli zbiera, wykorzystuje i chroni dane osobowe rodzin, twórców i partnerów — wyjaśnienie Twoich praw i wyborów."
@@ -793,7 +803,17 @@
         "complaint": {
           "icon": "ri-alert-line",
           "title": "Skarga",
-          "body": "Złóż skargę do organu nadzorczego ds. ochrony danych"
+          "body": "Złóż skargę do organu nadzorczego ds. ochrony danych. W Holandii możesz skontaktować się z Autoriteit Persoonsgegevens (niderlandzki organ ochrony danych)."
+        },
+        "restriction": {
+          "icon": "ri-pause-circle-line",
+          "title": "Ograniczenie",
+          "body": "Możesz poprosić nas o tymczasowe ograniczenie wykorzystania Twoich danych w określonych sytuacjach (np. gdy sprawdzamy poprawność informacji lub rozpatrujemy sprzeciw)."
+        },
+        "object": {
+          "icon": "ri-hand-stop-line",
+          "title": "Sprzeciw",
+          "body": "Możesz wnieść sprzeciw wobec przetwarzania Twoich danych, gdy opieramy się na uzasadnionym interesie (np. bezpieczeństwo lub działalność operacyjna). W razie sprzeciwu wstrzymamy przetwarzanie, chyba że wykażemy istnienie ważnych, nadrzędnych prawnie uzasadnionych podstaw."
         }
       }
     },
@@ -817,7 +837,7 @@
           "Dane wydajności i optymalizacji"
         ]
       },
-      "note": "Możesz w każdej chwili zmienić preferencje dotyczące plików cookie poprzez nasz baner lub kontaktując się z nami."
+      "note": "Możesz w każdej chwili zmienić preferencje dotyczące plików cookie w naszym banerze lub kontaktując się z nami. Plikami cookie możesz także zarządzać lub je usuwać w ustawieniach swojej przeglądarki w dowolnym momencie."
     },
     "security": {
       "title": "Środki bezpieczeństwa",
@@ -838,6 +858,7 @@
         "title": "Administrator danych",
         "company": "OmniTechs V.O.F. (Dreamli)",
         "kvk": "KvK: 93814429",
+        "vat": "Numer VAT / BTW: NL866537211B01",
         "addr1": "Resedastraat 39",
         "addr2": "9713TN Groningen, Niderlandy"
       },
@@ -1083,7 +1104,7 @@
       "description": "Wszystko o dostawie, przewoźnikach, kosztach, śledzeniu i zwrotach w Dreamli."
     },
     "hero": { "title": "Polityka wysyłki", "subtitle": "Wszystko o dostawie", "updated": "Ostatnia aktualizacja: listopad 2025" },
-    "store": { "badge": "Informacje o sklepie", "detailHtml": "<strong>Dreamli</strong> (nazwa handlowa OmniTechs V.O.F., Groningen, Holandia)" },
+    "store": { "badge": "Informacje o sklepie", "detailHtml": "<strong>Dreamli</strong> — nazwa handlowa OmniTechs V.O.F. | KvK: 93814429 | VAT (BTW) ID: NL866537211B01 | Resedastraat 39, 9713 TN Groningen, Holandia | info@dreamli.nl | +31 6 4555 9587" },
     "s1": { "title": "Dokąd wysyłamy", "euTitle": "Unia Europejska", "euText": "Wszystkie kraje UE", "usTitle": "Stany Zjednoczone", "usText": "Wszystkie stany w USA", "noCountryBold": "Nie widzisz swojego kraju?", "noCountryRest": "Skontaktuj się z nami pod adresem, a sprawdzimy, czy możemy zorganizować wysyłkę indywidualną." },
     "s2": { "title": "Jak działa nasza produkcja i wysyłka", "onDemand": "Sklep prezentowy on‑demand", "intro": "Dreamli działa bez magazynu. Nie utrzymujemy dużych zapasów. Zamiast tego:", "p3d": "Produkty drukowane 3D powstają na zamówienie w naszej pracowni w Groningen (Holandia)", "sourced": "Produkty pozyskiwane (zabawki, rękodzieło, łamigłówki, dekoracje) przygotowywane są na bieżąco przez zweryfikowanych europejskich dystrybutorów", "prodTitle": "Czas produkcji", "prod1": "Zwykle 3–5 dni roboczych dla produktów 3D", "prod2": "Produkty pozyskiwane są przygotowywane i pakowane w ciągu 1–3 dni roboczych", "shipTitle": "Czas dostawy", "ship1": "Zwykle 2–7 dni roboczych w zależności od miejsca i przewoźnika", "ship2": "Do każdej przesyłki dołączamy link do śledzenia", "overall": "Łączny czas dostawy: zwykle 5–10 dni roboczych od potwierdzenia zamówienia (produkcja + wysyłka)" },
     "s3": { "title": "Regiony i metody wysyłki", "euTitle": "Unia Europejska", "eu1": "Dostawa standardowa z PostNL, DHL lub podobnym", "eu2": "Śledzenie w cenie", "eu3": "Szacunkowo 2–7 dni roboczych", "usTitle": "Stany Zjednoczone", "us1": "Standardowa dostawa międzynarodowa", "us2": "Śledzenie w cenie", "us3": "Szacunkowo 5–10 dni roboczych" },
@@ -1096,6 +1117,7 @@
     "s10": { "title": "Cło i opłaty importowe", "p": "Przesyłki poza UE mogą podlegać cłu lub opłatom importowym. Ewentualne opłaty ponosi klient; nie są one wliczone w ceny produktów ani koszty wysyłki." },
     "s11": { "title": "Podział przesyłek", "intro": "Aby Twoje prezenty dotarły w najlepszym stanie i możliwie najszybciej, możemy wysłać zamówienie w następujący sposób:", "one": "Jedna łączona przesyłka", "oneSub": "Wszystkie przedmioty w jednym opakowaniu", "many": "Wiele paczek", "manySub": "Oddzielne paczki dla różnych typów przedmiotów", "exTitle": "Przykład podziału przesyłki:", "ex1": "Lampy 3D w jednym pudełku", "ex2": "Zabawki lub inne pozyskane produkty w drugim", "note": "Otrzymasz informacje o śledzeniu dla każdej paczki, jeśli wysyłka nastąpi osobno." },
     "s12": { "title": "Pytania i wsparcie", "intro": "Masz pytania dotyczące czasu dostawy, przewoźników lub specjalnych potrzeb (np. termin urodzin)? Skontaktuj się z nami przed lub po złożeniu zamówienia:", "email": "Napisz do nas", "website": "Odwiedź stronę", "happyTitle": "Chętnie pomożemy!", "happySub": "Pomożemy zaplanować zamówienie tak, aby prezent dotarł na czas." },
+    "returns": { "title": "Zwroty i refundacje", "standard": "Produkty standardowe: 14‑dniowe prawo odstąpienia od umowy liczone od dnia dostawy, bez podania przyczyny. Jeśli wskazano to wcześniej, koszty odesłania przy zwrocie z powodu zmiany decyzji ponosi klient.", "personalized": "Produkty spersonalizowane/na zamówienie: Brak 14‑dniowego prawa odstąpienia (Art. 6:230p BW / Dyrektywa 2011/83/UE). Zwroty przyjmujemy, jeśli produkt jest wadliwy, uszkodzony przy dostawie lub istotnie różni się od uzgodnionego projektu.", "how": "Jak rozpocząć zwrot: Wyślij e‑mail na adres info@dreamli.nl w ciągu 14 dni od dostawy, dołącz zdjęcia i numer zamówienia. Po weryfikacji naprawimy, wymienimy lub zwrócimy pieniądze. W przypadku potwierdzonych wad pokrywamy koszty odesłania.", "address": "Adres zwrotu: Resedastraat 39, 9713 TN Groningen, Holandia (dołącz numer zamówienia).", "refund": "Zwrot środków: Po otrzymaniu i sprawdzeniu towaru zwracamy płatność na pierwotną metodę płatności.", "perk": "Korzyść sklepu: 30 dni na zwrot dla kwalifikujących się produktów, zgodnie z opisem na stronie Wysyłka & Zwroty. Nie ogranicza to Twoich praw ustawowych (14 dni odstąpienia dla produktów standardowych; produkty spersonalizowane/na zamówienie są wyłączone z mocy prawa)." },
     "cta": { "title": "Gotowy na idealny prezent?", "body": "Przeglądaj naszą kolekcję wydruków 3D i starannie dobranych upominków", "shop": "Odwiedź sklep", "contact": "Kontakt" }
   }
 }

@@ -176,6 +176,9 @@
       "copyright": "{year} Dreamli. Alle Rechte vorbehalten.",
       "privacy": "Datenschutz",
       "terms": "Nutzungsbedingungen",
+      "shipping": "Versand & Rückgabe",
+      "about": "Über uns",
+      "contact": "Kontakt",
       "cookies": "Cookies"
     },
     "trustpilot": {
@@ -418,7 +421,8 @@
         "address": {
           "title": "Adresse",
           "subtitle": "Besuchen Sie uns in Groningen",
-          "kvk": "Handelskammer (KvK)"
+          "kvk": "Handelskammer (KvK)",
+          "vat": "USt-IdNr. (VAT)"
         }
       },
       "hours": {
@@ -467,6 +471,7 @@
         "success": "Vielen Dank für Ihre Nachricht! Wir melden uns bald.",
         "error": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
       },
+      "responseNote": "Wir antworten innerhalb von 1–2 Werktagen.",
       "badges": {
         "fast": { "title": "Schnelle Antwort", "subtitle": "Innerhalb von 24 Stunden" },
         "secure": { "title": "Sicher", "subtitle": "Ihre Daten sind geschützt" },
@@ -551,7 +556,7 @@
     },
     "company": {
       "title": "Unternehmensinformationen",
-      "body": "Dreamli ist Teil der OmniTechs V.O.F. (Handelsregister 93814429, Resedastraat 39, 9713TN Groningen, Niederlande, info@dreamli.nl). Diese Bedingungen gelten für alle über Dreamli.nl aufgegebenen Bestellungen."
+      "body": "Dreamli ist eine Handelsbezeichnung von OmniTechs V.O.F. (KvK 93814429 — USt‑IdNr.: NL866537211B01, Resedastraat 39, 9713 TN Groningen, Niederlande, info@dreamli.nl). Diese Bedingungen gelten für alle über Dreamli.nl aufgegebenen Bestellungen."
     },
     "products": {
       "title": "Produkte",
@@ -563,15 +568,19 @@
     },
     "delivery": {
       "title": "Lieferung & Verzögerungsvorteile",
-      "body": "Die Lieferzeit beträgt 3–10 Werktage ab Bestellbestätigung. Wir versenden in der Regel mit PostNL oder DHL. Wir übernehmen keine Verantwortung für durch den Versanddienstleister verursachte Verzögerungen.",
+      "body": "Wenn die Lieferung mehr als 10 Werktage ab Bestellbestätigung dauert, fügen wir Ihrem Konto Store-Guthaben (bis zu 100 €) hinzu. Die Anspruchsprüfung erfolgt anhand des Versand‑Scan‑Zeitpunkts und des Zustellzeitpunkts des Transportdienstleisters; sind Trackingdaten nicht eindeutig, akzeptieren wir angemessene Nachweise des Kunden. Dieser Vorteil schränkt Ihre gesetzlichen Rechte nicht ein.",
       "points": {
-        "onTime": "Geliefert innerhalb von 3–10 Werktagen: Sie erhalten 10 % Rabatt auf Ihre nächste Bestellung. Dieser wird Ihrem Konto als Gutschein/Guthaben gutgeschrieben und ist für Ihren nächsten Einkauf gültig (ein Gutschein pro Nutzer und Bestellung).",
-        "delayed": "Wenn die Lieferung mehr als 10 Werktage dauert: Ihre nächste Bestellung ist bis zu 100 € kostenlos. Das Guthaben wird Ihrem Konto gutgeschrieben (einmalig pro Nutzer und verzögerte Bestellung). Die Anspruchsberechtigung wird ausschließlich von Dreamli bestimmt; Angaben des Versanddienstleisters sind unerheblich."
+        "onTime": "",
+        "delayed": ""
       }
     },
     "returns": {
-      "title": "Rückgaben",
-      "body": "Nach EU-Recht besteht in der Regel ein 14-tägiges Widerrufsrecht; dieses gilt jedoch **nicht** für personalisierte Waren (Artikel 6:230p BW). Da unsere Produkte auf Bestellung angefertigt werden, können sie nur zurückgegeben werden, wenn sie beschädigt, defekt oder wesentlich anders als das vereinbarte Design sind. Bitte benachrichtigen Sie uns umgehend mit Fotos; wenn der Mangel bestätigt ist, reparieren, ersetzen oder erstatten wir. Rücksendekosten bei bestätigten Mängeln gehen zu unseren Lasten."
+      "title": "Rückgaben & Widerruf",
+      "rightTitle": "Widerrufsrecht (14 Tage)",
+      "rightBody": "Für Standardartikel ohne Personalisierung können Sie innerhalb von 14 Tagen nach Lieferung ohne Angabe von Gründen widerrufen. Ist dies vorab offengelegt, trägt der Kunde die Rücksendekosten bei einem Rücktritt aus Meinungsänderung.",
+      "personalTitle": "Personalisierte/Maßgefertigte Artikel",
+      "personalBody": "Das 14‑tägige Widerrufsrecht gilt nicht für Waren, die nach Kundenspezifikation gefertigt oder eindeutig personalisiert sind (Art. 6:230p BW / Richtlinie 2011/83/EU). Für solche Artikel akzeptieren wir Rückgaben, wenn das Produkt fehlerhaft ist, bei Ankunft beschädigt oder wesentlich vom vereinbarten Design abweicht. Senden Sie innerhalb von 14 Tagen nach Lieferung eine E‑Mail mit Fotos an info@dreamli.nl. Nach Validierung reparieren, ersetzen oder erstatten wir. Bei bestätigten Mängeln übernehmen wir die Rücksendekosten.",
+      "perkNote": "Unser 30‑Tage‑Store‑Rückgabefenster gilt für berechtigte Artikel wie auf der Seite „Versand & Rückgabe“ beschrieben und beschränkt Ihre gesetzlichen Rechte nicht."
     },
     "cashback": {
       "title": "Cashback- & Site-Guthaben-Politik",
@@ -607,7 +616,7 @@
     },
     "law": {
       "title": "Recht & Streitigkeiten",
-      "body": "Diese Bedingungen unterliegen dem niederländischen Recht. Streitigkeiten werden von den zuständigen Gerichten in den Niederlanden entschieden."
+      "body": "Diese Bedingungen unterliegen dem niederländischen Recht. Streitigkeiten werden von den zuständigen Gerichten in den Niederlanden entschieden. Für ungelöste Verbraucherstreitigkeiten können Sie geeignete ADR‑Stellen in den Niederlanden nutzen. (Hinweis: Die EU‑ODR‑Plattform wurde im Juli 2025 eingestellt.)"
     },
     "changes": {
       "title": "Änderungen",
@@ -622,6 +631,7 @@
     }
   },
   "privacy": {
+    "transfers": { "title": "Internationale Datenübermittlungen", "body": "Ihre personenbezogenen Daten werden hauptsächlich in den Niederlanden und innerhalb der EU/EWR verarbeitet. Einige unserer Dienstleister (z. B. Analyse- und Hosting‑Anbieter) können Daten außerhalb der EU/EWR verarbeiten. In solchen Fällen arbeiten wir nur mit Partnern zusammen, die angemessene Garantien nach der DSGVO bieten, etwa die EU‑Standardvertragsklauseln oder gleichwertige Schutzmaßnahmen. Wir stellen sicher, dass Ihre Daten auch dann nach EU‑Standards geschützt bleiben, wenn sie in Ländern verarbeitet werden, die kein gleichwertiges Datenschutzniveau haben." },
     "meta": {
       "title": "Datenschutzerklärung | Dreamli Datenschutz & Cookie-Richtlinie",
       "description": "Wie Dreamli personenbezogene Daten für Familien, Kreative und Partner sammelt, nutzt und schützt — Ihre Rechte und Wahlmöglichkeiten erklärt."
@@ -650,7 +660,7 @@
             "Persönliche Daten (Name, E-Mail-Adresse, Telefonnummer)",
             "Versand- und Rechnungsadressen",
             "Zahlungsinformationen",
-            "Zeichnungen und Kunstwerke von Kindern",
+            "Hochgeladene Bilder und Design‑Dateien",
             "Kommunikation mit dem Kundensupport"
           ]
         },
@@ -794,7 +804,17 @@
         "complaint": {
           "icon": "ri-alert-line",
           "title": "Beschwerde",
-          "body": "Reichen Sie eine Beschwerde bei der Datenschutzbehörde ein"
+          "body": "Reichen Sie eine Beschwerde bei der Datenschutzbehörde ein. In den Niederlanden können Sie sich an die Autoriteit Persoonsgegevens (niederländische Datenschutzaufsicht) wenden."
+        },
+        "restriction": {
+          "icon": "ri-pause-circle-line",
+          "title": "Einschränkung",
+          "body": "Sie können uns in bestimmten Situationen bitten, die Nutzung Ihrer Daten vorübergehend einzuschränken (z. B. während wir die Richtigkeit Ihrer Angaben prüfen oder einen Widerspruch behandeln)."
+        },
+        "object": {
+          "icon": "ri-hand-stop-line",
+          "title": "Widerspruch",
+          "body": "Sie können der Verarbeitung Ihrer Daten widersprechen, wenn wir uns auf berechtigte Interessen stützen (z. B. Sicherheit oder Geschäftsabläufe). Im Falle eines Widerspruchs verarbeiten wir Ihre Daten nicht weiter, es sei denn, es liegen zwingende schutzwürdige Gründe vor."
         }
       }
     },
@@ -818,7 +838,7 @@
           "Leistungs- und Optimierungsdaten"
         ]
       },
-      "note": "Sie können Ihre Cookie-Einstellungen jederzeit über unser Cookie-Banner oder durch Kontaktaufnahme mit uns ändern."
+      "note": "Sie können Ihre Cookie-Einstellungen jederzeit über unser Cookie‑Banner oder durch Kontaktaufnahme mit uns ändern. Sie können Cookies außerdem jederzeit in den Einstellungen Ihres Browsers verwalten oder löschen."
     },
     "security": {
       "title": "Sicherheitsmaßnahmen",
@@ -839,6 +859,7 @@
         "title": "Verantwortlicher",
         "company": "OmniTechs V.O.F. (Dreamli)",
         "kvk": "KvK: 93814429",
+        "vat": "USt‑IdNr. / BTW‑Nummer: NL866537211B01",
         "addr1": "Resedastraat 39",
         "addr2": "9713TN Groningen, Niederlande"
       },
@@ -1084,7 +1105,7 @@
       "description": "Alles über Lieferung, Versanddienstleister, Kosten, Sendungsverfolgung und Rückgaben bei Dreamli."
     },
     "hero": { "title": "Versandrichtlinie", "subtitle": "Alles, was Sie über die Lieferung wissen müssen", "updated": "Zuletzt aktualisiert: November 2025" },
-    "store": { "badge": "Shop-Informationen", "detailHtml": "<strong>Dreamli</strong> (Handelsname von OmniTechs V.O.F., Groningen, Niederlande)" },
+    "store": { "badge": "Shop-Informationen", "detailHtml": "<strong>Dreamli</strong> — Handelsname von OmniTechs V.O.F. | KvK: 93814429 | USt‑IdNr.: NL866537211B01 | Resedastraat 39, 9713 TN Groningen, Niederlande | info@dreamli.nl | +31 6 4555 9587" },
     "s1": { "title": "Wohin wir liefern", "euTitle": "Europäische Union", "euText": "Alle Länder innerhalb der EU", "usTitle": "Vereinigte Staaten", "usText": "Alle US-Bundesstaaten", "noCountryBold": "Ihr Land ist nicht dabei?", "noCountryRest": "Kontaktieren Sie uns unter und wir prüfen, ob eine Sonderlieferung möglich ist." },
     "s2": { "title": "So funktionieren Produktion & Versand", "onDemand": "On-Demand Geschenkeshop", "intro": "Dreamli arbeitet ohne Lagerbestand. Wir halten keine großen Vorräte. Stattdessen:", "p3d": "3D‑gedruckte Produkte werden auf Bestellung in unserer Werkstatt in Groningen (NL) gefertigt", "sourced": "Bezogene Produkte (Spielzeug, Basteln, Puzzles, Deko) werden auf Abruf von verifizierten europäischen Distributoren vorbereitet", "prodTitle": "Produktionszeit", "prod1": "Typischerweise 3–5 Werktage für 3D‑Druckartikel", "prod2": "Bezogene Artikel werden innerhalb von 1–3 Werktagen vorbereitet und verpackt", "shipTitle": "Versandzeit", "ship1": "In der Regel 2–7 Werktage je nach Ziel und Transportdienst", "ship2": "Für jede Sendung gibt es einen Sendungsverfolgungslink", "overall": "Gesamte Lieferzeit: meist 5–10 Werktage ab Bestellbestätigung (Produktion + Versand)" },
     "s3": { "title": "Versandregionen & Methoden", "euTitle": "Europäische Union", "eu1": "Standardversand mit PostNL, DHL oder ähnlich", "eu2": "Sendungsverfolgung inklusive", "eu3": "Voraussichtlich 2–7 Werktage", "usTitle": "Vereinigte Staaten", "us1": "Standard internationaler Versand", "us2": "Sendungsverfolgung inklusive", "us3": "Voraussichtlich 5–10 Werktage" },
@@ -1097,6 +1118,7 @@
     "s10": { "title": "Zoll & Einfuhrabgaben", "p": "Sendungen außerhalb der EU können zoll- oder einfuhrabgabepflichtig sein. Diese Gebühren trägt gegebenenfalls der Kunde; sie sind nicht in Produkt- oder Versandpreisen enthalten." },
     "s11": { "title": "Geteilte Sendungen", "intro": "Damit Ihre Geschenke in bestem Zustand und so schnell wie möglich ankommen, können wir Ihre Bestellung wie folgt versenden:", "one": "Eine kombinierte Sendung", "oneSub": "Alle Artikel zusammen in einem Paket", "many": "Mehrere Pakete", "manySub": "Separate Pakete für unterschiedliche Artikelarten", "exTitle": "Beispiel einer geteilten Sendung:", "ex1": "3D‑gedruckte Lampen in einem Karton", "ex2": "Spielzeug oder andere bezogene Artikel in einem anderen", "note": "Für jedes Paket erhalten Sie eigene Tracking‑Informationen, wenn separat versendet." },
     "s12": { "title": "Fragen & Support", "intro": "Bei Fragen zu Lieferzeiten, Dienstleistern oder besonderen Lieferwünschen (z. B. Geburtstagstermin) kontaktieren Sie uns bitte vor oder nach der Bestellung:", "email": "E‑Mail schreiben", "website": "Website besuchen", "happyTitle": "Wir helfen gern!", "happySub": "Wir helfen Ihnen, die Bestellung so zu planen, dass das Geschenk rechtzeitig ankommt." },
+    "returns": { "title": "Rückgaben & Erstattungen", "standard": "Standardartikel: 14‑tägiges Widerrufsrecht ab Lieferung ohne Angabe von Gründen. Ist dies vorab offengelegt, trägt der Kunde die Rücksendekosten bei einem Rücktritt aus Meinungsänderung.", "personalized": "Personalisierte/Maßgefertigte Artikel: Kein 14‑tägiges Widerrufsrecht (Art. 6:230p BW / Richtlinie 2011/83/EU). Rückgaben akzeptiert bei Defekt, beschädigter Ankunft oder wesentlicher Abweichung vom vereinbarten Design.", "how": "So starten Sie eine Rückgabe: Schreiben Sie innerhalb von 14 Tagen nach Lieferung an info@dreamli.nl mit Fotos und Bestellnummer. Nach Validierung reparieren, ersetzen oder erstatten wir. Bei bestätigten Mängeln übernehmen wir die Rücksendekosten.", "address": "Rücksendeadresse: Resedastraat 39, 9713 TN Groningen, Niederlande (Bestellnummer beilegen).", "refund": "Erstattungszeitpunkt: Rückerstattung auf die ursprüngliche Zahlungsmethode nach Eingang und Prüfung der Ware(n).", "perk": "Shop‑Vorteil: 30‑Tage‑Rückgabe für berechtigte Artikel wie auf der Seite „Versand & Rückgabe“ beschrieben. Dies beschränkt Ihre gesetzlichen Rechte nicht (14‑tägiger Widerruf für Standardartikel; personalisierte/Maßanfertigungen sind gesetzlich ausgeschlossen)." },
     "cta": { "title": "Bereit für das perfekte Geschenk?", "body": "Entdecken Sie unsere 3D‑Druck‑Kollektion und kuratierte Geschenke", "shop": "Zum Shop", "contact": "Kontakt" }
   }
 }

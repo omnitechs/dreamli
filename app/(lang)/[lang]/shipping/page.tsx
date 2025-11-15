@@ -19,6 +19,7 @@ type Copy = {
   s10: { title: string; p: string };
   s11: { title: string; intro: string; one: string; oneSub: string; many: string; manySub: string; exTitle: string; ex1: string; ex2: string; note: string };
   s12: { title: string; intro: string; email: string; website: string; happyTitle: string; happySub: string };
+  returns?: { title: string; standard: string; personalized: string; how: string; address: string; refund: string; perk: string };
   cta: { title: string; body: string; shop: string; contact: string };
 };
 
@@ -585,6 +586,26 @@ export default async function ShippingPage(
             </p>
           </div>
         </div>
+
+        {/* Returns & Refunds (appended) */}
+        {c.returns && (
+          <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
+            <h2 className="text-3xl font-bold text-gray-800 mb-6 flex items-center">
+              <div className="w-10 h-10 bg-gradient-to-r from-[#93C4FF] to-[#8472DF] rounded-full flex items-center justify-center text-white mr-4">
+                13
+              </div>
+              {c.returns.title}
+            </h2>
+            <div className="space-y-4 text-gray-700">
+              <p>{c.returns.standard}</p>
+              <p>{c.returns.personalized}</p>
+              <p>{c.returns.how}</p>
+              <p className="font-medium">{c.returns.address}</p>
+              <p>{c.returns.refund}</p>
+              <p className="text-purple-800 bg-purple-50 border border-purple-200 rounded-lg p-4">{c.returns.perk}</p>
+            </div>
+          </div>
+        )}
 
         {/* Footer CTA */}
         <div className="text-center">

@@ -200,7 +200,7 @@ export default async function PrivacyPolicyPage(
                     <section className="mb-12">
                         <h2 className="text-3xl font-bold text-gray-900 mb-6">{t('rights.title')}</h2>
                         <div className="grid md:grid-cols-2 gap-6">
-                            {['access','rectify','erase','consent','portability','complaint'].map(key => (
+                            {['access','rectify','erase','consent','portability','restriction','object','complaint'].map(key => (
                                 <div key={key} className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
                                     <h3 className="font-semibold text-gray-900 mb-2 flex items-center">
                                         <i className={t(`rights.blocks.${key}.icon`)}></i>
@@ -239,6 +239,14 @@ export default async function PrivacyPolicyPage(
                         </div>
                     </section>
 
+                    {/* International Data Transfers */}
+                    <section className="mb-12">
+                        <h2 className="text-3xl font-bold text-gray-900 mb-6">{t('transfers.title')}</h2>
+                        <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
+                            <p className="text-gray-700 leading-relaxed">{t('transfers.body')}</p>
+                        </div>
+                    </section>
+
                     {/* Security */}
                     <section className="mb-12">
                         <h2 className="text-3xl font-bold text-gray-900 mb-6">{t('security.title')}</h2>
@@ -269,6 +277,7 @@ export default async function PrivacyPolicyPage(
                                     <div className="space-y-2 text-gray-700">
                                         <p><strong>{t('contact.controller.company')}</strong></p>
                                         <p>{t('contact.controller.kvk')}</p>
+                                        <p>{t('contact.controller.vat', { default: '' })}</p>
                                         <p>{t('contact.controller.addr1')}</p>
                                         <p>{t('contact.controller.addr2')}</p>
                                     </div>
