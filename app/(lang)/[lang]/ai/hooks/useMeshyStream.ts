@@ -8,6 +8,7 @@ import {
     failModel,
 } from "@/app/store/slices/generatorSlice";
 import {GeneratorModel3D} from "@/app/(lang)/[lang]/ai/types";
+import usePrompt from "@/app/(lang)/[lang]/ai/hooks/usePrompt";
 
 type Terminal = "SUCCEEDED" | "FAILED" | "CANCELED";
 const TERMINAL: Record<string, true> = {SUCCEEDED: true, FAILED: true, CANCELED: true};

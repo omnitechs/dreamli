@@ -1,3 +1,4 @@
+'use client';
 import * as React from 'react';
 import usePrompt from "@/app/(lang)/[lang]/ai/hooks/usePrompt";
 
