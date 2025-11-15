@@ -1,6 +1,7 @@
 // app/(lang)/[lang]/ai/hooks/useMeshyStream.ts
 "use client";
 import {useDispatch} from "react-redux";
+import { useState, useTransition } from "react";
 import {
     upsertModel,
     setModelStatus,
@@ -9,6 +10,7 @@ import {
 } from "@/app/store/slices/generatorSlice";
 import {GeneratorModel3D} from "@/app/(lang)/[lang]/ai/types";
 import usePrompt from "@/app/(lang)/[lang]/ai/hooks/usePrompt";
+import useImages from "@/app/(lang)/[lang]/ai/hooks/useImages";
 
 type Terminal = "SUCCEEDED" | "FAILED" | "CANCELED";
 const TERMINAL: Record<string, true> = {SUCCEEDED: true, FAILED: true, CANCELED: true};
@@ -26,8 +28,13 @@ async function pollTask(taskId: string, kind: string) {
 export function useMeshyStream() {
     const dispatch = useDispatch();
     const {prompt} = usePrompt();
+    const { getSelectedImageUrls } = useImages();
 
-
+    const [isPending, startTransition] = useTransition();
+    const [error, setError] = useState<string | null>(null);
+    const [status, setStatus] = useState<string>("");
+    const [progress, setProgress] = useState<number>(0);
+    const [modelUrl, setModelUrl] = useState<string | undefined>(undefined);
 
     function openStream(base: GeneratorModel3D) {
         console.log("openStream");
@@ -284,5 +291,5 @@ export function useMeshyStream() {
 
 
 
-    return {streamExistingTask, resumeModel, resumeAll, startGenerationFromPrompt, useRef, isPending,startGenerationFromImage};
+    return { streamExistingTask, resumeModel, resumeAll, startGenerationFromPrompt, isPending, startGenerationFromImage };
 }
