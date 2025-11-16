@@ -523,7 +523,7 @@
       "title": "Our Sourcing Partners",
       "body": "These items are sourced from verified European wholesalers, including partners such as ArtBizniz and similar licensed distributors. We do not rebrand these items or claim exclusivity. We simply curate products that fit the creative, joyful, and gifting-focused spirit of Dreamli."
     },
-    "why": { "titleA": "Why Delivery Takes", "titleB": "5–10 Days", "subtitle": "Dreamli operates on a no-stock model for better quality and sustainability" },
+    "why": { "titleA": "Why Delivery Takes", "titleB": "EU 3–8 / US 7–18 Business Days", "subtitle": "Dreamli operates on a no-stock model for better quality and sustainability" },
     "whyCards": [
       { "title": "Made to Order", "text": "All 3D-printed items are created specifically for your order, ensuring freshness and quality." },
       { "title": "Fresh from Partners", "text": "All sourced items are picked fresh from our partner distributors for optimal condition." },
@@ -533,7 +533,7 @@
       "title": "This Model Ensures:",
       "bullets": ["Lower waste", "Fresh production", "Better quality control", "Clean packaging", "More consistent results"],
       "notePrefix": "For customers:",
-      "note": "This means delivery typically takes 5–10 days, depending on production and courier speed."
+      "note": "This means delivery typically takes EU 3–8 / US 7–18 business days (preparation + transit)."
     },
     "business": { "titleA": "Our", "titleB": "Business Identity" },
     "legal": {
@@ -626,19 +626,20 @@
     },
     "delivery": {
       "title": "Delivery & Delay Benefits",
-      "body": "If delivery exceeds 10 business days from order confirmation, we add store credit (up to €100) to your account. Eligibility is verified using the shipment scan time and the carrier’s delivery timestamp; if tracking is inconclusive, reasonable customer evidence will be accepted. This benefit does not limit your statutory rights.",
+      "body": "If your overall delivery time exceeds 10 business days in the EU or 20 business days in the US (counted from order confirmation), we give €100 as our delay guarantee. Eligibility is verified using the shipment scan time and the carrier’s delivery timestamp; if tracking is inconclusive, reasonable customer evidence will be accepted. This benefit does not limit your statutory rights.",
       "points": {
         "onTime": "",
         "delayed": ""
       }
     },
     "returns": {
-      "title": "Returns & Withdrawal",
-      "rightTitle": "Right of Withdrawal (14 Days)",
-      "rightBody": "For standard, non-personalized items, you may withdraw within 14 days after delivery without giving a reason. If disclosed in advance, return postage for a change-of-mind return is paid by the customer.",
-      "personalTitle": "Personalized/Custom Items",
-      "personalBody": "The 14-day withdrawal right does not apply to goods made to the consumer’s specifications or clearly personalized (Art. 6:230p BW / Directive 2011/83/EU). For such items, returns are accepted if the product is faulty, damaged on arrival, or materially different from the agreed design. Email info@dreamli.nl within 14 days of delivery with photos. Once validated, we will repair, replace, or refund. For validated defects, we cover return shipping.",
-      "perkNote": "Our 30-day store return window applies to eligible items as described on the Shipping & Returns page and does not limit your statutory rights."
+      "title": "Returns",
+      "body": "30-day no-questions-asked returns on all orders (including personalized items). Start within 30 days of delivery by emailing info@dreamli.nl with your order number. Items must be unused, in original condition, and well packed. Refunds are issued to the original payment method after inspection. For validated defects, we cover return shipping; otherwise, return postage is paid by the customer.",
+      "rightTitle": "",
+      "rightBody": "",
+      "personalTitle": "",
+      "personalBody": "",
+      "perkNote": ""
     },
     "cashback": {
       "title": "Cashback & Site Credit Policy",
@@ -1188,18 +1189,18 @@
     "hero": { "title": "Shipping Policy", "subtitle": "Everything you need to know about delivery", "updated": "Last updated: November 2025" },
     "store": { "badge": "Store Information", "detailHtml": "<strong>Dreamli</strong> — trade name of OmniTechs V.O.F. | KvK: 93814429 | BTW (VAT) ID: NL866537211B01 | Resedastraat 39, 9713 TN Groningen, Netherlands | info@dreamli.nl | +31 6 4555 9587" },
     "s1": { "title": "Where We Ship", "euTitle": "European Union", "euText": "All countries within the EU", "usTitle": "United States", "usText": "All states in the USA", "noCountryBold": "Don't see your country?", "noCountryRest": "Contact us at and we'll check if we can arrange a custom shipment." },
-    "s2": { "title": "How Our Production & Shipping Works", "onDemand": "On-Demand Gift Store", "intro": "Dreamli operates on a no-stock model. We don't hold large inventory. Instead:", "p3d": "3D-printed products are made to order in our workshop in Groningen, Netherlands", "sourced": "Sourced products (toys, crafts, puzzles, décor) are prepared on demand from verified European distributors", "prodTitle": "Production Time", "prod1": "Typically 3–5 business days for 3D-printed items", "prod2": "Sourced items are prepared and packed within 1–3 business days", "shipTitle": "Shipping Time", "ship1": "Typically 2–7 business days depending on destination and carrier", "ship2": "A track & trace link is provided for every shipment", "overall": "Overall delivery time: usually 5–10 business days from order confirmation (production + shipping)" },
-    "s3": { "title": "Shipping Regions & Methods", "euTitle": "European Union", "eu1": "Standard delivery with PostNL, DHL, or similar", "eu2": "Tracking included", "eu3": "Estimated 2–7 business days", "usTitle": "United States", "us1": "Standard international delivery", "us2": "Tracking included", "us3": "Estimated 5–10 business days" },
+    "s2": { "title": "How Our Production & Shipping Works", "onDemand": "On-Demand Gift Store", "intro": "Dreamli operates on a no-stock model. We don't hold large inventory. Instead:", "p3d": "3D-printed products are made to order in our workshop in Groningen, Netherlands", "sourced": "Sourced products (toys, crafts, puzzles, décor) are prepared on demand from verified European distributors", "prodTitle": "Preparation Time", "prod1": "All products (3D-printed or sourced): usually 2–4 business days to be prepared", "prod2": "Careful packing and quality check included", "shipTitle": "Transit Time", "ship1": "EU: 1–3 business days • US: 3–14 business days", "ship2": "A track & trace link is provided for every shipment", "overall": "Overall delivery time from order confirmation — EU: 3–8 business days • US: 7–18 business days" },
+    "s3": { "title": "Shipping Regions & Methods", "euTitle": "European Union", "eu1": "Standard delivery with PostNL, DHL, or similar", "eu2": "Tracking included", "eu3": "Estimated 1–3 business days", "usTitle": "United States", "us1": "Standard international delivery", "us2": "Tracking included", "us3": "Estimated 3–14 business days" },
     "s4": { "title": "Order Handling & Packaging", "p3dTitle": "3D-Printed Items", "p3d1": "Freshly produced per order", "p3d2": "Hand-finished for clean results", "p3d3": "Carefully packaged to avoid damage", "srcTitle": "Sourced Items", "src1": "Picked fresh from distributor", "src2": "Quality-checked before dispatch", "src3": "Secure packaging for transit", "eco": "We aim for eco-friendly packaging when possible while ensuring safe delivery." },
     "s5": { "title": "Shipping Carriers", "desc": "We may use other reliable carriers depending on your location to ensure timely delivery.", "postnl": "PostNL", "dhl": "DHL", "ups": "UPS" },
     "s6": { "title": "Shipping Costs", "intro": "Shipping costs are calculated and displayed at checkout before you confirm your order.", "affectsTitle": "What Affects Shipping Cost", "a1": "Destination country", "a2": "Total package weight and size", "a3": "Chosen delivery speed", "discountsTitle": "Discounts We Offer", "d1": "Free shipping above certain order values", "d2": "Free shipping promotions for specific products or regions" },
     "s7": { "title": "Tracking & Notifications", "i1": "You receive a track & trace link by email when your order ships", "i2": "If your order is split into multiple packages, you will receive tracking for each parcel", "i3": "We keep you informed if there are any unexpected delays" },
     "s8": { "title": "Address Accuracy", "p1": "Please make sure your shipping address is complete and correct before placing your order.", "p2": "If a package cannot be delivered due to an incorrect address, additional shipping costs may apply to resend the item." },
-    "s9": { "title": "Delivery Issues", "delayedTitle": "Delayed Delivery", "delayed": "Carriers may sometimes take longer than estimated due to peak periods or operational issues. We’ll support you in tracking the parcel and resolving issues.", "lostTitle": "Lost or Damaged", "lost": "If your package appears lost or arrives damaged, please contact us with your order number and photos. We’ll investigate and arrange a solution (replacement, repair, or refund)." },
+    "s9": { "title": "Delivery Issues", "delayedTitle": "Delayed Delivery", "delayed": "Carriers may sometimes take longer than estimated due to peak periods or operational issues. If your overall delivery time exceeds 10 business days in the EU or 20 business days in the US (counted from order confirmation), we give you €100 as our delay guarantee. We’ll support you in tracking the parcel and resolving issues.", "lostTitle": "Lost or Damaged", "lost": "If your package appears lost or arrives damaged, please contact us with your order number and photos. We’ll investigate and arrange a solution (replacement, repair, or refund)." },
     "s10": { "title": "Customs & Import Duties", "p": "Orders shipped outside the EU may be subject to customs fees or import duties. These charges, if applicable, are the responsibility of the customer and are not included in our product prices or shipping costs." },
     "s11": { "title": "Split Shipments", "intro": "To ensure your gifts arrive in the best condition and as quickly as possible, we may ship your order:", "one": "One Combined Shipment", "oneSub": "All items together in one package", "many": "Multiple Parcels", "manySub": "Separate packages for different item types", "exTitle": "Example Split Shipment:", "ex1": "3D-printed lamps in one box", "ex2": "Toys or other sourced items in another", "note": "You will receive tracking information for each parcel if shipped separately." },
     "s12": { "title": "Questions & Support", "intro": "If you have any questions about shipping times, carriers, or special delivery needs (for example, a birthday deadline or gift timing), please contact us before or after placing your order:", "email": "Email Us", "website": "Visit Website", "happyTitle": "We're Happy to Help!", "happySub": "We'll help you plan your order so your gift arrives on time." },
-    "returns": { "title": "Returns & Refunds", "standard": "Standard items: 14-day withdrawal from delivery without reason. If disclosed in advance, return postage for change-of-mind returns is paid by the customer.", "personalized": "Personalized/Custom items: No 14-day withdrawal (Art. 6:230p BW / Directive 2011/83/EU). Returns accepted if faulty, damaged on arrival, or materially different from the agreed design.", "how": "How to start a return: Email info@dreamli.nl within 14 days of delivery with photos and your order number. Once validated, we will repair, replace, or refund. For validated defects, we cover return shipping.", "address": "Return address: Resedastraat 39, 9713 TN Groningen, Netherlands (include order number).", "refund": "Refund timing: Refunds go back to the original payment method after we receive and inspect the item(s).", "perk": "Store benefit: 30-day returns on eligible items as described on the Shipping & Returns page. This does not limit your statutory rights (14-day withdrawal for standard items; personalized/custom items are excluded by law)." },
+    "returns": { "title": "Returns & Refunds", "standard": "30-day no-questions-asked returns on all orders.", "personalized": "No exclusions — this policy applies to personalized/custom items as well.", "how": "Start within 30 days of delivery: email info@dreamli.nl with your order number and photos if relevant. Items must be unused, in original condition, and well packed.", "address": "Return address: Resedastraat 39, 9713 TN Groningen, Netherlands (include order number).", "refund": "Refunds are issued to the original payment method after we receive and inspect the item(s). For validated defects, we cover return shipping; otherwise, return shipping is paid by the customer.", "perk": "Hassle-free promise: simple, friendly returns in 30 days — no questions asked." },
     "cta": { "title": "Ready to Order Your Perfect Gift?", "body": "Browse our collection of 3D-printed items and curated gifts", "shop": "Browse Shop", "contact": "Contact Us" }
   }
 }

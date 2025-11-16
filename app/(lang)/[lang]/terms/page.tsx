@@ -136,23 +136,6 @@ export default async function TermsPage(props: { params: Promise<{ lang: Languag
                                 })()}
                             </section>
 
-                            {/* Cashback & Site Credit Policy */}
-                            <section>
-                                <div className="flex items-center mb-4">
-                                    <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center mr-3">
-                                        <i className="ri-gift-line text-purple-600" />
-                                    </div>
-                                    <h2 className="text-2xl font-semibold text-gray-900">{t('cashback.title')}</h2>
-                                </div>
-                                <p className="text-gray-700 leading-relaxed">{t('cashback.body')}</p>
-                                <ul className="text-gray-700 leading-relaxed list-disc pl-6">
-                                    <li>{t('cashback.points.full')}</li>
-                                    <li>{t('cashback.points.thirty')}</li>
-                                    <li>{t('cashback.points.ten')}</li>
-                                    <li>{t('cashback.points.none')}</li>
-                                </ul>
-                                <p className="text-gray-700 leading-relaxed">{t('cashback.notice')}</p>
-                            </section>
 
                             {/* AI-Generated Models & Licensing */}
                             <section>

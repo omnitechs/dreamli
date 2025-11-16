@@ -78,7 +78,7 @@ const copy: Record<LanguageCode, {
     },
     why: {
       titleA: 'Why Delivery Takes',
-      titleB: '5–10 Days',
+      titleB: 'EU 3–8 / US 7–18 Business Days',
       subtitle: 'Dreamli operates on a no-stock model for better quality and sustainability'
     },
     whyCards: [
@@ -90,7 +90,7 @@ const copy: Record<LanguageCode, {
       title: 'This Model Ensures:',
       bullets: ['Lower waste', 'Fresh production', 'Better quality control', 'Clean packaging', 'More consistent results'],
       notePrefix: 'For customers:',
-      note: 'This means delivery typically takes 5–10 days, depending on production and courier speed.'
+      note: 'This means delivery typically takes EU 3–8 / US 7–18 business days (preparation + transit).'
     },
     business: { titleA: 'Our', titleB: 'Business Identity' },
     legal: {
@@ -111,7 +111,7 @@ const copy: Record<LanguageCode, {
       bullets: [
         'We ship across the European Union and the United States using PostNL, DHL, and UPS.',
         'Every order includes a track & trace link.',
-        "Store benefit: 30-day returns on eligible items as described on the Shipping & Returns page. This does not limit your statutory rights (14-day withdrawal for standard items; personalized/custom items are excluded by law)."
+        "We offer 30-day returns on all items, including customized 3D prints (as long as they're undamaged and properly packed)."
       ]
     },
     contactInfo: {
@@ -187,7 +187,7 @@ const copy: Record<LanguageCode, {
     },
     why: {
       titleA: 'Waarom Levertijd',
-      titleB: '5–10 Dagen',
+      titleB: 'EU 3–8 / VS 7–18 Werkdagen',
       subtitle: 'Dreamli werkt zonder voorraad voor betere kwaliteit en duurzaamheid'
     },
     whyCards: [
@@ -199,7 +199,7 @@ const copy: Record<LanguageCode, {
       title: 'Dit Model Zorgt Voor:',
       bullets: ['Minder afval', 'Verse productie', 'Betere kwaliteitscontrole', 'Schone verpakking', 'Consistentere resultaten'],
       notePrefix: 'Voor klanten:',
-      note: 'De levering duurt meestal 5–10 dagen, afhankelijk van productie en bezorgdienst.'
+      note: 'De levering duurt meestal EU 3–8 / VS 7–18 werkdagen (voorbereiding + transittijd).'
     },
     business: { titleA: 'Onze', titleB: 'Bedrijfsidentiteit' },
     legal: {
@@ -220,7 +220,7 @@ const copy: Record<LanguageCode, {
       bullets: [
         'We verzenden binnen de EU en de VS met PostNL, DHL en UPS.',
         'Elke bestelling bevat een track & trace-link.',
-        'Winkelvoordeel: 30 dagen retourneren op in aanmerking komende items zoals beschreven op de pagina Verzending & Retouren. Dit beperkt uw wettelijke rechten niet (14 dagen herroeping voor standaardartikelen; gepersonaliseerde/maatwerkartikelen zijn wettelijk uitgesloten).'
+        'We bieden 30 dagen retourneren voor alle items, inclusief gepersonaliseerde 3D-prints (mits onbeschadigd en goed verpakt).'
       ]
     },
     contactInfo: {
@@ -296,7 +296,7 @@ const copy: Record<LanguageCode, {
     },
     why: {
       titleA: 'Warum die Lieferung',
-      titleB: '5–10 Tage dauert',
+      titleB: 'EU 3–8 / USA 7–18 Werktage',
       subtitle: 'Dreamli arbeitet ohne Lagerbestand — für Qualität und Nachhaltigkeit'
     },
     whyCards: [
@@ -308,7 +308,7 @@ const copy: Record<LanguageCode, {
       title: 'Dieses Modell sorgt für:',
       bullets: ['Weniger Abfall', 'Frische Produktion', 'Bessere Qualitätskontrolle', 'Saubere Verpackung', 'Konstantere Ergebnisse'],
       notePrefix: 'Für Kund:innen:',
-      note: 'Die Lieferung dauert in der Regel 5–10 Tage — je nach Produktion und Versanddienst.'
+      note: 'Die Lieferung dauert in der Regel EU 3–8 / USA 7–18 Werktage (Vorbereitung + Transport).'
     },
     business: { titleA: 'Unsere', titleB: 'Unternehmensidentität' },
     legal: {
@@ -329,7 +329,7 @@ const copy: Record<LanguageCode, {
       bullets: [
         'Versand in der EU und den USA mit PostNL, DHL und UPS.',
         'Jede Bestellung enthält eine Sendungsverfolgung.',
-        'Shop‑Vorteil: 30‑Tage Rückgabe für berechtigte Artikel wie auf der Seite „Versand & Rückgabe“ beschrieben. Dies beschränkt nicht Ihre gesetzlichen Rechte (14‑tägiges Widerrufsrecht für Standardartikel; personalisierte/maßgeschneiderte Artikel sind gesetzlich ausgeschlossen).'
+        'Wir bieten 30 Tage Rückgabe für alle Artikel, auch personalisierte 3D‑Drucke (sofern unbeschädigt und gut verpackt).'
       ]
     },
     contactInfo: {
@@ -405,7 +405,7 @@ const copy: Record<LanguageCode, {
     },
     why: {
       titleA: 'Pourquoi la livraison prend',
-      titleB: '5–10 jours',
+      titleB: 'UE 3–8 / US 7–18 jours ouvrés',
       subtitle: 'Dreamli fonctionne sans stock pour plus de qualité et de durabilité'
     },
     whyCards: [
@@ -417,7 +417,7 @@ const copy: Record<LanguageCode, {
       title: 'Ce modèle garantit :',
       bullets: ['Moins de déchets', 'Production fraîche', 'Meilleur contrôle qualité', 'Emballage propre', 'Résultats plus constants'],
       notePrefix: 'Pour les clients :',
-      note: 'La livraison prend généralement 5–10 jours selon la production et le transporteur.'
+      note: 'La livraison prend généralement UE 3–8 / US 7–18 jours ouvrés (préparation + transport).'
     },
     business: { titleA: 'Notre', titleB: 'Identité d’entreprise' },
     legal: {
@@ -438,7 +438,7 @@ const copy: Record<LanguageCode, {
       bullets: [
         'Expédition UE et USA via PostNL, DHL et UPS.',
         'Chaque commande inclut un lien de suivi.',
-        "Avantage boutique : retours sous 30 jours sur les articles éligibles tels que décrit sur la page Expédition & Retours. Cela ne limite pas vos droits statutaires (rétractation de 14 jours pour les articles standards ; les articles personnalisés/sur mesure sont exclus par la loi)."
+        "Retours sous 30 jours pour tous les articles, y compris personnalisés (sous réserve qu’ils soient intacts et bien emballés)."
       ]
     },
     contactInfo: {
@@ -514,7 +514,7 @@ const copy: Record<LanguageCode, {
     },
     why: {
       titleA: 'Dlaczego dostawa trwa',
-      titleB: '5–10 dni',
+      titleB: 'UE 3–8 / USA 7–18 dni roboczych',
       subtitle: 'Działamy bez magazynu — dla lepszej jakości i zrównoważenia'
     },
     whyCards: [
@@ -526,7 +526,7 @@ const copy: Record<LanguageCode, {
       title: 'Ten model zapewnia:',
       bullets: ['Mniej odpadów', 'Świeża produkcja', 'Lepsza kontrola jakości', 'Czyste pakowanie', 'Bardziej spójne wyniki'],
       notePrefix: 'Dla klientów:',
-      note: 'Dostawa zwykle zajmuje 5–10 dni, zależnie od produkcji i kuriera.'
+      note: 'Oznacza to, że dostawa zwykle trwa: UE 3–8 / USA 7–18 dni roboczych (przygotowanie + transport).'
     },
     business: { titleA: 'Nasza', titleB: 'Tożsamość firmy' },
     legal: {
