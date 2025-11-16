@@ -22,11 +22,25 @@ export default function ContactForm() {
         setSubmitStatus('');
 
         try {
-            // Simulate form submission
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            setSubmitStatus(t('status.success'));
-            setFormData({ name: '', email: '', subject: '', message: '' });
-        } catch {
+            const res = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    subject: formData.subject,
+                    message: formData.message,
+                }),
+            });
+
+            const data = await res.json().catch(() => ({}));
+            if (res.ok && data?.ok) {
+                setSubmitStatus(t('status.success'));
+                setFormData({ name: '', email: '', subject: '', message: '' });
+            } else {
+                setSubmitStatus(t('status.error'));
+            }
+        } catch (err) {
             setSubmitStatus(t('status.error'));
         } finally {
             setIsSubmitting(false);

@@ -78,7 +78,7 @@ export default async function Footer({ lang }: { lang: LanguageCode }) {
 
                     {/* Company Information */}
                     <div>
-                        <h3 className="font-bold text-gray-900 mb-4">{t('company.heading')}</h3>
+                        <h3 className="font-bold text-gray-900 mb-4 text-purple-800">{t('company.heading')}</h3>
                         <div className="space-y-3 text-gray-600">
                             <div className="flex items-center space-x-2">
                                 <i className="ri-building-2-line text-purple-600" />
@@ -154,7 +154,7 @@ export default async function Footer({ lang }: { lang: LanguageCode }) {
 
                     {/* Newsletter */}
                     <div>
-                        <h3 className="font-bold text-gray-900 mb-4">{t('newsletter.heading')}</h3>
+                        <h3 className="font-bold text-gray-900 mb-4 text-purple-800">{t('newsletter.heading')}</h3>
                         <p className="text-gray-600 text-sm mb-4">{t('newsletter.blurb')}</p>
                         <NewsletterForm />
                     </div>
