@@ -91,7 +91,7 @@ export async function POST(req: Request) {
         async: false,
       }),
       // Force Node runtime for external network if needed
-      // @ts-ignore
+      // @ts-expect-error - explicitly allow nonstandard fetch init "cache" here to disable caching in this runtime
       cache: 'no-store',
     });
 
