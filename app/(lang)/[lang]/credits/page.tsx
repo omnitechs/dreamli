@@ -10,6 +10,51 @@ import { CREDIT_PACKAGES, computePackageDcTotal } from '@/lib/currency';
 import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
+function findPackageById(id: string | null | undefined) {
+  if (!id) return undefined as undefined | (typeof CREDIT_PACKAGES)[number];
+  return CREDIT_PACKAGES.find(p => p.id === id);
+}
+
+function fireGa4PurchaseOnce(opts: { sessionId: string; pkgId: string; valueEur: number }) {
+  const key = `ga4_purchase_fired:${opts.sessionId}`;
+  try {
+    const already = sessionStorage.getItem(key);
+    if (already === '1') return;
+  } catch {}
+
+  const payload: any = {
+    transaction_id: opts.sessionId,
+    currency: 'EUR',
+    value: Number(opts.valueEur.toFixed(2)),
+    items: [
+      {
+        item_id: opts.pkgId,
+        item_name: 'Digital Credits',
+        price: Number(opts.valueEur.toFixed(2)),
+        quantity: 1,
+      },
+    ],
+  };
+
+  let tries = 0;
+  const maxTries = 10;
+  const attempt = () => {
+    try {
+      const w = window as any;
+      if (typeof w.gtag === 'function') {
+        w.gtag('event', 'purchase', payload);
+        try { sessionStorage.setItem(key, '1'); } catch {}
+        return;
+      }
+    } catch {}
+    tries += 1;
+    if (tries < maxTries) {
+      setTimeout(attempt, 300);
+    }
+  };
+  attempt();
+}
+
 export default function CreditsPage() {
   const { lang } = useParams<{ lang: LanguageCode }>();
   const dispatch = useDispatch<AppDispatch>();
@@ -43,6 +88,8 @@ export default function CreditsPage() {
     try {
       const url = new URL(window.location.href)
       const status = url.searchParams.get('status')
+      const sessionId = url.searchParams.get('session_id')
+      const pkgIdFromUrl = url.searchParams.get('package_id')
       if (status) {
         if (status === 'success') {
           setNotice(t('notice.success'))
@@ -50,6 +97,15 @@ export default function CreditsPage() {
           // refresh immediately and shortly after to catch webhook update
           refresh()
           try { setTimeout(() => { refresh().catch(() => {}) }, 1500) } catch {}
+
+          // Fire GA4 purchase event once with transaction_id = session_id
+          try {
+            const pkgId = pkgIdFromUrl || sessionStorage.getItem('last_package_id') || undefined
+            const pkg = findPackageById(pkgId || undefined)
+            if (sessionId && pkg) {
+              fireGa4PurchaseOnce({ sessionId, pkgId: pkg.id, valueEur: pkg.eurPrice })
+            }
+          } catch {}
         } else if (status === 'cancel') {
           setNotice(t('notice.cancel'))
           setNoticeKind('warning')
@@ -58,6 +114,8 @@ export default function CreditsPage() {
           setNoticeKind('error')
         }
         url.searchParams.delete('status')
+        url.searchParams.delete('session_id')
+        url.searchParams.delete('package_id')
         window.history.replaceState({}, '', url.toString())
       }
     } catch {}
@@ -76,6 +134,7 @@ export default function CreditsPage() {
   async function buyPackage(packageId: string) {
     setLoading(true)
     try {
+      try { sessionStorage.setItem('last_package_id', packageId) } catch {}
       const res = await fetch('/api/stripe/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

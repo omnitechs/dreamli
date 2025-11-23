@@ -60,7 +60,7 @@ export async function POST(req: Request) {
 
   // Try to derive language from referer path: http://host/{lang}/credits
   const langMatch = referer?.split('/')?.[3] || 'en';
-  const successUrl = `${baseUrl}/${langMatch}/credits?status=success`;
+  const successUrl = `${baseUrl}/${langMatch}/credits?status=success&session_id={CHECKOUT_SESSION_ID}&package_id=${encodeURIComponent(pkg.id)}`;
   const cancelUrl = `${baseUrl}/${langMatch}/credits?status=cancel`;
 
   const checkout = await stripe.checkout.sessions.create({
