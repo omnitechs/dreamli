@@ -51,6 +51,67 @@ export const {
         }),
     ],
     callbacks: {
+        // Proactively link Google accounts to existing users by verified email to avoid OAuthAccountNotLinked
+        async signIn({ user, account, profile }) {
+            try {
+                if (account?.provider === "google") {
+                    const email = (user?.email || (profile as any)?.email || "").trim().toLowerCase();
+                    if (!email) return true;
+
+                    // Only trust if Google marks the email as verified (most Google accounts do)
+                    const emailVerified = (profile as any)?.email_verified ?? true; // default true for Google
+
+                    if (!emailVerified) return true; // fall back to default behavior
+
+                    const existing = await prisma.user.findUnique({ where: { email } });
+                    if (existing) {
+                        // Ensure an account row exists linking this Google account to the existing user
+                        await prisma.account.upsert({
+                            where: {
+                                provider_providerAccountId: {
+                                    provider: account.provider,
+                                    providerAccountId: account.providerAccountId!,
+                                },
+                            },
+                            update: {
+                                userId: existing.id,
+                                access_token: account.access_token ?? undefined,
+                                refresh_token: account.refresh_token ?? undefined,
+                                expires_at: account.expires_at ?? undefined,
+                                id_token: account.id_token ?? undefined,
+                                token_type: account.token_type ?? undefined,
+                                scope: account.scope ?? undefined,
+                                session_state: (account as any)?.session_state ?? undefined,
+                            },
+                            create: {
+                                userId: existing.id,
+                                type: account.type!,
+                                provider: account.provider,
+                                providerAccountId: account.providerAccountId!,
+                                access_token: account.access_token ?? undefined,
+                                refresh_token: account.refresh_token ?? undefined,
+                                expires_at: account.expires_at ?? undefined,
+                                id_token: account.id_token ?? undefined,
+                                token_type: account.token_type ?? undefined,
+                                scope: account.scope ?? undefined,
+                                session_state: (account as any)?.session_state ?? undefined,
+                            },
+                        });
+
+                        // Ensure subsequent callbacks see the correct user id
+                        (user as any).id = existing.id;
+                    }
+                }
+            } catch (e) {
+                if (process.env.NODE_ENV !== "production") {
+                    console.error("signIn callback linking error", e);
+                }
+                // Never hard fail sign-in due to linking attempt
+                return true;
+            }
+            return true;
+        },
+
         // Runs at sign-in and whenever the session is checked.
         async jwt({ token, user }) {
             // On first sign-in, "user" is defined → copy fields to the token
