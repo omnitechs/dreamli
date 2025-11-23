@@ -7,7 +7,7 @@ import {useTranslations} from "next-intl";
 const ModelViewer = dynamic(() => import('./ModelViewer'), {
     ssr: false,
     loading: () => (
-        <div className="w-full h-80 bg-gray-50 rounded-lg grid place-items-center">
+        <div className="w-full h-full bg-gray-50 rounded-lg grid place-items-center">
             <span className="text-sm text-gray-500">Loading 3D viewer…</span>
         </div>
     ),
@@ -88,7 +88,7 @@ export default function LazyGlb({
     return (
         <div
             ref={ref}
-            className={`relative ${className}`}
+            className={`relative w-full h-full ${className}`}
             onMouseEnter={prefetchModel}
             onTouchStart={prefetchModel}
             style={style}
@@ -97,7 +97,7 @@ export default function LazyGlb({
                 visible ? (
                     <ModelViewer
                         modelUrl={modelUrl}
-                        className={className}
+                        className="w-full h-full"
                         forceType={forceType}
                         active
                     />
@@ -105,7 +105,7 @@ export default function LazyGlb({
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={poster} alt="" className="w-full h-full object-cover rounded-lg" />
                 ) : (
-                    <div className="w-full h-80 bg-gray-50 rounded-lg grid place-items-center">
+                    <div className="w-full h-full bg-gray-50 rounded-lg grid place-items-center">
                         <span className="text-sm text-gray-500">{t('placeholder')}</span>
                     </div>
                 )

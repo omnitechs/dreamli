@@ -37,8 +37,9 @@ export default function ModelViewer({ modelUrl, className = '', forceType, activ
         }
 
         const container = containerRef.current;
-        const width = container.clientWidth;
-        const height = container.clientHeight || 400;
+        const rect = container.getBoundingClientRect();
+        const width = Math.max(1, Math.floor(rect.width || container.clientWidth || 1));
+        const height = Math.max(1, Math.floor(rect.height || container.clientHeight || 1));
 
         // Scene
         const scene = new THREE.Scene();
@@ -169,12 +170,19 @@ export default function ModelViewer({ modelUrl, className = '', forceType, activ
 
         // Mount
         container.appendChild(renderer.domElement);
+        try {
+            // Ensure canvas fills the container
+            renderer.domElement.style.width = '100%';
+            renderer.domElement.style.height = '100%';
+            renderer.domElement.style.display = 'block';
+        } catch {}
 
         // Resize
         const onResize = () => {
             if (!rendererRef.current || !cameraRef.current || !containerRef.current) return;
-            const w = containerRef.current.clientWidth;
-            const h = containerRef.current.clientHeight || 400;
+            const rect = containerRef.current.getBoundingClientRect();
+            const w = Math.max(1, Math.floor(rect.width || containerRef.current.clientWidth || 1));
+            const h = Math.max(1, Math.floor(rect.height || containerRef.current.clientHeight || 1));
             rendererRef.current.setSize(w, h);
             cameraRef.current.aspect = w / h;
             cameraRef.current.updateProjectionMatrix();
@@ -264,7 +272,7 @@ export default function ModelViewer({ modelUrl, className = '', forceType, activ
     }
 
     return (
-        <div ref={containerRef} className={`w-full h-80 bg-gray-50 rounded-lg relative ${className}`}>
+        <div ref={containerRef} className={`w-full h-full bg-gray-50 rounded-lg relative ${className}`}>
             {!modelUrl && (
                 <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-center">
