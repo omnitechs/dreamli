@@ -607,6 +607,94 @@
     "home": "Dreamli home",
     "logoAlt": "Dreamli Logo"
   },
+  "aiLanding": {
+    "heroPrompt": "Create a golden robot reindeer. Keep the tail short. With a saddle and blinders. Show Texan Wire Cadillac wheels at the top of the legs.",
+    "textTo3dExplainer": "Type a prompt and we’ll turn it into a 3D concept you can view and print. No 3D experience needed—just describe what you imagine.",
+    "horsePrompt": "Create a robotic-looking golden horse ornament. Add a round handle near the neck (for the weight). Incorporate the wheels (Texan Wire Cadillac wheels). Remove the wheels at the bottom of the legs. Make the handle smaller and place it slightly higher on the neck. The horse doesn’t need to stand on a base."
+  },
+  "christmas": {
+    "hero": {
+      "badgeNew": "New",
+      "badgeTry": "Try with Free AI Credits",
+      "title": { "before": "Turn Your Imagination into a", "highlight": "Real 3D Object." },
+      "subtitle": "Characters. Ornaments. Prototypes. Describe it with text or upload a photo. Our AI designs it, and we 3D print it in Groningen.",
+      "cta": "Start Creating for Free",
+      "bullets": {
+        "noSkills": "No 3D skills needed",
+        "printsFrom": "Prints from €10"
+      },
+      "renderAlt": "3D Render",
+      "photoAlt": "Final Photo",
+      "realBadge": "Real Object! ✨"
+    },
+    "textTo3d": {
+      "title": "Text to 3D",
+      "canDescribe": "Can you describe it?",
+      "promptLabel": "Prompt"
+    },
+    "imageTo3d": {
+      "title": "Image to 3D",
+      "havePicture": "Have a picture?",
+      "explainer": "Upload a drawing, a logo, or a photo of your pet. The AI turns 2D pixels into 3D depth.",
+      "uploadLabel": "Upload Image"
+    },
+    "testimonial": {
+      "title": "\"I couldn't find it in stores, so I made it myself.\"",
+      "quote": "I wanted a specific memory from the Beyoncé concert—the Cowboy Carter horse—but it didn't exist in shops. With Dreamli, I simply uploaded a reference image and the AI did the rest. It was empowering to create exactly what I wanted!",
+      "name": "Shanice de Jong",
+      "verified": "Verified Buyer"
+    },
+    "steps": {
+      "title": "How It Works",
+      "subtitle": "From imagination to reality in three simple steps",
+      "imagine": { "title": "Imagine", "desc": "Type text or upload a photo." },
+      "generate": { "title": "Generate", "desc": "Use Free Credits to visualize it in 3D." },
+      "order": { "title": "Order", "desc": "We print in Groningen & Ship fast." }
+    },
+    "pricing": {
+      "title": "Transparent Pricing",
+      "subtitle": "Two simple steps: Design with AI, then Print it real.",
+      "tabs": { "design": "Step 1: Design", "print": "Step 2: Print" },
+      "design": {
+        "free": { "price": "FREE", "label": "Starter", "btn": "Start Free",
+          "bullets": ["Free credits to try simple models", "Basic text-to-3D generation", "Standard quality exports"] },
+        "pro": { "price": "€4.99", "label": "Pro AI", "btn": "Upgrade to Pro", "mostPopular": "Most Popular",
+          "bullets": ["High-definition, complex details", "Faster generation speed", "Image-to-3D conversion", "Premium export formats"] }
+      },
+      "print": {
+        "material": "Biodegradable PLA Material",
+        "select": "Select your perfect size",
+        "mostPopular": "Most Popular",
+        "glow": {
+          "title": "Glow in the Dark",
+          "desc": "Makes your ornament magical at night!",
+          "x2": "x2 price",
+          "x2desc": "Special glow-in-the-dark filament (doubles price)"
+        },
+        "summary": {
+          "selectedSize": "Selected Size:",
+          "basePrice": "Base Price:",
+          "glow": "Glow in Dark:",
+          "total": "Total:"
+        },
+        "scaleAlt": "Size Comparison"
+      }
+    },
+    "footerBanner": {
+      "inspireTitle": "Need Inspiration?",
+      "inspireText": "Explore amazing 3D creations from our community. See what others have designed and get inspired for your next project!",
+      "browse": "Browse Marketplace",
+      "mainTitleA": "Stop searching for the perfect gift.",
+      "mainTitleB": "Create it.",
+      "cta": "Launch App & Create",
+      "badges": {
+        "made": "Made in Groningen",
+        "pla": "Biodegradable PLA",
+        "secure": "Secure Payment",
+        "fast": "Fast Shipping"
+      }
+    }
+  },
   "Terms": {
     "meta": {
       "title": "Terms & Conditions | Dreamli",

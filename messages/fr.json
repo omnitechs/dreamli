@@ -1128,5 +1128,93 @@
     "s12": { "title": "Questions & assistance", "intro": "Pour toute question sur les délais, les transporteurs ou des besoins spécifiques (par ex. date d’anniversaire), contactez‑nous avant ou après votre commande :", "email": "Nous écrire", "website": "Visiter le site", "happyTitle": "Nous sommes là pour vous aider !", "happySub": "Nous vous aidons à planifier votre commande pour une arrivée à temps." },
     "returns": { "title": "Retours & Remboursements", "standard": "Retours sous 30 jours, sans question, pour toutes les commandes.", "personalized": "Aucune exclusion — cette politique s’applique aussi aux articles personnalisés/sur mesure.", "how": "Démarrer sous 30 jours après la livraison : écrivez à info@dreamli.nl avec votre numéro de commande (et des photos si nécessaire). Les articles doivent être non utilisés, en état d’origine et bien emballés.", "address": "Adresse de retour : Resedastraat 39, 9713 TN Groningue, Pays‑Bas (joignez votre numéro de commande).", "refund": "Remboursement sur le mode de paiement initial après réception et inspection. Pour les défauts validés, nous prenons en charge les frais de retour ; sinon, les frais de retour sont à la charge du client.", "perk": "Promesse sérénité : retours faciles sous 30 jours — sans question." },
     "cta": { "title": "Prêt à commander le cadeau parfait ?", "body": "Parcourez notre sélection d’articles imprimés en 3D et de cadeaux sélectionnés", "shop": "Visiter la boutique", "contact": "Contact" }
+  },
+  "aiLanding": {
+    "heroPrompt": "Créez un renne robot doré. Gardez la queue courte. Avec une selle et des œillères. Montrez des roues Texan Wire Cadillac en haut des jambes.",
+    "textTo3dExplainer": "Saisissez une description et nous la transformerons en un concept 3D que vous pouvez visualiser et imprimer. Aucune expérience 3D requise — décrivez simplement ce que vous imaginez.",
+    "horsePrompt": "Créez un ornement de cheval doré au look robotique. Ajoutez une poignée ronde près du cou (pour le poids). Intégrez les roues (roues Texan Wire Cadillac). Retirez les roues au bas des jambes. Réduisez la taille de la poignée et placez‑la légèrement plus haut sur le cou. Le cheval n’a pas besoin d’être sur un socle."
+  },
+  "christmas": {
+    "hero": {
+      "badgeNew": "Nouveau",
+      "badgeTry": "Essayez avec des crédits IA gratuits",
+      "title": { "before": "Transformez votre imagination en", "highlight": "véritable objet 3D." },
+      "subtitle": "Personnages. Ornements. Prototypes. Décrivez‑le avec du texte ou téléversez une photo. Notre IA le conçoit, et nous l’imprimons en 3D à Groningue.",
+      "cta": "Commencer gratuitement",
+      "bullets": {
+        "noSkills": "Aucune compétence 3D requise",
+        "printsFrom": "Impressions dès 10 €"
+      },
+      "renderAlt": "Rendu 3D",
+      "photoAlt": "Photo finale",
+      "realBadge": "Objet réel ! ✨"
+    },
+    "textTo3d": {
+      "title": "Texte vers 3D",
+      "canDescribe": "Pouvez‑vous le décrire ?",
+      "promptLabel": "Invite"
+    },
+    "imageTo3d": {
+      "title": "Image vers 3D",
+      "havePicture": "Vous avez une image ?",
+      "explainer": "Téléversez un dessin, un logo ou la photo de votre animal. L’IA transforme les pixels 2D en profondeur 3D.",
+      "uploadLabel": "Téléverser une image"
+    },
+    "testimonial": {
+      "title": "\"Je ne le trouvais pas en magasin, alors je l’ai créé moi‑même.\"",
+      "quote": "Je voulais un souvenir précis du concert de Beyoncé — le cheval Cowboy Carter — mais il n’existait pas en boutique. Avec Dreamli, j’ai simplement téléversé une image de référence et l’IA a fait le reste. C’était grisant de créer exactement ce que je voulais !",
+      "name": "Shanice de Jong",
+      "verified": "Acheteuse vérifiée"
+    },
+    "steps": {
+      "title": "Comment ça marche",
+      "subtitle": "De l’imagination à la réalité en trois étapes simples",
+      "imagine": { "title": "Imaginer", "desc": "Saisissez du texte ou téléversez une photo." },
+      "generate": { "title": "Générer", "desc": "Utilisez des crédits gratuits pour le visualiser en 3D." },
+      "order": { "title": "Commander", "desc": "Nous imprimons à Groningue et expédions rapidement." }
+    },
+    "pricing": {
+      "title": "Tarification transparente",
+      "subtitle": "Deux étapes simples : concevoir avec l’IA, puis imprimer pour de vrai.",
+      "tabs": { "design": "Étape 1 : Design", "print": "Étape 2 : Impression" },
+      "design": {
+        "free": { "price": "GRATUIT", "label": "Starter", "btn": "Commencer gratuitement",
+          "bullets": ["Crédits gratuits pour tester des modèles simples", "Génération texte‑vers‑3D de base", "Exports de qualité standard"] },
+        "pro": { "price": "4,99 €", "label": "Pro IA", "btn": "Passer en Pro", "mostPopular": "Le plus populaire",
+          "bullets": ["Haute définition, détails complexes", "Génération plus rapide", "Conversion image‑vers‑3D", "Formats d’export premium"] }
+      },
+      "print": {
+        "material": "Matériau PLA biodégradable",
+        "select": "Choisissez votre taille idéale",
+        "mostPopular": "Le plus populaire",
+        "glow": {
+          "title": "Brille dans le noir",
+          "desc": "Rend votre ornement magique la nuit !",
+          "x2": "prix x2",
+          "x2desc": "Filament spécial phosphorescent (prix doublé)"
+        },
+        "summary": {
+          "selectedSize": "Taille sélectionnée :",
+          "basePrice": "Prix de base :",
+          "glow": "Glow in Dark :",
+          "total": "Total :"
+        },
+        "scaleAlt": "Comparaison de taille"
+      }
+    },
+    "footerBanner": {
+      "inspireTitle": "Besoin d’inspiration ?",
+      "inspireText": "Découvrez des créations 3D incroyables de notre communauté. Inspirez‑vous des projets des autres !",
+      "browse": "Parcourir le marketplace",
+      "mainTitleA": "Arrêtez de chercher le cadeau parfait.",
+      "mainTitleB": "Créez‑le.",
+      "cta": "Lancer l’app & créer",
+      "badges": {
+        "made": "Fabriqué à Groningue",
+        "pla": "PLA biodégradable",
+        "secure": "Paiement sécurisé",
+        "fast": "Expédition rapide"
+      }
+    }
   }
 }

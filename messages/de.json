@@ -1128,5 +1128,93 @@
     "s12": { "title": "Fragen & Support", "intro": "Bei Fragen zu Lieferzeiten, Dienstleistern oder besonderen Lieferwünschen (z. B. Geburtstagstermin) kontaktieren Sie uns bitte vor oder nach der Bestellung:", "email": "E‑Mail schreiben", "website": "Website besuchen", "happyTitle": "Wir helfen gern!", "happySub": "Wir helfen Ihnen, die Bestellung so zu planen, dass das Geschenk rechtzeitig ankommt." },
     "returns": { "title": "Rückgaben & Erstattungen", "standard": "30 Tage Rückgabe ohne Fragen für alle Bestellungen.", "personalized": "Keine Ausnahmen — diese Regel gilt auch für personalisierte/Maßanfertigungen.", "how": "Start innerhalb von 30 Tagen nach Lieferung: E‑Mail an info@dreamli.nl mit Bestellnummer und ggf. Fotos. Artikel müssen unbenutzt, im Originalzustand und gut verpackt sein.", "address": "Rücksendeadresse: Resedastraat 39, 9713 TN Groningen, Niederlande (Bestellnummer beilegen).", "refund": "Erstattung erfolgt auf die ursprüngliche Zahlungsart nach Eingang und Prüfung der Ware(n). Bei bestätigten Mängeln übernehmen wir die Rücksendekosten; andernfalls trägt der Kunde die Rücksendekosten.", "perk": "Stressfrei: einfache Rückgaben innerhalb von 30 Tagen — ohne Fragen." },
     "cta": { "title": "Bereit für das perfekte Geschenk?", "body": "Entdecken Sie unsere 3D‑Druck‑Kollektion und kuratierte Geschenke", "shop": "Zum Shop", "contact": "Kontakt" }
+  },
+  "aiLanding": {
+    "heroPrompt": "Erstelle ein goldenes Roboter‑Rentier. Halte den Schwanz kurz. Mit Sattel und Scheuklappen. Zeige Texan Wire Cadillac‑Räder oben an den Beinen.",
+    "textTo3dExplainer": "Gib eine Beschreibung ein und wir verwandeln sie in ein 3D‑Konzept, das du ansehen und drucken kannst. Keine 3D‑Erfahrung nötig — beschreibe einfach, was du dir vorstellst.",
+    "horsePrompt": "Erstelle ein robotisch wirkendes goldenes Pferde‑Ornament. Füge in der Nähe des Halses einen runden Henkel hinzu (für das Gewicht). Integriere die Räder (Texan Wire Cadillac Wheels). Entferne die Räder am unteren Ende der Beine. Mache den Henkel kleiner und platziere ihn etwas höher am Hals. Das Pferd muss nicht auf einem Sockel stehen."
+  },
+  "christmas": {
+    "hero": {
+      "badgeNew": "Neu",
+      "badgeTry": "Mit kostenlosen KI‑Credits ausprobieren",
+      "title": { "before": "Verwandle deine Vorstellung in ein", "highlight": "echtes 3D‑Objekt." },
+      "subtitle": "Charaktere. Ornamente. Prototypen. Beschreibe es mit Text oder lade ein Foto hoch. Unsere KI entwirft es, und wir drucken es in Groningen in 3D.",
+      "cta": "Kostenlos starten",
+      "bullets": {
+        "noSkills": "Keine 3D‑Kenntnisse erforderlich",
+        "printsFrom": "Drucke ab 10 €"
+      },
+      "renderAlt": "3D‑Render",
+      "photoAlt": "Endfoto",
+      "realBadge": "Echtes Objekt! ✨"
+    },
+    "textTo3d": {
+      "title": "Text zu 3D",
+      "canDescribe": "Kannst du es beschreiben?",
+      "promptLabel": "Prompt"
+    },
+    "imageTo3d": {
+      "title": "Bild zu 3D",
+      "havePicture": "Hast du ein Bild?",
+      "explainer": "Lade eine Zeichnung, ein Logo oder ein Foto deines Haustiers hoch. Die KI verwandelt 2D‑Pixel in 3D‑Tiefe.",
+      "uploadLabel": "Bild hochladen"
+    },
+    "testimonial": {
+      "title": "\"Ich konnte es in Geschäften nicht finden, also habe ich es selbst gemacht.\"",
+      "quote": "Ich wollte eine ganz bestimmte Erinnerung vom Beyoncé‑Konzert — das Cowboy‑Carter‑Pferd — aber es gab das nirgends zu kaufen. Mit Dreamli habe ich einfach ein Referenzbild hochgeladen und die KI hat den Rest erledigt. Es war empowernd, genau das zu erschaffen, was ich wollte!",
+      "name": "Shanice de Jong",
+      "verified": "Verifizierte Käuferin"
+    },
+    "steps": {
+      "title": "So funktioniert’s",
+      "subtitle": "Von der Vorstellung zur Realität in drei einfachen Schritten",
+      "imagine": { "title": "Vorstellen", "desc": "Gib Text ein oder lade ein Foto hoch." },
+      "generate": { "title": "Generieren", "desc": "Verwende Gratis‑Credits, um es in 3D zu visualisieren." },
+      "order": { "title": "Bestellen", "desc": "Wir drucken in Groningen und versenden schnell." }
+    },
+    "pricing": {
+      "title": "Transparente Preise",
+      "subtitle": "Zwei einfache Schritte: Mit KI entwerfen, dann real drucken.",
+      "tabs": { "design": "Schritt 1: Design", "print": "Schritt 2: Druck" },
+      "design": {
+        "free": { "price": "KOSTENLOS", "label": "Starter", "btn": "Kostenlos starten",
+          "bullets": ["Gratis‑Credits für einfache Modelle", "Basis Text‑zu‑3D‑Generierung", "Standard‑Exportqualität"] },
+        "pro": { "price": "€4,99", "label": "Pro KI", "btn": "Auf Pro upgraden", "mostPopular": "Am beliebtesten",
+          "bullets": ["Hohe Definition, komplexe Details", "Schnellere Generierung", "Bild‑zu‑3D‑Konvertierung", "Premium‑Exportformate"] }
+      },
+      "print": {
+        "material": "Biologisch abbaubares PLA‑Material",
+        "select": "Wähle deine perfekte Größe",
+        "mostPopular": "Am beliebtesten",
+        "glow": {
+          "title": "Leuchtet im Dunkeln",
+          "desc": "Macht dein Ornament nachts magisch!",
+          "x2": "x2 Preis",
+          "x2desc": "Spezielles Glow‑in‑the‑Dark‑Filament (verdoppelt den Preis)"
+        },
+        "summary": {
+          "selectedSize": "Gewählte Größe:",
+          "basePrice": "Grundpreis:",
+          "glow": "Glow in Dark:",
+          "total": "Gesamt:"
+        },
+        "scaleAlt": "Größenvergleich"
+      }
+    },
+    "footerBanner": {
+      "inspireTitle": "Inspiration gefällig?",
+      "inspireText": "Entdecke beeindruckende 3D‑Kreationen aus unserer Community. Lass dich von den Designs anderer inspirieren!",
+      "browse": "Marktplatz durchsuchen",
+      "mainTitleA": "Hör auf, nach dem perfekten Geschenk zu suchen.",
+      "mainTitleB": "Kreiere es.",
+      "cta": "App starten & erstellen",
+      "badges": {
+        "made": "Hergestellt in Groningen",
+        "pla": "Biologisch abbaubares PLA",
+        "secure": "Sichere Zahlung",
+        "fast": "Schneller Versand"
+      }
+    }
   }
 }

@@ -28,6 +28,8 @@ type LazyGlbProps = {
     offMode?: OffMode; // 'unmount' = remove viewer, 'pause' = keep but stop loop
     /** avoid rapid flip-flop while scrolling */
     exitDebounceMs?: number; // default 200
+    /** show rotate/zoom/pan helper hints */
+    showHints?: boolean;
 };
 
 export default function LazyGlb({
@@ -40,6 +42,7 @@ export default function LazyGlb({
                                     poster,
                                     offMode = 'unmount',
                                     exitDebounceMs = 200,
+                                    showHints = true,
                                 }: LazyGlbProps) {
     const ref = useRef<HTMLDivElement>(null);
     const [visible, setVisible] = useState(false);
@@ -99,6 +102,7 @@ export default function LazyGlb({
                         modelUrl={modelUrl}
                         className="w-full h-full"
                         forceType={forceType}
+                        showHints={showHints}
                         active
                     />
                 ) : poster ? (
@@ -114,6 +118,7 @@ export default function LazyGlb({
                     modelUrl={modelUrl}
                     className={className}
                     forceType={forceType}
+                    showHints={showHints}
                     active={visible}   // <- soft off
                 />
             )}

@@ -13,9 +13,11 @@ type Props = {
     forceType?: 'glb' | 'stl';
     /** when false, stop RAF + minimal work */
     active?: boolean;
+    /** show helper hints (rotate/zoom/pan) overlay */
+    showHints?: boolean;
 };
 
-export default function ModelViewer({ modelUrl, className = '', forceType, active = true }: Props) {
+export default function ModelViewer({ modelUrl, className = '', forceType, active = true, showHints = true }: Props) {
     const containerRef = useRef<HTMLDivElement>(null);
     const sceneRef = useRef<THREE.Scene | null>(null);
     const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
@@ -299,9 +301,11 @@ export default function ModelViewer({ modelUrl, className = '', forceType, activ
                 </div>
             )}
             {/* Helper hidden on mobile to avoid showing pan/zoom tips */}
-            <div className="hidden md:block absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
-                <p>🖱️ {t('rotate')} • 🔍 {t('zoom')} • 🤏 {t('pan')}</p>
-            </div>
+            {showHints && (
+                <div className="hidden md:block absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
+                    <p>🖱️ {t('rotate')} • 🔍 {t('zoom')} • 🤏 {t('pan')}</p>
+                </div>
+            )}
         </div>
     );
 }

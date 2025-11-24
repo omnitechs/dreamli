@@ -1127,5 +1127,93 @@
     "s12": { "title": "Pytania i wsparcie", "intro": "Masz pytania dotyczące czasu dostawy, przewoźników lub specjalnych potrzeb (np. termin urodzin)? Skontaktuj się z nami przed lub po złożeniu zamówienia:", "email": "Napisz do nas", "website": "Odwiedź stronę", "happyTitle": "Chętnie pomożemy!", "happySub": "Pomożemy zaplanować zamówienie tak, aby prezent dotarł na czas." },
     "returns": { "title": "Zwroty i refundacje", "standard": "30‑dniowe zwroty bez zadawania pytań dla wszystkich zamówień.", "personalized": "Bez wyjątków — zasada dotyczy również produktów spersonalizowanych/na zamówienie.", "how": "Rozpocznij w ciągu 30 dni od dostawy: napisz na info@dreamli.nl, podaj numer zamówienia i, jeśli to potrzebne, dołącz zdjęcia. Przedmioty muszą być nieużywane, w stanie oryginalnym i dobrze zapakowane.", "address": "Adres zwrotu: Resedastraat 39, 9713 TN Groningen, Holandia (dołącz numer zamówienia).", "refund": "Zwrot środków realizujemy na pierwotną metodę płatności po otrzymaniu i inspekcji. W przypadku potwierdzonych wad pokrywamy koszty odesłania; w przeciwnym razie koszty zwrotu ponosi klient.", "perk": "Bezproblemowo: proste zwroty w 30 dni — bez pytań." },
     "cta": { "title": "Gotowy na idealny prezent?", "body": "Przeglądaj naszą kolekcję wydruków 3D i starannie dobranych upominków", "shop": "Odwiedź sklep", "contact": "Kontakt" }
+  },
+  "aiLanding": {
+    "heroPrompt": "Stwórz złotego robota‑renifera. Ogon ma być krótki. Z siodłem i klapkami na oczy. Pokaż koła Texan Wire Cadillac u góry nóg.",
+    "textTo3dExplainer": "Wpisz opis, a my zamienimy go w koncepcję 3D, którą możesz obejrzeć i wydrukować. Nie jest potrzebne doświadczenie w 3D — po prostu opisz, co sobie wyobrażasz.",
+    "horsePrompt": "Stwórz złoty, robotycznie wyglądający koński ornament. Dodaj okrągły uchwyt przy szyi (ze względu na ciężar). Zintegruj koła (Texan Wire Cadillac wheels). Usuń koła na dole nóg. Zmniejsz uchwyt i umieść go nieco wyżej na szyi. Koń nie musi stać na podstawce."
+  },
+  "christmas": {
+    "hero": {
+      "badgeNew": "Nowość",
+      "badgeTry": "Wypróbuj z darmowymi kredytami AI",
+      "title": { "before": "Zamień wyobraźnię w", "highlight": "prawdziwy obiekt 3D." },
+      "subtitle": "Postacie. Ozdoby. Prototypy. Opisz to tekstem lub prześlij zdjęcie. Nasze AI zaprojektuje, a my wydrukujemy 3D w Groningen.",
+      "cta": "Zacznij tworzyć za darmo",
+      "bullets": {
+        "noSkills": "Bez potrzeby znajomości 3D",
+        "printsFrom": "Wydruki od 10 €"
+      },
+      "renderAlt": "Render 3D",
+      "photoAlt": "Zdjęcie końcowe",
+      "realBadge": "Prawdziwy obiekt! ✨"
+    },
+    "textTo3d": {
+      "title": "Tekst na 3D",
+      "canDescribe": "Potrafisz to opisać?",
+      "promptLabel": "Prompt"
+    },
+    "imageTo3d": {
+      "title": "Obraz na 3D",
+      "havePicture": "Masz zdjęcie?",
+      "explainer": "Prześlij rysunek, logo lub zdjęcie pupila. AI zamieni piksele 2D w trójwymiarową głębię.",
+      "uploadLabel": "Prześlij obraz"
+    },
+    "testimonial": {
+      "title": "\"Nie mogłam znaleźć w sklepach, więc zrobiłam to sama.\"",
+      "quote": "Chciałam zachować szczególne wspomnienie z koncertu Beyoncé — koń Cowboy Carter — ale nie było tego w sklepach. Z Dreamli po prostu przesłałam obraz referencyjny, a AI zrobiło resztę. To wspaniałe móc stworzyć dokładnie to, czego chciałam!",
+      "name": "Shanice de Jong",
+      "verified": "Zweryfikowana kupująca"
+    },
+    "steps": {
+      "title": "Jak to działa",
+      "subtitle": "Od wyobraźni do rzeczywistości w trzech prostych krokach",
+      "imagine": { "title": "Wyobraź sobie", "desc": "Wpisz tekst lub prześlij zdjęcie." },
+      "generate": { "title": "Generuj", "desc": "Użyj darmowych kredytów, aby zobaczyć w 3D." },
+      "order": { "title": "Zamów", "desc": "Drukujemy w Groningen i szybko wysyłamy." }
+    },
+    "pricing": {
+      "title": "Przejrzyste ceny",
+      "subtitle": "Dwa proste kroki: zaprojektuj z AI, potem wydrukuj naprawdę.",
+      "tabs": { "design": "Krok 1: Projekt", "print": "Krok 2: Druk" },
+      "design": {
+        "free": { "price": "ZA DARMO", "label": "Starter", "btn": "Zacznij za darmo",
+          "bullets": ["Darmowe kredyty na proste modele", "Podstawowe tekst‑na‑3D", "Standardowa jakość eksportu"] },
+        "pro": { "price": "4,99 €", "label": "Pro AI", "btn": "Przejdź na Pro", "mostPopular": "Najpopularniejsze",
+          "bullets": ["Wysoka rozdzielczość, złożone detale", "Szybsze generowanie", "Konwersja obraz‑na‑3D", "Formaty eksportu premium"] }
+      },
+      "print": {
+        "material": "Biodegradowalny materiał PLA",
+        "select": "Wybierz idealny rozmiar",
+        "mostPopular": "Najpopularniejsze",
+        "glow": {
+          "title": "Świeci w ciemności",
+          "desc": "Sprawia, że ozdoba jest magiczna nocą!",
+          "x2": "cena x2",
+          "x2desc": "Specjalny filament świecący (podwaja cenę)"
+        },
+        "summary": {
+          "selectedSize": "Wybrany rozmiar:",
+          "basePrice": "Cena bazowa:",
+          "glow": "Glow in Dark:",
+          "total": "Razem:"
+        },
+        "scaleAlt": "Porównanie rozmiaru"
+      }
+    },
+    "footerBanner": {
+      "inspireTitle": "Potrzebujesz inspiracji?",
+      "inspireText": "Odkryj niesamowite kreacje 3D naszej społeczności. Zainspiruj się projektami innych!",
+      "browse": "Przeglądaj marketplace",
+      "mainTitleA": "Przestań szukać idealnego prezentu.",
+      "mainTitleB": "Stwórz go.",
+      "cta": "Uruchom aplikację i twórz",
+      "badges": {
+        "made": "Wyprodukowano w Groningen",
+        "pla": "Biodegradowalne PLA",
+        "secure": "Bezpieczna płatność",
+        "fast": "Szybka wysyłka"
+      }
+    }
   }
 }

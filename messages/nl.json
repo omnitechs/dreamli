@@ -599,6 +599,94 @@
     "home": "Dreamli startpagina",
     "logoAlt": "Dreamli-logo"
   },
+  "aiLanding": {
+    "heroPrompt": "Maak een gouden robot rendier. Maak de staart kort. Met zadel en oogkleppen. Bovenaan de benen afgebeeld met texan whire Cadillac wheels.",
+    "textTo3dExplainer": "Typ een prompt en wij zetten het om in een 3D‑concept dat je kunt bekijken en printen. Geen 3D‑ervaring nodig — beschrijf gewoon wat je voor je ziet.",
+    "horsePrompt": "Maak een robot achtige gouden paard ornament. Er moet een ronde hengsel komen bij de nek, vanwege het gewicht. De wielen (cadillac, texan whire wheels) moeten erbij verwerkt worden. De wielen onderaan de poten moeten weg. Maak de hengsel kleiner en plaats het iets hoger in de nek. Prachtig, de paard hoeft niet op een plateau te staan"
+  },
+  "christmas": {
+    "hero": {
+      "badgeNew": "Nieuw",
+      "badgeTry": "Probeer met gratis AI‑credits",
+      "title": { "before": "Maak van je verbeelding een", "highlight": "echt 3D‑object." },
+      "subtitle": "Personages. Ornamenten. Prototypes. Beschrijf het met tekst of upload een foto. Onze AI ontwerpt het, wij 3D‑printen het in Groningen.",
+      "cta": "Gratis beginnen met creëren",
+      "bullets": {
+        "noSkills": "Geen 3D‑vaardigheden nodig",
+        "printsFrom": "Prints vanaf €10"
+      },
+      "renderAlt": "3D‑render",
+      "photoAlt": "Eindfoto",
+      "realBadge": "Echt object! ✨"
+    },
+    "textTo3d": {
+      "title": "Tekst naar 3D",
+      "canDescribe": "Kun je het beschrijven?",
+      "promptLabel": "Prompt"
+    },
+    "imageTo3d": {
+      "title": "Afbeelding naar 3D",
+      "havePicture": "Heb je een foto?",
+      "explainer": "Upload een tekening, logo of foto van je huisdier. De AI zet 2D‑pixels om in 3D‑diepte.",
+      "uploadLabel": "Afbeelding uploaden"
+    },
+    "testimonial": {
+      "title": "\"Ik kon het niet in winkels vinden, dus maakte ik het zelf.\"",
+      "quote": "Ik wilde een specifieke herinnering aan het Beyoncé‑concert — het Cowboy Carter‑paard — maar het bestond niet in winkels. Met Dreamli uploadde ik gewoon een referentiefoto en de AI deed de rest. Het voelde geweldig om precies te maken wat ik wilde!",
+      "name": "Shanice de Jong",
+      "verified": "Geverifieerde koper"
+    },
+    "steps": {
+      "title": "Hoe het werkt",
+      "subtitle": "Van verbeelding naar realiteit in drie eenvoudige stappen",
+      "imagine": { "title": "Bedenk", "desc": "Typ tekst of upload een foto." },
+      "generate": { "title": "Genereer", "desc": "Gebruik gratis credits om het in 3D te zien." },
+      "order": { "title": "Bestel", "desc": "Wij printen in Groningen en verzenden snel." }
+    },
+    "pricing": {
+      "title": "Transparante prijzen",
+      "subtitle": "Twee simpele stappen: Ontwerp met AI, daarna echt printen.",
+      "tabs": { "design": "Stap 1: Ontwerp", "print": "Stap 2: Print" },
+      "design": {
+        "free": { "price": "GRATIS", "label": "Starter", "btn": "Gratis starten",
+          "bullets": ["Gratis credits om simpele modellen te proberen", "Basis tekst‑naar‑3D generatie", "Standaard exportkwaliteit"] },
+        "pro": { "price": "€4,99", "label": "Pro AI", "btn": "Upgrade naar Pro", "mostPopular": "Meest populair",
+          "bullets": ["Hoge definitie, complexe details", "Snellere generatie", "Afbeelding‑naar‑3D conversie", "Premium exportformaten"] }
+      },
+      "print": {
+        "material": "Biologisch afbreekbaar PLA‑materiaal",
+        "select": "Kies je perfecte maat",
+        "mostPopular": "Meest populair",
+        "glow": {
+          "title": "Glow in the Dark",
+          "desc": "Maakt je ornament magisch in het donker!",
+          "x2": "x2 prijs",
+          "x2desc": "Speciale glow‑in‑the‑dark filament (verdubbelt de prijs)"
+        },
+        "summary": {
+          "selectedSize": "Geselecteerde maat:",
+          "basePrice": "Basisprijs:",
+          "glow": "Glow in Dark:",
+          "total": "Totaal:"
+        },
+        "scaleAlt": "Groottevergelijking"
+      }
+    },
+    "footerBanner": {
+      "inspireTitle": "Inspiratie nodig?",
+      "inspireText": "Ontdek geweldige 3D‑creaties van onze community. Zie wat anderen hebben ontworpen en laat je inspireren!",
+      "browse": "Bekijk Marktplaats",
+      "mainTitleA": "Stop met zoeken naar het perfecte cadeau.",
+      "mainTitleB": "Maak het.",
+      "cta": "Start de app & creëer",
+      "badges": {
+        "made": "Gemaakt in Groningen",
+        "pla": "Biologisch afbreekbare PLA",
+        "secure": "Veilig betalen",
+        "fast": "Snelle verzending"
+      }
+    }
+  },
   "Terms": {
     "meta": {
       "title": "Algemene Voorwaarden | Dreamli",
