@@ -118,7 +118,7 @@ export default async function LangLayout({
     };
 
     return (
-        <html lang={lang}>
+        <html lang={lang} suppressHydrationWarning>
         <head>
             <link rel="icon" href="/favicon.ico" />
             <meta name="google" content="notranslate" />
@@ -129,7 +129,7 @@ export default async function LangLayout({
             />
 
         </head>
-        <body>
+        <body suppressHydrationWarning>
         <NextIntlClientProvider key={lang} locale={lang} messages={messages}>
             <SessionProvider>
                 <ReduxProvider>

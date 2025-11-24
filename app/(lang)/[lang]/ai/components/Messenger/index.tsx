@@ -704,9 +704,9 @@ export function Messenger() {
                 onKeyDown={handleKeyDown}
                 placeholder={t("composer.placeholder")}
                 className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                style={{ minHeight: "44px", maxHeight: "120px" }}
+                style={{ minHeight: "44px", maxHeight: "240px" }}
                 disabled={sending}
-                rows={1}
+                rows={4}
             />
                         <button
                             type="submit"

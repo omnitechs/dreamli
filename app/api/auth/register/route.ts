@@ -9,7 +9,7 @@ import { SIGNUP_BONUS_DC, REFERRAL_BONUS_DC } from "@/lib/currency";
 import { splitName, subscribeToMailchimpAudience } from "@/lib/mailchimp";
 
 const schema = z.object({
-    email: z.email(),
+    email: z.string().email(),
     password: z.string().min(8).max(128),
     name: z.string().min(1).max(80).optional(),
 });

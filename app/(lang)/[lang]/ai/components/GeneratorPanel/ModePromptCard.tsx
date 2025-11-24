@@ -117,7 +117,7 @@ export function ModePromptCard() {
                             onChange={(event)=>updatePrompt(event.target.value)}
                             placeholder="Describe what you want to create in 3D..."
                             className="w-full px-4 py-3 border border-gray-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                            rows={3}
+                            rows={4}
                             disabled={saving === 'prompt'}
                         />
                         {saving === 'prompt' && (

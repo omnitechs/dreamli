@@ -11,7 +11,7 @@ import { SIGNUP_BONUS_DC } from "@/lib/currency";
 import { subscribeToMailchimpAudience, splitName } from "@/lib/mailchimp";
 
 const credentialsSchema = z.object({
-    email: z.email(),
+    email: z.string().email(),
     password: z.string().min(1),
 });
 
