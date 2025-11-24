@@ -33,7 +33,7 @@ export default function ReferenceImagesClient({ images }: { images: RefImage[] }
       ) : (
         <div className="grid grid-cols-3 gap-6">
           {list.map((im, idx) => (
-            <button key={im.id} className="group text-left" onClick={() => setOpenIdx(idx)}>
+            <button key={`${im.id}:${im.commitId ?? ''}:${im.createdAtMs ?? ''}:${idx}`} className="group text-left" onClick={() => setOpenIdx(idx)}>
               <div className="aspect-square bg-gray-100 rounded-xl overflow-hidden mb-3 border border-gray-200">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={im.url} alt={im.id} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
