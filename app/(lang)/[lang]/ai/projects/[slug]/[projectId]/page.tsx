@@ -20,7 +20,8 @@ function slugify(s?: string | null) {
 
 function pickBestModelUrl(modelUrls?: Record<string, string | undefined>) {
   if (!modelUrls) return undefined;
-  return modelUrls.glb || modelUrls.fbx || modelUrls.obj || modelUrls.usdz || undefined;
+  // Only return formats supported by the client viewer
+  return modelUrls.glb || (modelUrls as any).stl || undefined;
 }
 
 export default async function ProjectPublicPage({ params }: { params: Promise<{ slug: string; projectId: string }> }) {

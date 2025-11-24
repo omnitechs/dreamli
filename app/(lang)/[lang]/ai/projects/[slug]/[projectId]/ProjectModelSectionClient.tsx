@@ -13,7 +13,8 @@ export type ModelForViewer = {
 
 function pickBestUrl(urls?: ModelForViewer["modelUrls"]) {
   if (!urls) return undefined;
-  return urls.glb || urls.fbx || urls.obj || urls.usdz || urls.stl || undefined;
+  // Only return formats our viewer supports
+  return urls.glb || urls.stl || undefined;
 }
 
 export default function ProjectModelSectionClient({ models, activeId: controlledId, onActiveChange }: { models: ModelForViewer[]; activeId?: string; onActiveChange?: (id: string) => void; }) {
@@ -26,7 +27,8 @@ export default function ProjectModelSectionClient({ models, activeId: controlled
   const [uncontrolledId, setUncontrolledId] = useState<string>(sorted[0]?.id || "");
   const activeId = controlledId ?? uncontrolledId;
   const setActiveId = onActiveChange ?? setUncontrolledId;
-  const active = useMemo(() => sorted.find((m) => m.id === activeId) || sorted[0], [sorted, activeId]);
+  const supported = useMemo(() => sorted.filter((m) => !!pickBestUrl(m.modelUrls)), [sorted]);
+  const active = useMemo(() => supported.find((m) => m.id === activeId) || supported[0] || sorted[0], [supported, sorted, activeId]);
   const activeUrl = pickBestUrl(active?.modelUrls);
 
   return (
@@ -35,25 +37,31 @@ export default function ProjectModelSectionClient({ models, activeId: controlled
         <h2 className="text-2xl font-bold text-gray-900">3D Model</h2>
         {sorted.length > 1 ? (
           <div className="flex flex-wrap gap-2">
-            {sorted.map((m, idx) => (
-              <button
-                key={m.id}
-                onClick={() => setActiveId(m.id)}
-                className={`px-3 py-1.5 rounded-lg text-sm border transition-colors ${
-                  active?.id === m.id ? "bg-blue-600 text-white border-blue-600" : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
-                }`}
-                title={m.prompt || `Model ${idx + 1}`}
-              >
-                Model {idx + 1}
-              </button>
-            ))}
+            {sorted.map((m, idx) => {
+              const previewUrl = pickBestUrl(m.modelUrls);
+              const isActive = active?.id === m.id;
+              const disabled = !previewUrl;
+              return (
+                <button
+                  key={m.id}
+                  onClick={() => !disabled && setActiveId(m.id)}
+                  disabled={disabled}
+                  className={`px-3 py-1.5 rounded-lg text-sm border transition-colors ${
+                    isActive ? "bg-blue-600 text-white border-blue-600" : disabled ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed" : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                  }`}
+                  title={disabled ? "No 3D preview available for this model" : (m.prompt || `Model ${idx + 1}`)}
+                >
+                  Model {idx + 1}
+                </button>
+              );
+            })}
           </div>
         ) : null}
       </div>
 
       <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl overflow-hidden">
         {activeUrl ? (
-          <LazyGlb modelUrl={activeUrl} />
+          <LazyGlb modelUrl={activeUrl} offMode="pause" rootMargin="600px 0px" />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-500">
             No 3D preview available for this model

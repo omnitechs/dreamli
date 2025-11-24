@@ -122,6 +122,8 @@ export default function ModelViewer({ modelUrl, className = '', forceType, activ
 
         const loadGLB = (url: string) => {
             const loader = new GLTFLoader();
+            // help with CORS when server allows it
+            try { (loader as any).setCrossOrigin?.('anonymous'); } catch {}
             loader.load(
                 url,
                 (gltf) => {
@@ -132,6 +134,10 @@ export default function ModelViewer({ modelUrl, className = '', forceType, activ
                         }
                     });
                     addToScene(gltf.scene);
+                    // If inactive (offscreen), render one frame so the model appears without needing a tab visibility change
+                    if (!active) {
+                        try { renderer.render(scene, camera); } catch {}
+                    }
                 },
                 undefined,
                 (e) => console.error('GLB load error:', e)
@@ -152,6 +158,10 @@ export default function ModelViewer({ modelUrl, className = '', forceType, activ
                     });
                     const mesh = new THREE.Mesh(geometry, material);
                     addToScene(mesh);
+                    // If inactive (offscreen), render one frame so the model appears without needing a tab visibility change
+                    if (!active) {
+                        try { renderer.render(scene, camera); } catch {}
+                    }
                 },
                 undefined,
                 (e) => console.error('STL load error:', e)
@@ -196,6 +206,13 @@ export default function ModelViewer({ modelUrl, className = '', forceType, activ
             else if (active) startLoop();
         };
         document.addEventListener('visibilitychange', onVis);
+
+        // Start immediately, otherwise it may wait until a tab visibility change
+        if (active) startLoop();
+        else {
+            // Render a single frame so the viewer isn't blank when paused
+            try { renderer.render(scene, camera); } catch {}
+        }
 
         // Cleanup
         return () => {

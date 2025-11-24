@@ -8,7 +8,8 @@ import { useGetModelByIdQuery, useGetPublicCommitByIdQuery, useDownloadModelMuta
 
 function pickBestModelUrl(modelUrls?: Record<string, string | undefined>) {
   if (!modelUrls) return undefined;
-  return modelUrls.glb || modelUrls.fbx || modelUrls.obj || modelUrls.usdz || undefined;
+  // Only return formats the viewer supports
+  return modelUrls.glb || (modelUrls as any).stl || undefined;
 }
 
 function slugify(s: string | undefined | null) {

@@ -8,7 +8,8 @@ import { useParams, useRouter, usePathname } from 'next/navigation';
 
 function pickBestModelUrl(modelUrls?: Record<string, string | undefined>) {
   if (!modelUrls) return undefined;
-  return modelUrls.glb || modelUrls.fbx || modelUrls.obj || modelUrls.usdz || undefined;
+  // Only return preview formats our viewer supports
+  return modelUrls.glb || modelUrls.stl || undefined;
 }
 
 export type PublicModel = {

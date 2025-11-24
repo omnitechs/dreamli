@@ -207,7 +207,8 @@ function Card({ item, lang, canInteract, onLikeToggle }: { item: any; lang: stri
   // 3D viewer modal state
   const [showViewer, setShowViewer] = useState(false);
 
-  const modelUrl = item?.modelUrls?.glb || item?.modelUrls?.fbx || item?.modelUrls?.obj || item?.modelUrls?.usdz || '';
+  // Only preview formats our viewer supports
+  const modelUrl = item?.modelUrls?.glb || (item?.modelUrls as any)?.stl || '';
   const [downloadModel] = useDownloadModelMutation();
 
   const projectLink = `/${lang}/ai/projects/${slugify(item.projectName || item.owner?.name || 'project')}/${encodeURIComponent(item.projectId)}`;
