@@ -18,6 +18,7 @@ import { useDownloadModelMutation } from '@/app/(lang)/[lang]/ai/services/api';
 import LazyGlb from '@/components/GlbViewer';
 import ProjectCard from '@/components/ProjectCard';
 import { makeToggleLikeHandler } from '@/components/projectCardActions';
+import LoadingLottie from '@/components/LoadingLottie';
 
 function slugify(s?: string) {
   const base = (s || '').toLowerCase();
@@ -44,6 +45,10 @@ export default function MarketplacePage() {
 
   const [likeModel] = useLikeModelMutation();
   const [unlikeModel] = useUnlikeModelMutation();
+
+  if (isLoading) {
+    return <LoadingLottie label="Loading marketplace..." />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">

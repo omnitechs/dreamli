@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 import { useGetCommitsQuery } from '@/app/(lang)/[lang]/ai/services/api';
 import GeneratorPlayground from '@/app/(lang)/[lang]/ai/GeneratorPlayground';
 import {useTranslations} from 'next-intl';
+import LoadingLottie from '@/components/LoadingLottie';
 
 export default function ProjectPage() {
     const t = useTranslations('AI.Project');

@@ -9,6 +9,7 @@ import { useSession } from 'next-auth/react';
 import { Plus, MessageSquare, Upload, Cpu } from 'lucide-react';
 import ProjectCard from '@/components/ProjectCard';
 import { makeToggleLikeHandler } from '@/components/projectCardActions';
+import LoadingLottie from '@/components/LoadingLottie';
 
 function slugify(s?: string) {
     const base = (s || '').toLowerCase();
@@ -42,6 +43,10 @@ export default function ProjectsPage() {
     const items = marketData?.items || [];
     const [likeModel] = useLikeModelMutation();
     const [unlikeModel] = useUnlikeModelMutation();
+
+    if (isLoading || loadingMarket) {
+        return <LoadingLottie label="Loading AI studio..." />;
+    }
 
     const onCreate = async () => {
         if (!name.trim()) return;
