@@ -15,6 +15,7 @@ import { ReduxProvider } from '@/app/store/provider'
 import { SessionProvider } from 'next-auth/react'
 import CreditsModal from '@/components/CreditsModal'
 import BackButton from '@/components/BackButton'
+import ClarityTracker from '@/components/ClarityTracker'
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
@@ -153,6 +154,8 @@ export default async function LangLayout({
             })(window, document, "clarity", "script", "sy5gylxyzn");
           `}
         </Script>
+        {/* Ensure SPA navigations are tracked as page views in Clarity */}
+        <ClarityTracker />
 
         {/* Google Analytics 4 */}
         <Script
