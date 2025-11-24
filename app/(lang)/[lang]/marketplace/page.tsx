@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { Heart, MessageCircle, Clock } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import {
   useGetMarketplaceModelsQuery,
   useLikeModelMutation,
@@ -36,6 +37,7 @@ export default function MarketplacePage() {
   const lang = (params?.lang || 'en') as string;
   const { data: session } = useSession();
   const isAuthed = !!(session as any)?.user?.id;
+  const t = useTranslations('Marketplace');
 
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState<'recent' | 'likes' | 'comments'>('recent');
@@ -56,6 +58,14 @@ export default function MarketplacePage() {
         <div className="mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-3">3D Model Marketplace</h1>
           <p className="text-lg text-gray-600">Discover amazing 3D models created by our community</p>
+          <div className="mt-6">
+            <Link
+              href={`/${lang}/ai`}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold shadow-lg shadow-blue-600/20 hover:bg-blue-700 transition-colors"
+            >
+              {t('cta.createYourOwn')}
+            </Link>
+          </div>
         </div>
 
         <div className="mb-8">

@@ -542,6 +542,11 @@
     "contact": "Contact",
     "buyCredits": "Acheter du crédit"
   },
+  "Marketplace": {
+    "cta": {
+      "createYourOwn": "Créez le vôtre"
+    }
+  },
   "aria": {
     "home": "Accueil Dreamli",
     "logoAlt": "Logo Dreamli"

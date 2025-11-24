@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import ProjectHeaderActionsClient from "./ProjectHeaderActionsClient";
 import ProjectModelSectionClient, { type ModelForViewer } from "./ProjectModelSectionClient";
+import { useTranslations } from "next-intl";
 
 export type OwnerInfo = { id: string; name?: string | null; image?: string | null; username?: string | null } | null;
 
@@ -14,6 +15,7 @@ export default function ProjectHeaderAndModelClient({ projectName, owner, models
   const [selectedModelId, setSelectedModelId] = useState<string>(defaultModelId);
   const params = useParams<{ lang: string }>();
   const lang = (params?.lang || "en") as string;
+  const t = useTranslations("Marketplace");
   const ownerHref = owner ? `/${lang}/profile/${encodeURIComponent(owner.username || owner.id)}` : "#";
 
   // Ensure state follows models changes
@@ -50,8 +52,15 @@ export default function ProjectHeaderAndModelClient({ projectName, owner, models
                 </p>
               </div>
             </div>
-            <div className="-mx-2 px-2 overflow-x-auto sm:overflow-visible">
+            <div className="-mx-2 px-2 overflow-x-auto sm:overflow-visible flex items-center gap-3">
               <ProjectHeaderActionsClient modelId={selectedModelId || null} />
+              <Link
+                href={`/${lang}/ai`}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold shadow-lg shadow-blue-600/20 hover:bg-blue-700 transition-colors"
+                prefetch={false}
+              >
+                {t("cta.createYourOwn")}
+              </Link>
             </div>
           </div>
         </div>

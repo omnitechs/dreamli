@@ -598,6 +598,11 @@
     "contact": "Contact",
     "buyCredits": "Buy credits"
   },
+  "Marketplace": {
+    "cta": {
+      "createYourOwn": "Create your own"
+    }
+  },
   "aria": {
     "home": "Dreamli home",
     "logoAlt": "Dreamli Logo"
