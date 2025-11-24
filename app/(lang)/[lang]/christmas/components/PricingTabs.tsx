@@ -107,7 +107,9 @@ export default function PricingTabs() {
                   </li>
                 ))}
               </ul>
-              <button className="w-full bg-gray-200 hover:bg-gray-300 text-[#2E2E2E] py-4 rounded-full font-semibold transition-all whitespace-nowrap">{tc('pricing.design.free.btn')}</button>
+              <Link href={`/${lang}/ai`}>
+                <button className="w-full bg-gray-200 hover:bg-gray-300 text-[#2E2E2E] py-4 rounded-full font-semibold transition-all whitespace-nowrap">{tc('pricing.design.free.btn')}</button>
+              </Link>
             </div>
 
             <div className="bg-gradient-to-br from-[#8472DF]/10 to-[#93C4FF]/10 rounded-3xl p-8 border-2 border-[#8472DF] relative shadow-xl">

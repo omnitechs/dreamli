@@ -36,7 +36,7 @@ export default function FooterBanner() {
               {tc('footerBanner.mainTitleB')}
             </h2>
 
-            <Link href={`/${lang}/christmas#create`}>
+            <Link href={`/${lang}/ai`}>
               <button className="bg-white hover:bg-gray-50 text-[#8472DF] text-xl px-12 py-6 rounded-full font-bold transition-all duration-300 shadow-2xl hover:scale-105 whitespace-nowrap group mt-9">
                 {tc('footerBanner.cta')}
                 <i className="ri-rocket-line ml-3 group-hover:translate-x-1 transition-transform inline-block"></i>

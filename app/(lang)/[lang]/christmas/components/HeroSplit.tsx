@@ -81,7 +81,7 @@ export default function HeroSplit() {
             </div>
 
             <div className="space-y-4">
-              <Link href={`/${lang}/christmas`}>
+              <Link href={`/${lang}/ai`}>
                 <button className="bg-[#8472DF] hover:bg-[#8472DF]/90 text-white font-bold text-lg px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex items-center gap-2 whitespace-nowrap" suppressHydrationWarning>
                   {tc('hero.cta')}
                   <i className="ri-arrow-right-line"></i>
