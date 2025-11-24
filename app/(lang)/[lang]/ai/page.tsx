@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useGetProjectsQuery, useCreateProjectMutation, useGetMarketplaceModelsQuery, useDownloadModelMutation, useLikeModelMutation, useUnlikeModelMutation } from '@/app/(lang)/[lang]/ai/services/api';
+import { useGetProjectsQuery, useCreateProjectMutation, useGetMarketplaceModelsQuery, useLikeModelMutation, useUnlikeModelMutation } from '@/app/(lang)/[lang]/ai/services/api';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useParams, useRouter, usePathname } from 'next/navigation';
@@ -37,7 +37,6 @@ export default function ProjectsPage() {
     // Marketplace pagination
     const [page, setPage] = useState(1);
     const { data: marketData, isLoading: loadingMarket } = useGetMarketplaceModelsQuery({ page });
-    const [downloadModel] = useDownloadModelMutation();
     const router = useRouter();
     const pathname = usePathname();
     const items = marketData?.items || [];

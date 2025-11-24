@@ -18,7 +18,7 @@ export function CommandCenter(props: Props) {
 
     return (
         <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <h1 className="text-2xl font-semibold">Generator Playground</h1>
+            {/*<h1 className="text-2xl font-semibold">Generator Playground</h1>*/}
             <div className="flex flex-wrap gap-2">
                 <button className="px-3 py-2 rounded-xl shadow text-sm border hover:bg-gray-50"
                         onClick={toggleMode}>

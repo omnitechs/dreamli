@@ -49,6 +49,19 @@ export default function ModelsGallery() {
         if (models?.length) resumeAll(models);
     }, [models, resumeAll]);
 
+    // Listen to selection from the top navbar
+    useEffect(() => {
+        function onSelect(ev: Event) {
+            try {
+                const ce = ev as CustomEvent<{ modelId?: string }>;
+                const id = ce?.detail?.modelId || null;
+                if (id) setSelectedId(id);
+            } catch {}
+        }
+        try { window.addEventListener('ai-model-select' as any, onSelect as any); } catch {}
+        return () => { try { window.removeEventListener('ai-model-select' as any, onSelect as any); } catch {} };
+    }, []);
+
     const selectedModel = useMemo(
         () => models?.find((m: any) => m.id === selectedId) ?? null,
         [models, selectedId]
@@ -73,94 +86,36 @@ export default function ModelsGallery() {
                     )}
                 </div>
             )}
-
             {empty ? (
                 <div className="rounded-xl border p-4 text-sm opacity-70">
                     No models yet. Generate one to see it here.
                 </div>
             ) : (
                 <>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {models.map((m: any) => (
-                            <article
-                                key={m.id}
-                                onClick={() => setSelectedId(m.id)}
-                                className={`rounded-xl border p-3 space-y-2 cursor-pointer transition ${
-                                    selectedId === m.id ? 'ring-2 ring-black' : 'hover:bg-gray-50'
-                                }`}
-                                title="Click to preview below"
-                            >
-                                <div className="flex items-center justify-between">
-                                    <div className="text-sm font-medium truncate">{m.prompt ?? m.kind}</div>
-                                    <span className="text-[10px] px-2 py-0.5 rounded bg-gray-100">
-                    {m.status ?? '—'}
-                  </span>
-                                </div>
-
-                                <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
-                                    {m.thumbnailUrl ? (
-                                        // eslint-disable-next-line @next/next/no-img-element
-                                        <img src={m.thumbnailUrl} alt="thumb" className="w-full h-full object-cover" />
-                                    ) : (
-                                        <div className="text-xs text-gray-500">No thumbnail</div>
-                                    )}
-                                </div>
-
-                                {typeof m.progress === 'number' &&
-                                    (m.status === 'PENDING' || m.status === 'IN_PROGRESS') && (
-                                        <div className="w-full h-2 bg-gray-200 rounded">
-                                            <div
-                                                className="h-2 rounded bg-black transition-all"
-                                                style={{ width: `${Math.max(0, Math.min(100, m.progress ?? 0))}%` }}
-                                            />
-                                        </div>
-                                    )}
-
-                                {m.status === 'SUCCEEDED' && (
-                                    <div className="flex flex-wrap gap-2 text-xs">
-                                        {Object.entries(m.modelUrls ?? {}).map(([fmt, url]) =>
-                                            url ? (
-                                                <a
-                                                    key={fmt}
-                                                    href={String(url)}
-                                                    target="_blank"
-                                                    rel="noreferrer"
-                                                    className="underline"
-                                                    onClick={(e) => e.stopPropagation()}
-                                                >
-                                                    {fmt}
-                                                </a>
-                                            ) : null
-                                        )}
-                                    </div>
-                                )}
-
-                                <div className="flex items-center justify-between">
-                                    <div className="text-[10px] text-gray-500">
-                                        {new Date(m.createdAt ?? Date.now()).toLocaleString()}
-                                    </div>
-                                    {m.status === 'SUCCEEDED' ? (
-                                        <PurchaseButton modelId={m.id} onClick={(e) => e.stopPropagation()} />
-                                    ) : null}
-                                </div>
-                            </article>
-                        ))}
-                    </div>
-
-                    {selectedModel && (
-                        <div className="mt-4 space-y-3">
+                    {selectedModel ? (
+                        <div className="mt-2 space-y-3">
                             <div className="flex items-center justify-between">
-                                <div className="text-sm font-medium truncate">
-                                    Preview: {selectedModel.prompt ?? selectedModel.kind}
-                                </div>
+                                {/*<div className="text-sm font-medium truncate">*/}
+                                {/*    Preview: {selectedModel.prompt ?? selectedModel.kind}*/}
+                                {/*</div>*/}
                                 <button
-                                    className="text-xs underline text-gray-600"
+                                    className="
+      ml-auto
+      inline-flex items-center justify-center
+      rounded-full
+      bg-blue-600
+      px-3 py-1
+      text-xs font-semibold text-white
+      shadow
+      hover:bg-blue-700
+      focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1
+    "
                                     onClick={() => setSelectedId(null)}
                                 >
                                     Close
                                 </button>
                             </div>
-
+                            <div className="h-80 overflow-hidden rounded-xl border bg-gray-50 flex items-center justify-center shadow-sm transition-all duration-300 ease-in-out hover:shadow-md">
                             {selectedModelUrl ? (
                                 <LazyGlb
                                     key={selectedModelUrl || selectedModel.id}
@@ -168,9 +123,14 @@ export default function ModelsGallery() {
                                 />
                             ) : (
                                 <div className="text-sm text-gray-500">
-                                    No previewable URL yet. (We look for <code>.glb</code> first, then <code>.fbx</code>, <code>.obj</code>, <code>.usdz</code>.)
+                                    No previewable URL yet. We look for .glb first, then .fbx, .obj, .usdz.
                                 </div>
                             )}
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="rounded-xl border p-4 text-sm text-gray-600">
+                            Select a model from the top bar to preview it here.
                         </div>
                     )}
                 </>

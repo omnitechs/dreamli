@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import ProjectHeaderActionsClient from "./ProjectHeaderActionsClient";
 import ProjectModelSectionClient, { type ModelForViewer } from "./ProjectModelSectionClient";
+import ProjectModelsNavbarClient from "./ProjectModelsNavbarClient";
 
 export type OwnerInfo = { id: string; name?: string | null; image?: string | null; username?: string | null } | null;
 
@@ -54,6 +55,13 @@ export default function ProjectHeaderAndModelClient({ projectName, owner, models
           </div>
         </div>
       </div>
+
+      {/* Models navbar (reference UI with download + purchase) */}
+      <ProjectModelsNavbarClient
+        models={models}
+        activeId={selectedModelId}
+        onActiveChange={(id) => setSelectedModelId(id)}
+      />
 
       {/* 3D Model Section (controlled selection) */}
       <div className="max-w-7xl mx-auto px-6 py-8">

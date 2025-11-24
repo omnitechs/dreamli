@@ -6,7 +6,7 @@ import {Messenger} from "@/app/(lang)/[lang]/ai/components/Messenger";
 import {CommandCenter} from "@/app/(lang)/[lang]/ai/components/CommandCenter";
 import {GeneratorPanel} from "@/app/(lang)/[lang]/ai/components/GeneratorPanel";
 import { useSession } from "next-auth/react";
-
+import AiSessionModelsNavbarClient from "@/app/(lang)/[lang]/ai/AiSessionModelsNavbarClient";
 
 
 type Props ={

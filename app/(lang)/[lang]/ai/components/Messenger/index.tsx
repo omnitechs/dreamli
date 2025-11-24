@@ -1,7 +1,7 @@
 // app/(lang)/[lang]/ai/components/Messenger.tsx
 "use client";
 
-import { useState, useRef, useLayoutEffect, useEffect } from "react";
+import React, { useState, useRef, useLayoutEffect, useEffect } from "react";
 import { Send, User, Bot, Settings, ChevronDown, ChevronRight, AlertTriangle } from "lucide-react";
 import type { Message } from "../../types";
 import useMessage from "@/app/(lang)/[lang]/ai/hooks/useMessage";
@@ -19,6 +19,8 @@ import {
     updateText as updateGenText,
 } from "@/app/store/slices/generatorSlice";
 import { useLocale, useTranslations } from "next-intl";
+import AiSessionModelsNavbarClient from "@/app/(lang)/[lang]/ai/AiSessionModelsNavbarClient";
+import ProjectModelsNavbarClient from "@/app/(lang)/[lang]/ai/projects/[slug]/[projectId]/ProjectModelsNavbarClient";
 
 type AnglePromptMap = Record<string, string>;
 type ProposedAction = {
@@ -590,6 +592,7 @@ export function Messenger() {
                 )}
             </div>
 
+            <AiSessionModelsNavbarClient />
             <ModelGallery />
 
             {/* Error banners */}
@@ -670,7 +673,6 @@ export function Messenger() {
                     </div>
                 )}
             </div>
-
             {/* Proposed Actions BAR — below chat */}
             {Array.isArray(proposed) && proposed.length > 0 && (
                 <div className="border-t border-gray-200 px-4 py-3 bg-white">
