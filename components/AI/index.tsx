@@ -38,7 +38,7 @@ export default async function AI({lang}: { lang: LanguageCode }) {
                     {/* ---------- Content grid ---------- */}
                     <div className="grid lg:grid-cols-2 gap-16 items-center">
                         {/* Left: model viewer */}
-                        <div className="relative">
+                        <div className="relative h-[450px] rounded-2xl shadow-lg border border-[#F3E8FF]">
                             <GlbViewer
                                 offMode="pause"
                                 modelUrl="/Untitled2.glb"
