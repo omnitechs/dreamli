@@ -165,6 +165,8 @@ export default async function LangLayout({
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'G-2Q0BPDFWS4');
+            // Google Ads config for conversion tracking
+            gtag('config', 'AW-17268282776');
           `}
         </Script>
         </body>

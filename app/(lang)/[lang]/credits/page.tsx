@@ -55,6 +55,38 @@ function fireGa4PurchaseOnce(opts: { sessionId: string; pkgId: string; valueEur:
   attempt();
 }
 
+// Google Ads conversion event for purchase (fires once per sessionId)
+function fireGoogleAdsConversionOnce(opts: { sessionId: string; valueEur: number }) {
+  const key = `ads_conv_fired:${opts.sessionId}`;
+  try {
+    const already = sessionStorage.getItem(key);
+    if (already === '1') return;
+  } catch {}
+
+  const payload: any = {
+    send_to: 'AW-17268282776/cL6_CM3lpbUbEJirlKpA',
+    value: Number(opts.valueEur.toFixed(2)),
+    currency: 'EUR',
+    transaction_id: opts.sessionId,
+  };
+
+  let tries = 0;
+  const maxTries = 10;
+  const attempt = () => {
+    try {
+      const w = window as any;
+      if (typeof w.gtag === 'function') {
+        w.gtag('event', 'conversion', payload);
+        try { sessionStorage.setItem(key, '1'); } catch {}
+        return;
+      }
+    } catch {}
+    tries += 1;
+    if (tries < maxTries) setTimeout(attempt, 300);
+  };
+  attempt();
+}
+
 export default function CreditsPage() {
   const { lang } = useParams<{ lang: LanguageCode }>();
   const dispatch = useDispatch<AppDispatch>();
@@ -98,12 +130,13 @@ export default function CreditsPage() {
           refresh()
           try { setTimeout(() => { refresh().catch(() => {}) }, 1500) } catch {}
 
-          // Fire GA4 purchase event once with transaction_id = session_id
+          // Fire GA4 purchase event and Google Ads conversion once with transaction_id = session_id
           try {
             const pkgId = pkgIdFromUrl || sessionStorage.getItem('last_package_id') || undefined
             const pkg = findPackageById(pkgId || undefined)
             if (sessionId && pkg) {
               fireGa4PurchaseOnce({ sessionId, pkgId: pkg.id, valueEur: pkg.eurPrice })
+              fireGoogleAdsConversionOnce({ sessionId, valueEur: pkg.eurPrice })
             }
           } catch {}
         } else if (status === 'cancel') {
