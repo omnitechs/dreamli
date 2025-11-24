@@ -640,7 +640,7 @@
     },
     "testimonial": {
       "title": "\"I couldn't find it in stores, so I made it myself.\"",
-      "quote": "I wanted a specific memory from the Beyoncé concert—the Cowboy Carter horse—but it didn't exist in shops. With Dreamli, I simply uploaded a reference image and the AI did the rest. It was empowering to create exactly what I wanted!",
+      "quote": "I wanted a specific memory from the Beyoncé concert—the Cowboy Carter image—but it didn’t exist in shops. With Dreamli, I simply uploaded a reference picture and let the AI do the rest. I even turned it into a Christmas version by giving it antlers, so it became my own little holiday deer. It felt empowering to create exactly what I had in mind.",
       "name": "Shanice de Jong",
       "verified": "Verified Buyer"
     },
@@ -657,14 +657,20 @@
       "tabs": { "design": "Step 1: Design", "print": "Step 2: Print" },
       "design": {
         "free": { "price": "FREE", "label": "Starter", "btn": "Start Free",
-          "bullets": ["Free credits to try simple models", "Basic text-to-3D generation", "Standard quality exports"] },
-        "pro": { "price": "€4.99", "label": "Pro AI", "btn": "Upgrade to Pro", "mostPopular": "Most Popular",
-          "bullets": ["High-definition, complex details", "Faster generation speed", "Image-to-3D conversion", "Premium export formats"] }
+          "bullets": ["Enough credit to create one model", "Edits or advanced models require credits", "Standard quality exports"] },
+        "pro": { "price": "From €4.99", "label": "Credits", "btn": "Buy Credits", "mostPopular": "Most Popular",
+          "bullets": ["Top up from €4.99", "Edit or iterate your models", "Generate advanced/complex models", "Faster generation speed"] }
       },
       "print": {
         "material": "Biodegradable PLA Material",
         "select": "Select your perfect size",
         "mostPopular": "Most Popular",
+        "color": {
+          "title": "Color the model",
+          "desc": "Hand-painted color finish for your print.",
+          "plus20": "+€20",
+          "plus20desc": "Adds a flat €20 for color painting"
+        },
         "glow": {
           "title": "Glow in the Dark",
           "desc": "Makes your ornament magical at night!",
@@ -675,6 +681,7 @@
           "selectedSize": "Selected Size:",
           "basePrice": "Base Price:",
           "glow": "Glow in Dark:",
+          "color": "Color the model:",
           "total": "Total:"
         },
         "scaleAlt": "Size Comparison"

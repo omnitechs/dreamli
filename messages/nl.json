@@ -632,7 +632,7 @@
     },
     "testimonial": {
       "title": "\"Ik kon het niet in winkels vinden, dus maakte ik het zelf.\"",
-      "quote": "Ik wilde een specifieke herinnering aan het Beyoncé‑concert — het Cowboy Carter‑paard — maar het bestond niet in winkels. Met Dreamli uploadde ik gewoon een referentiefoto en de AI deed de rest. Het voelde geweldig om precies te maken wat ik wilde!",
+      "quote": "Ik wilde een specifieke herinnering aan het Beyoncé‑concert — de Cowboy Carter‑afbeelding — maar die bestond niet in winkels. Met Dreamli uploadde ik gewoon een referentiefoto en liet ik de AI de rest doen. Ik heb er zelfs een kerstversie van gemaakt door gewei toe te voegen, zodat het mijn eigen kleine kersthertje werd. Het voelde krachtig om precies te maken wat ik in gedachten had.",
       "name": "Shanice de Jong",
       "verified": "Geverifieerde koper"
     },
@@ -649,14 +649,20 @@
       "tabs": { "design": "Stap 1: Ontwerp", "print": "Stap 2: Print" },
       "design": {
         "free": { "price": "GRATIS", "label": "Starter", "btn": "Gratis starten",
-          "bullets": ["Gratis credits om simpele modellen te proberen", "Basis tekst‑naar‑3D generatie", "Standaard exportkwaliteit"] },
-        "pro": { "price": "€4,99", "label": "Pro AI", "btn": "Upgrade naar Pro", "mostPopular": "Meest populair",
-          "bullets": ["Hoge definitie, complexe details", "Snellere generatie", "Afbeelding‑naar‑3D conversie", "Premium exportformaten"] }
+          "bullets": ["Genoeg credits om één model te maken", "Bewerkingen of geavanceerde modellen vereisen credits", "Standaard exportkwaliteit"] },
+        "pro": { "price": "Vanaf €4,99", "label": "Credits", "btn": "Koop credits", "mostPopular": "Meest populair",
+          "bullets": ["Opwaarderen vanaf €4,99", "Modellen bewerken of itereren", "Geavanceerde/complexe modellen genereren", "Snellere generatie"] }
       },
       "print": {
         "material": "Biologisch afbreekbaar PLA‑materiaal",
         "select": "Kies je perfecte maat",
         "mostPopular": "Meest populair",
+        "color": {
+          "title": "Model inkleuren",
+          "desc": "Handgeschilderde kleurafwerking voor je print.",
+          "plus20": "+€20",
+          "plus20desc": "Vaste toeslag van €20 voor het inkleuren"
+        },
         "glow": {
           "title": "Glow in the Dark",
           "desc": "Maakt je ornament magisch in het donker!",
@@ -667,6 +673,7 @@
           "selectedSize": "Geselecteerde maat:",
           "basePrice": "Basisprijs:",
           "glow": "Glow in Dark:",
+          "color": "Model inkleuren:",
           "total": "Totaal:"
         },
         "scaleAlt": "Groottevergelijking"

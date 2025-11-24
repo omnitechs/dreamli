@@ -2,12 +2,17 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 
 export default function PricingTabs() {
   const tc = useTranslations('christmas');
+  const params = useParams<{ lang: string }>();
+  const lang = (params?.lang || 'en') as string;
   const [activeTab, setActiveTab] = useState<'design' | 'print'>('print');
   const [selectedSize, setSelectedSize] = useState('medium');
   const [glowInDark, setGlowInDark] = useState(false);
+  const [colorModel, setColorModel] = useState(false);
 
   const sizes = [
     {
@@ -50,8 +55,9 @@ export default function PricingTabs() {
   ];
 
   const selectedPrice = sizes.find(s => s.id === selectedSize)?.price || 0;
-  // Glow-in-the-dark doubles the base price
-  const totalPrice = glowInDark ? selectedPrice * 2 : selectedPrice;
+  // Pricing: Glow-in-the-dark doubles the base price; Color the model adds a flat €20
+  const baseWithGlow = glowInDark ? selectedPrice * 2 : selectedPrice;
+  const totalPrice = baseWithGlow + (colorModel ? 20 : 0);
 
   return (
     <section id="pricing" className="py-20 px-6 bg-white">
@@ -118,7 +124,9 @@ export default function PricingTabs() {
                   </li>
                 ))}
               </ul>
-              <button className="w-full bg-[#8472DF] hover:bg-[#8472DF]/90 text-white py-4 rounded-full font-semibold transition-all shadow-lg hover:shadow-xl whitespace-nowrap">{tc('pricing.design.pro.btn')}</button>
+              <Link href={`/${lang}/credits`}>
+                <button className="w-full bg-[#8472DF] hover:bg-[#8472DF]/90 text-white py-4 rounded-full font-semibold transition-all shadow-lg hover:shadow-xl whitespace-nowrap">{tc('pricing.design.pro.btn')}</button>
+              </Link>
             </div>
           </div>
         )}
@@ -202,6 +210,36 @@ export default function PricingTabs() {
                 </div>
               )}
 
+              {/* Color the Model toggle */}
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-[#FFB067]/20 rounded-xl flex items-center justify-center">
+                    <i className="ri-palette-line text-2xl text-[#FFB067]"></i>
+                  </div>
+                  <div>
+                    <div className="text-[#2E2E2E] font-semibold text-lg">{tc('pricing.print.color.title', { fallback: 'Color the model' })}</div>
+                    <div className="text-[#2E2E2E]/60 text-sm">{tc('pricing.print.color.desc', { fallback: 'Hand-painted color finish for your print.' })}</div>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setColorModel(!colorModel)}
+                  className={`relative w-16 h-8 rounded-full transition-all duration-300 ${
+                    colorModel ? 'bg-[#8472DF]' : 'bg-gray-300'
+                  }`}
+                >
+                  <div className={`absolute top-1 w-6 h-6 bg-white rounded-full transition-all duration-300 ${
+                    colorModel ? 'left-9' : 'left-1'
+                  }`}></div>
+                </button>
+              </div>
+
+              {colorModel && (
+                <div className="bg-[#FFB067]/10 border border-[#FFB067]/30 rounded-xl p-4 mb-6">
+                  <div className="text-[#FF8A00] font-semibold mb-1">{tc('pricing.print.color.plus20', { fallback: '+€20' })}</div>
+                  <div className="text-[#2E2E2E]/70 text-sm">{tc('pricing.print.color.plus20desc', { fallback: 'Adds a flat €20 for color painting' })}</div>
+                </div>
+              )}
+
               <div className="border-t border-gray-200 pt-6">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-[#2E2E2E]/70">{tc('pricing.print.summary.selectedSize')}</span>
@@ -217,6 +255,12 @@ export default function PricingTabs() {
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-[#2E2E2E]/70">{tc('pricing.print.summary.glow')}</span>
                     <span className="text-[#2E2E2E] font-semibold">x2</span>
+                  </div>
+                )}
+                {colorModel && (
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[#2E2E2E]/70">{tc('pricing.print.summary.color', { fallback: 'Color the model:' })}</span>
+                    <span className="text-[#2E2E2E] font-semibold">{tc('pricing.print.color.plus20', { fallback: '+€20' })}</span>
                   </div>
                 )}
                 <div className="flex items-center justify-between text-2xl font-bold pt-4 border-t border-gray-200">

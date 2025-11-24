@@ -1162,7 +1162,7 @@
     },
     "testimonial": {
       "title": "\"Ich konnte es in Geschäften nicht finden, also habe ich es selbst gemacht.\"",
-      "quote": "Ich wollte eine ganz bestimmte Erinnerung vom Beyoncé‑Konzert — das Cowboy‑Carter‑Pferd — aber es gab das nirgends zu kaufen. Mit Dreamli habe ich einfach ein Referenzbild hochgeladen und die KI hat den Rest erledigt. Es war empowernd, genau das zu erschaffen, was ich wollte!",
+      "quote": "Ich wollte eine ganz bestimmte Erinnerung vom Beyoncé‑Konzert — das Cowboy‑Carter‑Bild — aber es gab das in Geschäften nicht. Mit Dreamli habe ich einfach ein Referenzbild hochgeladen und die KI den Rest machen lassen. Ich habe es sogar in eine Weihnachtsversion verwandelt, indem ich ihm ein Geweih gegeben habe, sodass es zu meinem eigenen kleinen Feiertags‑Rentier wurde. Es fühlte sich bestärkend an, genau das zu erschaffen, was ich im Sinn hatte.",
       "name": "Shanice de Jong",
       "verified": "Verifizierte Käuferin"
     },
@@ -1179,14 +1179,20 @@
       "tabs": { "design": "Schritt 1: Design", "print": "Schritt 2: Druck" },
       "design": {
         "free": { "price": "KOSTENLOS", "label": "Starter", "btn": "Kostenlos starten",
-          "bullets": ["Gratis‑Credits für einfache Modelle", "Basis Text‑zu‑3D‑Generierung", "Standard‑Exportqualität"] },
-        "pro": { "price": "€4,99", "label": "Pro KI", "btn": "Auf Pro upgraden", "mostPopular": "Am beliebtesten",
-          "bullets": ["Hohe Definition, komplexe Details", "Schnellere Generierung", "Bild‑zu‑3D‑Konvertierung", "Premium‑Exportformate"] }
+          "bullets": ["Genug Guthaben für ein Modell", "Bearbeitungen oder fortgeschrittene Modelle erfordern Guthaben", "Standard‑Exportqualität"] },
+        "pro": { "price": "Ab 4,99 €", "label": "Guthaben", "btn": "Guthaben kaufen", "mostPopular": "Am beliebtesten",
+          "bullets": ["Aufladen ab 4,99 €", "Modelle bearbeiten bzw. iterieren", "Fortgeschrittene/komplexe Modelle generieren", "Schnellere Generierung"] }
       },
       "print": {
         "material": "Biologisch abbaubares PLA‑Material",
         "select": "Wähle deine perfekte Größe",
         "mostPopular": "Am beliebtesten",
+        "color": {
+          "title": "Modell bemalen",
+          "desc": "Handbemaltes Farb‑Finish für deinen Druck.",
+          "plus20": "+20 €",
+          "plus20desc": "Pauschaler Aufpreis von 20 € für das Bemalen"
+        },
         "glow": {
           "title": "Leuchtet im Dunkeln",
           "desc": "Macht dein Ornament nachts magisch!",
@@ -1197,6 +1203,7 @@
           "selectedSize": "Gewählte Größe:",
           "basePrice": "Grundpreis:",
           "glow": "Glow in Dark:",
+          "color": "Modell bemalen:",
           "total": "Gesamt:"
         },
         "scaleAlt": "Größenvergleich"

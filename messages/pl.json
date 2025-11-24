@@ -1161,7 +1161,7 @@
     },
     "testimonial": {
       "title": "\"Nie mogłam znaleźć w sklepach, więc zrobiłam to sama.\"",
-      "quote": "Chciałam zachować szczególne wspomnienie z koncertu Beyoncé — koń Cowboy Carter — ale nie było tego w sklepach. Z Dreamli po prostu przesłałam obraz referencyjny, a AI zrobiło resztę. To wspaniałe móc stworzyć dokładnie to, czego chciałam!",
+      "quote": "Chciałam zachować konkretne wspomnienie z koncertu Beyoncé — obraz Cowboy Carter — ale w sklepach tego nie było. Z Dreamli po prostu przesłałam zdjęcie referencyjne i pozwoliłam, aby resztę zrobiła AI. Zrobiłam nawet świąteczną wersję, dodając poroże, więc powstał mój własny mały świąteczny jelonek. To było wzmacniające uczucie — stworzyć dokładnie to, co miałam na myśli.",
       "name": "Shanice de Jong",
       "verified": "Zweryfikowana kupująca"
     },
@@ -1178,14 +1178,20 @@
       "tabs": { "design": "Krok 1: Projekt", "print": "Krok 2: Druk" },
       "design": {
         "free": { "price": "ZA DARMO", "label": "Starter", "btn": "Zacznij za darmo",
-          "bullets": ["Darmowe kredyty na proste modele", "Podstawowe tekst‑na‑3D", "Standardowa jakość eksportu"] },
-        "pro": { "price": "4,99 €", "label": "Pro AI", "btn": "Przejdź na Pro", "mostPopular": "Najpopularniejsze",
-          "bullets": ["Wysoka rozdzielczość, złożone detale", "Szybsze generowanie", "Konwersja obraz‑na‑3D", "Formaty eksportu premium"] }
+          "bullets": ["Wystarczające środki na stworzenie jednego modelu", "Edycje lub zaawansowane modele wymagają kredytów", "Standardowa jakość eksportu"] },
+        "pro": { "price": "Od 4,99 €", "label": "Kredyty", "btn": "Kup kredyty", "mostPopular": "Najpopularniejsze",
+          "bullets": ["Doładowanie od 4,99 €", "Edytuj lub iteruj swoje modele", "Generuj zaawansowane/złożone modele", "Szybsze generowanie"] }
       },
       "print": {
         "material": "Biodegradowalny materiał PLA",
         "select": "Wybierz idealny rozmiar",
         "mostPopular": "Najpopularniejsze",
+        "color": {
+          "title": "Pomaluj model",
+          "desc": "Ręcznie malowane, kolorowe wykończenie wydruku.",
+          "plus20": "+20 €",
+          "plus20desc": "Dodaje stałą dopłatę 20 € za malowanie"
+        },
         "glow": {
           "title": "Świeci w ciemności",
           "desc": "Sprawia, że ozdoba jest magiczna nocą!",
@@ -1196,6 +1202,7 @@
           "selectedSize": "Wybrany rozmiar:",
           "basePrice": "Cena bazowa:",
           "glow": "Glow in Dark:",
+          "color": "Pomaluj model:",
           "total": "Razem:"
         },
         "scaleAlt": "Porównanie rozmiaru"

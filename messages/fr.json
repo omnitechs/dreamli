@@ -1162,7 +1162,7 @@
     },
     "testimonial": {
       "title": "\"Je ne le trouvais pas en magasin, alors je l’ai créé moi‑même.\"",
-      "quote": "Je voulais un souvenir précis du concert de Beyoncé — le cheval Cowboy Carter — mais il n’existait pas en boutique. Avec Dreamli, j’ai simplement téléversé une image de référence et l’IA a fait le reste. C’était grisant de créer exactement ce que je voulais !",
+      "quote": "Je voulais garder un souvenir précis du concert de Beyoncé — l’image Cowboy Carter — mais elle n’existait pas en boutique. Avec Dreamli, j’ai simplement téléversé une photo de référence et laissé l’IA faire le reste. J’en ai même fait une version de Noël en ajoutant des bois, et c’est devenu mon petit renne des fêtes. C’était puissant de créer exactement ce que j’avais en tête.",
       "name": "Shanice de Jong",
       "verified": "Acheteuse vérifiée"
     },
@@ -1179,14 +1179,20 @@
       "tabs": { "design": "Étape 1 : Design", "print": "Étape 2 : Impression" },
       "design": {
         "free": { "price": "GRATUIT", "label": "Starter", "btn": "Commencer gratuitement",
-          "bullets": ["Crédits gratuits pour tester des modèles simples", "Génération texte‑vers‑3D de base", "Exports de qualité standard"] },
-        "pro": { "price": "4,99 €", "label": "Pro IA", "btn": "Passer en Pro", "mostPopular": "Le plus populaire",
-          "bullets": ["Haute définition, détails complexes", "Génération plus rapide", "Conversion image‑vers‑3D", "Formats d’export premium"] }
+          "bullets": ["Assez de crédit pour créer un modèle", "Les modifications ou modèles avancés nécessitent des crédits", "Exports de qualité standard"] },
+        "pro": { "price": "À partir de 4,99 €", "label": "Crédits", "btn": "Acheter des crédits", "mostPopular": "Le plus populaire",
+          "bullets": ["Recharge dès 4,99 €", "Modifier ou itérer vos modèles", "Générer des modèles avancés/complexes", "Génération plus rapide"] }
       },
       "print": {
         "material": "Matériau PLA biodégradable",
         "select": "Choisissez votre taille idéale",
         "mostPopular": "Le plus populaire",
+        "color": {
+          "title": "Colorer le modèle",
+          "desc": "Finition colorée peinte à la main pour votre impression.",
+          "plus20": "+20 €",
+          "plus20desc": "Ajoute un forfait de 20 € pour la mise en couleur"
+        },
         "glow": {
           "title": "Brille dans le noir",
           "desc": "Rend votre ornement magique la nuit !",
@@ -1197,6 +1203,7 @@
           "selectedSize": "Taille sélectionnée :",
           "basePrice": "Prix de base :",
           "glow": "Glow in Dark :",
+          "color": "Colorer le modèle :",
           "total": "Total :"
         },
         "scaleAlt": "Comparaison de taille"
