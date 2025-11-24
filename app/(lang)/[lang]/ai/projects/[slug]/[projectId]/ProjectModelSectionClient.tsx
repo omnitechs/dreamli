@@ -33,10 +33,12 @@ export default function ProjectModelSectionClient({ models, activeId: controlled
 
   return (
     <section className="bg-white rounded-2xl p-8 shadow-sm border border-gray-200">
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-4">
         <h2 className="text-2xl font-bold text-gray-900">3D Model</h2>
-        {sorted.length > 1 ? (
-          <div className="flex flex-wrap gap-2">
+      </div>
+      {sorted.length > 1 ? (
+        <div className="mb-6 -mx-2 px-2 overflow-x-auto sm:overflow-visible">
+          <div className="flex gap-2 whitespace-nowrap sm:flex-wrap sm:whitespace-normal">
             {sorted.map((m, idx) => {
               const previewUrl = pickBestUrl(m.modelUrls);
               const isActive = active?.id === m.id;
@@ -56,8 +58,10 @@ export default function ProjectModelSectionClient({ models, activeId: controlled
               );
             })}
           </div>
-        ) : null}
-      </div>
+        </div>
+      ) : (
+        <div className="mb-6" />
+      )}
 
       <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl overflow-hidden">
         {activeUrl ? (

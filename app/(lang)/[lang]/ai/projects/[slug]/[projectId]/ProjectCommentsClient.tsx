@@ -196,7 +196,7 @@ export default function ProjectCommentsClient({ models }: { models: ModelLite[] 
           rows={3}
           disabled={!isAuthed || posting}
         />
-        <div className="flex items-center justify-between mt-3">
+        <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
             <label className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer whitespace-nowrap">
               <Paperclip className="w-4 h-4 text-gray-600" />
@@ -211,8 +211,8 @@ export default function ProjectCommentsClient({ models }: { models: ModelLite[] 
                 disabled={!isAuthed || posting}
               />
             </label>
-            <span className="text-xs text-gray-500">{text.length}/500</span>
           </div>
+
           <button
             onClick={onSend}
             disabled={!isAuthed || posting || (!text.trim() && attachments.length === 0)}
@@ -221,6 +221,8 @@ export default function ProjectCommentsClient({ models }: { models: ModelLite[] 
             <Send className="w-4 h-4" />
             <span>Post</span>
           </button>
+
+          <span className="text-xs text-gray-500 self-end sm:self-auto">{text.length}/500</span>
         </div>
 
         {/* Attachments Preview */}

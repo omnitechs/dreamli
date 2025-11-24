@@ -119,8 +119,8 @@ export default function AiTopModelsBarClient({ items }: { items: MarketplaceMode
   if (!models.length) return null;
 
   return (
-    <div className="fixed top-0 left-0 right-0 h-40 bg-white shadow-md z-50 overflow-x-auto overflow-y-visible">
-      <div className="flex items-center gap-4 h-full px-6">
+    <div className="fixed top-0 left-0 right-0 h-28 sm:h-40 bg-white shadow-md z-50 overflow-x-auto overflow-y-visible snap-x snap-mandatory" style={{ WebkitOverflowScrolling: 'touch' }}>
+      <div className="flex items-center gap-2 sm:gap-4 h-full px-3 sm:px-6">
         {models.map((m, idx) => {
           const isActive = selectedId ? selectedId === m.id : idx === 0;
 
@@ -136,13 +136,13 @@ export default function AiTopModelsBarClient({ items }: { items: MarketplaceMode
           return (
             <div
               key={m.id}
-              className={`flex-shrink-0 flex items-center gap-4 px-4 py-3 rounded-xl border-2 transition-all cursor-pointer ${
+              className={`flex-shrink-0 snap-start flex items-center gap-3 px-3 py-2 sm:gap-4 sm:px-4 sm:py-3 rounded-xl border-2 transition-all cursor-pointer ${
                 isActive ? "border-teal-500 bg-teal-50" : "border-gray-200 bg-white hover:border-gray-300"
               }`}
               onClick={() => setSelectedId(selectedId === m.id ? null : m.id)}
             >
               <div className="relative">
-                <img src={thumb} alt={m.prompt || `Model ${idx + 1}`} className="w-24 h-24 object-cover rounded-lg" />
+                <img src={thumb} alt={m.prompt || `Model ${idx + 1}`} className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg" />
                 {isActive && (
                   <div className="absolute -top-2 -right-2 w-6 h-6 bg-teal-500 rounded-full flex items-center justify-center">
                     <i className="ri-check-line text-white text-sm"></i>
@@ -165,7 +165,7 @@ export default function AiTopModelsBarClient({ items }: { items: MarketplaceMode
                         e.stopPropagation();
                         setOpenDropdown(openDropdown === m.id ? null : m.id);
                       }}
-                      className="px-3 py-1.5 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2 whitespace-nowrap text-sm"
+                      className="px-2 py-1 text-xs sm:px-3 sm:py-1.5 sm:text-sm bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2 whitespace-nowrap"
                       title="Download"
                     >
                       <i className="ri-download-line"></i>
@@ -180,7 +180,7 @@ export default function AiTopModelsBarClient({ items }: { items: MarketplaceMode
                             setOpenDropdown(null);
                           }}
                         />
-                        <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
+                        <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50 flex flex-col whitespace-normal max-h-72 overflow-auto">
                           {formats.length ? (
                             formats.map(([fmt]) => (
                               <button
@@ -189,7 +189,7 @@ export default function AiTopModelsBarClient({ items }: { items: MarketplaceMode
                                   e.stopPropagation();
                                   handleDownload(m.id, fmt);
                                 }}
-                                className="w-full px-4 py-2 text-left hover:bg-gray-50 flex items-center gap-3 transition-colors"
+                                className="w-full px-4 py-2 text-left hover:bg-gray-50 flex items-center gap-3 transition-colors block"
                               >
                                 <i className="ri-file-3d-line text-gray-400"></i>
                                 <span className="text-sm text-gray-700">{fmt.toUpperCase()}</span>

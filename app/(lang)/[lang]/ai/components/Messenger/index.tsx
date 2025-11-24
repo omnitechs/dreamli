@@ -721,9 +721,9 @@ export function Messenger() {
                             )}
                         </button>
                     </div>
-                    <div className="flex items-center justify-between text-xs text-gray-500">
-                        <span>{t("composer.hint")}</span>
-                        <span>{(msgText ?? "").length}/1000</span>
+                    <div className="text-xs text-gray-500 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                        <span className="order-2 sm:order-1">{t("composer.hint")}</span>
+                        <span className="order-1 sm:order-2 self-end sm:self-auto">{(msgText ?? "").length}/1000</span>
                     </div>
                 </form>
             </div>

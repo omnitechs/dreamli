@@ -6,7 +6,6 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import ProjectHeaderActionsClient from "./ProjectHeaderActionsClient";
 import ProjectModelSectionClient, { type ModelForViewer } from "./ProjectModelSectionClient";
-import ProjectModelsNavbarClient from "./ProjectModelsNavbarClient";
 
 export type OwnerInfo = { id: string; name?: string | null; image?: string | null; username?: string | null } | null;
 
@@ -26,42 +25,38 @@ export default function ProjectHeaderAndModelClient({ projectName, owner, models
     <>
       {/* Header */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-3 sm:gap-4">
               {owner ? (
                 <Link href={ownerHref} className="flex-shrink-0" prefetch={false}>
                   {owner.image ? (
-                    <Image src={owner.image} alt={owner.name || "User"} width={48} height={48} className="w-12 h-12 rounded-full object-cover" />
+                    <Image src={owner.image} alt={owner.name || "User"} width={48} height={48} className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover" />
                   ) : (
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-lg font-semibold">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-lg font-semibold">
                       {(owner.name || "U").charAt(0)}
                     </div>
                   )}
                 </Link>
               ) : (
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-lg font-semibold">U</div>
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-lg font-semibold">U</div>
               )}
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">{projectName}</h1>
-                <p className="text-sm text-gray-600">
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">{projectName}</h1>
+                <p className="text-xs sm:text-sm text-gray-600">
                   {owner ? (
                     <>by <Link href={ownerHref} className="hover:underline" prefetch={false}>{owner.name || "User"}</Link></>
                   ) : null}
                 </p>
               </div>
             </div>
-            <ProjectHeaderActionsClient modelId={selectedModelId || null} />
+            <div className="-mx-2 px-2 overflow-x-auto sm:overflow-visible">
+              <ProjectHeaderActionsClient modelId={selectedModelId || null} />
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Models navbar (reference UI with download + purchase) */}
-      <ProjectModelsNavbarClient
-        models={models}
-        activeId={selectedModelId}
-        onActiveChange={(id) => setSelectedModelId(id)}
-      />
 
       {/* 3D Model Section (controlled selection) */}
       <div className="max-w-7xl mx-auto px-6 py-8">

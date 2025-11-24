@@ -53,57 +53,75 @@ export default function MarketplacePage() {
           <p className="text-lg text-gray-600">Discover amazing 3D models created by our community</p>
         </div>
 
-        <div className="mb-8 flex items-center gap-3">
-          <span className="text-sm font-medium text-gray-700">Sort by:</span>
-          <div className="flex gap-2">
-            <button
-              onClick={() => {
-                setPage(1);
-                setSort('likes');
-              }}
-              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap flex items-center gap-2 ${
-                sort === 'likes'
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                  : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
-              }`}
-            >
-              <div className="w-4 h-4 flex items-center justify-center">
-                <Heart className="w-4 h-4" />
+        <div className="mb-8">
+          {/* Desktop: inline label + buttons */}
+          <div className="hidden sm:flex items-center gap-3">
+            <span className="text-sm font-medium text-gray-700">Sort by:</span>
+            <div className="flex gap-2">
+              <button
+                onClick={() => { setPage(1); setSort('likes'); }}
+                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap flex items-center gap-2 ${sort === 'likes' ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30' : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'}`}
+              >
+                <div className="w-4 h-4 flex items-center justify-center">
+                  <Heart className="w-4 h-4" />
+                </div>
+                Most Liked
+              </button>
+              <button
+                onClick={() => { setPage(1); setSort('comments'); }}
+                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap flex items-center gap-2 ${sort === 'comments' ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30' : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'}`}
+              >
+                <div className="w-4 h-4 flex items-center justify-center">
+                  <MessageCircle className="w-4 h-4" />
+                </div>
+                Most Discussed
+              </button>
+              <button
+                onClick={() => { setPage(1); setSort('recent'); }}
+                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap flex items-center gap-2 ${sort === 'recent' ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30' : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'}`}
+              >
+                <div className="w-4 h-4 flex items-center justify-center">
+                  <Clock className="w-4 h-4" />
+                </div>
+                Most Recent
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile: label stacked and horizontally scrollable buttons */}
+          <div className="sm:hidden">
+            <span className="block text-sm font-medium text-gray-700 mb-2">Sort by:</span>
+            <div className="-mx-4 px-4 overflow-x-auto">
+              <div className="flex gap-2 whitespace-nowrap">
+                <button
+                  onClick={() => { setPage(1); setSort('likes'); }}
+                  className={`px-3 py-2 rounded-xl text-xs font-medium transition-all whitespace-nowrap flex items-center gap-2 ${sort === 'likes' ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'}`}
+                >
+                  <div className="w-4 h-4 flex items-center justify-center">
+                    <Heart className="w-4 h-4" />
+                  </div>
+                  Most Liked
+                </button>
+                <button
+                  onClick={() => { setPage(1); setSort('comments'); }}
+                  className={`px-3 py-2 rounded-xl text-xs font-medium transition-all whitespace-nowrap flex items-center gap-2 ${sort === 'comments' ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'}`}
+                >
+                  <div className="w-4 h-4 flex items-center justify-center">
+                    <MessageCircle className="w-4 h-4" />
+                  </div>
+                  Most Discussed
+                </button>
+                <button
+                  onClick={() => { setPage(1); setSort('recent'); }}
+                  className={`px-3 py-2 rounded-xl text-xs font-medium transition-all whitespace-nowrap flex items-center gap-2 ${sort === 'recent' ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'}`}
+                >
+                  <div className="w-4 h-4 flex items-center justify-center">
+                    <Clock className="w-4 h-4" />
+                  </div>
+                  Most Recent
+                </button>
               </div>
-              Most Liked
-            </button>
-            <button
-              onClick={() => {
-                setPage(1);
-                setSort('comments');
-              }}
-              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap flex items-center gap-2 ${
-                sort === 'comments'
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                  : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
-              }`}
-            >
-              <div className="w-4 h-4 flex items-center justify-center">
-                <MessageCircle className="w-4 h-4" />
-              </div>
-              Most Discussed
-            </button>
-            <button
-              onClick={() => {
-                setPage(1);
-                setSort('recent');
-              }}
-              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap flex items-center gap-2 ${
-                sort === 'recent'
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                  : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
-              }`}
-            >
-              <div className="w-4 h-4 flex items-center justify-center">
-                <Clock className="w-4 h-4" />
-              </div>
-              Most Recent
-            </button>
+            </div>
           </div>
         </div>
 
