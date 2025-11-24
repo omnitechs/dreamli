@@ -17,7 +17,7 @@ export default function FooterBanner() {
             <h3 className="text-4xl font-bold text-white">{tc('footerBanner.inspireTitle')}</h3>
             <p className="text-xl text-white/90 max-w-2xl mx-auto">{tc('footerBanner.inspireText')}</p>
             <Link href={`/${lang}/marketplace`}>
-              <button className="bg-white hover:bg-gray-50 text-[#8472DF] text-lg px-10 py-4 rounded-full font-bold transition-all duration-300 shadow-xl hover:scale-105 whitespace-nowrap group">
+              <button className="bg-white hover:bg-gray-50 text-[#8472DF] text-lg px-10 py-4 rounded-full font-bold transition-all duration-300 shadow-xl hover:scale-105 whitespace-nowrap group mt-9">
                 {tc('footerBanner.browse')}
                 <i className="ri-gallery-line ml-3 group-hover:translate-x-1 transition-transform inline-block"></i>
               </button>
@@ -37,13 +37,13 @@ export default function FooterBanner() {
             </h2>
 
             <Link href={`/${lang}/christmas#create`}>
-              <button className="bg-white hover:bg-gray-50 text-[#8472DF] text-xl px-12 py-6 rounded-full font-bold transition-all duration-300 shadow-2xl hover:scale-105 whitespace-nowrap group">
+              <button className="bg-white hover:bg-gray-50 text-[#8472DF] text-xl px-12 py-6 rounded-full font-bold transition-all duration-300 shadow-2xl hover:scale-105 whitespace-nowrap group mt-9">
                 {tc('footerBanner.cta')}
                 <i className="ri-rocket-line ml-3 group-hover:translate-x-1 transition-transform inline-block"></i>
               </button>
             </Link>
 
-            <div className="grid md:grid-cols-4 gap-8 pt-12 max-w-4xl mx-auto">
+            <div className="grid md:grid-cols-4 gap-8 pt-2 max-w-4xl mx-auto">
               <div className="flex flex-col items-center gap-2">
                 <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
                   <i className="ri-map-pin-line text-3xl text-white"></i>
