@@ -10,9 +10,8 @@ import Footer from '@/components/Footer';
 import MailchimpSubscriptionCoupon from '@/components/MailchimpSubscriptionCoupon';
 import Script from 'next/script';
 import 'remixicon/fonts/remixicon.css';
-import Providers from '@/app/providers'
+// Providers are already applied at the app root (app/layout.tsx)
 import { ReduxProvider } from '@/app/store/provider'
-import { SessionProvider } from 'next-auth/react'
 import CreditsModal from '@/components/CreditsModal'
 import BackButton from '@/components/BackButton'
 import ClarityTracker from '@/components/ClarityTracker'
@@ -132,16 +131,14 @@ export default async function LangLayout({
         </head>
         <body suppressHydrationWarning>
         <NextIntlClientProvider key={lang} locale={lang} messages={messages}>
-            <SessionProvider>
-                <ReduxProvider>
-                    <MailchimpSubscriptionCoupon />
-                    <Header lang={lang} />
-                    <CreditsModal />
-                    {children}
-                    <Footer lang={lang} />
-                    <BackButton />
-                </ReduxProvider>
-            </SessionProvider>
+            <ReduxProvider>
+                <MailchimpSubscriptionCoupon />
+                <Header lang={lang} />
+                <CreditsModal />
+                {children}
+                <Footer lang={lang} />
+                <BackButton />
+            </ReduxProvider>
         </NextIntlClientProvider>
 
         {/* Microsoft Clarity */}
