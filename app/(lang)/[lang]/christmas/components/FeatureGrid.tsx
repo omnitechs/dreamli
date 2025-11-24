@@ -27,7 +27,7 @@ export default function FeatureGrid() {
                 <i className="ri-terminal-box-line text-[#8472DF]"></i>
                 <span className="text-[#2E2E2E]/70 text-sm">{tc('textTo3d.promptLabel')}</span>
               </div>
-              <div className="text-[#2E2E2E] font-mono text-sm mb-4">"{t('horsePrompt')}"</div>
+              <div className="text-[#2E2E2E] font-mono text-sm mb-4">{t('horsePrompt')}</div>
               {/* Make this image container same size as the Image-to-3D viewer for visual consistency */}
               <div className="w-full bg-gradient-to-br from-[#8472DF]/10 to-[#93C4FF]/10 rounded-lg p-2">
                 <div className="w-full h-56 sm:h-64 md:h-72 rounded-lg overflow-hidden border border-gray-200">
