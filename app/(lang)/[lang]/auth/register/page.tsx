@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import RegisterForm from "../RegisterForm";
 import { getTranslations } from "next-intl/server";
+import { Suspense } from "react";
 
 export default async function RegisterPage({
   params,
@@ -35,7 +36,10 @@ export default async function RegisterPage({
   return (
     <main className="mx-auto max-w-md p-6">
       <h1 className="mb-4 text-2xl font-semibold">{t("title")}</h1>
-      <RegisterForm />
+      {/* Wrap client component using useSearchParams in Suspense to satisfy Next.js CSR bailout requirements */}
+      <Suspense fallback={null}>
+        <RegisterForm />
+      </Suspense>
       <p className="mt-4 text-sm text-gray-500">
         {t("haveAccount")} {" "}
         <a className="underline" href={loginHref}>

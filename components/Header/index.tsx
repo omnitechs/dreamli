@@ -67,18 +67,22 @@ export default async function Header({ lang }: { lang: LanguageCode }) {
                         <Suspense fallback={<>...</>}>
                             <LangSwitcher lang={lang} languages={languages as readonly Language[]} />
                         </Suspense>
-                        <UserNav base={base} />
+                        <Suspense fallback={null}>
+                            <UserNav base={base} />
+                        </Suspense>
                     </div>
 
                     {/* Mobile menu */}
                     <nav className="md:hidden">
-                        <MobileDropdown
-                            label={t('nav.menu')}
-                            items={navItems.map(item => ({
-                                label: item.label,
-                                href: item.href
-                            }))}
-                        />
+                        <Suspense fallback={null}>
+                            <MobileDropdown
+                                label={t('nav.menu')}
+                                items={navItems.map(item => ({
+                                    label: item.label,
+                                    href: item.href
+                                }))}
+                            />
+                        </Suspense>
                     </nav>
                 </div>
             </div>

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
 import { languages, languageCodes, type LanguageCode } from '@/config/i18n';
@@ -154,8 +154,11 @@ export default async function LangLayout({
             })(window, document, "clarity", "script", "sy5gylxyzn");
           `}
         </Script>
-        {/* Ensure SPA navigations are tracked as page views in Clarity */}
-        <ClarityTracker />
+        {/* Ensure SPA navigations are tracked as page views in Clarity.
+            Wrap with Suspense because ClarityTracker uses useSearchParams/usePathname. */}
+        <Suspense fallback={null}>
+            <ClarityTracker />
+        </Suspense>
 
         {/* Google Analytics 4 */}
         <Script
