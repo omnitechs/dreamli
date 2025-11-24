@@ -70,7 +70,8 @@ export const api = createApi({
 
                     const state = getState() as RootState;
                     const activeProjectId = (state as any)?.generator?.__meta?.projectId ?? null;
-                    const projectChanged = activeProjectId !== null && activeProjectId !== projectId;
+                    // Treat initial load (no activeProjectId) or a different project as a project change
+                    const projectChanged = activeProjectId !== projectId;
 
                     if (projectChanged) {
                         dispatch(resetForProjectGenerator({ projectId }));
