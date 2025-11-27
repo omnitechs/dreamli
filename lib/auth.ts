@@ -24,6 +24,11 @@ export const {
     adapter: PrismaAdapter(prisma),
     session: { strategy: "jwt" }, // ✅ use JWT sessions
     allowDangerousEmailAccountLinking: true,
+    // Send users to our custom login UI (locale-aware via middleware) instead of NextAuth default pages
+    pages: {
+        signIn: "/auth/login",
+        error: "/auth/login",
+    },
     providers: [
         Google({
             clientId: process.env.GOOGLE_CLIENT_ID!,

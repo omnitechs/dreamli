@@ -1031,7 +1031,15 @@
       "withGoogle": "Doorgaan met Google",
       "or": "of",
       "noAccount": "Nog geen account?",
-      "createOne": "Maak er een aan"
+      "createOne": "Maak er een aan",
+      "errors": {
+        "invalidEmail": "Vul een geldig e-mailadres in (bijv. naam@voorbeeld.com).",
+        "requiredEmail": "Vul je e-mailadres in.",
+        "requiredPassword": "Vul je wachtwoord in.",
+        "credentials": "Onjuist e-mailadres of wachtwoord.",
+        "oauthAccountNotLinked": "Dit e-mailadres is al geregistreerd. Log in met de oorspronkelijke methode.",
+        "default": "Inloggen is mislukt. Probeer het opnieuw."
+      }
     },
     "register": {
       "title": "Account aanmaken",

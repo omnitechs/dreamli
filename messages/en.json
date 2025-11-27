@@ -1039,7 +1039,15 @@
       "withGoogle": "Continue with Google",
       "or": "or",
       "noAccount": "Don’t have an account?",
-      "createOne": "Create one"
+      "createOne": "Create one",
+      "errors": {
+        "invalidEmail": "Please enter a valid email address (e.g. name@example.com).",
+        "requiredEmail": "Please enter your email address.",
+        "requiredPassword": "Please enter your password.",
+        "credentials": "Incorrect email or password.",
+        "oauthAccountNotLinked": "This email is already registered. Please sign in using the original method.",
+        "default": "Unable to sign in. Please try again."
+      }
     },
     "register": {
       "title": "Create account",

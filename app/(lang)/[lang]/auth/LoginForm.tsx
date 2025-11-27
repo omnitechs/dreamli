@@ -1,13 +1,14 @@
 // components/auth/LoginForm.tsx
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useSearchParams, usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 export default function LoginForm() {
   const t = useTranslations("Auth.login");
+  const te = useTranslations("Auth.login.errors");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -29,6 +30,25 @@ export default function LoginForm() {
     return computeFallback();
   }
 
+  const mapError = useCallback(
+    (code?: string | null) => {
+      switch (code) {
+        case "CredentialsSignin":
+        case "credentials":
+          return te("credentials");
+        case "OAuthAccountNotLinked":
+          return te("oauthAccountNotLinked");
+        case "Configuration":
+        case "AccessDenied":
+        case "Verification":
+          return te("default");
+        default:
+          return te("default");
+      }
+    },
+    [te]
+  );
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
@@ -36,14 +56,24 @@ export default function LoginForm() {
 
     const callbackUrl = computeCallbackUrl();
 
-    await signIn("credentials", {
+    const res = await signIn("credentials", {
       email,
       password,
-      redirect: true,
-      callbackUrl,
+      redirect: false,
     });
 
     setBusy(false);
+
+    if (res?.ok) {
+      if (typeof window !== "undefined") {
+        window.location.assign(callbackUrl);
+      }
+      return;
+    }
+
+    // Show localized error inline instead of redirecting to /api/auth/signin?error=
+    const msg = mapError(res?.error);
+    setError(msg);
   }
 
   async function onGoogle() {
@@ -53,6 +83,16 @@ export default function LoginForm() {
     await signIn("google", { callbackUrl });
     setBusy(false);
   }
+
+  // If the URL already contains an error from a previous redirect (e.g. OAuthAccountNotLinked),
+  // display a localized message instead of the default NextAuth English screen.
+  useEffect(() => {
+    const err = params.get("error");
+    if (err) {
+      setError(mapError(err));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params]);
 
   return (
     <div className="space-y-4">
@@ -85,6 +125,18 @@ export default function LoginForm() {
             className="w-full rounded border px-3 py-2"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            onInvalid={(e) => {
+              const el = e.currentTarget as HTMLInputElement;
+              const v = el.validity;
+              if (v.valueMissing) {
+                el.setCustomValidity(te("requiredEmail"));
+              } else if (v.typeMismatch) {
+                el.setCustomValidity(te("invalidEmail"));
+              } else {
+                el.setCustomValidity("");
+              }
+            }}
+            onInput={(e) => (e.currentTarget as HTMLInputElement).setCustomValidity("")}
             required
           />
         </div>
@@ -97,6 +149,15 @@ export default function LoginForm() {
             className="w-full rounded border px-3 py-2"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onInvalid={(e) => {
+              const el = e.currentTarget as HTMLInputElement;
+              if (el.validity.valueMissing) {
+                el.setCustomValidity(te("requiredPassword"));
+              } else {
+                el.setCustomValidity("");
+              }
+            }}
+            onInput={(e) => (e.currentTarget as HTMLInputElement).setCustomValidity("")}
             required
           />
         </div>
