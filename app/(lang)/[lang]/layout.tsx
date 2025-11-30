@@ -7,7 +7,6 @@ import { notFound } from 'next/navigation';
 import '@/app/globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import MailchimpSubscriptionCoupon from '@/components/MailchimpSubscriptionCoupon';
 import Script from 'next/script';
 import 'remixicon/fonts/remixicon.css';
 // Providers are already applied at the app root (app/layout.tsx)
@@ -132,7 +131,6 @@ export default async function LangLayout({
         <body suppressHydrationWarning>
         <NextIntlClientProvider key={lang} locale={lang} messages={messages}>
             <ReduxProvider>
-                <MailchimpSubscriptionCoupon />
                 <Header lang={lang} />
                 <CreditsModal />
                 {children}
