@@ -56,6 +56,19 @@ export const {
         }),
     ],
     callbacks: {
+        // Ensure NextAuth never bounces users to baseUrl (home) on errors; keep them on our login page
+        async redirect({ url, baseUrl }) {
+            try {
+                // Allow same-origin absolute URLs
+                if (url.startsWith(baseUrl)) return url;
+                // Allow relative URLs within the site
+                if (url.startsWith("/")) return `${baseUrl}${url}`;
+                // Fallback: send to our login page (middleware will prefix locale)
+                return `${baseUrl}/auth/login`;
+            } catch {
+                return `${baseUrl}/auth/login`;
+            }
+        },
         // Proactively link Google accounts to existing users by verified email to avoid OAuthAccountNotLinked
         async signIn({ user, account, profile }) {
             try {
