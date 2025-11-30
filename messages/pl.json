@@ -127,6 +127,7 @@
     "inputAria": "Pole wprowadzania wiadomości na czacie",
     "send": "Wyślij",
     "decorativeDotAlt": "Ozdobna kropka",
+    "responseTimeNotice": "Odpowiedzi AI trwają około minuty, ponieważ przeszukujemy ponad 7 000 produktów. Dziękujemy za cierpliwość.",
     "greeting": "Cześć! Pomogę Ci znaleźć idealny prezent. Czego szukasz?",
     "errorStreaming": "Błąd podczas przesyłania odpowiedzi"
   },

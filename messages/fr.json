@@ -127,6 +127,7 @@
     "inputAria": "Champ de saisie du message de chat",
     "send": "Envoyer",
     "decorativeDotAlt": "Point décoratif",
+    "responseTimeNotice": "Les réponses de l’IA prennent environ une minute, le temps de chercher parmi plus de 7 000 produits. Merci de votre patience.",
     "greeting": "Bonjour ! Je suis là pour vous aider à trouver le cadeau parfait. Que recherchez-vous ?",
     "errorStreaming": "Erreur lors du flux de la réponse"
   },

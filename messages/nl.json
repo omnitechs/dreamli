@@ -126,6 +126,7 @@
     "inputAria": "Invoerveld chatbericht",
     "send": "Versturen",
     "decorativeDotAlt": "Decoratieve stip",
+    "responseTimeNotice": "Antwoorden van de AI duren ongeveer één minuut, terwijl er gezocht wordt in meer dan 7.000 producten. Bedankt voor je geduld.",
     "greeting": "Hoi! Ik help je graag het perfecte cadeau te vinden. Waar ben je naar op zoek?",
     "errorStreaming": "Fout bij het streamen van het antwoord"
   },

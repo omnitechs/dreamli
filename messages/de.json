@@ -127,6 +127,7 @@
     "inputAria": "Eingabefeld für Chatnachricht",
     "send": "Senden",
     "decorativeDotAlt": "Dekorativer Punkt",
+    "responseTimeNotice": "KI-Antworten dauern etwa eine Minute, während über 7.000 Produkte durchsucht werden. Danke für deine Geduld.",
     "greeting": "Hallo! Ich helfe dir, das perfekte Geschenk zu finden. Wonach suchst du?",
     "errorStreaming": "Fehler beim Streamen der Antwort"
   },

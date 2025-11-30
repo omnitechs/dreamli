@@ -131,6 +131,7 @@
     "inputAria": "Chat message input",
     "send": "Send",
     "decorativeDotAlt": "Decorative dot",
+    "responseTimeNotice": "AI replies take about a minute while searching across 7,000+ products. Thanks for your patience.",
     "greeting": "Hi! I'm here to help you find the perfect gift. What are you looking for?",
     "errorStreaming": "Error streaming response"
   },

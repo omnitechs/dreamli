@@ -218,6 +218,10 @@ function AIChatAssistant() {
                     <ChatTranscript items={messages} thinking={thinking} />
                 </div>
                 <ChatInputBar value={input} onChange={setInput} onSend={send} sending={thinking} />
+                <p className="mt-3 text-xs text-[#2E2E2E]/60 flex items-center gap-2" aria-live="polite">
+                    <i className="ri-time-line" aria-hidden="true" />
+                    {t('responseTimeNotice')}
+                </p>
             </article>
 
             <div
