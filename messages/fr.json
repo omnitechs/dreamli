@@ -879,6 +879,37 @@
       }
     }
   },
+  "Auth": {
+    "login": {
+      "title": "Se connecter",
+      "email": "E-mail",
+      "password": "Mot de passe",
+      "submit": "Se connecter",
+      "signingIn": "Connexion…",
+      "withGoogle": "Continuer avec Google",
+      "or": "ou",
+      "noAccount": "Vous n’avez pas de compte ?",
+      "createOne": "Créer un compte",
+      "errors": {
+        "invalidEmail": "Veuillez saisir une adresse e‑mail valide (ex. nom@exemple.com).",
+        "requiredEmail": "Veuillez saisir votre adresse e‑mail.",
+        "requiredPassword": "Veuillez saisir votre mot de passe.",
+        "credentials": "E‑mail ou mot de passe incorrect.",
+        "oauthAccountNotLinked": "Cet e‑mail est déjà enregistré. Veuillez vous connecter avec la méthode d’origine.",
+        "default": "Impossible de se connecter. Veuillez réessayer."
+      }
+    },
+    "register": {
+      "title": "Créer un compte",
+      "name": "Nom",
+      "email": "E-mail",
+      "password": "Mot de passe",
+      "submit": "Créer le compte",
+      "creating": "Création…",
+      "haveAccount": "Vous avez déjà un compte ?",
+      "signIn": "Se connecter"
+    }
+  },
   "Account": {
     "title": "Mon compte",
     "signOut": "Se déconnecter",

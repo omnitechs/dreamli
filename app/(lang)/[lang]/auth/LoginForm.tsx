@@ -64,7 +64,8 @@ export default function LoginForm() {
 
     setBusy(false);
 
-    if (res?.ok) {
+    const success = !!(res?.ok && !res?.error);
+    if (success) {
       if (typeof window !== "undefined") {
         window.location.assign(callbackUrl);
       }
@@ -72,8 +73,23 @@ export default function LoginForm() {
     }
 
     // Show localized error inline instead of redirecting to /api/auth/signin?error=
-    const msg = mapError(res?.error);
+    const code = res?.error ?? "credentials";
+    const msg = mapError(code);
     setError(msg);
+
+    // Also reflect the error in the URL while preserving any existing redirect param
+    // This keeps the intended post-login destination (redirect) in the URL
+    try {
+      if (typeof window !== "undefined") {
+        const usp = new URLSearchParams(params.toString());
+        usp.set("error", code);
+        const q = usp.toString();
+        const newUrl = q ? `${pathname}?${q}` : pathname || "/";
+        window.history.replaceState(null, "", newUrl);
+      }
+    } catch {
+      // no-op
+    }
   }
 
   async function onGoogle() {

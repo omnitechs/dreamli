@@ -521,6 +521,38 @@
     "promise": { "titleA": "Unser", "titleB": "Versprechen", "subtitle": "Unsere Mission: Dir zu helfen, ein persönliches Geschenk zu finden — handgemacht in unserer Werkstatt oder sorgfältig kuratiert von vertrauenswürdigen europäischen Partnern.", "cards": [ { "title": "Transparente Praxis", "text": "Ehrliche Geschäftspraktiken mit klaren Informationen" }, { "title": "Zuverlässiger Versand", "text": "Versand in EU & USA mit Sendungsverfolgung" }, { "title": "Hohe Qualität", "text": "Geprüfte Produkte und frische Produktion" }, { "title": "Echter Support", "text": "Reaktionsschneller Kundendienst" } ] },
     "cta": { "title": "Bereit für das perfekte Geschenk?", "body": "Braucht du Hilfe bei der Auswahl, individuelle Wünsche oder Fragen zur Bestellung? Wir helfen gerne.", "shop": "Shop besuchen", "contact": "Kontaktiere uns" }
   },
+  "Auth": {
+    "login": {
+      "title": "Anmelden",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "submit": "Anmelden",
+      "signingIn": "Anmeldung…",
+      "withGoogle": "Mit Google fortfahren",
+      "or": "oder",
+      "noAccount": "Noch kein Konto?",
+      "createOne": "Konto erstellen",
+      "errors": {
+        "invalidEmail": "Bitte gib eine gültige E‑Mail‑Adresse ein (z. B. name@beispiel.com).",
+        "requiredEmail": "Bitte gib deine E‑Mail‑Adresse ein.",
+        "requiredPassword": "Bitte gib dein Passwort ein.",
+        "credentials": "E‑Mail oder Passwort ist falsch.",
+        "oauthAccountNotLinked": "Diese E‑Mail ist bereits registriert. Bitte melde dich mit der ursprünglichen Methode an.",
+        "default": "Anmeldung nicht möglich. Bitte versuche es erneut."
+      }
+    },
+    "register": {
+      "title": "Konto erstellen",
+      "name": "Name",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "submit": "Konto erstellen",
+      "creating": "Wird erstellt…",
+      "haveAccount": "Bereits ein Konto?",
+      "signIn": "Anmelden"
+    }
+  },
+
   "CouponPopup": {
     "badge": "NUR FÜR KURZE ZEIT",
     "headline": "50 % Rabatt auf Ihr erstes Geschenk",
