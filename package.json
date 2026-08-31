@@ -21,7 +21,7 @@
     "framer-motion": "^10.16.5",
     "iconv-lite": "^0.7.0",
     "lucide-react": "^0.294.0",
-    "next": "15.4.7",
+    "next": "15.4.10",
     "next-auth": "^5.0.0-beta.29",
     "next-intl": "^4.3.9",
     "next-themes": "^0.2.1",
